@@ -1,0 +1,14 @@
+#
+# Brian R Taylor
+# brian.taylor@bolderflight.com
+# 
+# Copyright (c) 2020 Bolder Flight Systems
+#
+
+DatalogMessage.imu_accel_mps2 max_count:3 fixed_count:true
+DatalogMessage.imu_gyro_radps max_count:3 fixed_count:true
+DatalogMessage.imu_mag_ut max_count:3 fixed_count:true
+DatalogMessage.gnss_ned_vel_mps max_count:3 fixed_count:true
+DatalogMessage.ins_accel_mps2 max_count:3 fixed_count:true
+DatalogMessage.ins_gyro_radps max_count:3 fixed_count:true
+DatalogMessage.ins_ned_vel_mps max_count:3 fixed_count:true

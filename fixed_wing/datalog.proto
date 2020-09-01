@@ -15,13 +15,34 @@
 
 syntax = "proto3";
 
-import "nanopb.proto";
-
 /* Data log message */
 message DatalogMessage {
-  repeated int32 inceptors = 1 [(nanopb).max_count = 16, (nanopb).fixed_count = true];
-  float imu_accel_x_mps2 = 2;
-  float imu_accel_y_mps2 = 3;
-  float imu_accel_z_mps2 = 4;
+  double time_s = 1;
+  repeated float imu_accel_mps2 = 2;
+  repeated float imu_gyro_radps = 3;
+  repeated float imu_mag_ut = 4;
+  int32 gnss_fix = 6;
+  int32 gnss_num_sv = 7;
+  repeated float gnss_ned_vel_mps = 8;
+  double gnss_lat_rad = 9;
+  double gnss_lon_rad = 10;
+  float gnss_alt_m = 11;
+  repeated float ins_accel_mps2 = 12;
+  repeated float ins_gyro_radps = 13;
+  repeated float ins_ned_vel_mps = 14;
+  double ins_lat_rad = 15;
+  double ins_lon_rad = 16;
+  float ins_alt_m = 17;
+  float ins_pitch_rad = 18;
+  float ins_roll_rad = 19;
+  float ins_yaw_rad = 20;
+  float static_press_pa = 21;
+  float diff_press_pa = 22;
+  float filt_static_press_pa = 23;
+  float filt_diff_press_pa = 24;
+  float press_alt_m = 25;
+  float agl_alt_m = 26;
+  float ias_mps = 27;
+  float eas_mps = 28;
 }
 

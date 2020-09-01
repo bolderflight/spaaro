@@ -49,9 +49,48 @@ void Init() {
 }
 void Write(const AircraftData &ref) {
   /* Fill the datalog message */
-  datalog_msg_.imu_accel_x_mps2 = ref.ins.imu.accel_mps2(0);
-  datalog_msg_.imu_accel_y_mps2 = ref.ins.imu.accel_mps2(1);
-  datalog_msg_.imu_accel_z_mps2 = ref.ins.imu.accel_mps2(2);
+  datalog_msg_.time_s = ref.time_s;
+  datalog_msg_.imu_accel_mps2[0] = ref.ins.imu.accel_mps2(0);
+  datalog_msg_.imu_accel_mps2[1] = ref.ins.imu.accel_mps2(1);
+  datalog_msg_.imu_accel_mps2[2] = ref.ins.imu.accel_mps2(2);
+  datalog_msg_.imu_gyro_radps[0] = ref.ins.imu.gyro_radps(0);
+  datalog_msg_.imu_gyro_radps[1] = ref.ins.imu.gyro_radps(1);
+  datalog_msg_.imu_gyro_radps[2] = ref.ins.imu.gyro_radps(2);
+  datalog_msg_.imu_mag_ut[0] = ref.ins.imu.mag_ut(0);
+  datalog_msg_.imu_mag_ut[1] = ref.ins.imu.mag_ut(1);
+  datalog_msg_.imu_mag_ut[2] = ref.ins.imu.mag_ut(2);
+  datalog_msg_.gnss_fix = ref.ins.gnss.fix;
+  datalog_msg_.gnss_num_sv = ref.ins.gnss.num_satellites;
+  datalog_msg_.gnss_ned_vel_mps[0] = ref.ins.gnss.ned_vel_mps(0);
+  datalog_msg_.gnss_ned_vel_mps[1] = ref.ins.gnss.ned_vel_mps(1);
+  datalog_msg_.gnss_ned_vel_mps[2] = ref.ins.gnss.ned_vel_mps(2);
+  datalog_msg_.gnss_lat_rad = ref.ins.gnss.lla_rad_m(0);
+  datalog_msg_.gnss_lon_rad = ref.ins.gnss.lla_rad_m(1);
+  datalog_msg_.gnss_alt_m = static_cast<float>(ref.ins.gnss.lla_rad_m(2));
+  datalog_msg_.ins_accel_mps2[0] = ref.ins.ekf.accel_mps2(0);
+  datalog_msg_.ins_accel_mps2[1] = ref.ins.ekf.accel_mps2(1);
+  datalog_msg_.ins_accel_mps2[2] = ref.ins.ekf.accel_mps2(2);
+  datalog_msg_.ins_gyro_radps[0] = ref.ins.ekf.gyro_radps(0);
+  datalog_msg_.ins_gyro_radps[1] = ref.ins.ekf.gyro_radps(1);
+  datalog_msg_.ins_gyro_radps[2] = ref.ins.ekf.gyro_radps(2);
+  datalog_msg_.ins_ned_vel_mps[0] = ref.ins.ekf.ned_vel_mps(0);
+  datalog_msg_.ins_ned_vel_mps[1] = ref.ins.ekf.ned_vel_mps(1);
+  datalog_msg_.ins_ned_vel_mps[2] = ref.ins.ekf.ned_vel_mps(2);
+  datalog_msg_.ins_lat_rad = ref.ins.ekf.lla_rad_m(0);
+  datalog_msg_.ins_lon_rad = ref.ins.ekf.lla_rad_m(1);
+  datalog_msg_.ins_alt_m = static_cast<float>(ref.ins.ekf.lla_rad_m(2));
+  datalog_msg_.ins_pitch_rad = ref.ins.ekf.pitch_rad;
+  datalog_msg_.ins_roll_rad = ref.ins.ekf.roll_rad;
+  datalog_msg_.ins_yaw_rad = ref.ins.ekf.yaw_rad;
+  datalog_msg_.static_press_pa = ref.airdata.ps_static.press_pa;
+  datalog_msg_.diff_press_pa = ref.airdata.ps_diff.press_pa;
+  datalog_msg_.filt_static_press_pa = ref.airdata.filt_static_press_pa;
+  datalog_msg_.filt_diff_press_pa = ref.airdata.filt_diff_press_pa;
+  datalog_msg_.press_alt_m = ref.airdata.press_alt_m;
+  datalog_msg_.agl_alt_m = ref.airdata.agl_alt_m;
+  datalog_msg_.ias_mps = ref.airdata.ias_mps;
+  datalog_msg_.eas_mps = ref.airdata.eas_mps;
+
   /* Encode */
   stream_ = pb_ostream_from_buffer(data_buffer_, sizeof(data_buffer_));
   if (!pb_encode(&stream_, DatalogMessage_fields, &datalog_msg_)) {

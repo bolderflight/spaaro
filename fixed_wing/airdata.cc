@@ -49,6 +49,8 @@ void Init() {
   while (t_ms < INIT_TIME_S_ * 1000.0f) {
     if (static_press_.Read()) {
       static_press_stats_.Accum(static_press_.pressure_pa());
+      /* Warm up the static pressure filter */
+      static_press_filt_.Filter(static_press_.pressure_pa());
     }
     if (diff_press_.Read()) {
       diff_press_stats_.Accum(diff_press_.pressure_pa());
