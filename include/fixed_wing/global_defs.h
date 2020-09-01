@@ -62,7 +62,6 @@ struct PressureTransducerData {
 struct Airdata {
   PressureTransducerData ps_static;
   PressureTransducerData ps_diff;
-  PressureTransducerData fmu_static;
   float filt_static_press_pa;
   float filt_diff_press_pa;
   float press_alt_m;

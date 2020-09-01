@@ -16,6 +16,13 @@ configMcu(${MCU})
 add_definitions(
 	-DSERIAL3_RX_BUFFER_SIZE=1024
 )
+# nanopb
+set(NANOPB_SRC_ROOT_FOLDER "/usr/local/nanopb")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${NANOPB_SRC_ROOT_FOLDER}/extra)
+find_package(Nanopb REQUIRED)
+include_directories(${NANOPB_INCLUDE_DIRS})
+NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS fixed_wing/datalog.proto)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 # Fetch dependencies
 include(FetchContent)
 FetchContent_Declare(
@@ -48,11 +55,6 @@ FetchContent_Declare(
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/ams5915.git
 )
 FetchContent_MakeAvailable(ams5915)
-FetchContent_Declare(
-	bme280
-	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/bme280.git
-)
-FetchContent_MakeAvailable(bme280)
 FetchContent_Declare(
 	airdata
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/airdata.git
@@ -88,6 +90,16 @@ FetchContent_Declare(
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/actuator.git
 )
 FetchContent_MakeAvailable(actuator)
+FetchContent_Declare(
+	logger
+	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/logger.git
+)
+FetchContent_MakeAvailable(logger)
+FetchContent_Declare(
+	framing
+	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/framing.git
+)
+FetchContent_MakeAvailable(framing)
 # Add the executable
 add_executable(flight
 	fixed_wing/flight.cc
@@ -97,6 +109,9 @@ add_executable(flight
 	fixed_wing/airdata.cc
 	fixed_wing/control.cc
 	fixed_wing/effector.cc
+	fixed_wing/datalog.cc
+	${PROTO_SRCS}
+	${PROTO_HDRS}
 )
 # Add the includes
 target_include_directories(flight PUBLIC 
@@ -112,7 +127,6 @@ target_link_libraries(flight
 		ublox
 		navigation
 		ams5915
-		bme280
 		airdata
 		filter
 		statistics
@@ -120,6 +134,8 @@ target_link_libraries(flight
 		polytools
 		pwm
 		actuator
+		logger
+		framing
 )
 # Add hex and upload targets
 include(${CMAKE_SOURCE_DIR}/cmake/flash_mcu.cmake)

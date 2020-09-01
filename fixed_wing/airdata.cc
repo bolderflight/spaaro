@@ -10,7 +10,6 @@
 #include "fixed_wing/hardware_defs.h"
 #include "fixed_wing/global_defs.h"
 #include "ams5915/ams5915.h"
-#include "bme280/bme280.h"
 #include "airdata/airdata.h"
 #include "filter/filter.h"
 #include "statistics/statistics.h"
@@ -20,7 +19,6 @@ namespace {
 /* AMS-5915 */
 sensors::Ams5915 static_press_(&STATIC_PRESS_I2C_BUS, STATIC_PRESS_ADDR, STATIC_PRESS_TRANSDUCER);
 sensors::Ams5915 diff_press_(&DIFF_PRESS_I2C_BUS, DIFF_PRESS_ADDR, DIFF_PRESS_TRANSDUCER);
-sensors::Bme280 fmu_press_(&BME_SPI_BUS, BME_CS);
 /* Initialization time perion */
 static constexpr float INIT_TIME_S_ = 10.0f;
 /* Static and differential pressure statistics */
@@ -44,9 +42,6 @@ void Init() {
   }
   if (!diff_press_.Begin()) {
     print::Error("Unable to initialize communication with differential pressure transducer.");
-  }
-  if (!fmu_press_.Begin()) {
-    print::Error("Unable to initialize communication with FMU pressure transducer.");
   }
   print::Info("done.\n");
   print::Info("Initializing airdata states...");
@@ -79,11 +74,6 @@ void Read(Airdata *ptr) {
     ptr->ps_diff.die_temp_c = diff_press_.die_temperature_c();
     /* Filtered diff pressure */
     ptr->filt_diff_press_pa = diff_press_filt_.Filter(ptr->ps_diff.press_pa);
-  }
-  if (fmu_press_.Read()) {
-    /* Pressure transducer data */
-    ptr->fmu_static.press_pa = fmu_press_.pressure_pa();
-    ptr->fmu_static.die_temp_c = fmu_press_.die_temperature_c();
   }
   /* Altitudes */
   ptr->press_alt_m = PressureAltitude_m(ptr->filt_static_press_pa);

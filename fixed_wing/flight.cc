@@ -14,6 +14,7 @@
 #include "fixed_wing/airdata.h"
 #include "fixed_wing/control.h"
 #include "fixed_wing/effector.h"
+#include "fixed_wing/datalog.h"
 
 /* Timer for sending effector commands */
 IntervalTimer effector_timer;
@@ -42,6 +43,8 @@ void daq() {
   controls::Run(data, &data.control);
   /* Effectors */
   effector::Cmd(data.control.cmds);
+  /* Datalog */
+  datalog::Write(data);
 }
 
 int main() {
@@ -57,9 +60,11 @@ int main() {
   controls::Init();
   /* Init effectors */
   effector::Init();
+  /* Init datalog */
+  datalog::Init();
   /* Attach data acquisition interrupt to INS data ready */
   ins::AttachCallback(IMU_DRDY, daq);
   while(1) {
-
+    datalog::Flush();
   }
 }
