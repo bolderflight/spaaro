@@ -70,7 +70,7 @@ void Read(Airdata *ptr) {
   }
   if (diff_press_.Read()) {
     /* Pressure transducer data */
-    ptr->ps_diff.press_pa = diff_press_.pressure_pa();
+    ptr->ps_diff.press_pa = diff_press_.pressure_pa() - diff_press_bias_pa_;
     ptr->ps_diff.die_temp_c = diff_press_.die_temperature_c();
     /* Filtered diff pressure */
     ptr->filt_diff_press_pa = diff_press_filt_.Filter(ptr->ps_diff.press_pa);
