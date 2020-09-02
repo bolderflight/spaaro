@@ -59,6 +59,12 @@ void Write(const AircraftData &ref) {
   datalog_msg_.imu_mag_ut[0] = ref.ins.imu.mag_ut(0);
   datalog_msg_.imu_mag_ut[1] = ref.ins.imu.mag_ut(1);
   datalog_msg_.imu_mag_ut[2] = ref.ins.imu.mag_ut(2);
+  datalog_msg_.gnss_utc_year = ref.ins.gnss.year;
+  datalog_msg_.gnss_utc_month = ref.ins.gnss.month;
+  datalog_msg_.gnss_utc_day = ref.ins.gnss.day;
+  datalog_msg_.gnss_utc_hour = ref.ins.gnss.hour;
+  datalog_msg_.gnss_utc_min = ref.ins.gnss.min;
+  datalog_msg_.gnss_utc_sec = ref.ins.gnss.sec;
   datalog_msg_.gnss_fix = ref.ins.gnss.fix;
   datalog_msg_.gnss_num_sv = ref.ins.gnss.num_satellites;
   datalog_msg_.gnss_ned_vel_mps[0] = ref.ins.gnss.ned_vel_mps(0);

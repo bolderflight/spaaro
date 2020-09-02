@@ -105,6 +105,17 @@ void Read(InsData *ptr) {
   } 
   /* Check if GNSS packet available */
   if (gnss_.Read()) {
+    ptr->gnss.year = gnss_.year();
+    ptr->gnss.month = gnss_.month();
+    ptr->gnss.day = gnss_.day();
+    ptr->gnss.hour = gnss_.hour();
+    ptr->gnss.min = gnss_.min();
+    /* 
+    * Storing seconds as a float with millisecond precision. 
+    * Using integer division on nano-sec to truncate to milliseconds
+    * before casting to a float and converting milliseconds to seconds.
+    */
+    ptr->gnss.sec = static_cast<float>(gnss_.sec()) + static_cast<float>(gnss_.nano_sec() / 1000) / 1000000.0f;
     ptr->gnss.fix = static_cast<uint8_t>(gnss_.fix());
     ptr->gnss.num_satellites = gnss_.num_satellites();
     ptr->gnss.ned_vel_mps = gnss_.ned_velocity_mps();

@@ -26,6 +26,12 @@ struct ImuData {
 };
 /* GNSS data */
 struct GnssData {
+  int16_t year;
+  int8_t month;
+  int8_t day;
+  int8_t hour;
+  int8_t min;
+  float sec;
   uint8_t fix;
   uint8_t num_satellites;
   Eigen::Vector3f ned_vel_mps;
