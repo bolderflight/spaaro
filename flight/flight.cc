@@ -6,15 +6,15 @@
 */
 
 #include "core/core.h"
-#include "fixed_wing/print_msg.h"
-#include "fixed_wing/hardware_defs.h"
-#include "fixed_wing/global_defs.h"
-#include "fixed_wing/inceptor.h"
-#include "fixed_wing/ins.h"
-#include "fixed_wing/airdata.h"
-#include "fixed_wing/control.h"
-#include "fixed_wing/effector.h"
-#include "fixed_wing/datalog.h"
+#include "flight/print_msg.h"
+#include "flight/hardware_defs.h"
+#include "flight/global_defs.h"
+#include "flight/inceptor.h"
+#include "flight/ins.h"
+#include "flight/airdata.h"
+#include "flight/control.h"
+#include "flight/effector.h"
+#include "flight/datalog.h"
 
 /* Timer for sending effector commands */
 IntervalTimer effector_timer;

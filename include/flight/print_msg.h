@@ -5,8 +5,8 @@
 * Copyright (c) 2020 Bolder Flight Systems
 */
 
-#ifndef INCLUDE_FIXED_WING_PRINT_MSG_H_
-#define INCLUDE_FIXED_WING_PRINT_MSG_H_
+#ifndef INCLUDE_FLIGHT_PRINT_MSG_H_
+#define INCLUDE_FLIGHT_PRINT_MSG_H_
 
 #include <string>
 
@@ -23,4 +23,4 @@ void Warning(std::string str);
 void Error(std::string str);
 } // print
 
-#endif  // INCLUDE_FIXED_WING_PRINT_MSG_H_
+#endif  // INCLUDE_FLIGHT_PRINT_MSG_H_

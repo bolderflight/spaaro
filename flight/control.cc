@@ -5,10 +5,10 @@
 * Copyright (c) 2020 Bolder Flight Systems
 */
 
-#include "fixed_wing/control.h"
-#include "fixed_wing/print_msg.h"
-#include "fixed_wing/hardware_defs.h"
-#include "fixed_wing/global_defs.h"
+#include "flight/control.h"
+#include "flight/print_msg.h"
+#include "flight/hardware_defs.h"
+#include "flight/global_defs.h"
 
 namespace controls {
 

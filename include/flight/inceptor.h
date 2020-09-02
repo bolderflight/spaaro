@@ -5,10 +5,10 @@
 * Copyright (c) 2020 Bolder Flight Systems
 */
 
-#ifndef INCLUDE_FIXED_WING_INCEPTOR_H_
-#define INCLUDE_FIXED_WING_INCEPTOR_H_
+#ifndef INCLUDE_FLIGHT_INCEPTOR_H_
+#define INCLUDE_FLIGHT_INCEPTOR_H_
 
-#include "fixed_wing/global_defs.h" 
+#include "flight/global_defs.h" 
 
 namespace inceptor {
 
@@ -17,4 +17,4 @@ void Read(InceptorData *ptr);
 
 }  // namespace inceptor
 
-#endif  // INCLUDE_FIXED_WING_INCEPTOR_H_
+#endif  // INCLUDE_FLIGHT_INCEPTOR_H_

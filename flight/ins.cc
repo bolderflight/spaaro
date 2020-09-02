@@ -5,10 +5,10 @@
 * Copyright (c) 2020 Bolder Flight Systems
 */
 
-#include "fixed_wing/ins.h"
-#include "fixed_wing/print_msg.h"
-#include "fixed_wing/hardware_defs.h"
-#include "fixed_wing/global_defs.h"
+#include "flight/ins.h"
+#include "flight/print_msg.h"
+#include "flight/hardware_defs.h"
+#include "flight/global_defs.h"
 #include "mpu9250/mpu9250.h"
 #include "ublox/ublox.h"
 #include "navigation/navigation.h"

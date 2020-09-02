@@ -5,8 +5,8 @@
 * Copyright (c) 2020 Bolder Flight Systems
 */
 
-#ifndef INCLUDE_FIXED_WING_HARDWARE_DEFS_H_
-#define INCLUDE_FIXED_WING_HARDWARE_DEFS_H_
+#ifndef INCLUDE_FLIGHT_HARDWARE_DEFS_H_
+#define INCLUDE_FLIGHT_HARDWARE_DEFS_H_
 
 #include "core/core.h"
 #include "ams5915/ams5915.h"
@@ -43,4 +43,4 @@ static constexpr sensors::Ams5915::Transducer DIFF_PRESS_TRANSDUCER   = sensors:
 static constexpr SPIClass &BME_SPI_BUS = SPI;
 static constexpr unsigned int BME_CS = 26;
 
-#endif  // INCLUDE_FIXED_WING_HARDWARE_DEFS_H_
+#endif  // INCLUDE_FLIGHT_HARDWARE_DEFS_H_

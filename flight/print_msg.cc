@@ -6,13 +6,13 @@
 */
 
 #include "core/core.h"
-#include "fixed_wing/print_msg.h"
-#include "fixed_wing/hardware_defs.h"
+#include "flight/print_msg.h"
+#include "flight/hardware_defs.h"
 
 namespace print {
 
 namespace {
-  static constexpr bool DEBUG = true;
+static constexpr bool DEBUG = true;
 } // anonymous
 
 void Begin()

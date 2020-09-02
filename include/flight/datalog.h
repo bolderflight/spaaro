@@ -5,10 +5,10 @@
 * Copyright (c) 2020 Bolder Flight Systems
 */
 
-#ifndef INCLUDE_FIXED_WING_DATALOG_H_
-#define INCLUDE_FIXED_WING_DATALOG_H_
+#ifndef INCLUDE_FLIGHT_DATALOG_H_
+#define INCLUDE_FLIGHT_DATALOG_H_
 
-#include "fixed_wing/global_defs.h" 
+#include "flight/global_defs.h" 
 
 namespace datalog {
 
@@ -19,4 +19,4 @@ void Close();
 
 }  // namespace datalog
 
-#endif  // INCLUDE_FIXED_WING_DATALOG_H_
+#endif  // INCLUDE_FLIGHT_DATALOG_H_

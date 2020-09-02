@@ -4,9 +4,9 @@ set(MCU MK66FX1M0)
 # Setting up the toolchain
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
-project(FixedWing
+project(Flight
 	VERSION 1.0.0
-	DESCRIPTION "Fixed wing flight software"
+	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )
 # Grab the processor and set up definitions and compile options
@@ -21,7 +21,7 @@ set(NANOPB_SRC_ROOT_FOLDER "/usr/local/nanopb")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${NANOPB_SRC_ROOT_FOLDER}/extra)
 find_package(Nanopb REQUIRED)
 include_directories(${NANOPB_INCLUDE_DIRS})
-NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS fixed_wing/datalog.proto)
+NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS flight/datalog.proto)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 # Fetch dependencies
 include(FetchContent)
@@ -102,14 +102,14 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(framing)
 # Add the executable
 add_executable(flight
-	fixed_wing/flight.cc
-	fixed_wing/print_msg.cc
-	fixed_wing/inceptor.cc
-	fixed_wing/ins.cc
-	fixed_wing/airdata.cc
-	fixed_wing/control.cc
-	fixed_wing/effector.cc
-	fixed_wing/datalog.cc
+	flight/flight.cc
+	flight/print_msg.cc
+	flight/inceptor.cc
+	flight/ins.cc
+	flight/airdata.cc
+	flight/control.cc
+	flight/effector.cc
+	flight/datalog.cc
 	${PROTO_SRCS}
 	${PROTO_HDRS}
 )

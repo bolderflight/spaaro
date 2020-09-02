@@ -5,10 +5,10 @@
 * Copyright (c) 2020 Bolder Flight Systems
 */
 
-#ifndef INCLUDE_FIXED_WING_EFFECTOR_H_
-#define INCLUDE_FIXED_WING_EFFECTOR_H_
+#ifndef INCLUDE_FLIGHT_EFFECTOR_H_
+#define INCLUDE_FLIGHT_EFFECTOR_H_
 
-#include "fixed_wing/global_defs.h" 
+#include "flight/global_defs.h" 
 
 namespace effector {
 
@@ -18,4 +18,4 @@ void Write();
 
 }  // namespace effector
 
-#endif  // INCLUDE_FIXED_WING_EFFECTOR_H_
+#endif  // INCLUDE_FLIGHT_EFFECTOR_H_

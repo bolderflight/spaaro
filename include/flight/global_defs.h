@@ -5,10 +5,10 @@
 * Copyright (c) 2020 Bolder Flight Systems
 */
 
-#ifndef INCLUDE_FIXED_WING_GLOBAL_DEFS_H_
-#define INCLUDE_FIXED_WING_GLOBAL_DEFS_H_
+#ifndef INCLUDE_FLIGHT_GLOBAL_DEFS_H_
+#define INCLUDE_FLIGHT_GLOBAL_DEFS_H_
 
-#include "fixed_wing/hardware_defs.h"
+#include "flight/hardware_defs.h"
 #include "Eigen/Core"
 #include "Eigen/Dense"
 #include <array>
@@ -93,4 +93,4 @@ struct AircraftData {
   ControlsData control;
 };
 
-#endif  // INCLUDE_FIXED_WING_GLOBAL_DEFS_H_
+#endif  // INCLUDE_FLIGHT_GLOBAL_DEFS_H_
