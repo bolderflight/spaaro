@@ -77,7 +77,7 @@ void Init() {
   /* Get updated IMU data */
   while (!imu_.Read()) {}
   /* Initialize the EKF states */
-  ekf_.Initialize(imu_.accel_mps2(), imu_.gyro_radps(), imu_.mag_ut(), gnss_.ned_velocity_mps(), gnss_.lla_rad_m());
+  ekf_.Initialize(imu_.accel_mps2(), imu_.gyro_radps(), imu_.mag_ut(), gnss_.ned_velocity_mps(), gnss_.lla_msl_rad_m());
   print::Info("done.\n");
 }
 void AttachCallback(uint8_t int_pin, void (*function)()) {
@@ -104,7 +104,9 @@ void Read(InsData *ptr) {
     ptr->ekf.yaw_rad = ekf_.yaw_rad();
   } 
   /* Check if GNSS packet available */
+  ptr->gnss.updated = false;
   if (gnss_.Read()) {
+    ptr->gnss.updated = true;
     ptr->gnss.year = gnss_.year();
     ptr->gnss.month = gnss_.month();
     ptr->gnss.day = gnss_.day();
@@ -119,13 +121,17 @@ void Read(InsData *ptr) {
     ptr->gnss.fix = static_cast<uint8_t>(gnss_.fix());
     ptr->gnss.num_satellites = gnss_.num_satellites();
     ptr->gnss.ned_vel_mps = gnss_.ned_velocity_mps();
-    ptr->gnss.lla_rad_m = gnss_.lla_rad_m();
+    ptr->gnss.lla_msl_rad_m = gnss_.lla_msl_rad_m();
+    ptr->gnss.alt_wgs84_m = gnss_.alt_wgs84_m();
+    ptr->gnss.ground_speed_mps = gnss_.ground_speed_mps();
+    ptr->gnss.ground_track_rad = gnss_.ground_track_rad();
     ptr->gnss.time_accuracy_ns = gnss_.time_accuracy_ns();
     ptr->gnss.horiz_accuracy_m = gnss_.horizontal_accuracy_m();
     ptr->gnss.vert_accuracy_m = gnss_.vertical_accuracy_m();
     ptr->gnss.vel_accuracy_mps = gnss_.velocity_accuracy_mps();
+    ptr->gnss.track_accuracy_rad = gnss_.track_accuracy_rad();
     /* EKF measurement update */
-    ekf_.MeasurementUpdate(gnss_.ned_velocity_mps(), gnss_.lla_rad_m());
+    ekf_.MeasurementUpdate(gnss_.ned_velocity_mps(), gnss_.lla_msl_rad_m());
     ptr->ekf.accel_bias_mps2 = ekf_.accel_bias_mps2();
     ptr->ekf.gyro_bias_radps = ekf_.gyro_bias_radps();
     ptr->ekf.accel_mps2 = ekf_.accel_mps2();

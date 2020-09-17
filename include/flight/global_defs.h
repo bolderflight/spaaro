@@ -26,6 +26,7 @@ struct ImuData {
 };
 /* GNSS data */
 struct GnssData {
+  bool updated;
   int16_t year;
   int8_t month;
   int8_t day;
@@ -35,11 +36,15 @@ struct GnssData {
   uint8_t fix;
   uint8_t num_satellites;
   Eigen::Vector3f ned_vel_mps;
-  Eigen::Vector3d lla_rad_m;
+  Eigen::Vector3d lla_msl_rad_m;
+  float alt_wgs84_m;
+  float ground_speed_mps;
+  float ground_track_rad;
   uint32_t time_accuracy_ns;
   float horiz_accuracy_m;
   float vert_accuracy_m;
   float vel_accuracy_mps;
+  float track_accuracy_rad;
 };
 /* EKF data */
 struct EkfData {

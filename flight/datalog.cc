@@ -59,6 +59,7 @@ void Write(const AircraftData &ref) {
   datalog_msg_.imu_mag_ut[0] = ref.ins.imu.mag_ut(0);
   datalog_msg_.imu_mag_ut[1] = ref.ins.imu.mag_ut(1);
   datalog_msg_.imu_mag_ut[2] = ref.ins.imu.mag_ut(2);
+  datalog_msg_.gnss_updated = ref.ins.gnss.updated;
   datalog_msg_.gnss_utc_year = ref.ins.gnss.year;
   datalog_msg_.gnss_utc_month = ref.ins.gnss.month;
   datalog_msg_.gnss_utc_day = ref.ins.gnss.day;
@@ -70,9 +71,9 @@ void Write(const AircraftData &ref) {
   datalog_msg_.gnss_ned_vel_mps[0] = ref.ins.gnss.ned_vel_mps(0);
   datalog_msg_.gnss_ned_vel_mps[1] = ref.ins.gnss.ned_vel_mps(1);
   datalog_msg_.gnss_ned_vel_mps[2] = ref.ins.gnss.ned_vel_mps(2);
-  datalog_msg_.gnss_lat_rad = ref.ins.gnss.lla_rad_m(0);
-  datalog_msg_.gnss_lon_rad = ref.ins.gnss.lla_rad_m(1);
-  datalog_msg_.gnss_alt_m = static_cast<float>(ref.ins.gnss.lla_rad_m(2));
+  datalog_msg_.gnss_lat_rad = ref.ins.gnss.lla_msl_rad_m(0);
+  datalog_msg_.gnss_lon_rad = ref.ins.gnss.lla_msl_rad_m(1);
+  datalog_msg_.gnss_alt_m = static_cast<float>(ref.ins.gnss.lla_msl_rad_m(2));
   datalog_msg_.ins_accel_mps2[0] = ref.ins.ekf.accel_mps2(0);
   datalog_msg_.ins_accel_mps2[1] = ref.ins.ekf.accel_mps2(1);
   datalog_msg_.ins_accel_mps2[2] = ref.ins.ekf.accel_mps2(2);

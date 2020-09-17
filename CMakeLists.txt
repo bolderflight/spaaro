@@ -14,7 +14,7 @@ include(${CMAKE_SOURCE_DIR}/cmake/config_mcu.cmake)
 configMcu(${MCU})
 # Define a larger Serial 3 RX buffer
 add_definitions(
-	-DSERIAL3_RX_BUFFER_SIZE=1024
+	-DSERIAL3_RX_BUFFER_SIZE=2048
 )
 # nanopb
 set(NANOPB_SRC_ROOT_FOLDER "/usr/local/nanopb")
