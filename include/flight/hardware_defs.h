@@ -42,5 +42,20 @@ static constexpr unsigned int DIFF_PRESS_ADDR = 0x11;
 static constexpr sensors::Ams5915::Transducer DIFF_PRESS_TRANSDUCER   = sensors::Ams5915::AMS5915_0010_D;
 static constexpr SPIClass &BME_SPI_BUS = SPI;
 static constexpr unsigned int BME_CS = 26;
+/* Voltage */
+static constexpr int ANALOG_RESOLUTION_BITS = 16;
+static constexpr unsigned int INPUT_VOLTAGE_PIN = 15;
+static constexpr float INPUT_VOLTAGE_SCALE = (10000.0f + 1000.0f) / 1000.0f;
+static constexpr unsigned int REGULATED_VOLTAGE_PIN = A22;
+static constexpr float REGULATED_VOLTAGE_SCALE = (1000.0f + 1000.0f) / 1000.0f;
+static constexpr unsigned int SBUS_VOLTAGE_PIN = A21;
+static constexpr float SBUS_VOLTAGE_SCALE = (1000.0f + 499.0f) / 499.0f;
+static constexpr unsigned int PWM_VOLTAGE_PIN = 39;
+static constexpr float PWM_VOLTAGE_SCALE = (1000.0f + 499.0f) / 499.0f;
+/* Telemetry */
+static constexpr int TELEM_RATE_HZ = 25;
+static constexpr int TELEM_ID = 1;
+static constexpr HardwareSerial &TELEM_UART = Serial4;
+static constexpr unsigned int TELEM_BAUD = 57600;
 
 #endif  // INCLUDE_FLIGHT_HARDWARE_DEFS_H_

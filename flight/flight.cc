@@ -14,7 +14,9 @@
 #include "flight/airdata.h"
 #include "flight/control.h"
 #include "flight/effector.h"
+#include "flight/status.h"
 #include "flight/datalog.h"
+#include "flight/telemetry.h"
 
 /* Timer for sending effector commands */
 IntervalTimer effector_timer;
@@ -39,12 +41,15 @@ void daq() {
   /* Read sensors */
   ins::Read(&data.ins);
   airdata::Read(&data.airdata);
+  status::Read(&data.status);
   /* Controls */
   controls::Run(data, &data.control);
   /* Effectors */
   effector::Cmd(data.control.cmds);
   /* Datalog */
   datalog::Write(data);
+  /* Telemetry */
+  telemetry::Send(data);
 }
 
 int main() {
@@ -56,15 +61,21 @@ int main() {
   /* Init sensors and sensor processing */
   ins::Init();
   airdata::Init();
+  status::Init();
   /* Init controls */
   controls::Init();
   /* Init effectors */
   effector::Init();
   /* Init datalog */
   datalog::Init();
+  /* Init telemtry */
+  telemetry::Init();
   /* Attach data acquisition interrupt to INS data ready */
   ins::AttachCallback(IMU_DRDY, daq);
   while(1) {
+    /* Send heartbeat and check for messages */
+    telemetry::Update();
+    /* Flush datalog to SD */
     datalog::Flush();
   }
 }

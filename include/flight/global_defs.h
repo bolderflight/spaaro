@@ -80,6 +80,13 @@ struct Airdata {
   float ias_mps;
   float eas_mps;
 };
+/* Status data */
+struct StatusData {
+  float input_voltage;
+  float regulated_voltage;
+  float pwm_voltage;
+  float sbus_voltage;
+};
 /* Effector Commands */
 struct EffectorCmds {
   std::array<uint16_t, NUM_PWM_PINS> pwm;
@@ -95,6 +102,7 @@ struct AircraftData {
   InceptorData inceptor;
   InsData ins;
   Airdata airdata;
+  StatusData status;
   ControlsData control;
 };
 

@@ -51,5 +51,9 @@ message DatalogMessage {
   float agl_alt_m = 32;
   float ias_mps = 33;
   float eas_mps = 34;
+  float input_voltage = 35;
+  float regulated_voltage = 36;
+  float pwm_voltage = 37;
+  float sbus_voltage = 38;
 }
 

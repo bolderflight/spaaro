@@ -100,6 +100,11 @@ FetchContent_Declare(
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/framing.git
 )
 FetchContent_MakeAvailable(framing)
+FetchContent_Declare(
+	mavlink
+	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/mavlink.git
+)
+FetchContent_MakeAvailable(mavlink)
 # Add the executable
 add_executable(flight
 	flight/flight.cc
@@ -109,7 +114,9 @@ add_executable(flight
 	flight/airdata.cc
 	flight/control.cc
 	flight/effector.cc
+	flight/status.cc
 	flight/datalog.cc
+	flight/telemetry.cc
 	${PROTO_SRCS}
 	${PROTO_HDRS}
 )
@@ -136,6 +143,7 @@ target_link_libraries(flight
 		actuator
 		logger
 		framing
+		mavlink
 )
 # Add hex and upload targets
 include(${CMAKE_SOURCE_DIR}/cmake/flash_mcu.cmake)

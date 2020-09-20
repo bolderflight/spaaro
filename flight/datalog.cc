@@ -97,6 +97,10 @@ void Write(const AircraftData &ref) {
   datalog_msg_.agl_alt_m = ref.airdata.agl_alt_m;
   datalog_msg_.ias_mps = ref.airdata.ias_mps;
   datalog_msg_.eas_mps = ref.airdata.eas_mps;
+  datalog_msg_.input_voltage = ref.status.input_voltage;
+  datalog_msg_.regulated_voltage = ref.status.regulated_voltage;
+  datalog_msg_.pwm_voltage = ref.status.pwm_voltage;
+  datalog_msg_.sbus_voltage = ref.status.sbus_voltage;
 
   /* Encode */
   stream_ = pb_ostream_from_buffer(data_buffer_, sizeof(data_buffer_));
