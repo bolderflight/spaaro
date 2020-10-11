@@ -12,9 +12,17 @@ project(Flight
 # Grab the processor and set up definitions and compile options
 include(${CMAKE_SOURCE_DIR}/cmake/config_mcu.cmake)
 configMcu(${MCU})
+# Define a larger Serial 2 RX buffer
+add_definitions(
+	-DSERIAL2_RX_BUFFER_SIZE=1024
+)
 # Define a larger Serial 3 RX buffer
 add_definitions(
 	-DSERIAL3_RX_BUFFER_SIZE=2048
+)
+# Define a larger Serial 4 TX buffer
+add_definitions(
+	-DSERIAL4_TX_BUFFER_SIZE=2048
 )
 # nanopb
 set(NANOPB_SRC_ROOT_FOLDER "/usr/local/nanopb")
