@@ -5,7 +5,7 @@ set(MCU MK66FX1M0)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-	VERSION 1.0.0
+	VERSION 1.0.1
 	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )
@@ -36,81 +36,97 @@ include(FetchContent)
 FetchContent_Declare(
 	core
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/core.git
+	GIT_TAG v1.0.1
 )
 FetchContent_MakeAvailable(core)
 FetchContent_Declare(
 	eigen
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/eigen.git
+	GIT_TAG v1.0.0
 )
 FetchContent_MakeAvailable(eigen)
 FetchContent_Declare(
 	mpu9250
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/mpu9250.git
+	GIT_TAG v1.0.1
 )
 FetchContent_MakeAvailable(mpu9250)
 FetchContent_Declare(
 	ublox
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/ublox.git
+	GIT_TAG v1.2.1
 )
 FetchContent_MakeAvailable(ublox)
 FetchContent_Declare(
 	navigation
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/navigation.git
+	GIT_TAG v1.2.2
 )
 FetchContent_MakeAvailable(navigation)
 FetchContent_Declare(
 	ams5915
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/ams5915.git
+	GIT_TAG v1.0.1
 )
 FetchContent_MakeAvailable(ams5915)
 FetchContent_Declare(
 	airdata
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/airdata.git
+	GIT_TAG v1.0.1
 )
 FetchContent_MakeAvailable(airdata)
 FetchContent_Declare(
 	filter
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/filter.git
+	GIT_TAG v1.0.1
 )
 FetchContent_MakeAvailable(filter)
 FetchContent_Declare(
 	statistics
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/statistics.git
+	GIT_TAG v1.0.1
 )
 FetchContent_MakeAvailable(statistics)
 FetchContent_Declare(
 	sbus
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/sbus.git
+	GIT_TAG v1.0.2
 )
 FetchContent_MakeAvailable(sbus)
 FetchContent_Declare(
 	polytools
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/polytools.git
+	GIT_TAG v1.0.2
 )
 FetchContent_MakeAvailable(polytools)
 FetchContent_Declare(
 	pwm
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/pwm.git
+	GIT_TAG v1.0.1
 )
 FetchContent_MakeAvailable(pwm)
 FetchContent_Declare(
 	actuator
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/actuator.git
+	GIT_TAG v1.0.1
 )
 FetchContent_MakeAvailable(actuator)
 FetchContent_Declare(
 	logger
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/logger.git
+	GIT_TAG v1.0.2
 )
 FetchContent_MakeAvailable(logger)
 FetchContent_Declare(
 	framing
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/framing.git
+	GIT_TAG v1.1.1
 )
 FetchContent_MakeAvailable(framing)
 FetchContent_Declare(
 	mavlink
 	GIT_REPOSITORY 	git@gitlab.com:bolderflight/software/mavlink.git
+	GIT_TAG v1.0.1
 )
 FetchContent_MakeAvailable(mavlink)
 # Add the executable
