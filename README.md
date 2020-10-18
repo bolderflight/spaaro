@@ -1,12 +1,23 @@
 # Flight Software
 Welcome to Bolder Flight System's flight software! This is meant to serve as a template for creating airframe or project specific code. It pulls together common sensing, filtering, estimation, actuation, datalogging, and telemetry modules, providing a space to rapidly implement airframe / project specific control laws. It also serves as a jumping off point into Bolder Flight's ecosystem by providing an overarching vision and direction to the development. We're glad that you're here and we hope that you contribute to our project.
 
-## Vision
+## Table of Contents
+* [Our Vision](#vision)
+* [Getting Started](#getting_started)
+   - [Development Environment](#dev_env)
+   - [Project Organization](#organization)
+   - [Contributing](#contributing)
+   - [Style Guide](#style)
+   - [Licensing](#licensing)
+   - [Examples](#examples)
+   - [Tags](#tags)
+
+## Our Vision<a name="vision"></a>
 *To drive the rapid growth of reliable autonomous aircraft with a focus on research and commercial applications with the highest potential to improve the environment, improve access to affordable mobility, and expand access to public services and goods. We will drive this rapid growth by developing flight systems with a focus on data quality, reliability, and robustness at a revolutionary price.*
 
-## Getting Started
+## Getting Started<a name="getting_started"></a>
 
-### Development Environment
+### Development Environment<a name="dev_env"></a>
 We use a Linux based development environment with CMake and GCC as a build system, git for versioning, and Google Protocol Buffers for specifying datalog packets. The following are specific instructions for setting up your development environment.
 
 1. Linux is used as our development environment. Start by installing a Debian-based distro or the Windows Subsystem for Linux (WSL) version 1 or 2. Although other Linux distros should work, these instructions are written for a Debian-based distro.
@@ -103,7 +114,7 @@ This builds the software. To upload to the flight computer, the command would be
 $ make flight_upload
 ```
 
-### Project Organization
+### Project Organization<a name="organization"></a>
 The project is organized into many small repos. This approach enhances the code readability, re-use, and unit testing. CMake's *fetch_content* is used to grab dependencies. A summary of the relevant repos is below:
 
 * [flight](https://gitlab.com/bolderflight/software/flight): flight software template, overarching project vision and direction.
@@ -135,70 +146,28 @@ The project is organized into many small repos. This approach enhances the code 
 * [mavlink](https://gitlab.com/bolderflight/software/mavlink): wrapper to ease sending MAV Link telemetry.
 * [mat_converter](https://gitlab.com/bolderflight/software/mat_converter): program to convert BFS data log files to MATLAB mat files given a Google Protocol Buffer description of the data log message layout.
 
-### Contributing
-We welcome code contributions, bug reports, suggested enhancements, and assistance with documentation or testing. Please use the repo's issue tracking system to identify potential bugs and suggested enhancements. Please issue pull requests for making code contributions and assisting with documentation. If you have an idea to contribute and are unsure of the best approach, please contact us at support@bolderflight.com to discuss.
+### Contributing<a name="contributing"></a>
+We welcome code contributions, bug reports, suggested enhancements, and assistance with documentation or testing. Use the repo's issue tracking system to identify potential bugs and suggested enhancements. Issue pull requests for making code contributions and assisting with documentation. If you have an idea to contribute and are unsure of the best approach, please contact us at support@bolderflight.com to discuss.
 
-When issuing a bug report, please be specific about the microprocessor used to find the bug. Also please include code and steps necessary to reproduce the bug. We need to be able to reliably reproduce the bug in order to identify the problem and develop solutions.
+When issuing a bug report, be specific about:
+   * The microprocessor used or Linux environment
+   * Steps to reproduce the bug
+   * Include code
 
-### Design Principles
-The following are several of our design principles, which enable us to develop flight systems with a focus on data quality, reliability, and robustness,
-
-1. Synchronize data collection to the IMU or INS data ready interrupt. Collect all updated sensor data, then apply filtering and estimation and compute control law outputs. Set a timer based on the start of data collection for sending actuator commands. This approach minimizes latency between sensing and actuation by ensuring that all data is updated before the next layer of software uses that data. The timer for actuation fixes the latency at a pre-determined value, so the system has extremely high levels of determinism and control law robustness to the fixed latency can be analyzed.
-
-2. Avoid dynamic memory allocation or large, local memory allocation. This approach provides high levels of determinism by minimizing the likelihood of running out of memory during operation.
-
-3. Push checks and errors to compile time rather than run time. Similar to above, we would like to avoid run time errors at all cost. Compile time errors also provide better feedback on the error source, enhancing debugging.
-
-4. The UI should be tailored for the end-user, presenting the most simplified set of options possible. For example, a precision-ag farmer will need far fewer configuration options than a hobbyist or a researcher. The farmer also likely doesn't know or care about flying altitude or speed. Present options to them in metrics that matter given the mission (altitude and airspeed's relationship with survey data resolution and time is far more meaningful). Simpler interfaces lead to more reliable flights.
-
-### Best Practices
-The following are best practices when developing software for Bolder Flight.
-
-#### Style Guide
+### Style Guide<a name="style"></a>
 Follow the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html). Any parameter or variable names, which contain unit specific data should be appended with an underscore and the units (i.e. accel_z_mps2). Units should be named by their common abbreviation. For derived units, use _p_ to indicate _"per"_ and append exponents. So, m/s/s would be _mps2_ and kg/m^3 would be _kgpm3_. If a common abbreviation already exists for the unit, use that instead (i.e. _psi_ instead of _lbpin2_).
 
 Prefer to use _float_ instead of _double_ unless there is a specific and demonstrated need for the additional resolution. Specify integer size in all cases where a certain number of bytes are expected (i.e. uint16_t where 2 bytes is assumed); otherwise use std::size_t or a signed int. Typically, we are not concerned with program size and int work well for integers and index values. If a certain number of bytes are needed they need to be called out directly since different compilers and platforms can change the number of bytes stored in a short, for instance. Do not assume that using unsigned int will prevent a negative input, instead use signed int and check for negative values.
 
-#### Licensing
+Linting tests check for conformance to the style guide - analyzing the code for potential errors and leading to better readibility. [cpplint](https://raw.githubusercontent.com/google/styleguide/gh-pages/cpplint/cpplint.py) should be used to conduct linting tests with verbosity level 0. Typically line length limits can be ignored for code; although, comments should conform to the line length limitation.
+
+### Licensing<a name="licensing"></a>
 If you use external sources, ensure they are licensed MIT, BSD, or a similarly permissive license. We would like to limit the amount of LGPL code and need to avoid GPL and unlicensed code.
 
 If you would like to use external sources with licenses other than MIT or BSD, contact support@bolderflight.com to discuss options.
 
-#### Examples
+### Examples<a name="examples"></a>
 Develop examples demonstrating your code's functionality and include expected outputs in comments. These examples provide an easy access point to learning your code and ensuring that it installed correctly.
 
-#### Testing
-All tests should pass before a pull request is issued. Typically the following tests would be run:
-   * Linting
-   * Build
-   * Test
-      * Inputs
-      * Expected values
-
-At this time, we do not have unit tests setup for software running on a microcontroller. For those libraries, linting would be the only step.
-
-#### Linting
-Linting tests check for conformance to the style guide - analyzing the code for potential errors and leading to better readibility. [cpplint](https://raw.githubusercontent.com/google/styleguide/gh-pages/cpplint/cpplint.py) should be used to conduct linting tests with verbosity level 0. Typically line length limits can be ignored for code; although, comments should conform to the line length limitation.
-
-#### Build
-Libraries, example code, and tests should be compiled with CMake without error.
-
-#### Inputs
-Test all parameters against unexpected values, such as NULL inputs, buffer overflows, and zero or negative values. Try to capture all potential combinations of malformed inputs to ensure that your code is protecting against these. Assume that your fellow developers will not read your documentation and will try to use your code with incorrect parameters.
-
-#### Expected values
-Test against expected values to ensure that your software algorithms are computing outputs correctly.
-
-#### CI Pipeline
-Update the CI pipeline configuration in _.gitlab-ci.yml_ to incorporate all additional tests that you add. The _bfs_ tag should be used to specify using Bolder Flight Systems' runners, which are configured to compile and test our software.
-
-### Document
-Document all API changes in the repository README.md file. Specify what each function and method does, input parameters, and outputs. Give a short example of how to use that block of code. Ideally these example snippets will be pulled from the example executable.
-
-### Merge
-Pushing directly to the master branch is dangerous - it enables changes to be made without proper testing and review. This practice also increases the risk of pushing breaking changes and having inadequate documentation. You should create a branch, make your changes, run tests, update documentation, and submit a merge request for review and incorporation.
-
-The CHANGELOG.md will be updated to briefly document code changes.
-
-### Tag
+### Tags<a name="tags"></a>
 Tags are used to specify release version numbers in [semver](https://semver.org/) formatting. These tags are important because repositories using your code as a dependency will pull, build, and validate against a specific version, rather than continuously needing to manage code updates following HEAD.
