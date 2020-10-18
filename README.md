@@ -2,7 +2,6 @@
 Welcome to Bolder Flight System's flight software! This is meant to serve as a template for creating airframe or project specific code. It pulls together common sensing, filtering, estimation, actuation, datalogging, and telemetry modules, providing a space to rapidly implement airframe / project specific control laws. It also serves as a jumping off point into Bolder Flight's ecosystem by providing an overarching vision and direction to the development. We're glad that you're here and we hope that you contribute to our project.
 
 ## Vision
-
 *To drive the rapid growth of reliable autonomous aircraft with a focus on research and commercial applications with the highest potential to improve the environment, improve access to affordable mobility, and expand access to public services and goods. We will drive this rapid growth by developing flight systems with a focus on data quality, reliability, and robustness at a revolutionary price.*
 
 ## Getting Started
@@ -79,14 +78,14 @@ $ sudo cp -r * /usr/local/
 9. Install the Linux udev rules. Software is flashed over USB and udev rules are needed to give the loader permission to use the USB port. The rules can be downloaded [here](https://www.pjrc.com/teensy/49-teensy.rules) and are copieied to /etc/udev/rules.d/.
 
 ```
-wget https://www.pjrc.com/teensy/49-teensy.rules
-sudo cp 49-teensy.rules /etc/udev/rules.d/
+$ wget https://www.pjrc.com/teensy/49-teensy.rules
+$ sudo cp 49-teensy.rules /etc/udev/rules.d/
 ```
 
 10. Configure git with your name and email
 ```
-git config --global user.name "Your Name"
-git config --global user.email "youremail@yourdomain.com"
+$ git config --global user.name "Your Name"
+$ git config --global user.email "youremail@yourdomain.com"
 ```
 
 11. Install your favorite text editor and start hacking! Hints on installation are given in each repo. In general, the CMake idiom involves creating a *build* directory, running CMake, and running make. For this repo, the steps would be:
@@ -139,18 +138,18 @@ The project is organized into many small repos. This approach enhances the code 
 ### Contributing
 We welcome code contributions, bug reports, suggested enhancements, and assistance with documentation or testing. Please use the repo's issue tracking system to identify potential bugs and suggested enhancements. Please issue pull requests for making code contributions and assisting with documentation. If you have an idea to contribute and are unsure of the best approach, please contact us at support@bolderflight.com to discuss.
 
-When issuing a bug report, please be specific about the microprocessor used to find the bug. Also please include code and steps necessary to produce the bug. We need to be able to reliably produce the bug in order to identify the problem and develop solutions.
+When issuing a bug report, please be specific about the microprocessor used to find the bug. Also please include code and steps necessary to reproduce the bug. We need to be able to reliably reproduce the bug in order to identify the problem and develop solutions.
 
 ### Design Principles
 The following are several of our design principles, which enable us to develop flight systems with a focus on data quality, reliability, and robustness,
 
-1. Synchronize data collection to the IMU or INS data ready interrupt. Collect all updated sensor data, then apply filtering and estimation and compute control law outputs. Set a timer based on the start of data collection for sending actuator commands. This approach minimizes latency between sensing and actuation by ensuring that all sensor data is updated before filtering and that all sensor data, filters, and real-time estimation has been completed for running the control laws. The time for actuation fixes the latency at a pre-determined value, so the system has extremely high levels of determinism and control law robustness to the fixed latency can be analyzed.
+1. Synchronize data collection to the IMU or INS data ready interrupt. Collect all updated sensor data, then apply filtering and estimation and compute control law outputs. Set a timer based on the start of data collection for sending actuator commands. This approach minimizes latency between sensing and actuation by ensuring that all data is updated before the next layer of software uses that data. The timer for actuation fixes the latency at a pre-determined value, so the system has extremely high levels of determinism and control law robustness to the fixed latency can be analyzed.
 
 2. Avoid dynamic memory allocation or large, local memory allocation. This approach provides high levels of determinism by minimizing the likelihood of running out of memory during operation.
 
 3. Push checks and errors to compile time rather than run time. Similar to above, we would like to avoid run time errors at all cost. Compile time errors also provide better feedback on the error source, enhancing debugging.
 
-4. Focus on simple UI's for the end-user. The UI should be tailored for the end-user, presenting the most simplified set of options possible. A farmer will need far fewer configuration options than a hobbyist or a researcher. The farmer also likely doesn't care about flying altitude or speed. Present options to them in metrics that matter given the mission (altitude and airspeed's relationship with survey data resolution and time). Simpler interfaces lead to more reliable flights.
+4. The UI should be tailored for the end-user, presenting the most simplified set of options possible. For example, a precision-ag farmer will need far fewer configuration options than a hobbyist or a researcher. The farmer also likely doesn't know or care about flying altitude or speed. Present options to them in metrics that matter given the mission (altitude and airspeed's relationship with survey data resolution and time is far more meaningful). Simpler interfaces lead to more reliable flights.
 
 ### Best Practices
 The following are best practices when developing software for Bolder Flight.
@@ -175,6 +174,8 @@ All tests should pass before a pull request is issued. Typically the following t
    * Test
       * Inputs
       * Expected values
+
+At this time, we do not have unit tests setup for software running on a microcontroller. For those libraries, linting would be the only step.
 
 #### Linting
 Linting tests check for conformance to the style guide - analyzing the code for potential errors and leading to better readibility. [cpplint](https://raw.githubusercontent.com/google/styleguide/gh-pages/cpplint/cpplint.py) should be used to conduct linting tests with verbosity level 0. Typically line length limits can be ignored for code; although, comments should conform to the line length limitation.
