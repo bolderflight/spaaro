@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.0.3
+- Updated version numbers for dependencies
+
 ## v1.0.2
 - Updated README to provide information about the project
 - Added CONTRIBUTING
