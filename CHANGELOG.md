@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.0.4
+- Added flight control system and node schematics
+
 ## v1.0.3
 - Updated version numbers for dependencies
 
