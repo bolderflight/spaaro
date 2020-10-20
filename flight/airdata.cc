@@ -22,8 +22,8 @@ sensors::Ams5915 diff_press_(&DIFF_PRESS_I2C_BUS, DIFF_PRESS_ADDR, DIFF_PRESS_TR
 /* Initialization time perion */
 static constexpr float INIT_TIME_S_ = 10.0f;
 /* Static and differential pressure statistics */
-statistics::Welford<float> static_press_stats_;
-statistics::Welford<float> diff_press_stats_;
+statistics::Running<float> static_press_stats_;
+statistics::Running<float> diff_press_stats_;
 /* Differential pressure bias */
 float diff_press_bias_pa_;
 /* Initial pressure altitude */
@@ -48,12 +48,12 @@ void Init() {
   elapsedMillis t_ms = 0;
   while (t_ms < INIT_TIME_S_ * 1000.0f) {
     if (static_press_.Read()) {
-      static_press_stats_.Accum(static_press_.pressure_pa());
+      static_press_stats_.Update(static_press_.pressure_pa());
       /* Warm up the static pressure filter */
       static_press_filt_.Filter(static_press_.pressure_pa());
     }
     if (diff_press_.Read()) {
-      diff_press_stats_.Accum(diff_press_.pressure_pa());
+      diff_press_stats_.Update(diff_press_.pressure_pa());
     }
     delay(FRAME_PERIOD_S * 1000.0f);
   }
