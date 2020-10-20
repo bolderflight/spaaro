@@ -5,7 +5,7 @@ set(MCU MK66FX1M0)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-	VERSION 1.0.4
+	VERSION 2.0.0
 	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )
@@ -84,7 +84,7 @@ FetchContent_MakeAvailable(filter)
 FetchContent_Declare(
 	statistics
 	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/statistics.git
-	GIT_TAG v1.0.2
+	GIT_TAG v2.0.0
 )
 FetchContent_MakeAvailable(statistics)
 FetchContent_Declare(

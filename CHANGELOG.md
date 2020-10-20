@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.0.5
+- Updated *statistics* library to v2.0.0
+
 ## v1.0.4
 - Added flight control system and node schematics
 
