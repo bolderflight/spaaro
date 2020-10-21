@@ -24,7 +24,7 @@ DatalogMessage datalog_msg_;
 /* SD card */
 SdFatSdioEX sd_;
 /* Logger object */
-Logger<450> logger_(&sd_);
+Logger<400> logger_(&sd_);
 /* Framing */
 framing::Encoder<DatalogMessage_size> encoder;
 /* nanopb buffer for encoding */
