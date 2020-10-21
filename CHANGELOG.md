@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.0.6
+- Decreased datalog buffer size to avoid running out of memory
+
 ## v1.0.5
 - Updated *statistics* library to v2.0.0
 
