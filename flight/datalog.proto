@@ -43,17 +43,18 @@ message DatalogMessage {
   float ins_pitch_rad = 24;
   float ins_roll_rad = 25;
   float ins_yaw_rad = 26;
-  float static_press_pa = 27;
-  float diff_press_pa = 28;
-  float filt_static_press_pa = 29;
-  float filt_diff_press_pa = 30;
-  float press_alt_m = 31;
-  float agl_alt_m = 32;
-  float ias_mps = 33;
-  float eas_mps = 34;
-  float input_voltage = 35;
-  float regulated_voltage = 36;
-  float pwm_voltage = 37;
-  float sbus_voltage = 38;
+  float fmu_static_press_pa = 27;
+  float static_press_pa = 28;
+  float diff_press_pa = 29;
+  float filt_static_press_pa = 30;
+  float filt_diff_press_pa = 31;
+  float press_alt_m = 32;
+  float agl_alt_m = 33;
+  float ias_mps = 34;
+  float eas_mps = 35;
+  float input_voltage = 36;
+  float regulated_voltage = 37;
+  float pwm_voltage = 38;
+  float sbus_voltage = 39;
 }
 

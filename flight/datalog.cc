@@ -89,6 +89,7 @@ void Write(const AircraftData &ref) {
   datalog_msg_.ins_pitch_rad = ref.ins.ekf.pitch_rad;
   datalog_msg_.ins_roll_rad = ref.ins.ekf.roll_rad;
   datalog_msg_.ins_yaw_rad = ref.ins.ekf.yaw_rad;
+  datalog_msg_.fmu_static_press_pa = ref.airdata.fmu_static.press_pa;
   datalog_msg_.static_press_pa = ref.airdata.ps_static.press_pa;
   datalog_msg_.diff_press_pa = ref.airdata.ps_diff.press_pa;
   datalog_msg_.filt_static_press_pa = ref.airdata.filt_static_press_pa;

@@ -9,6 +9,7 @@
 #include "flight/print_msg.h"
 #include "flight/hardware_defs.h"
 #include "flight/global_defs.h"
+#include "bme280/bme280.h"
 #include "ams5915/ams5915.h"
 #include "airdata/airdata.h"
 #include "filter/filter.h"
@@ -16,6 +17,8 @@
 
 namespace airdata {
 namespace {
+/* BME280 */
+sensors::Bme280 fmu_static_press_(&FMU_PRESS_SPI_BUS, FMU_PRESS_CS);
 /* AMS-5915 */
 sensors::Ams5915 static_press_(&STATIC_PRESS_I2C_BUS, STATIC_PRESS_ADDR, STATIC_PRESS_TRANSDUCER);
 sensors::Ams5915 diff_press_(&DIFF_PRESS_I2C_BUS, DIFF_PRESS_ADDR, DIFF_PRESS_TRANSDUCER);
@@ -37,6 +40,9 @@ filters::DigitalFilter1D<float, b_.size(), a_.size()> diff_press_filt_(b_, a_);
 
 void Init() {
   print::Info("Initializing pressure transducers...");
+  if (!fmu_static_press_.Begin()) {
+    print::Error("Unable to initialize communication with FMU integrated static pressure transducer.");
+  }
   if (!static_press_.Begin()) {
     print::Error("Unable to initialize communication with static pressure transducer.");
   }
@@ -63,6 +69,10 @@ void Init() {
 }
 void Read(Airdata *ptr) {
   if (!ptr) {return;}
+  if (fmu_static_press_.Read()) {
+    ptr->fmu_static.press_pa = fmu_static_press_.pressure_pa();
+    ptr->fmu_static.die_temp_c = fmu_static_press_.die_temperature_c();
+  }
   if (static_press_.Read()) {
     /* Pressure transducer data */
     ptr->ps_static.press_pa = static_press_.pressure_pa();

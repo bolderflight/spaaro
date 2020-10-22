@@ -40,8 +40,8 @@ static constexpr sensors::Ams5915::Transducer STATIC_PRESS_TRANSDUCER = sensors:
 static constexpr i2c_t3 &DIFF_PRESS_I2C_BUS = Wire1;
 static constexpr unsigned int DIFF_PRESS_ADDR = 0x11;
 static constexpr sensors::Ams5915::Transducer DIFF_PRESS_TRANSDUCER   = sensors::Ams5915::AMS5915_0010_D;
-static constexpr SPIClass &BME_SPI_BUS = SPI;
-static constexpr unsigned int BME_CS = 26;
+static constexpr SPIClass &FMU_PRESS_SPI_BUS = SPI;
+static constexpr unsigned int FMU_PRESS_CS = 26;
 /* Voltage */
 static constexpr int ANALOG_RESOLUTION_BITS = 16;
 static constexpr unsigned int INPUT_VOLTAGE_PIN = 15;
