@@ -59,8 +59,8 @@ int main() {
   /* Init inceptors */
   inceptor::Init();
   /* Init sensors and sensor processing */
-  ins::Init();
   airdata::Init();
+  ins::Init();
   status::Init();
   /* Init controls */
   controls::Init();

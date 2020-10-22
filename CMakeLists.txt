@@ -52,6 +52,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(mpu9250)
 FetchContent_Declare(
+	bme280
+	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/bme280.git
+	GIT_TAG v1.0.4
+)
+FetchContent_MakeAvailable(bme280)
+FetchContent_Declare(
 	ublox
 	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/ublox.git
 	GIT_TAG v1.2.2
@@ -155,6 +161,7 @@ target_link_libraries(flight
 		core
 		eigen
 		mpu9250
+		bme280
 		ublox
 		navigation
 		ams5915
