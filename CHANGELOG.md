@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.0.7
+- Added BME280 FMU integrated static pressure sensor
+
 ## v1.0.6
 - Decreased datalog buffer size to avoid running out of memory
 
