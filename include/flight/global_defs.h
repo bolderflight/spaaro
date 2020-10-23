@@ -71,15 +71,17 @@ struct PressureTransducerData {
 };
 /* Airdata */
 struct Airdata {
+  #ifdef HAVE_PITOT_STATIC
   PressureTransducerData fmu_static_press;
-  PressureTransducerData static_press;
   PressureTransducerData diff_press;
-  float filt_static_press_pa;
   float filt_diff_press_pa;
-  float press_alt_m;
-  float agl_alt_m;
   float ias_mps;
   float eas_mps;
+  #endif
+  PressureTransducerData static_press;
+  float filt_static_press_pa;
+  float press_alt_m;
+  float agl_alt_m;
 };
 /* Status data */
 struct StatusData {

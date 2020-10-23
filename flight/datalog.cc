@@ -89,15 +89,17 @@ void Write(const AircraftData &ref) {
   datalog_msg_.pitch_rad = ref.ins.ekf.pitch_rad;
   datalog_msg_.roll_rad = ref.ins.ekf.roll_rad;
   datalog_msg_.yaw_rad = ref.ins.ekf.yaw_rad;
+  #ifdef HAVE_PITOT_STATIC
   datalog_msg_.fmu_static_press_pa = ref.airdata.fmu_static_press.press_pa;
-  datalog_msg_.static_press_pa = ref.airdata.static_press.press_pa;
   datalog_msg_.diff_press_pa = ref.airdata.diff_press.press_pa;
-  datalog_msg_.filt_static_press_pa = ref.airdata.filt_static_press_pa;
   datalog_msg_.filt_diff_press_pa = ref.airdata.filt_diff_press_pa;
-  datalog_msg_.press_alt_m = ref.airdata.press_alt_m;
-  datalog_msg_.agl_alt_m = ref.airdata.agl_alt_m;
   datalog_msg_.ias_mps = ref.airdata.ias_mps;
   datalog_msg_.eas_mps = ref.airdata.eas_mps;
+  #endif
+  datalog_msg_.static_press_pa = ref.airdata.static_press.press_pa;
+  datalog_msg_.filt_static_press_pa = ref.airdata.filt_static_press_pa;
+  datalog_msg_.press_alt_m = ref.airdata.press_alt_m;
+  datalog_msg_.agl_alt_m = ref.airdata.agl_alt_m;
   datalog_msg_.input_voltage = ref.status.input_voltage;
   datalog_msg_.regulated_voltage = ref.status.regulated_voltage;
   datalog_msg_.pwm_voltage = ref.status.pwm_voltage;
