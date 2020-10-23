@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.0.8
+- Updated to Datalog and global_defs variable names
+
 ## v1.0.7
 - Added BME280 FMU integrated static pressure sensor
 
