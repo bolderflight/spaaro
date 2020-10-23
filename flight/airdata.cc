@@ -70,22 +70,22 @@ void Init() {
 void Read(Airdata *ptr) {
   if (!ptr) {return;}
   if (fmu_static_press_.Read()) {
-    ptr->fmu_static.press_pa = fmu_static_press_.pressure_pa();
-    ptr->fmu_static.die_temp_c = fmu_static_press_.die_temperature_c();
+    ptr->fmu_static_press.press_pa = fmu_static_press_.pressure_pa();
+    ptr->fmu_static_press.die_temp_c = fmu_static_press_.die_temperature_c();
   }
   if (static_press_.Read()) {
     /* Pressure transducer data */
-    ptr->ps_static.press_pa = static_press_.pressure_pa();
-    ptr->ps_static.die_temp_c = static_press_.die_temperature_c();
+    ptr->static_press.press_pa = static_press_.pressure_pa();
+    ptr->static_press.die_temp_c = static_press_.die_temperature_c();
     /* Filtered static pressure */
-    ptr->filt_static_press_pa = static_press_filt_.Filter(ptr->ps_static.press_pa);
+    ptr->filt_static_press_pa = static_press_filt_.Filter(ptr->static_press.press_pa);
   }
   if (diff_press_.Read()) {
     /* Pressure transducer data */
-    ptr->ps_diff.press_pa = diff_press_.pressure_pa() - diff_press_bias_pa_;
-    ptr->ps_diff.die_temp_c = diff_press_.die_temperature_c();
+    ptr->diff_press.press_pa = diff_press_.pressure_pa() - diff_press_bias_pa_;
+    ptr->diff_press.die_temp_c = diff_press_.die_temperature_c();
     /* Filtered diff pressure */
-    ptr->filt_diff_press_pa = diff_press_filt_.Filter(ptr->ps_diff.press_pa);
+    ptr->filt_diff_press_pa = diff_press_filt_.Filter(ptr->diff_press.press_pa);
   }
   /* Altitudes */
   ptr->press_alt_m = PressureAltitude_m(ptr->filt_static_press_pa);

@@ -5,7 +5,7 @@ set(MCU MK66FX1M0)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-	VERSION 1.0.7
+	VERSION 1.0.8
 	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )

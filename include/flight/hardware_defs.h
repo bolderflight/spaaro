@@ -15,7 +15,7 @@
 /* Software Version */
 static constexpr unsigned int MAJOR_VERSION = 1;
 static constexpr unsigned int MINOR_VERSION = 0;
-static constexpr unsigned int FIX_VERSION = 7;
+static constexpr unsigned int FIX_VERSION = 8;
 /* Messages */    
 static constexpr usb_serial_class &MSG_BUS = Serial;
 /* Frame rate */
