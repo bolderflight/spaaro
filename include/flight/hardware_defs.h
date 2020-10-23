@@ -12,10 +12,19 @@
 #include "ams5915/ams5915.h"
 #include <array>
 
+/*
+* This define sets whether the aircraft has a pitot-static system
+* installed, along with the associated pressure transducers. If
+* it does, then those will be used for airspeeds and altitudes.
+* Otherwise, the FMU integrated static pressure will be used
+* for altitudes.
+*/
+// #define HAVE_PITOT_STATIC
+
 /* Software Version */
 static constexpr unsigned int MAJOR_VERSION = 1;
-static constexpr unsigned int MINOR_VERSION = 0;
-static constexpr unsigned int FIX_VERSION = 8;
+static constexpr unsigned int MINOR_VERSION = 1;
+static constexpr unsigned int FIX_VERSION = 0;
 /* Messages */    
 static constexpr usb_serial_class &MSG_BUS = Serial;
 /* Frame rate */
@@ -34,12 +43,14 @@ static constexpr unsigned int IMU_DRDY = 27;
 static constexpr HardwareSerial &GNSS_UART = Serial3;
 static constexpr unsigned int GNSS_BAUD = 921600;
 /* Pressure Transducers */
+#ifdef HAVE_PITOT_STATIC
 static constexpr i2c_t3 &STATIC_PRESS_I2C_BUS = Wire1;
 static constexpr unsigned int STATIC_PRESS_ADDR = 0x10;
 static constexpr sensors::Ams5915::Transducer STATIC_PRESS_TRANSDUCER = sensors::Ams5915::AMS5915_1200_B;
 static constexpr i2c_t3 &DIFF_PRESS_I2C_BUS = Wire1;
 static constexpr unsigned int DIFF_PRESS_ADDR = 0x11;
 static constexpr sensors::Ams5915::Transducer DIFF_PRESS_TRANSDUCER   = sensors::Ams5915::AMS5915_0010_D;
+#endif
 static constexpr SPIClass &FMU_PRESS_SPI_BUS = SPI;
 static constexpr unsigned int FMU_PRESS_CS = 26;
 /* Voltage */

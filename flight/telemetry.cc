@@ -52,7 +52,11 @@ void Send(const AircraftData &ref) {
       heading_rad_ += 2.0f * global::constants::PI<float>;
     }
     telem_.SendHud(static_cast<uint32_t>(ref.time_s * 1000),
+      #ifdef HAVE_PITOT_STATIC
       ref.airdata.ias_mps,
+      #else
+      ground_speed_mps_,
+      #endif
       ground_speed_mps_,
       ref.ins.ekf.lla_rad_m(2),
       -1.0f * ref.ins.ekf.ned_vel_mps(2), // EKF is positive down, this is positive up

@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.1.0
+- Added definition (HAVE_PITOT_STATIC) in *hardware_defs.h* to defined whether the aircraft has a pitot-static system or not
+
 ## v1.0.8
 - Updated to Datalog and global_defs variable names
 
