@@ -10,7 +10,7 @@
 #include "flight/hardware_defs.h"
 #include "flight/global_defs.h"
 // #include "mavlink/mavlink.h"
-#include "global_defs/global_defs.h"
+// #include "global_defs/global_defs.h"
 #include <cmath>
 
 namespace telemetry {

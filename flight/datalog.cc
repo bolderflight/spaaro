@@ -22,7 +22,7 @@ std::string DATA_LOG_NAME_ = "flight_data";
 /* Datalog message from protobuf */
 DatalogMessage datalog_msg_;
 /* SD card */
-SdFatSdioEX sd_;
+SdFat32 sd_;
 /* Logger object */
 Logger<400> logger_(&sd_);
 /* Framing */
@@ -35,7 +35,7 @@ pb_ostream_t stream_;
 void Init() {
   print::Info("Initializing datalog...");  
   /* Initialize SD card */
-  sd_.begin();
+  sd_.begin(SdioConfig(FIFO_SDIO));
   /* Initialize logger */
   int file_num = logger_.Init(DATA_LOG_NAME_);
   if (file_num < 0) {
