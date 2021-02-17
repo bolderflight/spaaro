@@ -35,106 +35,100 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include(FetchContent)
 FetchContent_Declare(
 	core
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/core.git
-	GIT_TAG v1.0.3
+	GIT_REPOSITORY https://github.com/bolderflight/core.git
+	GIT_TAG v2.0.4
 )
 FetchContent_MakeAvailable(core)
 FetchContent_Declare(
 	eigen
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/eigen.git
+	GIT_REPOSITORY https://github.com/bolderflight/eigen.git
 	GIT_TAG v1.0.0
 )
 FetchContent_MakeAvailable(eigen)
 FetchContent_Declare(
 	mpu9250
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/mpu9250.git
-	GIT_TAG v1.0.2
+	GIT_REPOSITORY https://github.com/bolderflight/mpu9250.git
+	GIT_TAG v2.0.1
 )
 FetchContent_MakeAvailable(mpu9250)
 FetchContent_Declare(
 	bme280
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/bme280.git
-	GIT_TAG v1.0.4
+	GIT_REPOSITORY https://github.com/bolderflight/bme280.git
+	GIT_TAG v2.0.1
 )
 FetchContent_MakeAvailable(bme280)
 FetchContent_Declare(
 	ublox
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/ublox.git
-	GIT_TAG v1.2.2
+	GIT_REPOSITORY https://github.com/bolderflight/ublox.git
+	GIT_TAG v1.2.5
 )
 FetchContent_MakeAvailable(ublox)
 FetchContent_Declare(
 	navigation
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/navigation.git
-	GIT_TAG v1.2.3
+	GIT_REPOSITORY 	https://github.com/bolderflight/navigation.git
+	GIT_TAG v1.2.4
 )
 FetchContent_MakeAvailable(navigation)
 FetchContent_Declare(
 	ams5915
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/ams5915.git
-	GIT_TAG v1.0.2
+	GIT_REPOSITORY https://github.com/bolderflight/ams5915.git
+	GIT_TAG v1.0.5
 )
 FetchContent_MakeAvailable(ams5915)
 FetchContent_Declare(
 	airdata
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/airdata.git
-	GIT_TAG v1.0.2
+	GIT_REPOSITORY https://github.com/bolderflight/airdata.git
+	GIT_TAG v1.0.3
 )
 FetchContent_MakeAvailable(airdata)
 FetchContent_Declare(
 	filter
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/filter.git
-	GIT_TAG v1.0.2
+	GIT_REPOSITORY https://github.com/bolderflight/filter.git
+	GIT_TAG v1.0.3
 )
 FetchContent_MakeAvailable(filter)
 FetchContent_Declare(
 	statistics
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/statistics.git
-	GIT_TAG v2.0.0
+	GIT_REPOSITORY https://github.com/bolderflight/statistics.git
+	GIT_TAG v2.0.1
 )
 FetchContent_MakeAvailable(statistics)
 FetchContent_Declare(
-	sbus
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/sbus.git
-	GIT_TAG v1.0.3
-)
-FetchContent_MakeAvailable(sbus)
-FetchContent_Declare(
 	polytools
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/polytools.git
-	GIT_TAG v1.0.3
+	GIT_REPOSITORY https://github.com/bolderflight/polytools.git
+	GIT_TAG v1.1.4
 )
 FetchContent_MakeAvailable(polytools)
 FetchContent_Declare(
+	sbus
+	GIT_REPOSITORY https://github.com/bolderflight/sbus.git
+	GIT_TAG v1.0.6
+)
+FetchContent_MakeAvailable(sbus)
+FetchContent_Declare(
 	pwm
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/pwm.git
-	GIT_TAG v1.0.3
+	GIT_REPOSITORY https://github.com/bolderflight/pwm.git
+	GIT_TAG v1.0.5
 )
 FetchContent_MakeAvailable(pwm)
 FetchContent_Declare(
-	actuator
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/actuator.git
-	GIT_TAG v1.0.2
-)
-FetchContent_MakeAvailable(actuator)
-FetchContent_Declare(
 	logger
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/logger.git
-	GIT_TAG v1.0.3
+	GIT_REPOSITORY https://github.com/bolderflight/logger.git
+	GIT_TAG v1.0.4
 )
 FetchContent_MakeAvailable(logger)
 FetchContent_Declare(
 	framing
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/framing.git
-	GIT_TAG v1.1.2
+	GIT_REPOSITORY https://github.com/bolderflight/framing.git
+	GIT_TAG v1.1.3
 )
 FetchContent_MakeAvailable(framing)
-FetchContent_Declare(
-	mavlink
-	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/mavlink.git
-	GIT_TAG v1.0.3
-)
-FetchContent_MakeAvailable(mavlink)
+# FetchContent_Declare(
+# 	mavlink
+# 	GIT_REPOSITORY 	https://gitlab.com/bolderflight/software/mavlink.git
+# 	GIT_TAG v1.0.3
+# )
+# FetchContent_MakeAvailable(mavlink)
 # Add the executable
 add_executable(flight
 	flight/flight.cc
@@ -168,13 +162,12 @@ target_link_libraries(flight
 		airdata
 		filter
 		statistics
-		sbus
 		polytools
+		sbus
 		pwm
-		actuator
 		logger
 		framing
-		mavlink
+		# mavlink
 )
 # Add hex and upload targets
 include(${CMAKE_SOURCE_DIR}/cmake/flash_mcu.cmake)
