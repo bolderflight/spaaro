@@ -38,21 +38,21 @@ void Init() {
     print::Error("Unable to initialize communication with IMU.");
   }
   /* Set the rotation */
-  imu_.rotation(ROTATION_);
+  imu_.ApplyRotation(ROTATION_);
   /* Set the accel range */
-  if (!imu_.accel_range(ACCEL_RANGE_)) {
+  if (!imu_.ConfigAccelRange(ACCEL_RANGE_)) {
     print::Error("Unable to set IMU accel full-scale range.");
   }
   /* Set the gryo range */
-  if (!imu_.gyro_range(Gyro_RANGE_)) {
+  if (!imu_.ConfigGyroRange(Gyro_RANGE_)) {
     print::Error("Unable to set IMU gyro full-scale range.");
   }
   /* Set the DLPF */
-  if (!imu_.dlpf_bandwidth(DLPF_)) {
+  if (!imu_.ConfigDlpf(DLPF_)) {
     print::Error("Unable to set IMU DLPF bandwidth.");
   }
   /* Set the SRD */
-  if (!imu_.sample_rate_divider(SRD_)) {
+  if (!imu_.ConfigSrd(SRD_)) {
     print::Error("Unable to set IMU sample rate divider.");
   }
   /* Enable data ready interrupt */
