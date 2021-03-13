@@ -23,13 +23,19 @@
 * IN THE SOFTWARE.
 */
 
-#include "flight/global_defs.h"
+#ifndef INCLUDE_FLIGHT_MSG_H_
+#define INCLUDE_FLIGHT_MSG_H_
 
-void ControlInit() {
+#include <string>
+#include "version.h"
 
-}
-void ControlRun(const SysMonData &sys_mon, const InceptorData &inceptor,
-                const SensorData &sensor, const NavData &nav,
-                ControlData * const control, EffectorCmds * const effector) {
+/* Initializes the messager */
+void MsgBegin();
+/* Info message */
+void MsgInfo(std::string str);
+/* Warning message */
+void MsgWarning(std::string str);
+/* Error message */
+void MsgError(std::string str);
 
-}
+#endif  // INCLUDE_FLIGHT_MSG_H_

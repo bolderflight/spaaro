@@ -23,13 +23,12 @@
 * IN THE SOFTWARE.
 */
 
+#ifndef INCLUDE_FLIGHT_NAV_H_
+#define INCLUDE_FLIGHT_NAV_H_
+
 #include "flight/global_defs.h"
 
-void ControlInit() {
+void NavInit();
+void NavRun(const SensorData &ref, NavData * const ptr);
 
-}
-void ControlRun(const SysMonData &sys_mon, const InceptorData &inceptor,
-                const SensorData &sensor, const NavData &nav,
-                ControlData * const control, EffectorCmds * const effector) {
-
-}
+#endif  // INCLUDE_FLIGHT_NAV_H_

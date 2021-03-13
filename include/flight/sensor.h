@@ -23,13 +23,14 @@
 * IN THE SOFTWARE.
 */
 
+#ifndef INCLUDE_FLIGHT_SENSOR_H_
+#define INCLUDE_FLIGHT_SENSOR_H_
+
 #include "flight/global_defs.h"
 
-void ControlInit() {
+void SensorInit();
+bool SensorRemoveBias(const SensorData &ref);
+void SensorRead(SensorData * const ptr);
+void RegisterDataIsr(void (*function)());
 
-}
-void ControlRun(const SysMonData &sys_mon, const InceptorData &inceptor,
-                const SensorData &sensor, const NavData &nav,
-                ControlData * const control, EffectorCmds * const effector) {
-
-}
+#endif  // INCLUDE_FLIGHT_SENSOR_H_

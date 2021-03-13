@@ -23,13 +23,13 @@
 * IN THE SOFTWARE.
 */
 
+#ifndef INCLUDE_FLIGHT_SYS_MON_H_
+#define INCLUDE_FLIGHT_SYS_MON_H_
+
 #include "flight/global_defs.h"
 
-void ControlInit() {
+void SysMonInit();
+void SysMonRead(SysMonData *const ptr);
+void SysMonFrameEnd();
 
-}
-void ControlRun(const SysMonData &sys_mon, const InceptorData &inceptor,
-                const SensorData &sensor, const NavData &nav,
-                ControlData * const control, EffectorCmds * const effector) {
-
-}
+#endif  // INCLUDE_FLIGHT_SYS_MON_H_

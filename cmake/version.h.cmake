@@ -23,13 +23,13 @@
 * IN THE SOFTWARE.
 */
 
-#include "flight/global_defs.h"
+#ifndef INCLUDE_VERSION_H_
+#define INCLUDE_VERSION_H_
 
-void ControlInit() {
+#define PROJECT "@PROJECT@"
+#define PROJECT_VERSION "@PROJECT_VERSION@"
+#define PROJECT_VERSION_MAJOR "@PROJECT_VERSION_MAJOR@"
+#define PROJECT_VERSION_MINOR "@PROJECT_VERSION_MINOR@"
+#define PROJECT_VERSION_PATCH "@PROJECT_VERSION_PATCH@"
 
-}
-void ControlRun(const SysMonData &sys_mon, const InceptorData &inceptor,
-                const SensorData &sensor, const NavData &nav,
-                ControlData * const control, EffectorCmds * const effector) {
-
-}
+#endif  // INCLUDE_VERSION_H_
