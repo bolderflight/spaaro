@@ -23,13 +23,40 @@
 * IN THE SOFTWARE.
 */
 
+#include "flight/msg.h"
+#include "flight/hardware_defs.h"
 #include "flight/global_defs.h"
+#include "flight/config.h"
 
-void ControlInit() {
+extern bool DEBUG;
 
+void MsgBegin()
+{
+  MSG_BUS.begin(115200);
+  if (DEBUG) {
+    while (!MSG_BUS) {}
+  }
+  MSG_BUS.println ("---------Bolder Flight Systems---------");
+  MSG_BUS.println ("Flight Software");
+  MSG_BUS.print   ("Version: ");
+  MSG_BUS.println(PROJECT_VERSION);
+  MSG_BUS.println ("---------------------------------------");
 }
-void ControlRun(const SysMonData &sys_mon, const InceptorData &inceptor,
-                const SensorData &sensor, const NavData &nav,
-                ControlData * const control, EffectorCmds * const effector) {
 
+void MsgInfo(std::string str)
+{
+  MSG_BUS.print(str);
+}
+
+void MsgWarning(std::string str)
+{
+  MSG_BUS.print("\nWARNING: ");
+  MSG_BUS.print(str);
+}
+
+void MsgError(std::string str)
+{
+  MSG_BUS.print("\nERROR: ");
+  MSG_BUS.print(str);
+  while (1) {}
 }

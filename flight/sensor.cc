@@ -24,12 +24,24 @@
 */
 
 #include "flight/global_defs.h"
+#include "flight/hardware_defs.h"
+#include "flight/config.h"
+#include "flight/msg.h"
+#include "flight/sensor.h"
+#include "flight/imu.h"
+#include "flight/gnss.h"
+#include "flight/airdata.h"
 
-void ControlInit() {
-
+void SensorInit() {
+  ImuInit();
+  GnssInit();
+  AirdataInit();
 }
-void ControlRun(const SysMonData &sys_mon, const InceptorData &inceptor,
-                const SensorData &sensor, const NavData &nav,
-                ControlData * const control, EffectorCmds * const effector) {
-
+void SensorRead(SensorData * const ptr) {
+  ImuRead(&ptr->imu);
+  GnssRead(&ptr->gnss);
+  AirdataRead(&ptr->airdata);
+}
+void RegisterDataIsr(void (*function)()) {
+  ImuRegisterDrdyIsr(function);
 }
