@@ -30,17 +30,13 @@
 #include "flight/telemetry.h"
 #include "mavlink_types.h"
 #include "common/mavlink.h"
+#include "framing/framing.h"
 
 namespace {
-/* MAV Link message data */
-mavlink_message_t msg_;
-mavlink_status_t status_;
-uint16_t msg_len_;
-uint8_t msg_buf_[MAVLINK_MAX_PACKET_LEN];
-/* Timers */
-elapsedMillis heartbeat_timer_ms_;
-static constexpr int HEARTBEAT_PERIOD_MS_ = 1000;
-
+/* Framing */
+bfs::Encoder<20> encoder;
+/* Buffer */
+uint8_t buffer[8];
 }  // namespace
 
 void TelemInit() {
@@ -49,10 +45,11 @@ void TelemInit() {
   MsgInfo("done.\n");
 }
 void TelemTxRx(const AircraftData &ref) {
-
-
-  if (heartbeat_timer_ms_ > HEARTBEAT_PERIOD_MS_) {
-
-  }
-  
+  /* Copy pitch and roll into buffer */
+  memcpy(buffer, &ref.nav.pitch_rad, 4);
+  memcpy(buffer + 4, &ref.nav.roll_rad, 4);
+  /* Frame data */
+  encoder.Write(buffer, sizeof(buffer));
+  /* Send */
+  TELEM_UART.write(encoder.Data(), encoder.Size());
 }
