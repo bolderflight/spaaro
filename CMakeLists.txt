@@ -137,6 +137,12 @@ FetchContent_Declare(
 	GIT_TAG v2.0.0
 )
 FetchContent_MakeAvailable(pwm)
+FetchContent_Declare(
+	mavlink_headers_v2
+	GIT_REPOSITORY https://github.com/bolderflight/mavlink_c_library_v2.git
+	GIT_TAG v1.0.0
+)
+FetchContent_MakeAvailable(mavlink_headers_v2)
 # Add the executable
 add_executable(flight
 	include/flight/airdata.h
@@ -194,6 +200,7 @@ target_link_libraries(flight
 		effector
 		sbus
 		pwm
+		mavlink_headers_v2
 )
 # Add hex and upload targets
 include(${CMAKE_SOURCE_DIR}/cmake/flash_mcu.cmake)

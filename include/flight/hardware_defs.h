@@ -77,5 +77,8 @@ static constexpr float SBUS_VOLTAGE_SCALE = VOLTAGE_RANGE /
 static constexpr unsigned int PWM_VOLTAGE_PIN = 39;
 static constexpr float PWM_VOLTAGE_SCALE = VOLTAGE_RANGE /
   ANALOG_COUNT_RANGE * (1000.0f + 499.0f) / 499.0f;
+/* Telemetry */
+static constexpr HardwareSerial &TELEM_UART = Serial4;
+static constexpr unsigned int TELEM_BAUD = 57600;
 
 #endif  // INCLUDE_FLIGHT_HARDWARE_DEFS_H_

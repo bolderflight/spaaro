@@ -30,10 +30,6 @@
 #include <array>
 #include "flight/hardware_defs.h"
 
-static constexpr int MAJOR_VERSION = 1;
-static constexpr int MINOR_VERSION = 0;
-static constexpr int FIX_VERSION = 0;
-
 struct SysMonData {
   int32_t frame_time_us;
   float input_volt;

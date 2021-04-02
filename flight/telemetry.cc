@@ -23,13 +23,36 @@
 * IN THE SOFTWARE.
 */
 
+#include "flight/hardware_defs.h"
 #include "flight/global_defs.h"
+#include "flight/config.h"
 #include "flight/msg.h"
+#include "flight/telemetry.h"
+#include "mavlink_types.h"
+#include "common/mavlink.h"
+
+namespace {
+/* MAV Link message data */
+mavlink_message_t msg_;
+mavlink_status_t status_;
+uint16_t msg_len_;
+uint8_t msg_buf_[MAVLINK_MAX_PACKET_LEN];
+/* Timers */
+elapsedMillis heartbeat_timer_ms_;
+static constexpr int HEARTBEAT_PERIOD_MS_ = 1000;
+
+}  // namespace
 
 void TelemInit() {
   MsgInfo("Initializing telemetry...");
+  TELEM_UART.begin(TELEM_BAUD);
   MsgInfo("done.\n");
 }
 void TelemTxRx(const AircraftData &ref) {
+
+
+  if (heartbeat_timer_ms_ > HEARTBEAT_PERIOD_MS_) {
+
+  }
   
 }
