@@ -26,6 +26,8 @@ add_definitions(
 add_definitions(
 	-DSERIAL4_TX_BUFFER_SIZE=2048
 )
+# Include directories
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 # Fetch dependencies
 include(FetchContent)
 FetchContent_Declare(
@@ -34,6 +36,18 @@ FetchContent_Declare(
 	GIT_TAG v2.0.4
 )
 FetchContent_MakeAvailable(core)
+FetchContent_Declare(
+	imu
+	GIT_REPOSITORY https://github.com/bolderflight/imu.git
+	GIT_TAG v1.0.1
+)
+FetchContent_MakeAvailable(imu)
+FetchContent_Declare(
+	mpu9250_imu
+	GIT_REPOSITORY https://github.com/bolderflight/mpu9250_imu.git
+	GIT_TAG v1.0.0
+)
+FetchContent_MakeAvailable(mpu9250_imu)
 # Add the executable
 add_executable(flight
 	include/flight/global_defs.h
@@ -51,6 +65,8 @@ target_include_directories(flight PUBLIC
 target_link_libraries(flight
 	PRIVATE
 		core
+		imu
+		mpu9250_imu
 )
 # Add hex and upload targets
 include(${CMAKE_SOURCE_DIR}/cmake/flash_mcu.cmake)

@@ -25,5 +25,8 @@
 
 #include "flight/hardware_defs.h"
 #include "flight/global_defs.h"
+#include "flight/msg.h"
+
+bool DEBUG = true;
 
 int main() {}
