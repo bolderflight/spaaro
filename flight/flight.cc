@@ -26,7 +26,4 @@
 #include "flight/hardware_defs.h"
 #include "flight/global_defs.h"
 
-
-int main() {
-
-}
+int main() {}

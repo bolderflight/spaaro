@@ -25,36 +25,32 @@
 
 #include "flight/msg.h"
 #include "flight/hardware_defs.h"
-#include "flight/global_defs.h"
+#include "./version.h"
 
 extern bool DEBUG;
 
-void MsgBegin()
-{
+void MsgBegin() {
   MSG_BUS.begin(115200);
   if (DEBUG) {
     while (!MSG_BUS) {}
   }
-  MSG_BUS.println ("---------Bolder Flight Systems---------");
-  MSG_BUS.println ("Flight Software");
-  MSG_BUS.print   ("Version: ");
+  MSG_BUS.println("---------Bolder Flight Systems---------");
+  MSG_BUS.println("Flight Software");
+  MSG_BUS.print("Version: ");
   MSG_BUS.println(PROJECT_VERSION);
-  MSG_BUS.println ("---------------------------------------");
+  MSG_BUS.println("---------------------------------------");
 }
 
-void MsgInfo(std::string str)
-{
+void MsgInfo(std::string str) {
   MSG_BUS.print(str);
 }
 
-void MsgWarning(std::string str)
-{
+void MsgWarning(std::string str) {
   MSG_BUS.print("\nWARNING: ");
   MSG_BUS.print(str);
 }
 
-void MsgError(std::string str)
-{
+void MsgError(std::string str) {
   MSG_BUS.print("\nERROR: ");
   MSG_BUS.print(str);
   while (1) {}

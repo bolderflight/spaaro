@@ -26,13 +26,6 @@ add_definitions(
 add_definitions(
 	-DSERIAL4_TX_BUFFER_SIZE=2048
 )
-# nanopb
-set(NANOPB_SRC_ROOT_FOLDER "/usr/local/nanopb")
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${NANOPB_SRC_ROOT_FOLDER}/extra)
-find_package(Nanopb REQUIRED)
-include_directories(${NANOPB_INCLUDE_DIRS})
-NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS flight/datalog.proto)
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
 # Fetch dependencies
 include(FetchContent)
 FetchContent_Declare(
@@ -45,6 +38,7 @@ FetchContent_MakeAvailable(core)
 add_executable(flight
 	include/flight/global_defs.h
 	include/flight/hardware_defs.h
+	include/flight/msg.h
 	flight/msg.cc
 	flight/flight.cc
 )
