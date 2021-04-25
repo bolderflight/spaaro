@@ -26,7 +26,6 @@
 #include "flight/msg.h"
 #include "flight/hardware_defs.h"
 #include "flight/global_defs.h"
-#include "flight/config.h"
 
 extern bool DEBUG;
 

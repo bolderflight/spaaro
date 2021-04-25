@@ -27,7 +27,7 @@
 #define INCLUDE_FLIGHT_MSG_H_
 
 #include <string>
-#include "version.h"
+#include "./version.h"
 
 /* Initializes the messager */
 void MsgBegin();

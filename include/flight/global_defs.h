@@ -39,83 +39,6 @@ struct SysMonData {
   double sys_time_s;
 };
 
-struct InceptorData {
-  bool new_data;
-  int8_t mode0;
-  int8_t mode1;
-  bool throttle_en;
-  bool lost_frame;
-  bool failsafe;
-  float throttle;
-  float pitch;
-  float roll;
-  float yaw;
-};
-
-struct ImuData {
-  bool new_data;
-  float accel_x_mps2;
-  float accel_y_mps2;
-  float accel_z_mps2;
-  float gyro_x_radps;
-  float gyro_y_radps;
-  float gyro_z_radps;
-  float mag_x_ut;
-  float mag_y_ut;
-  float mag_z_ut;
-  struct {
-    float accel_x_mps2;
-    float accel_y_mps2;
-    float accel_z_mps2;
-    float gyro_x_radps;
-    float gyro_y_radps;
-    float gyro_z_radps;
-    float mag_x_ut;
-    float mag_y_ut;
-    float mag_z_ut;
-  } dlpf;
-  float die_temp_c;
-};
-
-struct GnssData {
-  bool new_data;
-  int8_t fix;
-  int8_t num_sats;
-  int16_t week;
-  float alt_wgs84_m;
-  float north_vel_mps;
-  float east_vel_mps;
-  float down_vel_mps;
-  float horz_acc_m;
-  float vert_acc_m;
-  float vel_acc_mps;
-  double lat_rad;
-  double lon_rad;
-  double tow_s;
-};
-
-struct PresData {
-  bool new_data;
-  float pres_pa;
-  struct {
-    float pres_pa;
-  } dlpf;
-  float die_temp_c;
-};
-
-struct AirdataData {
-  PresData static_pres;
-  PresData diff_pres;
-};
-
-struct SensorData {
-  ImuData imu;
-  GnssData gnss;
-  AirdataData airdata;
-};
-
-struct GuidanceData {};
-
 struct NavData {
   float accel_x_mps2;
   float accel_y_mps2;
@@ -144,19 +67,18 @@ struct ControlData {
   std::array<float, 24> aux;
 };
 
-struct EffectorCmds {
-  std::array<float, NUM_PWM_PINS> pwm;
-  std::array<float, NUM_SBUS_CH> sbus;
+struct SensorData {
+
 };
 
 struct AircraftData {
-  SysMonData sys_mon;
-  InceptorData inceptor;
-  SensorData sensor;
-  GuidanceData guidance;
-  NavData nav;
-  ControlData control;
-  EffectorCmds effector;
+  // SysMonData sys_mon;
+  // InceptorData inceptor;
+  // SensorData sensor;
+  // GuidanceData guidance;
+  // NavData nav;
+  // ControlData control;
+  // EffectorCmds effector;
 };
 
 #endif  // INCLUDE_FLIGHT_GLOBAL_DEFS_H_
