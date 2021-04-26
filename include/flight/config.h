@@ -23,20 +23,12 @@
 * IN THE SOFTWARE.
 */
 
-#include "flight/hardware_defs.h"
-#include "flight/global_defs.h"
-#include "flight/msg.h"
-#include "imu/imu.h"
-#include "flight/config.h"
-#include "mpu9250_imu/mpu9250_imu.h"
-/* Aircraft data */
-AircraftData data;
-/* IMU */
-bfs::Imu<bfs::Mpu9250Imu> imu(&IMU_SPI_BUS, IMU_CS);
+#ifndef INCLUDE_FLIGHT_CONFIG_H_
+#define INCLUDE_FLIGHT_CONFIG_H_
 
-int main() {
-  /* Init the message bus */
-  MsgBegin();
-  /* Init the IMU */
-  if (!imu.Init(config.imu)) {MsgError("Unable to communicate with IMU");}
-}
+#include "flight/global_defs.h"
+
+extern bool DEBUG;
+extern AircraftConfig config;
+
+#endif  // INCLUDE_FLIGHT_CONFIG_H_

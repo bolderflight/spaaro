@@ -23,20 +23,19 @@
 * IN THE SOFTWARE.
 */
 
-#include "flight/hardware_defs.h"
-#include "flight/global_defs.h"
-#include "flight/msg.h"
-#include "imu/imu.h"
 #include "flight/config.h"
-#include "mpu9250_imu/mpu9250_imu.h"
-/* Aircraft data */
-AircraftData data;
-/* IMU */
-bfs::Imu<bfs::Mpu9250Imu> imu(&IMU_SPI_BUS, IMU_CS);
+#include "flight/hardware_defs.h"
 
-int main() {
-  /* Init the message bus */
-  MsgBegin();
-  /* Init the IMU */
-  if (!imu.Init(config.imu)) {MsgError("Unable to communicate with IMU");}
-}
+/* Whether to wait for USB to display debug messages */
+bool DEBUG = true;
+/* Aircraft configuration */
+AircraftConfig config = {
+  .imu = {
+    .odr = bfs::ImuConfig::ODR_50HZ,
+    .accel_bias_mps2 = Eigen::Vector3f::Zero(),
+    .mag_bias_ut = Eigen::Vector3f::Zero(),
+    .accel_scale = Eigen::Matrix3f::Identity(),
+    .mag_scale = Eigen::Matrix3f::Identity(),
+    .rotation = Eigen::Matrix3f::Identity()
+  }
+};

@@ -26,26 +26,26 @@
 #ifndef INCLUDE_FLIGHT_HARDWARE_DEFS_H_
 #define INCLUDE_FLIGHT_HARDWARE_DEFS_H_
 
-#include <cmath>
 #include <array>
+#include <cstdint>
+#include "Eigen/Core"
+#include "Eigen/Dense"
 #include "core/core.h"
 
 /* Messages */
-static constexpr usb_serial_class &MSG_BUS = Serial;
+extern usb_serial_class &MSG_BUS;
 /* Frame rate */
-static constexpr int32_t FRAME_RATE_HZ = 50;
-static constexpr int32_t FRAME_PERIOD_MS = 1000 / FRAME_RATE_HZ;
+extern int32_t FRAME_RATE_HZ;
+extern int32_t FRAME_PERIOD_MS;
 /* Inceptor / Effector */
-static constexpr int NUM_SBUS_CH = 16;
-static constexpr int NUM_PWM_PINS = 8;
-static constexpr HardwareSerial &SBUS_UART = Serial2;
-static constexpr std::array<int, NUM_PWM_PINS> PWM_PINS = {21, 22, 23, 2, 3,
-                                                           4, 5, 6};
+extern HardwareSerial &SBUS_UART;
+extern int8_t PWM_PINS[];
 /* 90% of the frame period */
-static constexpr float EFFECTOR_DELAY_US = FRAME_PERIOD_MS * 0.9f * 1e3;
+extern float EFFECTOR_DELAY_US;
 /* IMU */
-static constexpr SPIClass &IMU_SPI_BUS = SPI;
-static constexpr unsigned int IMU_CS = 24;
-static constexpr unsigned int IMU_DRDY = 27;
+extern SPIClass &IMU_SPI_BUS;
+extern int8_t IMU_CS;
+extern int8_t IMU_DRDY;
+extern Eigen::Matrix3f IMU_ROTATION;
 
 #endif  // INCLUDE_FLIGHT_HARDWARE_DEFS_H_

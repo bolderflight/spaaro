@@ -8,6 +8,9 @@ Lint:
   script: 
     - cpplint --verbose=0 include/flight/global_defs.h
     - cpplint --verbose=0 include/flight/hardware_defs.h
+    - cpplint --verbose=0 include/flight/config.h
     - cpplint --verbose=0 include/flight/msg.h
     - cpplint --verbose=0 flight/msg.cc
+    - cpplint --verbose=0 flight/config.cc
+    - cpplint --verbose=0 flight/hardware_defs.cc
     - cpplint --verbose=0 flight/flight.cc

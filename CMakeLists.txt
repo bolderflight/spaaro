@@ -54,6 +54,8 @@ add_executable(flight
 	include/flight/hardware_defs.h
 	include/flight/msg.h
 	flight/msg.cc
+	flight/hardware_defs.cc
+	flight/config.cc
 	flight/flight.cc
 )
 # Add the includes

@@ -29,5 +29,15 @@
 #include <cstdint>
 #include <array>
 #include "flight/hardware_defs.h"
+#include "imu/imu.h"
+
+/* Aircraft config */
+struct AircraftConfig {
+  bfs::ImuConfig imu;
+};
+/* Aircraft data */
+struct AircraftData {
+  bfs::ImuData imu;
+};
 
 #endif  // INCLUDE_FLIGHT_GLOBAL_DEFS_H_

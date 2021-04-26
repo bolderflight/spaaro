@@ -24,19 +24,26 @@
 */
 
 #include "flight/hardware_defs.h"
-#include "flight/global_defs.h"
-#include "flight/msg.h"
-#include "imu/imu.h"
-#include "flight/config.h"
-#include "mpu9250_imu/mpu9250_imu.h"
-/* Aircraft data */
-AircraftData data;
-/* IMU */
-bfs::Imu<bfs::Mpu9250Imu> imu(&IMU_SPI_BUS, IMU_CS);
+#include <array>
+#include <cstdint>
+#include "Eigen/Core"
+#include "Eigen/Dense"
+#include "core/core.h"
 
-int main() {
-  /* Init the message bus */
-  MsgBegin();
-  /* Init the IMU */
-  if (!imu.Init(config.imu)) {MsgError("Unable to communicate with IMU");}
-}
+/* Messages */
+usb_serial_class &MSG_BUS = Serial;
+/* Frame rate */
+int32_t FRAME_RATE_HZ = 50;
+int32_t FRAME_PERIOD_MS = 1000 / FRAME_RATE_HZ;
+/* Inceptor / Effector */
+static constexpr int8_t NUM_SBUS_CH = 16;
+static constexpr int8_t NUM_PWM_PINS = 8;
+HardwareSerial &SBUS_UART = Serial2;
+int8_t PWM_PINS[NUM_PWM_PINS] = {21, 22, 23, 2, 3, 4, 5, 6};
+/* 90% of the frame period */
+float EFFECTOR_DELAY_US = FRAME_PERIOD_MS * 0.9f * 1e3;
+/* IMU */
+SPIClass &IMU_SPI_BUS = SPI;
+int8_t IMU_CS = 24;
+int8_t IMU_DRDY = 27;
+Eigen::Matrix3f IMU_ROTATION = Eigen::Matrix3f::Identity();
