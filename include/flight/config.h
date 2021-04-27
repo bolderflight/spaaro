@@ -27,8 +27,23 @@
 #define INCLUDE_FLIGHT_CONFIG_H_
 
 #include "flight/global_defs.h"
+#include "ams5915/ams5915.h"
 
-extern bool DEBUG;
+/* Debug messages */
+static constexpr bool DEBUG = true;
+/* GNSS */
+static constexpr HardwareSerial &GNSS_UART = Serial3;
+/* Airdata */
+static constexpr bool PITOT_STATIC_INSTALLED = false;
+#if (PITOT_STATIC_INSTALLED)
+static constexpr bfs::Ams5915Transducer STATIC_PRES_TYPE = bfs::AMS5915_1200_B;
+static constexpr int8_t STATIC_PRES_ADDR = 0x10;
+static constexpr bfs::Ams5915Transducer DIFF_PRES_TYPE = bfs::AMS5915_0010_D;
+static constexpr int8_t DIFF_PRES_ADDR = 0x11;
+#else
+static constexpr int8_t STATIC_PRES_CS = 26;
+#endif
+/* Aircraft config */
 extern AircraftConfig config;
 
 #endif  // INCLUDE_FLIGHT_CONFIG_H_

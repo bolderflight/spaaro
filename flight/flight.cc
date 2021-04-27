@@ -25,18 +25,56 @@
 
 #include "flight/hardware_defs.h"
 #include "flight/global_defs.h"
+#include "flight/config.h"
 #include "flight/msg.h"
 #include "imu/imu.h"
-#include "flight/config.h"
+#include "gnss/gnss.h"
+#include "static_pres/static_pres.h"
+#include "diff_pres/diff_pres.h"
 #include "mpu9250_imu/mpu9250_imu.h"
+#include "bme280_static_pres/bme280_static_pres.h"
+#include "ams5915_static_pres/ams5915_static_pres.h"
+#include "ams5915_diff_pres/ams5915_diff_pres.h"
+
 /* Aircraft data */
 AircraftData data;
 /* IMU */
 bfs::Imu<bfs::Mpu9250Imu> imu(&IMU_SPI_BUS, IMU_CS);
+/* GNSS */
+// bfs::Gnss<> gnss(&GNSS_UART);
+/* Airdata */
+#if (PITOT_STATIC_INSTALLED)
+bfs::StaticPres<
+  bfs::Ams5915StaticPres<STATIC_PRES_TYPE>
+> static_pres(&PRES_I2C_BUS, STATIC_PRES_ADDR);
+bfs::DiffPres<
+  bfs::Ams5915DiffPres<DIFF_PRES_TYPE>
+> diff_pres(&PRES_I2C_BUS, DIFF_PRES_ADDR);
+#else
+bfs::StaticPres<
+  bfs::Bme280StaticPres
+> static_pres(&PRES_SPI_BUS, STATIC_PRES_CS);
+#endif
+/* Inceptors */
+
+/* Nav */
+
+/* Effectors */
 
 int main() {
   /* Init the message bus */
   MsgBegin();
   /* Init the IMU */
   if (!imu.Init(config.imu)) {MsgError("Unable to communicate with IMU");}
+  /* Init the GNSS */
+  // if (!gnss.Init(config.gnss)) {MsgError("Unable to communicate with GNSS");}
+  /* Init the pressure transducers */
+  if (!static_pres.Init(config.static_pres)) {
+    MsgError("Unable to communicate with static pressure transducer");
+  }
+  #if (PITOT_STATIC_INSTALLED)
+  if (!diff_pres.Init(config.diff_pres)) {
+    MsgError("Unable to communicate with differential pressure transducer");
+  }
+  #endif
 }

@@ -25,9 +25,8 @@
 
 #include "flight/msg.h"
 #include "flight/hardware_defs.h"
+#include "flight/config.h"
 #include "./version.h"
-
-extern bool DEBUG;
 
 void MsgBegin() {
   MSG_BUS.begin(115200);

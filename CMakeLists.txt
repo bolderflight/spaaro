@@ -43,11 +43,47 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(imu)
 FetchContent_Declare(
+	gnss
+	GIT_REPOSITORY https://github.com/bolderflight/gnss.git
+	GIT_TAG v1.2.1
+)
+FetchContent_MakeAvailable(gnss)
+FetchContent_Declare(
+	static_pres
+	GIT_REPOSITORY https://github.com/bolderflight/static_pres.git
+	GIT_TAG v1.0.2
+)
+FetchContent_MakeAvailable(static_pres)
+FetchContent_Declare(
+	diff_pres
+	GIT_REPOSITORY https://github.com/bolderflight/diff_pres.git
+	GIT_TAG v1.0.0
+)
+FetchContent_MakeAvailable(diff_pres)
+FetchContent_Declare(
 	mpu9250_imu
 	GIT_REPOSITORY https://github.com/bolderflight/mpu9250_imu.git
 	GIT_TAG v1.0.0
 )
 FetchContent_MakeAvailable(mpu9250_imu)
+FetchContent_Declare(
+	bme280_static_pres
+	GIT_REPOSITORY https://github.com/bolderflight/bme280_static_pres.git
+	GIT_TAG v1.0.0
+)
+FetchContent_MakeAvailable(bme280_static_pres)
+FetchContent_Declare(
+	ams5915_static_pres
+	GIT_REPOSITORY https://github.com/bolderflight/ams5915_static_pres.git
+	GIT_TAG v1.0.0
+)
+FetchContent_MakeAvailable(ams5915_static_pres)
+FetchContent_Declare(
+	ams5915_diff_pres
+	GIT_REPOSITORY https://github.com/bolderflight/ams5915_diff_pres.git
+	GIT_TAG v1.0.0
+)
+FetchContent_MakeAvailable(ams5915_diff_pres)
 # Add the executable
 add_executable(flight
 	include/flight/global_defs.h
@@ -68,7 +104,13 @@ target_link_libraries(flight
 	PRIVATE
 		core
 		imu
+		gnss
+		static_pres
+		diff_pres
 		mpu9250_imu
+		bme280_static_pres
+		ams5915_static_pres
+		ams5915_diff_pres
 )
 # Add hex and upload targets
 include(${CMAKE_SOURCE_DIR}/cmake/flash_mcu.cmake)

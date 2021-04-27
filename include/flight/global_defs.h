@@ -30,14 +30,23 @@
 #include <array>
 #include "flight/hardware_defs.h"
 #include "imu/imu.h"
+#include "gnss/gnss.h"
+#include "static_pres/static_pres.h"
+#include "diff_pres/diff_pres.h"
 
 /* Aircraft config */
 struct AircraftConfig {
   bfs::ImuConfig imu;
+  bfs::GnssConfig gnss;
+  bfs::StaticPresConfig static_pres;
+  bfs::DiffPresConfig diff_pres;
 };
 /* Aircraft data */
 struct AircraftData {
   bfs::ImuData imu;
+  bfs::GnssData gnss;
+  bfs::StaticPresData static_pres;
+  bfs::DiffPresData diff_pres;
 };
 
 #endif  // INCLUDE_FLIGHT_GLOBAL_DEFS_H_

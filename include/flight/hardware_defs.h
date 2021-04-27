@@ -47,5 +47,9 @@ extern SPIClass &IMU_SPI_BUS;
 extern int8_t IMU_CS;
 extern int8_t IMU_DRDY;
 extern Eigen::Matrix3f IMU_ROTATION;
+/* Airdata */
+extern TwoWire &PRES_I2C_BUS;
+extern SPIClass &PRES_SPI_BUS;
+
 
 #endif  // INCLUDE_FLIGHT_HARDWARE_DEFS_H_

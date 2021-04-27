@@ -47,3 +47,6 @@ SPIClass &IMU_SPI_BUS = SPI;
 int8_t IMU_CS = 24;
 int8_t IMU_DRDY = 27;
 Eigen::Matrix3f IMU_ROTATION = Eigen::Matrix3f::Identity();
+/* Airdata */
+TwoWire &PRES_I2C_BUS = Wire1;
+SPIClass &PRES_SPI_BUS = SPI;

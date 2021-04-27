@@ -25,9 +25,11 @@
 
 #include "flight/config.h"
 #include "flight/hardware_defs.h"
+#include "ams5915/ams5915.h"
 
-/* Whether to wait for USB to display debug messages */
-bool DEBUG = true;
+// #else
+// int8_t STATIC_PRES_CS = 26;
+// #endif
 /* Aircraft configuration */
 AircraftConfig config = {
   .imu = {
@@ -36,6 +38,16 @@ AircraftConfig config = {
     .mag_bias_ut = Eigen::Vector3f::Zero(),
     .accel_scale = Eigen::Matrix3f::Identity(),
     .mag_scale = Eigen::Matrix3f::Identity(),
-    .rotation = Eigen::Matrix3f::Identity()
+    .rotation = Eigen::Matrix3f::Identity() * IMU_ROTATION
+  },
+  .gnss = {
+    .baud = 921600,
+    .sampling_period_ms = 20
+  },
+  .static_pres = {
+    .sampling_period_ms = FRAME_PERIOD_MS
+  },
+  .diff_pres = {
+    .sampling_period_ms = FRAME_PERIOD_MS
   }
 };
