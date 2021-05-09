@@ -27,54 +27,74 @@
 #include "flight/global_defs.h"
 #include "flight/config.h"
 #include "flight/msg.h"
-#include "imu/imu.h"
-#include "gnss/gnss.h"
-#include "static_pres/static_pres.h"
-#include "diff_pres/diff_pres.h"
-#include "mpu9250_imu/mpu9250_imu.h"
-#include "bme280_static_pres/bme280_static_pres.h"
-#include "ams5915_static_pres/ams5915_static_pres.h"
-#include "ams5915_diff_pres/ams5915_diff_pres.h"
+#include "flight/sys.h"
+#include "flight/sensors.h"
+#include "flight/effectors.h"
+#include "flight/nav.h"
+#include "flight/control.h"
+#include "flight/datalog.h"
+#include "flight/telem.h"
 
+/* Aircraft sensors */
+Sensors sensors;
+/* Aircraft effectors */
+Effectors effectors;
 /* Aircraft data */
 AircraftData data;
-/* IMU */
-bfs::Imu<bfs::Mpu9250Imu> imu(&IMU_SPI_BUS, IMU_CS);
-/* GNSS */
-// bfs::Gnss<> gnss(&GNSS_UART);
-/* Airdata */
-#if (PITOT_STATIC_INSTALLED)
-bfs::StaticPres<
-  bfs::Ams5915StaticPres<STATIC_PRES_TYPE>
-> static_pres(&PRES_I2C_BUS, STATIC_PRES_ADDR);
-bfs::DiffPres<
-  bfs::Ams5915DiffPres<DIFF_PRES_TYPE>
-> diff_pres(&PRES_I2C_BUS, DIFF_PRES_ADDR);
-#else
-bfs::StaticPres<
-  bfs::Bme280StaticPres
-> static_pres(&PRES_SPI_BUS, STATIC_PRES_CS);
-#endif
-/* Inceptors */
+/* Timer for sending effector commands */
+IntervalTimer effector_timer;
 
-/* Nav */
+/* ISR to send effector commands */
+void send_effectors() {
+  /* Stop the effector timer */
+  effector_timer.end();
+  /* Send effector commands */
+  EffectorsWrite(&effectors);
+}
 
-/* Effectors */
+/* ISR to gather sensor data and run VMS */
+void run() {
+  /* Start the effector timer */
+  effector_timer.begin(send_effectors, EFFECTOR_DELAY_US);
+  /* System data */
+  SysRead(&data.sys);
+  /* Sensor data */
+  SensorsRead(&data.sensor, &sensors);
+  /* Nav filter */
+  NavRun(data.sensor, &data.nav);
+  /* Control laws */
+  ControlRun(data, &data.control);
+  /* Command effectors */
+  EffectorsCmd(data.sensor.inceptor.throttle_en, data.control, &effectors);
+  /* Datalog */
+  DatalogAdd(data);
+  /* Telemetry */
+  TelemUpdate(data, &data.telem);
+  /* Frame duration */
+  SysFrameEnd();
+}
 
 int main() {
   /* Init the message bus */
   MsgBegin();
-  /* Init the IMU */
-  if (!imu.Init(config.imu)) {MsgError("Unable to communicate with IMU");}
-  /* Init the GNSS */
-  // if (!gnss.Init(config.gnss)) {MsgError("Unable to communicate with GNSS");}
-  /* Init the pressure transducers */
-  if (!static_pres.Init(config.static_pres)) {
-    MsgError("Unable to communicate with static pressure transducer");
+  /* Init system */
+  SysInit();
+  /* Init sensors */
+  SensorsInit(config.sensor, &sensors);
+  /* Init nav */
+  NavInit(config.nav);
+  /* Init effectors */
+  EffectorsInit(config.effector, &effectors);
+  /* Init control */
+  ControlInit();
+  /* Init telemetry */
+  TelemInit(config, &data.telem);
+  /* Init datalog */
+  DatalogInit();
+  /* Attach data ready interrupt */
+  attachInterrupt(IMU_DRDY, run, RISING);
+  while (1) {
+    /* Flush datalog */
+    DatalogFlush();
   }
-  #if (PITOT_STATIC_INSTALLED)
-  if (!diff_pres.Init(config.diff_pres)) {
-    MsgError("Unable to communicate with differential pressure transducer");
-  }
-  #endif
 }

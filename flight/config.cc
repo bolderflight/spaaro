@@ -25,29 +25,94 @@
 
 #include "flight/config.h"
 #include "flight/hardware_defs.h"
-#include "ams5915/ams5915.h"
+#include "flight/global_defs.h"
 
-// #else
-// int8_t STATIC_PRES_CS = 26;
-// #endif
-/* Aircraft configuration */
+/* Debug */
+bool DEBUG = true;
+/* Aircraft config */
 AircraftConfig config = {
-  .imu = {
-    .odr = bfs::ImuConfig::ODR_50HZ,
-    .accel_bias_mps2 = Eigen::Vector3f::Zero(),
-    .mag_bias_ut = Eigen::Vector3f::Zero(),
-    .accel_scale = Eigen::Matrix3f::Identity(),
-    .mag_scale = Eigen::Matrix3f::Identity(),
-    .rotation = Eigen::Matrix3f::Identity() * IMU_ROTATION
+  .sensor = {
+    .pitot_static_installed = true,
+    .inceptor = {
+      .hw = &SBUS_UART,
+      .throttle_en = {
+
+      },
+      .mode0 = {
+
+      },
+      .mode1 = {
+
+      },
+      .mode2 = {
+
+      },
+      .mode3 = {
+
+      },
+      .throttle = {
+
+      },
+      .pitch = {
+
+      },
+      .roll = {
+
+      },
+      .yaw = {
+
+      }
+    },
+    .imu = {
+      .frame_rate = FRAME_RATE_HZ,
+      .dev = IMU_CS,
+      .bus = &IMU_SPI_BUS,
+      .accel_bias_mps2 = Eigen::Vector3f::Zero(),
+      .mag_bias_ut = Eigen::Vector3f::Zero(),
+      .accel_scale = Eigen::Matrix3f::Identity(),
+      .mag_scale = Eigen::Matrix3f::Identity(),
+      .rotation = Eigen::Matrix3f::Identity() * IMU_ROTATION
+    },
+    .gnss = {
+      .sampling_period_ms = 200,  // 5 Hz
+      .baud = 921600,
+      .bus = &Serial3
+    },
+    .fmu_static_pres = {
+      .dev = PRES_CS,
+      .sampling_period_ms = FRAME_PERIOD_MS,
+      .bus = &PRES_SPI_BUS
+    },
+    .pitot_static_pres = {
+      .dev = 0x10,
+      .transducer = bfs::AMS5915_1200_B,
+      .sampling_period_ms = FRAME_PERIOD_MS,
+      .bus = &PRES_I2C_BUS
+    },
+    .pitot_diff_pres = {
+      .dev = 0x11,
+      .transducer = bfs::AMS5915_0010_D,
+      .sampling_period_ms = FRAME_PERIOD_MS,
+      .bus = &PRES_I2C_BUS
+    }
   },
-  .gnss = {
-    .baud = 921600,
-    .sampling_period_ms = 20
+  .effector = {
+    .sbus = {
+      .hw = &SBUS_UART,
+      .effectors = {
+
+      }
+    },
+    .pwm = {
+      .hw = PWM_PINS,
+      .effectors = {
+        
+      }
+    }
   },
-  .static_pres = {
-    .sampling_period_ms = FRAME_PERIOD_MS
-  },
-  .diff_pres = {
-    .sampling_period_ms = FRAME_PERIOD_MS
+  .telem = {
+    .aircraft_type = bfs::FIXED_WING,
+    .bus = &Serial4,
+    .baud = 57600
   }
 };

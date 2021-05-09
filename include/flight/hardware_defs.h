@@ -31,15 +31,20 @@
 #include "Eigen/Core"
 #include "Eigen/Dense"
 #include "core/core.h"
+#include "imu/imu.h"
 
 /* Messages */
 extern usb_serial_class &MSG_BUS;
 /* Frame rate */
-extern int32_t FRAME_RATE_HZ;
-extern int32_t FRAME_PERIOD_MS;
+inline constexpr bfs::FrameRate FRAME_RATE_HZ = bfs::FRAME_RATE_50HZ;
+inline constexpr int16_t FRAME_PERIOD_MS = 1000 /
+                                           static_cast<uint8_t>(FRAME_RATE_HZ);
 /* Inceptor / Effector */
+inline constexpr int8_t NUM_SBUS_CH = 16;
+inline constexpr int8_t NUM_PWM_PINS = 8;
 extern HardwareSerial &SBUS_UART;
-extern int8_t PWM_PINS[];
+inline constexpr std::array<int8_t, NUM_PWM_PINS> PWM_PINS = {21, 22, 23, 2,
+                                                              3, 4, 5, 6};
 /* 90% of the frame period */
 extern float EFFECTOR_DELAY_US;
 /* IMU */
@@ -47,9 +52,30 @@ extern SPIClass &IMU_SPI_BUS;
 extern int8_t IMU_CS;
 extern int8_t IMU_DRDY;
 extern Eigen::Matrix3f IMU_ROTATION;
-/* Airdata */
+extern int8_t VN_CS;
+extern int8_t VN_DRDY;
+/* Pressure transducers */
 extern TwoWire &PRES_I2C_BUS;
 extern SPIClass &PRES_SPI_BUS;
+extern int8_t PRES_CS;
+/* Voltage */
+inline constexpr int ANALOG_RESOLUTION_BITS = 16;
+inline constexpr float VOLTAGE_RANGE = 3.3;
+inline constexpr float ANALOG_COUNT_RANGE =
+  std::pow(2.0f, ANALOG_RESOLUTION_BITS) - 1.0f;
+inline constexpr unsigned int INPUT_VOLTAGE_PIN = 15;
+inline constexpr float INPUT_VOLTAGE_SCALE = VOLTAGE_RANGE /
+  ANALOG_COUNT_RANGE * (10000.0f + 1000.0f) / 1000.0f;
+inline constexpr unsigned int REGULATED_VOLTAGE_PIN = A22;
+inline constexpr float REGULATED_VOLTAGE_SCALE = VOLTAGE_RANGE /
+  ANALOG_COUNT_RANGE * (1000.0f + 1000.0f) / 1000.0f;
+inline constexpr unsigned int SBUS_VOLTAGE_PIN = A21;
+inline constexpr float SBUS_VOLTAGE_SCALE = VOLTAGE_RANGE /
+  ANALOG_COUNT_RANGE * (1000.0f + 499.0f) / 499.0f;
+inline constexpr unsigned int PWM_VOLTAGE_PIN = 39;
+inline constexpr float PWM_VOLTAGE_SCALE = VOLTAGE_RANGE /
+  ANALOG_COUNT_RANGE * (1000.0f + 499.0f) / 499.0f;
+
 
 
 #endif  // INCLUDE_FLIGHT_HARDWARE_DEFS_H_

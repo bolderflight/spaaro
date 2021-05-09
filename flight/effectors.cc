@@ -23,15 +23,38 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef INCLUDE_FLIGHT_CONFIG_H_
-#define INCLUDE_FLIGHT_CONFIG_H_
-
-#include "flight/hardware_defs.h"
+#include "flight/effectors.h"
 #include "flight/global_defs.h"
+#include "flight/config.h"
+#include "flight/msg.h"
 
-/* Debug */
-extern bool DEBUG;
-/* Aircraft config */
-extern AircraftConfig config;
-
-#endif  // INCLUDE_FLIGHT_CONFIG_H_
+void EffectorsInit(const EffectorConfig &cfg, Effectors * const obj) {
+  if (!obj) {return;}
+  MsgInfo("Intializing effectors...");
+  if (!obj->sbus.Init(cfg.sbus)) {
+    MsgError("Unable to initialize SBUS effectors.");
+  }
+  if (!obj->pwm.Init(cfg.pwm)) {
+    MsgError("Unable to initialize PWM effectors.");
+  }
+  obj->sbus.EnableServos();
+  obj->pwm.EnableServos();
+  MsgInfo("done.\n");
+}
+void EffectorsCmd(bool motor, ControlData &cmd, Effectors * const obj) {
+  if (!obj) {return;}
+  if (motor) {
+    obj->sbus.EnableMotors();
+    obj->pwm.EnableMotors();
+  } else {
+    obj->sbus.DisableMotors();
+    obj->pwm.DisableMotors();
+  }
+  obj->sbus.Cmd(cmd.sbus);
+  obj->pwm.Cmd(cmd.pwm);
+}
+void EffectorsWrite(Effectors * const obj) {
+  if (!obj) {return;}
+  obj->sbus.Write();
+  obj->pwm.Write();
+}

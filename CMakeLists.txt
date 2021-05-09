@@ -26,6 +26,12 @@ add_definitions(
 add_definitions(
 	-DSERIAL4_TX_BUFFER_SIZE=2048
 )
+# nanopb
+set(NANOPB_SRC_ROOT_FOLDER "/usr/local/nanopb")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${NANOPB_SRC_ROOT_FOLDER}/extra)
+find_package(Nanopb REQUIRED)
+include_directories(${NANOPB_INCLUDE_DIRS})
+NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS flight/datalog.proto)
 # Include directories
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 # Fetch dependencies
@@ -33,66 +39,136 @@ include(FetchContent)
 FetchContent_Declare(
 	core
 	GIT_REPOSITORY https://github.com/bolderflight/core.git
-	GIT_TAG v2.0.4
+	GIT_TAG v2.0.5
 )
 FetchContent_MakeAvailable(core)
 FetchContent_Declare(
 	imu
 	GIT_REPOSITORY https://github.com/bolderflight/imu.git
-	GIT_TAG v1.0.1
+	GIT_TAG v2.1.0
 )
 FetchContent_MakeAvailable(imu)
 FetchContent_Declare(
 	gnss
 	GIT_REPOSITORY https://github.com/bolderflight/gnss.git
-	GIT_TAG v1.2.1
+	GIT_TAG v2.2.0
 )
 FetchContent_MakeAvailable(gnss)
 FetchContent_Declare(
-	static_pres
-	GIT_REPOSITORY https://github.com/bolderflight/static_pres.git
-	GIT_TAG v1.0.2
+	pres
+	GIT_REPOSITORY https://github.com/bolderflight/pres.git
+	GIT_TAG v1.2.0
 )
-FetchContent_MakeAvailable(static_pres)
+FetchContent_MakeAvailable(pres)
 FetchContent_Declare(
-	diff_pres
-	GIT_REPOSITORY https://github.com/bolderflight/diff_pres.git
-	GIT_TAG v1.0.0
+	inceptor
+	GIT_REPOSITORY https://github.com/bolderflight/inceptor.git
+	GIT_TAG v2.1.1
 )
-FetchContent_MakeAvailable(diff_pres)
+FetchContent_MakeAvailable(inceptor)
 FetchContent_Declare(
-	mpu9250_imu
-	GIT_REPOSITORY https://github.com/bolderflight/mpu9250_imu.git
-	GIT_TAG v1.0.0
+	effector
+	GIT_REPOSITORY https://github.com/bolderflight/effector.git
+	GIT_TAG v6.0.1
 )
-FetchContent_MakeAvailable(mpu9250_imu)
+FetchContent_MakeAvailable(effector)
 FetchContent_Declare(
-	bme280_static_pres
-	GIT_REPOSITORY https://github.com/bolderflight/bme280_static_pres.git
-	GIT_TAG v1.0.0
+	navigation
+	GIT_REPOSITORY https://github.com/bolderflight/navigation.git
+	GIT_TAG v2.0.1
 )
-FetchContent_MakeAvailable(bme280_static_pres)
+FetchContent_MakeAvailable(navigation)
 FetchContent_Declare(
-	ams5915_static_pres
-	GIT_REPOSITORY https://github.com/bolderflight/ams5915_static_pres.git
-	GIT_TAG v1.0.0
+	airdata
+	GIT_REPOSITORY https://github.com/bolderflight/airdata.git
+	GIT_TAG v2.1.0
 )
-FetchContent_MakeAvailable(ams5915_static_pres)
+FetchContent_MakeAvailable(airdata)
 FetchContent_Declare(
-	ams5915_diff_pres
-	GIT_REPOSITORY https://github.com/bolderflight/ams5915_diff_pres.git
-	GIT_TAG v1.0.0
+	logger
+	GIT_REPOSITORY https://github.com/bolderflight/logger.git
+	GIT_TAG v2.0.3
 )
-FetchContent_MakeAvailable(ams5915_diff_pres)
+FetchContent_MakeAvailable(logger)
+FetchContent_Declare(
+	framing
+	GIT_REPOSITORY https://github.com/bolderflight/framing.git
+	GIT_TAG v2.0.0
+)
+FetchContent_MakeAvailable(framing)
+FetchContent_Declare(
+	filter
+	GIT_REPOSITORY https://github.com/bolderflight/filter.git
+	GIT_TAG v2.1.1
+)
+FetchContent_MakeAvailable(filter)
+FetchContent_Declare(
+	mavlink
+	GIT_REPOSITORY https://github.com/bolderflight/mavlink.git
+	GIT_TAG v3.0.1
+)
+FetchContent_MakeAvailable(mavlink)
+FetchContent_Declare(
+	mpu9250
+	GIT_REPOSITORY https://github.com/bolderflight/mpu9250.git
+	GIT_TAG v4.1.0
+)
+FetchContent_MakeAvailable(mpu9250)
+FetchContent_Declare(
+	ublox
+	GIT_REPOSITORY https://github.com/bolderflight/ublox.git
+	GIT_TAG v3.1.0
+)
+FetchContent_MakeAvailable(ublox)
+FetchContent_Declare(
+	ams5915
+	GIT_REPOSITORY https://github.com/bolderflight/ams5915.git
+	GIT_TAG v4.1.0
+)
+FetchContent_MakeAvailable(ams5915)
+FetchContent_Declare(
+	bme280
+	GIT_REPOSITORY https://github.com/bolderflight/bme280.git
+	GIT_TAG v4.1.0
+)
+FetchContent_MakeAvailable(bme280)
+FetchContent_Declare(
+	sbus
+	GIT_REPOSITORY https://github.com/bolderflight/sbus.git
+	GIT_TAG v4.0.0
+)
+FetchContent_MakeAvailable(sbus)
+FetchContent_Declare(
+	pwm
+	GIT_REPOSITORY https://github.com/bolderflight/pwm.git
+	GIT_TAG v4.0.0
+)
+FetchContent_MakeAvailable(pwm)
 # Add the executable
 add_executable(flight
 	include/flight/global_defs.h
 	include/flight/hardware_defs.h
 	include/flight/msg.h
-	flight/msg.cc
+	include/flight/sys.h
+	include/flight/sensors.h
+	include/flight/effectors.h
+	include/flight/nav.h
+	include/flight/control.h
+	include/flight/datalog.h
+	include/flight/telem.h
+	flight/flight.cc
 	flight/hardware_defs.cc
 	flight/config.cc
-	flight/flight.cc
+	flight/msg.cc
+	flight/sys.cc
+	flight/sensors.cc
+	flight/effectors.cc
+	flight/nav.cc
+	flight/control.cc
+	flight/datalog.cc
+	flight/telem.cc
+	${PROTO_SRCS}
+	${PROTO_HDRS}
 )
 # Add the includes
 target_include_directories(flight PUBLIC 
@@ -105,12 +181,21 @@ target_link_libraries(flight
 		core
 		imu
 		gnss
-		static_pres
-		diff_pres
-		mpu9250_imu
-		bme280_static_pres
-		ams5915_static_pres
-		ams5915_diff_pres
+		pres
+		inceptor
+		effector
+		navigation
+		airdata
+		logger
+		framing
+		filter
+		mavlink
+		mpu9250
+		ublox
+		ams5915
+		bme280
+		sbus
+		pwm
 )
 # Add hex and upload targets
 include(${CMAKE_SOURCE_DIR}/cmake/flash_mcu.cmake)

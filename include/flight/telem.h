@@ -23,15 +23,12 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef INCLUDE_FLIGHT_CONFIG_H_
-#define INCLUDE_FLIGHT_CONFIG_H_
+#ifndef INCLUDE_FLIGHT_TELEM_H_
+#define INCLUDE_FLIGHT_TELEM_H_
 
-#include "flight/hardware_defs.h"
 #include "flight/global_defs.h"
 
-/* Debug */
-extern bool DEBUG;
-/* Aircraft config */
-extern AircraftConfig config;
+void TelemInit(const AircraftConfig &cfg, TelemData * const ptr);
+void TelemUpdate(const AircraftData &data, TelemData * const ptr);
 
-#endif  // INCLUDE_FLIGHT_CONFIG_H_
+#endif  // INCLUDE_FLIGHT_TELEM_H_

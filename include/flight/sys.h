@@ -23,15 +23,13 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef INCLUDE_FLIGHT_CONFIG_H_
-#define INCLUDE_FLIGHT_CONFIG_H_
+#ifndef INCLUDE_FLIGHT_SYS_H_
+#define INCLUDE_FLIGHT_SYS_H_
 
-#include "flight/hardware_defs.h"
 #include "flight/global_defs.h"
 
-/* Debug */
-extern bool DEBUG;
-/* Aircraft config */
-extern AircraftConfig config;
+void SysInit();
+void SysRead(SysData * const ptr);
+void SysFrameEnd();
 
-#endif  // INCLUDE_FLIGHT_CONFIG_H_
+#endif

@@ -23,15 +23,12 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef INCLUDE_FLIGHT_CONFIG_H_
-#define INCLUDE_FLIGHT_CONFIG_H_
+#include "flight/control.h"
 
-#include "flight/hardware_defs.h"
-#include "flight/global_defs.h"
+void ControlInit() {
 
-/* Debug */
-extern bool DEBUG;
-/* Aircraft config */
-extern AircraftConfig config;
+}
+void ControlRun(const AircraftData &data, ControlData * const ctrl) {
+  if (!ctrl) {return;}
 
-#endif  // INCLUDE_FLIGHT_CONFIG_H_
+}

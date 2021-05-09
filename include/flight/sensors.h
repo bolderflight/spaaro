@@ -23,15 +23,12 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef INCLUDE_FLIGHT_CONFIG_H_
-#define INCLUDE_FLIGHT_CONFIG_H_
+#ifndef INCLUDE_FLIGHT_SENSORS_H_
+#define INCLUDE_FLIGHT_SENSORS_H_
 
-#include "flight/hardware_defs.h"
 #include "flight/global_defs.h"
 
-/* Debug */
-extern bool DEBUG;
-/* Aircraft config */
-extern AircraftConfig config;
+void SensorsInit(const SensorConfig &cfg, Sensors * const obj);
+void SensorsRead(SensorData * const data, Sensors * const obj);
 
-#endif  // INCLUDE_FLIGHT_CONFIG_H_
+#endif  // INCLUDE_FLIGHT_SENSORS_H_

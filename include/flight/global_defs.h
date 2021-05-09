@@ -26,27 +26,152 @@
 #ifndef INCLUDE_FLIGHT_GLOBAL_DEFS_H_
 #define INCLUDE_FLIGHT_GLOBAL_DEFS_H_
 
-#include <cstdint>
-#include <array>
 #include "flight/hardware_defs.h"
 #include "imu/imu.h"
 #include "gnss/gnss.h"
-#include "static_pres/static_pres.h"
-#include "diff_pres/diff_pres.h"
+#include "pres/pres.h"
+#include "inceptor/inceptor.h"
+#include "effector/effector.h"
+#include "global_defs/global_defs.h"
+#include "mavlink/mavlink.h"
+#include "mpu9250/mpu9250.h"
+#include "ublox/ublox.h"
+#include "ams5915/ams5915.h"
+#include "bme280/bme280.h"
+#include "sbus/sbus.h"
+#include "pwm/pwm.h"
 
-/* Aircraft config */
-struct AircraftConfig {
+/* Control sizes */
+inline constexpr std::size_t NUM_AUX_VAR = 24;
+/* Telem sizes */
+inline constexpr std::size_t NUM_TELEM_PARAMS = 24;
+inline constexpr std::size_t NUM_FLIGHT_PLAN_POINTS = 250;
+inline constexpr std::size_t NUM_FENCE_POINTS = 100;
+inline constexpr std::size_t NUM_RALLY_POINTS = 10;
+/* Sensor objects */
+struct Sensors {
+  bfs::SbusRx inceptor;
+  bfs::Mpu9250 imu;
+  bfs::Ublox gnss;
+  bfs::Bme280 fmu_static_pres;
+  bfs::Ams5915 pitot_static_pres;
+  bfs::Ams5915 pitot_diff_pres;
+};
+/* Effector objects */
+struct Effectors {
+  bfs::SbusTx<NUM_SBUS_CH> sbus;
+  bfs::PwmTx<NUM_PWM_PINS> pwm;
+};
+/* Sensor config */
+struct SensorConfig {
+  bool pitot_static_installed;
+  bfs::InceptorConfig inceptor;
   bfs::ImuConfig imu;
   bfs::GnssConfig gnss;
-  bfs::StaticPresConfig static_pres;
-  bfs::DiffPresConfig diff_pres;
+  bfs::PresConfig fmu_static_pres;
+  bfs::PresConfig pitot_static_pres;
+  bfs::PresConfig pitot_diff_pres;
+};
+/* Nav config */
+struct NavConfig {
+  float accel_cutoff_hz;
+  float gyro_cutoff_hz;
+  float mag_cutoff_hz;
+  float static_pres_cutoff_hz;
+  float diff_pres_cutoff_hz;
+};
+/* Effector config */
+struct EffectorConfig {
+  bfs::EffectorConfig<NUM_SBUS_CH> sbus;
+  bfs::EffectorConfig<NUM_PWM_PINS> pwm;
+};
+/* Telem config */
+struct TelemConfig {
+  bfs::AircraftType aircraft_type;
+  HardwareSerial *bus;
+  int32_t baud;
+};
+/* Aircraft config */
+struct AircraftConfig {
+  SensorConfig sensor;
+  NavConfig nav;
+  EffectorConfig effector;
+  TelemConfig telem;
+};
+/* System data */
+struct SysData {
+  int32_t frame_time_us;
+  float input_volt;
+  float reg_volt;
+  float pwm_volt;
+  float sbus_volt;
+  int64_t sys_time_us;
+};
+/* Sensor data */
+struct SensorData {
+  bool pitot_static_installed;
+  bfs::InceptorData inceptor;
+  bfs::ImuData imu;
+  bfs::GnssData gnss;
+  bfs::PresData fmu_static_pres;
+  bfs::PresData pitot_static_pres;
+  bfs::PresData pitot_diff_pres;
+};
+/* Nav data */
+struct NavData {
+  bool nav_initialized;
+  float pitch_rad;
+  float roll_rad;
+  float heading_rad;
+  float alt_wgs84_m;
+  float alt_msl_m;
+  float alt_rel_m;
+  float static_pres_pa;
+  float diff_pres_pa;
+  float alt_pres_m;
+  float ias_mps;
+  float gnd_spd_mps;
+  float gnd_track_rad;
+  float flight_path_rad;
+  Eigen::Vector3f accel_bias_mps2;
+  Eigen::Vector3f gyro_bias_radps;
+  Eigen::Vector3f accel_mps2;
+  Eigen::Vector3f gyro_radps;
+  Eigen::Vector3f mag_ut;
+  Eigen::Vector3f ned_pos_m;
+  Eigen::Vector3f ned_vel_mps;
+  double lat_rad;
+  double lon_rad;
+};
+/* Control data */
+struct ControlData {
+  bool waypoint_reached;
+  bfs::AircraftMode mode;
+  std::array<float, NUM_SBUS_CH> sbus;
+  std::array<float, NUM_PWM_PINS> pwm;
+  std::array<float, NUM_AUX_VAR> aux;
+};
+/* Telemetry data */
+struct TelemData {
+  bool waypoints_updated;
+  bool fence_updated;
+  bool rally_points_updated;
+  int16_t current_waypoint;
+  int16_t num_waypoints;
+  int16_t num_fence_items;
+  int16_t num_rally_points;
+  std::array<float, NUM_TELEM_PARAMS> param;
+  std::array<bfs::MissionItem, NUM_FLIGHT_PLAN_POINTS> flight_plan;
+  std::array<bfs::MissionItem, NUM_FENCE_POINTS> fence;
+  std::array<bfs::MissionItem, NUM_RALLY_POINTS> rally;
 };
 /* Aircraft data */
 struct AircraftData {
-  bfs::ImuData imu;
-  bfs::GnssData gnss;
-  bfs::StaticPresData static_pres;
-  bfs::DiffPresData diff_pres;
+  SysData sys;
+  SensorData sensor;
+  NavData nav;
+  ControlData control;
+  TelemData telem;
 };
 
 #endif  // INCLUDE_FLIGHT_GLOBAL_DEFS_H_
