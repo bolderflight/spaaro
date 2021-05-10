@@ -31,20 +31,6 @@
 #include "core/core.h"
 #include "imu/imu.h"
 
-/* Messages */
-usb_serial_class &MSG_BUS = Serial;
-/* Inceptor / Effector */
-HardwareSerial &SBUS_UART = Serial2;
-/* 90% of the frame period */
-float EFFECTOR_DELAY_US = FRAME_PERIOD_MS * 0.9f * 1e3;
 /* IMU */
-SPIClass &IMU_SPI_BUS = SPI;
-int8_t IMU_CS = 24;
-int8_t IMU_DRDY = 27;
-Eigen::Matrix3f IMU_ROTATION = (Eigen::Matrix3f() << 0, 1, 0, -1, 0, 0, 0, 0, 1).finished();
-int8_t VN_CS = 25;
-int8_t VN_DRDY = 28;
-/* Pressure transducers */
-TwoWire &PRES_I2C_BUS = Wire1;
-SPIClass &PRES_SPI_BUS = SPI;
-int8_t PRES_CS = 26;
+Eigen::Matrix3f IMU_ROTATION =
+  (Eigen::Matrix3f() << 0, 1, 0, -1, 0, 0, 0, 0, 1).finished();

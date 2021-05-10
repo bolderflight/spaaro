@@ -69,7 +69,7 @@ FetchContent_MakeAvailable(inceptor)
 FetchContent_Declare(
 	effector
 	GIT_REPOSITORY https://github.com/bolderflight/effector.git
-	GIT_TAG v6.0.1
+	GIT_TAG v6.0.2
 )
 FetchContent_MakeAvailable(effector)
 FetchContent_Declare(
@@ -135,13 +135,13 @@ FetchContent_MakeAvailable(bme280)
 FetchContent_Declare(
 	sbus
 	GIT_REPOSITORY https://github.com/bolderflight/sbus.git
-	GIT_TAG v4.0.0
+	GIT_TAG v4.0.1
 )
 FetchContent_MakeAvailable(sbus)
 FetchContent_Declare(
 	pwm
 	GIT_REPOSITORY https://github.com/bolderflight/pwm.git
-	GIT_TAG v4.0.0
+	GIT_TAG v4.0.2
 )
 FetchContent_MakeAvailable(pwm)
 # Add the executable

@@ -63,7 +63,6 @@ void SysRead(SysData * const ptr) {
                    SBUS_VOLTAGE_SCALE;
   ptr->pwm_volt = static_cast<float>(analogRead(PWM_VOLTAGE_PIN)) *
                   PWM_VOLTAGE_SCALE;
-
 }
 void SysFrameEnd() {
   frame_time_us_ = static_cast<int32_t>(micros64() - frame_start_us_);

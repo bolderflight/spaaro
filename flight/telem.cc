@@ -58,7 +58,8 @@ void TelemInit(const AircraftConfig &cfg, TelemData * const ptr) {
   /* Config */
   telem_.hardware_serial(cfg.telem.bus);
   telem_.aircraft_type(cfg.telem.aircraft_type);
-  telem_.mission(ptr->flight_plan.data(), ptr->flight_plan.size(), temp_.data());
+  telem_.mission(ptr->flight_plan.data(), ptr->flight_plan.size(),
+                 temp_.data());
   telem_.fence(ptr->fence.data(), ptr->fence.size());
   telem_.rally(ptr->rally.data(), ptr->rally.size());
   /* Make a copy of the effector config */
@@ -174,7 +175,8 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   }
   telem_.effector(effector_);
   /* Inceptor */
-  inceptor_[inceptor_config_.pitch.ch] = data.sensor.inceptor.pitch * 0.5f + 0.5f;
+  inceptor_[inceptor_config_.pitch.ch] = data.sensor.inceptor.pitch * 0.5f +
+                                         0.5f;
   inceptor_[inceptor_config_.roll.ch] = data.sensor.inceptor.roll * 0.5f + 0.5f;
   inceptor_[inceptor_config_.yaw.ch] = data.sensor.inceptor.yaw * 0.5f + 0.5f;
   inceptor_[inceptor_config_.throttle.ch]  = data.sensor.inceptor.throttle;

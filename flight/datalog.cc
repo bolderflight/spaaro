@@ -25,16 +25,15 @@
 
 #include "flight/datalog.h"
 #include "flight/msg.h"
-#include "flight/datalog.h"
 #include "logger/logger.h"
 #include "framing/framing.h"
-#include "datalog.pb.h"
-#include "pb_encode.h"
-#include "pb_decode.h"
+#include "./datalog.pb.h"
+#include "./pb_encode.h"
+#include "./pb_decode.h"
 
 namespace {
 /* Datalog file name */
-std::string DATA_LOG_NAME_ = "flight_data";
+static const char * DATA_LOG_NAME_ = "flight_data";
 /* SD card */
 SdFat32 sd_;
 /* Logger object */

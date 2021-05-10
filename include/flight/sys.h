@@ -32,4 +32,4 @@ void SysInit();
 void SysRead(SysData * const ptr);
 void SysFrameEnd();
 
-#endif
+#endif  // INCLUDE_FLIGHT_SYS_H_

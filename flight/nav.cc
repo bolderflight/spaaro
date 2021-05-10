@@ -38,7 +38,8 @@ bool nav_initialized_ = false;
 /* Minimum number of satellites */
 static constexpr int MIN_SAT_ = 12;
 /* Frame period */
-static constexpr float FRAME_PERIOD_S = static_cast<float>(FRAME_PERIOD_MS) / 1000.0f;
+static constexpr float FRAME_PERIOD_S = static_cast<float>(FRAME_PERIOD_MS) /
+                                        1000.0f;
 /* Navigation filter */
 bfs::Ekf15State nav_filter_;
 Eigen::Vector3d gnss_lla_;
@@ -140,13 +141,15 @@ void NavRun(const SensorData &ref, NavData * const ptr) {
                         ref.imu.mag_ut(2));
       /* Init the EKF */
       nav_filter_.Initialize(ref.imu.accel_mps2, ref.imu.gyro_radps,
-                             ref.imu.mag_ut, ref.gnss.ned_vel_mps, home_pos_lla_);
+                             ref.imu.mag_ut, ref.gnss.ned_vel_mps,
+                             home_pos_lla_);
       nav_initialized_ = true;
     }
   } else {
     /* EKF time update */
     if (ref.imu.new_imu_data) {
-      nav_filter_.TimeUpdate(ref.imu.accel_mps2, ref.imu.gyro_radps, FRAME_PERIOD_S);
+      nav_filter_.TimeUpdate(ref.imu.accel_mps2, ref.imu.gyro_radps,
+                             FRAME_PERIOD_S);
     }
     /* EKF measurement update */
     if (ref.gnss.new_data) {
@@ -191,16 +194,19 @@ void NavRun(const SensorData &ref, NavData * const ptr) {
     /* Air data */
     if (ref.pitot_static_installed) {
       if (ref.pitot_static_pres.new_data) {
-        ptr->static_pres_pa = static_pres_dlpf_.Filter(ref.pitot_static_pres.pres_pa);
+        ptr->static_pres_pa =
+          static_pres_dlpf_.Filter(ref.pitot_static_pres.pres_pa);
         ptr->alt_pres_m = bfs::PressureAltitude_m(ptr->static_pres_pa);
       }
       if (ref.pitot_diff_pres.new_data) {
-        ptr->diff_pres_pa = diff_pres_dlpf_.Filter(ref.pitot_diff_pres.pres_pa);
+        ptr->diff_pres_pa =
+          diff_pres_dlpf_.Filter(ref.pitot_diff_pres.pres_pa);
         ptr->ias_mps = bfs::Ias_mps(ptr->diff_pres_pa);
       }
     } else {
       if (ref.fmu_static_pres.new_data) {
-        ptr->static_pres_pa = static_pres_dlpf_.Filter(ref.fmu_static_pres.pres_pa);
+        ptr->static_pres_pa =
+          static_pres_dlpf_.Filter(ref.fmu_static_pres.pres_pa);
         ptr->alt_pres_m = bfs::PressureAltitude_m(ptr->static_pres_pa);
       }
     }

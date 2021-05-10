@@ -36,9 +36,6 @@ void SensorsInit(const SensorConfig &cfg, Sensors * const obj) {
   if (!obj) {return;}
   pitot_static_installed_ = cfg.pitot_static_installed;
   MsgInfo("Intializing sensors...");
-  if (!obj->inceptor.Init(cfg.inceptor)) {
-    MsgError("Unable to initialize inceptor.");
-  }
   if (!obj->imu.Init(cfg.imu)) {
     MsgError("Unable to initialize IMU.");
   }
@@ -57,6 +54,9 @@ void SensorsInit(const SensorConfig &cfg, Sensors * const obj) {
       MsgError("Unable to initialize FMU static pressure sensor.");
     }
   }
+  MsgInfo("done.\n");
+  MsgInfo("Initializing inceptors...");
+  while (!obj->inceptor.Init(cfg.inceptor)) {}
   MsgInfo("done.\n");
 }
 void SensorsRead(SensorData * const data, Sensors * const obj) {

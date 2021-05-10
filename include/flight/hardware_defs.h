@@ -34,7 +34,7 @@
 #include "imu/imu.h"
 
 /* Messages */
-extern usb_serial_class &MSG_BUS;
+inline constexpr usb_serial_class &MSG_BUS = Serial;
 /* Frame rate */
 inline constexpr bfs::FrameRate FRAME_RATE_HZ = bfs::FRAME_RATE_50HZ;
 inline constexpr int16_t FRAME_PERIOD_MS = 1000 /
@@ -42,22 +42,22 @@ inline constexpr int16_t FRAME_PERIOD_MS = 1000 /
 /* Inceptor / Effector */
 inline constexpr int8_t NUM_SBUS_CH = 16;
 inline constexpr int8_t NUM_PWM_PINS = 8;
-extern HardwareSerial &SBUS_UART;
+inline constexpr HardwareSerial &SBUS_UART = Serial2;
 inline constexpr std::array<int8_t, NUM_PWM_PINS> PWM_PINS = {21, 22, 23, 2,
                                                               3, 4, 5, 6};
 /* 90% of the frame period */
-extern float EFFECTOR_DELAY_US;
+inline constexpr float EFFECTOR_DELAY_US = FRAME_PERIOD_MS * 0.9f * 1e3;
 /* IMU */
-extern SPIClass &IMU_SPI_BUS;
-extern int8_t IMU_CS;
-extern int8_t IMU_DRDY;
+inline constexpr SPIClass &IMU_SPI_BUS = SPI;
+inline constexpr int8_t IMU_CS = 24;
+inline constexpr int8_t IMU_DRDY = 27;
 extern Eigen::Matrix3f IMU_ROTATION;
-extern int8_t VN_CS;
-extern int8_t VN_DRDY;
+inline constexpr int8_t VN_CS = 25;
+inline constexpr int8_t VN_DRDY = 28;
 /* Pressure transducers */
-extern TwoWire &PRES_I2C_BUS;
-extern SPIClass &PRES_SPI_BUS;
-extern int8_t PRES_CS;
+inline constexpr TwoWire &PRES_I2C_BUS = Wire1;
+inline constexpr SPIClass &PRES_SPI_BUS = SPI;
+inline constexpr int8_t PRES_CS = 26;
 /* Voltage */
 inline constexpr int ANALOG_RESOLUTION_BITS = 16;
 inline constexpr float VOLTAGE_RANGE = 3.3;

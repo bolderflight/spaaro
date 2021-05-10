@@ -41,7 +41,7 @@ void EffectorsInit(const EffectorConfig &cfg, Effectors * const obj) {
   obj->pwm.EnableServos();
   MsgInfo("done.\n");
 }
-void EffectorsCmd(bool motor, ControlData &cmd, Effectors * const obj) {
+void EffectorsCmd(bool motor, const ControlData &cmd, Effectors * const obj) {
   if (!obj) {return;}
   if (motor) {
     obj->sbus.EnableMotors();

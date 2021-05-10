@@ -25,10 +25,7 @@
 
 #include "flight/control.h"
 
-void ControlInit() {
-
-}
+void ControlInit() {}
 void ControlRun(const AircraftData &data, ControlData * const ctrl) {
   if (!ctrl) {return;}
-
 }
