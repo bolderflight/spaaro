@@ -35,33 +35,15 @@ AircraftConfig config = {
     .pitot_static_installed = true,
     .inceptor = {
       .hw = &SBUS_UART,
-      .throttle_en = {
-
-      },
-      .mode0 = {
-
-      },
-      .mode1 = {
-
-      },
-      .mode2 = {
-
-      },
-      .mode3 = {
-
-      },
-      .throttle = {
-
-      },
-      .pitch = {
-
-      },
-      .roll = {
-
-      },
-      .yaw = {
-
-      }
+      .throttle_en = {},
+      .mode0 = {},
+      .mode1 = {},
+      .mode2 = {},
+      .mode3 = {},
+      .throttle = {},
+      .pitch = {},
+      .roll = {},
+      .yaw = {}
     },
     .imu = {
       .frame_rate = FRAME_RATE_HZ,
@@ -99,15 +81,11 @@ AircraftConfig config = {
   .effector = {
     .sbus = {
       .hw = &SBUS_UART,
-      .effectors = {
-
-      }
+      .effectors = {}
     },
     .pwm = {
       .hw = PWM_PINS,
-      .effectors = {
-        
-      }
+      .effectors = {}
     }
   },
   .telem = {
