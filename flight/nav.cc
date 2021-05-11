@@ -42,6 +42,7 @@ static constexpr float FRAME_PERIOD_S = static_cast<float>(FRAME_PERIOD_MS) /
                                         1000.0f;
 /* Navigation filter */
 bfs::Ekf15State nav_filter_;
+/* Data */
 Eigen::Vector3d gnss_lla_;
 Eigen::Vector3f gnss_ned_vel_mps_;
 Eigen::Vector3f imu_accel_mps2_;
