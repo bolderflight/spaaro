@@ -43,9 +43,17 @@ static constexpr float FRAME_PERIOD_S = static_cast<float>(FRAME_PERIOD_MS) /
 /* Navigation filter */
 bfs::Ekf15State nav_filter_;
 Eigen::Vector3d gnss_lla_;
+Eigen::Vector3f gnss_ned_vel_mps_;
+Eigen::Vector3f imu_accel_mps2_;
+Eigen::Vector3f imu_gyro_radps_;
+Eigen::Vector3f imu_mag_ut_;
 Eigen::Vector3d nav_lla_;
-Eigen::Vector3f accel_mps2_;
-Eigen::Vector3f gyro_radps_;
+Eigen::Vector3f nav_ned_pos_m_;
+Eigen::Vector3f nav_ned_vel_mps_;
+Eigen::Vector3f nav_accel_mps2_;
+Eigen::Vector3f nav_gyro_radps_;
+Eigen::Vector3f nav_accel_bias_mps2_;
+Eigen::Vector3f nav_gyro_bias_radps_;
 /* Geoid height */
 float geoid_height_m_;
 /* Home position */
@@ -114,53 +122,80 @@ void NavRun(const SensorData &ref, NavData * const ptr) {
       /* Init IMU filters */
       accel_dlpf_[0].Init(config_.accel_cutoff_hz,
                           static_cast<float>(FRAME_RATE_HZ),
-                          ref.imu.accel_mps2(0));
+                          ref.imu.accel_mps2[0]);
       accel_dlpf_[1].Init(config_.accel_cutoff_hz,
                           static_cast<float>(FRAME_RATE_HZ),
-                          ref.imu.accel_mps2(1));
+                          ref.imu.accel_mps2[1]);
       accel_dlpf_[2].Init(config_.accel_cutoff_hz,
                           static_cast<float>(FRAME_RATE_HZ),
-                          ref.imu.accel_mps2(2));
+                          ref.imu.accel_mps2[2]);
       gyro_dlpf_[0].Init(config_.gyro_cutoff_hz,
                          static_cast<float>(FRAME_RATE_HZ),
-                         ref.imu.gyro_radps(0));
+                         ref.imu.gyro_radps[0]);
       gyro_dlpf_[1].Init(config_.gyro_cutoff_hz,
                          static_cast<float>(FRAME_RATE_HZ),
-                         ref.imu.gyro_radps(1));
+                         ref.imu.gyro_radps[1]);
       gyro_dlpf_[2].Init(config_.gyro_cutoff_hz,
                          static_cast<float>(FRAME_RATE_HZ),
-                         ref.imu.gyro_radps(2));
+                         ref.imu.gyro_radps[2]);
       mag_dlpf_[0].Init(config_.mag_cutoff_hz,
                         mag_frame_rate_hz_,
-                        ref.imu.mag_ut(0));
+                        ref.imu.mag_ut[0]);
       mag_dlpf_[1].Init(config_.accel_cutoff_hz,
                         mag_frame_rate_hz_,
-                        ref.imu.mag_ut(1));
+                        ref.imu.mag_ut[1]);
       mag_dlpf_[2].Init(config_.accel_cutoff_hz,
                         mag_frame_rate_hz_,
-                        ref.imu.mag_ut(2));
+                        ref.imu.mag_ut[2]);
+      imu_accel_mps2_(0) = ref.imu.accel_mps2[0];
+      imu_accel_mps2_(1) = ref.imu.accel_mps2[1];
+      imu_accel_mps2_(2) = ref.imu.accel_mps2[2];
+      imu_gyro_radps_(0) = ref.imu.gyro_radps[0];
+      imu_gyro_radps_(1) = ref.imu.gyro_radps[1];
+      imu_gyro_radps_(2) = ref.imu.gyro_radps[2];
+      imu_mag_ut_(0) = ref.imu.mag_ut[0];
+      imu_mag_ut_(1) = ref.imu.mag_ut[1];
+      imu_mag_ut_(2) = ref.imu.mag_ut[2];
+      gnss_ned_vel_mps_(0) = ref.gnss.ned_vel_mps[0];
+      gnss_ned_vel_mps_(1) = ref.gnss.ned_vel_mps[1];
+      gnss_ned_vel_mps_(2) = ref.gnss.ned_vel_mps[2];
       /* Init the EKF */
-      nav_filter_.Initialize(ref.imu.accel_mps2, ref.imu.gyro_radps,
-                             ref.imu.mag_ut, ref.gnss.ned_vel_mps,
+      nav_filter_.Initialize(imu_accel_mps2_, imu_gyro_radps_,
+                             imu_mag_ut_, gnss_ned_vel_mps_,
                              home_pos_lla_);
       nav_initialized_ = true;
     }
   } else {
     /* EKF time update */
     if (ref.imu.new_imu_data) {
-      nav_filter_.TimeUpdate(ref.imu.accel_mps2, ref.imu.gyro_radps,
+      imu_accel_mps2_(0) = ref.imu.accel_mps2[0];
+      imu_accel_mps2_(1) = ref.imu.accel_mps2[1];
+      imu_accel_mps2_(2) = ref.imu.accel_mps2[2];
+      imu_gyro_radps_(0) = ref.imu.gyro_radps[0];
+      imu_gyro_radps_(1) = ref.imu.gyro_radps[1];
+      imu_gyro_radps_(2) = ref.imu.gyro_radps[2];
+      nav_filter_.TimeUpdate(imu_accel_mps2_, imu_gyro_radps_,
                              FRAME_PERIOD_S);
     }
     /* EKF measurement update */
     if (ref.gnss.new_data) {
+      gnss_ned_vel_mps_(0) = ref.gnss.ned_vel_mps[0];
+      gnss_ned_vel_mps_(1) = ref.gnss.ned_vel_mps[1];
+      gnss_ned_vel_mps_(2) = ref.gnss.ned_vel_mps[2];
       gnss_lla_(0) = ref.gnss.lat_rad;
       gnss_lla_(1) = ref.gnss.lon_rad;
       gnss_lla_(2) = ref.gnss.alt_wgs84_m;
-      nav_filter_.MeasurementUpdate(ref.gnss.ned_vel_mps, gnss_lla_);
+      nav_filter_.MeasurementUpdate(gnss_ned_vel_mps_, gnss_lla_);
     }
     /* EKF data */
-    ptr->accel_bias_mps2 = nav_filter_.accel_bias_mps2();
-    ptr->gyro_bias_radps = nav_filter_.gyro_bias_radps();
+    nav_accel_bias_mps2_ = nav_filter_.accel_bias_mps2();
+    nav_gyro_bias_radps_ = nav_filter_.gyro_bias_radps();
+    ptr->accel_bias_mps2[0] = nav_accel_bias_mps2_(0);
+    ptr->accel_bias_mps2[1] = nav_accel_bias_mps2_(1);
+    ptr->accel_bias_mps2[2] = nav_accel_bias_mps2_(2);
+    ptr->gyro_bias_radps[0] = nav_gyro_bias_radps_(0);
+    ptr->gyro_bias_radps[1] = nav_gyro_bias_radps_(1);
+    ptr->gyro_bias_radps[2] = nav_gyro_bias_radps_(2);
     ptr->pitch_rad = nav_filter_.pitch_rad();
     ptr->roll_rad = nav_filter_.roll_rad();
     ptr->heading_rad = nav_filter_.yaw_rad();
@@ -169,27 +204,33 @@ void NavRun(const SensorData &ref, NavData * const ptr) {
     ptr->lon_rad = nav_lla_(1);
     ptr->alt_wgs84_m = nav_lla_(2);
     ptr->alt_msl_m = ptr->alt_wgs84_m - geoid_height_m_;
-    ptr->ned_vel_mps = nav_filter_.ned_vel_mps();
-    ptr->ned_pos_m = bfs::lla2ned(nav_lla_, home_pos_lla_).cast<float>();
-    ptr->alt_rel_m = -1.0f * ptr->ned_pos_m(2);
-    ptr->gnd_spd_mps = std::sqrt(ptr->ned_vel_mps(0) * ptr->ned_vel_mps(0) +
-                                ptr->ned_vel_mps(1) * ptr->ned_vel_mps(1));
-    ptr->gnd_track_rad = std::atan2(ptr->ned_vel_mps(1), ptr->ned_vel_mps(0));
-    ptr->flight_path_rad = std::atan2(-1.0f * ptr->ned_vel_mps(2),
+    nav_ned_vel_mps_ = nav_filter_.ned_vel_mps();
+    ptr->ned_vel_mps[0] = nav_ned_vel_mps_(0);
+    ptr->ned_vel_mps[1] = nav_ned_vel_mps_(1);
+    ptr->ned_vel_mps[2] = nav_ned_vel_mps_(2);
+    nav_ned_pos_m_ = bfs::lla2ned(nav_lla_, home_pos_lla_).cast<float>();
+    ptr->ned_pos_m[0] = nav_ned_pos_m_(0);
+    ptr->ned_pos_m[1] = nav_ned_pos_m_(1);
+    ptr->ned_pos_m[2] = nav_ned_pos_m_(2);
+    ptr->alt_rel_m = -1.0f * ptr->ned_pos_m[2];
+    ptr->gnd_spd_mps = std::sqrt(ptr->ned_vel_mps[0] * ptr->ned_vel_mps[0] +
+                                 ptr->ned_vel_mps[1] * ptr->ned_vel_mps[1]);
+    ptr->gnd_track_rad = std::atan2(ptr->ned_vel_mps[1], ptr->ned_vel_mps[0]);
+    ptr->flight_path_rad = std::atan2(-1.0f * ptr->ned_vel_mps[2],
                                       ptr->gnd_spd_mps);
     /* Filtered IMU data */
-    accel_mps2_ = nav_filter_.accel_mps2();
-    gyro_radps_ = nav_filter_.gyro_radps();
-    ptr->accel_mps2(0) = accel_dlpf_[0].Filter(accel_mps2_(0));
-    ptr->accel_mps2(1) = accel_dlpf_[1].Filter(accel_mps2_(1));
-    ptr->accel_mps2(2) = accel_dlpf_[2].Filter(accel_mps2_(2));
-    ptr->gyro_radps(0) = gyro_dlpf_[0].Filter(gyro_radps_(0));
-    ptr->gyro_radps(1) = gyro_dlpf_[1].Filter(gyro_radps_(1));
-    ptr->gyro_radps(2) = gyro_dlpf_[2].Filter(gyro_radps_(2));
+    nav_accel_mps2_ = nav_filter_.accel_mps2();
+    nav_gyro_radps_ = nav_filter_.gyro_radps();
+    ptr->accel_mps2[0] = accel_dlpf_[0].Filter(nav_accel_mps2_(0));
+    ptr->accel_mps2[1] = accel_dlpf_[1].Filter(nav_accel_mps2_(1));
+    ptr->accel_mps2[2] = accel_dlpf_[2].Filter(nav_accel_mps2_(2));
+    ptr->gyro_radps[0] = gyro_dlpf_[0].Filter(nav_gyro_radps_(0));
+    ptr->gyro_radps[1] = gyro_dlpf_[1].Filter(nav_gyro_radps_(1));
+    ptr->gyro_radps[2] = gyro_dlpf_[2].Filter(nav_gyro_radps_(2));
     if (ref.imu.new_mag_data) {
-      ptr->mag_ut(0) = mag_dlpf_[0].Filter(ref.imu.mag_ut(0));
-      ptr->mag_ut(1) = mag_dlpf_[1].Filter(ref.imu.mag_ut(1));
-      ptr->mag_ut(2) = mag_dlpf_[2].Filter(ref.imu.mag_ut(2));
+      ptr->mag_ut[0] = mag_dlpf_[0].Filter(ref.imu.mag_ut[0]);
+      ptr->mag_ut[1] = mag_dlpf_[1].Filter(ref.imu.mag_ut[1]);
+      ptr->mag_ut[2] = mag_dlpf_[2].Filter(ref.imu.mag_ut[2]);
     }
     /* Air data */
     if (ref.pitot_static_installed) {

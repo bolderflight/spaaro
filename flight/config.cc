@@ -46,14 +46,14 @@ AircraftConfig config = {
       .yaw = {}
     },
     .imu = {
-      .frame_rate = FRAME_RATE_HZ,
       .dev = IMU_CS,
+      .frame_rate = FRAME_RATE_HZ,
       .bus = &IMU_SPI_BUS,
-      .accel_bias_mps2 = Eigen::Vector3f::Zero(),
-      .mag_bias_ut = Eigen::Vector3f::Zero(),
-      .accel_scale = Eigen::Matrix3f::Identity(),
-      .mag_scale = Eigen::Matrix3f::Identity(),
-      .rotation = Eigen::Matrix3f::Identity() * IMU_ROTATION
+      .accel_bias_mps2 = {0, 0, 0},
+      .mag_bias_ut = {0, 0, 0},
+      .accel_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
+      .mag_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
+      .rotation = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}
     },
     .gnss = {
       .sampling_period_ms = 200,  // 5 Hz

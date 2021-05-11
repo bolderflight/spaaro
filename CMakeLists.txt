@@ -45,13 +45,13 @@ FetchContent_MakeAvailable(core)
 FetchContent_Declare(
 	imu
 	GIT_REPOSITORY https://github.com/bolderflight/imu.git
-	GIT_TAG v2.1.0
+	GIT_TAG v2.2.0
 )
 FetchContent_MakeAvailable(imu)
 FetchContent_Declare(
 	gnss
 	GIT_REPOSITORY https://github.com/bolderflight/gnss.git
-	GIT_TAG v2.2.0
+	GIT_TAG v2.4.0
 )
 FetchContent_MakeAvailable(gnss)
 FetchContent_Declare(
@@ -69,7 +69,7 @@ FetchContent_MakeAvailable(inceptor)
 FetchContent_Declare(
 	effector
 	GIT_REPOSITORY https://github.com/bolderflight/effector.git
-	GIT_TAG v6.0.2
+	GIT_TAG v6.1.0
 )
 FetchContent_MakeAvailable(effector)
 FetchContent_Declare(
@@ -105,19 +105,19 @@ FetchContent_MakeAvailable(filter)
 FetchContent_Declare(
 	mavlink
 	GIT_REPOSITORY https://github.com/bolderflight/mavlink.git
-	GIT_TAG v3.0.1
+	GIT_TAG v3.0.4
 )
 FetchContent_MakeAvailable(mavlink)
 FetchContent_Declare(
 	mpu9250
 	GIT_REPOSITORY https://github.com/bolderflight/mpu9250.git
-	GIT_TAG v4.1.0
+	GIT_TAG v4.2.0
 )
 FetchContent_MakeAvailable(mpu9250)
 FetchContent_Declare(
 	ublox
 	GIT_REPOSITORY https://github.com/bolderflight/ublox.git
-	GIT_TAG v3.1.0
+	GIT_TAG v3.2.0
 )
 FetchContent_MakeAvailable(ublox)
 FetchContent_Declare(
@@ -135,13 +135,13 @@ FetchContent_MakeAvailable(bme280)
 FetchContent_Declare(
 	sbus
 	GIT_REPOSITORY https://github.com/bolderflight/sbus.git
-	GIT_TAG v4.0.1
+	GIT_TAG v4.0.2
 )
 FetchContent_MakeAvailable(sbus)
 FetchContent_Declare(
 	pwm
 	GIT_REPOSITORY https://github.com/bolderflight/pwm.git
-	GIT_TAG v4.0.2
+	GIT_TAG v4.0.3
 )
 FetchContent_MakeAvailable(pwm)
 # Add the executable

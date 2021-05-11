@@ -102,15 +102,15 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   telem_.accel_healthy(data.sensor.imu.imu_healthy);
   telem_.gyro_healthy(data.sensor.imu.imu_healthy);
   telem_.mag_healthy(data.sensor.imu.mag_healthy);
-  telem_.imu_accel_x_mps2(data.sensor.imu.accel_mps2(0));
-  telem_.imu_accel_y_mps2(data.sensor.imu.accel_mps2(1));
-  telem_.imu_accel_z_mps2(data.sensor.imu.accel_mps2(2));
-  telem_.imu_gyro_x_radps(data.sensor.imu.gyro_radps(0));
-  telem_.imu_gyro_y_radps(data.sensor.imu.gyro_radps(1));
-  telem_.imu_gyro_z_radps(data.sensor.imu.gyro_radps(2));
-  telem_.imu_mag_x_ut(data.sensor.imu.mag_ut(0));
-  telem_.imu_mag_y_ut(data.sensor.imu.mag_ut(1));
-  telem_.imu_mag_z_ut(data.sensor.imu.mag_ut(2));
+  telem_.imu_accel_x_mps2(data.sensor.imu.accel_mps2[0]);
+  telem_.imu_accel_y_mps2(data.sensor.imu.accel_mps2[1]);
+  telem_.imu_accel_z_mps2(data.sensor.imu.accel_mps2[2]);
+  telem_.imu_gyro_x_radps(data.sensor.imu.gyro_radps[0]);
+  telem_.imu_gyro_y_radps(data.sensor.imu.gyro_radps[1]);
+  telem_.imu_gyro_z_radps(data.sensor.imu.gyro_radps[2]);
+  telem_.imu_mag_x_ut(data.sensor.imu.mag_ut[0]);
+  telem_.imu_mag_y_ut(data.sensor.imu.mag_ut[1]);
+  telem_.imu_mag_z_ut(data.sensor.imu.mag_ut[2]);
   telem_.imu_die_temp_c(data.sensor.imu.die_temp_c);
   /* GNSS data */
   telem_.gnss_healthy(data.sensor.gnss.healthy);
@@ -146,20 +146,20 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   telem_.nav_lon_rad(data.nav.lon_rad);
   telem_.nav_alt_msl_m(data.nav.alt_msl_m);
   telem_.nav_alt_agl_m(data.nav.alt_rel_m);
-  telem_.nav_north_pos_m(data.nav.ned_pos_m(0));
-  telem_.nav_east_pos_m(data.nav.ned_pos_m(1));
-  telem_.nav_down_pos_m(data.nav.ned_pos_m(2));
-  telem_.nav_north_vel_mps(data.nav.ned_vel_mps(0));
-  telem_.nav_east_vel_mps(data.nav.ned_vel_mps(1));
-  telem_.nav_down_vel_mps(data.nav.ned_vel_mps(2));
+  telem_.nav_north_pos_m(data.nav.ned_pos_m[0]);
+  telem_.nav_east_pos_m(data.nav.ned_pos_m[1]);
+  telem_.nav_down_pos_m(data.nav.ned_pos_m[2]);
+  telem_.nav_north_vel_mps(data.nav.ned_vel_mps[0]);
+  telem_.nav_east_vel_mps(data.nav.ned_vel_mps[1]);
+  telem_.nav_down_vel_mps(data.nav.ned_vel_mps[2]);
   telem_.nav_gnd_spd_mps(data.nav.gnd_spd_mps);
   telem_.nav_ias_mps(data.nav.ias_mps);
   telem_.nav_pitch_rad(data.nav.pitch_rad);
   telem_.nav_roll_rad(data.nav.roll_rad);
   telem_.nav_hdg_rad(data.nav.heading_rad);
-  telem_.nav_gyro_x_radps(data.nav.gyro_radps(0));
-  telem_.nav_gyro_y_radps(data.nav.gyro_radps(1));
-  telem_.nav_gyro_z_radps(data.nav.gyro_radps(2));
+  telem_.nav_gyro_x_radps(data.nav.gyro_radps[0]);
+  telem_.nav_gyro_y_radps(data.nav.gyro_radps[1]);
+  telem_.nav_gyro_z_radps(data.nav.gyro_radps[2]);
   /* Effector */
   for (std::size_t i = 0; i < NUM_PWM_PINS; i++) {
     min_ = effector_config_.pwm.effectors[i].min;
