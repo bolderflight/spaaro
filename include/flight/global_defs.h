@@ -146,7 +146,7 @@ struct NavData {
 /* Control data */
 struct ControlData {
   bool waypoint_reached;
-  bfs::AircraftMode mode;
+  int8_t mode;
   std::array<float, NUM_SBUS_CH> sbus;
   std::array<float, NUM_PWM_PINS> pwm;
   std::array<float, NUM_AUX_VAR> aux;

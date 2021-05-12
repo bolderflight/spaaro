@@ -17,12 +17,17 @@ config();
 
 %% Add paths
 addpath(genpath('aircraft'));
-addpath(genpath('libraries'));
 addpath(genpath('matlab'));
 addpath(genpath('models'));
-addpath(genpath('sensor_processing'));
-addpath(genpath('sfun'));
-addpath(genpath('vms'));
+addpath(genpath('control'));
+
+%% Specify root folders for autocode and cache
+Simulink.fileGenControl('set', ...
+    'CacheFolder', '../build/slprj', ...
+    'CodeGenFolder', '../autocode', ...
+    'CodeGenFolderStructure', ...
+    Simulink.filegen.CodeGenFolderStructure.ModelSpecific, ...
+    'createDir', true);
 
 %% Load bus definitions
 load('bus_defs.mat');

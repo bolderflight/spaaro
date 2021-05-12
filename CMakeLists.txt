@@ -170,6 +170,16 @@ add_executable(flight
 	${PROTO_SRCS}
 	${PROTO_HDRS}
 )
+# Setup autocode
+if (DEFINED CNTRL)
+	include_directories(autocode/${CNTRL}_ert_rtw)
+	target_sources(flight
+		PUBLIC
+			autocode/${CNTRL}_ert_rtw/autocode.cpp
+			autocode/${CNTRL}_ert_rtw/autocode.h
+	)
+	add_definitions(-D__AUTOCODE__)
+endif()
 # Add the includes
 target_include_directories(flight PUBLIC 
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

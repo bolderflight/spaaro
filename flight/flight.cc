@@ -63,7 +63,7 @@ void run() {
   /* Nav filter */
   NavRun(data.sensor, &data.nav);
   /* Control laws */
-  ControlRun(data, &data.control);
+  ControlRun(data.sys, data.sensor, data.nav, data.telem, &data.control);
   /* Command effectors */
   EffectorsCmd(data.sensor.inceptor.throttle_en, data.control, &effectors);
   /* Datalog */

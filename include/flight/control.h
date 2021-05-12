@@ -29,6 +29,8 @@
 #include "flight/global_defs.h"
 
 void ControlInit();
-void ControlRun(const AircraftData &data, ControlData * const ctrl);
+void ControlRun(const SysData &sys, const SensorData &sensor,
+                const NavData &nav, const TelemData &telem,
+                ControlData *ctrl);
 
 #endif  // INCLUDE_FLIGHT_CONTROL_H_

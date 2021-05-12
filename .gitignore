@@ -1,6 +1,9 @@
 # ignore the build directory
 **/build
 
+# ignore the autocode directory
+**/autocode
+
 # ignore VS code
 .vscode
 

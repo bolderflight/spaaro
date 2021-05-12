@@ -24,8 +24,27 @@
 */
 
 #include "flight/control.h"
+#ifdef __AUTOCODE__
+  #include "./autocode.h"
+#endif
 
-void ControlInit() {}
-void ControlRun(const AircraftData &data, ControlData * const ctrl) {
+namespace {
+#ifdef __AUTOCODE__
+/* Autocode instance */
+bfs::Autocode autocode;
+#endif
+}  // namespace
+
+void ControlInit() {
+#ifdef __AUTOCODE__
+  autocode.initialize();
+#endif
+}
+void ControlRun(const SysData &sys, const SensorData &sensor,
+                const NavData &nav, const TelemData &telem,
+                ControlData *ctrl) {
   if (!ctrl) {return;}
+#ifdef __AUTOCODE__
+  autocode.Run(sys, sensor, nav, telem, ctrl);
+#endif
 }
