@@ -82,7 +82,7 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   telem_.sys_time_us(data.sys.sys_time_us);
   telem_.cpu_load(data.sys.frame_time_us, FRAME_PERIOD_US);
   telem_.throttle_enabled(data.sensor.inceptor.throttle_en);
-  // telem_.aircraft_mode(data.control.mode);
+  telem_.aircraft_mode(data.control.mode);
   if (data.sensor.inceptor.throttle_en) {
     telem_.aircraft_state(bfs::ACTIVE);
   } else {
