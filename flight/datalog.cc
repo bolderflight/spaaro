@@ -147,28 +147,37 @@ void DatalogAdd(const AircraftData &ref) {
   datalog_msg_.nav_lat_rad = ref.nav.lat_rad;
   datalog_msg_.nav_lon_rad = ref.nav.lon_rad;
   datalog_msg_.cntrl_waypoint_reached = ref.control.waypoint_reached;
-  for (std::size_t i =0; i < NUM_SBUS_CH; i++) {
+  for (std::size_t i = 0; i < NUM_SBUS_CH; i++) {
     datalog_msg_.cntrl_sbus[i] = ref.control.sbus[i];
   }
-  for (std::size_t i =0; i < NUM_PWM_PINS; i++) {
+  for (std::size_t i = 0; i < NUM_PWM_PINS; i++) {
     datalog_msg_.cntrl_pwm[i] = ref.control.pwm[i];
   }
-  for (std::size_t i =0; i < NUM_AUX_VAR; i++) {
+  for (std::size_t i = 0; i < NUM_AUX_VAR; i++) {
     datalog_msg_.cntrl_aux[i] = ref.control.aux[i];
   }
   datalog_msg_.cntrl_mode = ref.control.mode;
-  for (std::size_t i =0; i < NUM_TELEM_PARAMS; i++) {
+  for (std::size_t i = 0; i < NUM_TELEM_PARAMS; i++) {
     datalog_msg_.telem_param[i] = ref.telem.param[i];
   }
-  datalog_msg_.waypoint_frame = ref.telem.flight_plan[ref.telem.current_waypoint].frame;
-  datalog_msg_.waypoint_cmd = ref.telem.flight_plan[ref.telem.current_waypoint].cmd;
-  datalog_msg_.waypoint_param1 = ref.telem.flight_plan[ref.telem.current_waypoint].param1;
-  datalog_msg_.waypoint_param2 = ref.telem.flight_plan[ref.telem.current_waypoint].param2;
-  datalog_msg_.waypoint_param3 = ref.telem.flight_plan[ref.telem.current_waypoint].param3;
-  datalog_msg_.waypoint_param4 = ref.telem.flight_plan[ref.telem.current_waypoint].param4;
-  datalog_msg_.waypoint_x = ref.telem.flight_plan[ref.telem.current_waypoint].x;
-  datalog_msg_.waypoint_y = ref.telem.flight_plan[ref.telem.current_waypoint].y;
-  datalog_msg_.waypoint_z = ref.telem.flight_plan[ref.telem.current_waypoint].z;
+  datalog_msg_.waypoint_frame = 
+    ref.telem.flight_plan[ref.telem.current_waypoint].frame;
+  datalog_msg_.waypoint_cmd = 
+    ref.telem.flight_plan[ref.telem.current_waypoint].cmd;
+  datalog_msg_.waypoint_param1 = 
+    ref.telem.flight_plan[ref.telem.current_waypoint].param1;
+  datalog_msg_.waypoint_param2 = 
+    ref.telem.flight_plan[ref.telem.current_waypoint].param2;
+  datalog_msg_.waypoint_param3 = 
+    ref.telem.flight_plan[ref.telem.current_waypoint].param3;
+  datalog_msg_.waypoint_param4 = 
+    ref.telem.flight_plan[ref.telem.current_waypoint].param4;
+  datalog_msg_.waypoint_x = 
+    ref.telem.flight_plan[ref.telem.current_waypoint].x;
+  datalog_msg_.waypoint_y = 
+    ref.telem.flight_plan[ref.telem.current_waypoint].y;
+  datalog_msg_.waypoint_z = 
+    ref.telem.flight_plan[ref.telem.current_waypoint].z;
   /* Encode */
   stream_ = pb_ostream_from_buffer(data_buffer_, sizeof(data_buffer_));
   if (!pb_encode(&stream_, DatalogMessage_fields, &datalog_msg_)) {
