@@ -160,23 +160,23 @@ void DatalogAdd(const AircraftData &ref) {
   for (std::size_t i = 0; i < NUM_TELEM_PARAMS; i++) {
     datalog_msg_.telem_param[i] = ref.telem.param[i];
   }
-  datalog_msg_.waypoint_frame = 
+  datalog_msg_.waypoint_frame =
     ref.telem.flight_plan[ref.telem.current_waypoint].frame;
-  datalog_msg_.waypoint_cmd = 
+  datalog_msg_.waypoint_cmd =
     ref.telem.flight_plan[ref.telem.current_waypoint].cmd;
-  datalog_msg_.waypoint_param1 = 
+  datalog_msg_.waypoint_param1 =
     ref.telem.flight_plan[ref.telem.current_waypoint].param1;
-  datalog_msg_.waypoint_param2 = 
+  datalog_msg_.waypoint_param2 =
     ref.telem.flight_plan[ref.telem.current_waypoint].param2;
-  datalog_msg_.waypoint_param3 = 
+  datalog_msg_.waypoint_param3 =
     ref.telem.flight_plan[ref.telem.current_waypoint].param3;
-  datalog_msg_.waypoint_param4 = 
+  datalog_msg_.waypoint_param4 =
     ref.telem.flight_plan[ref.telem.current_waypoint].param4;
-  datalog_msg_.waypoint_x = 
+  datalog_msg_.waypoint_x =
     ref.telem.flight_plan[ref.telem.current_waypoint].x;
-  datalog_msg_.waypoint_y = 
+  datalog_msg_.waypoint_y =
     ref.telem.flight_plan[ref.telem.current_waypoint].y;
-  datalog_msg_.waypoint_z = 
+  datalog_msg_.waypoint_z =
     ref.telem.flight_plan[ref.telem.current_waypoint].z;
   /* Encode */
   stream_ = pb_ostream_from_buffer(data_buffer_, sizeof(data_buffer_));
