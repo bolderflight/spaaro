@@ -63,13 +63,13 @@ FetchContent_MakeAvailable(pres)
 FetchContent_Declare(
 	inceptor
 	GIT_REPOSITORY https://github.com/bolderflight/inceptor.git
-	GIT_TAG v2.1.1
+	GIT_TAG v2.1.2
 )
 FetchContent_MakeAvailable(inceptor)
 FetchContent_Declare(
 	effector
 	GIT_REPOSITORY https://github.com/bolderflight/effector.git
-	GIT_TAG v6.1.0
+	GIT_TAG v6.1.1
 )
 FetchContent_MakeAvailable(effector)
 FetchContent_Declare(
@@ -105,7 +105,7 @@ FetchContent_MakeAvailable(filter)
 FetchContent_Declare(
 	mavlink
 	GIT_REPOSITORY https://github.com/bolderflight/mavlink.git
-	GIT_TAG v3.0.4
+	GIT_TAG v3.1.0
 )
 FetchContent_MakeAvailable(mavlink)
 FetchContent_Declare(
@@ -157,7 +157,6 @@ add_executable(flight
 	include/flight/datalog.h
 	include/flight/telem.h
 	flight/flight.cc
-	flight/hardware_defs.cc
 	flight/config.cc
 	flight/msg.cc
 	flight/sys.cc

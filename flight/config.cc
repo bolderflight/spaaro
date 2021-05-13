@@ -53,7 +53,7 @@ AircraftConfig config = {
       .mag_bias_ut = {0, 0, 0},
       .accel_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
       .mag_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-      .rotation = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}
+      .rotation = {{0, 1, 0}, {-1, 0, 0}, {0, 0, 1}}
     },
     .gnss = {
       .sampling_period_ms = 200,  // 5 Hz

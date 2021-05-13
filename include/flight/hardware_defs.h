@@ -28,8 +28,7 @@
 
 #include <array>
 #include <cstdint>
-#include "Eigen/Core"
-#include "Eigen/Dense"
+#include <cmath>
 #include "core/core.h"
 #include "imu/imu.h"
 
@@ -51,7 +50,6 @@ inline constexpr float EFFECTOR_DELAY_US = FRAME_PERIOD_MS * 0.9f * 1e3;
 inline constexpr SPIClass &IMU_SPI_BUS = SPI;
 inline constexpr int8_t IMU_CS = 24;
 inline constexpr int8_t IMU_DRDY = 27;
-extern Eigen::Matrix3f IMU_ROTATION;
 inline constexpr int8_t VN_CS = 25;
 inline constexpr int8_t VN_DRDY = 28;
 /* Pressure transducers */

@@ -33,7 +33,6 @@
 #include "inceptor/inceptor.h"
 #include "effector/effector.h"
 #include "global_defs/global_defs.h"
-#include "mavlink/mavlink.h"
 #include "mpu9250/mpu9250.h"
 #include "ublox/ublox.h"
 #include "ams5915/ams5915.h"
@@ -45,8 +44,8 @@
 inline constexpr std::size_t NUM_AUX_VAR = 24;
 /* Telem sizes */
 inline constexpr std::size_t NUM_TELEM_PARAMS = 24;
-inline constexpr std::size_t NUM_FLIGHT_PLAN_POINTS = 250;
-inline constexpr std::size_t NUM_FENCE_POINTS = 100;
+inline constexpr std::size_t NUM_FLIGHT_PLAN_POINTS = 100;
+inline constexpr std::size_t NUM_FENCE_POINTS = 50;
 inline constexpr std::size_t NUM_RALLY_POINTS = 10;
 /* Sensor objects */
 struct Sensors {
@@ -133,13 +132,13 @@ struct NavData {
   float gnd_spd_mps;
   float gnd_track_rad;
   float flight_path_rad;
-  float accel_bias_mps2[3];
-  float gyro_bias_radps[3];
-  float accel_mps2[3];
-  float gyro_radps[3];
-  float mag_ut[3];
-  float ned_pos_m[3];
-  float ned_vel_mps[3];
+  std::array<float, 3> accel_bias_mps2;
+  std::array<float, 3> gyro_bias_radps;
+  std::array<float, 3> accel_mps2;
+  std::array<float, 3> gyro_radps;
+  std::array<float, 3> mag_ut;
+  std::array<float, 3> ned_pos_m;
+  std::array<float, 3> ned_vel_mps;
   double lat_rad;
   double lon_rad;
 };
