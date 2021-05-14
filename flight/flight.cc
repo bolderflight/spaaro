@@ -35,10 +35,6 @@
 #include "flight/datalog.h"
 #include "flight/telem.h"
 
-/* Aircraft sensors */
-Sensors sensors;
-/* Aircraft effectors */
-Effectors effectors;
 /* Aircraft data */
 AircraftData data;
 /* Timer for sending effector commands */
@@ -49,7 +45,7 @@ void send_effectors() {
   /* Stop the effector timer */
   effector_timer.end();
   /* Send effector commands */
-  EffectorsWrite(&effectors);
+  EffectorsWrite();
 }
 
 /* ISR to gather sensor data and run VMS */
@@ -59,13 +55,13 @@ void run() {
   /* System data */
   SysRead(&data.sys);
   /* Sensor data */
-  SensorsRead(&data.sensor, &sensors);
+  SensorsRead(&data.sensor);
   /* Nav filter */
   NavRun(data.sensor, &data.nav);
   /* Control laws */
   ControlRun(data.sys, data.sensor, data.nav, data.telem, &data.control);
   /* Command effectors */
-  EffectorsCmd(data.sensor.inceptor.throttle_en, data.control, &effectors);
+  EffectorsCmd(data.sensor.inceptor.throttle_en, data.control);
   /* Datalog */
   DatalogAdd(data);
   /* Telemetry */
@@ -80,11 +76,11 @@ int main() {
   /* Init system */
   SysInit();
   /* Init sensors */
-  SensorsInit(config.sensor, &sensors);
+  SensorsInit(config.sensor);
   /* Init nav */
   NavInit(config.nav);
   /* Init effectors */
-  EffectorsInit(config.effector, &effectors);
+  EffectorsInit(config.effector);
   /* Init control */
   ControlInit();
   /* Init telemetry */

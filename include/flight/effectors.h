@@ -28,8 +28,8 @@
 
 #include "flight/global_defs.h"
 
-void EffectorsInit(const EffectorConfig &cfg, Effectors * const obj);
-void EffectorsCmd(bool motor, const ControlData &cmd, Effectors * const obj);
-void EffectorsWrite(Effectors * const obj);
+void EffectorsInit(const EffectorConfig &cfg);
+void EffectorsCmd(bool motor, const ControlData &cmd);
+void EffectorsWrite();
 
 #endif  // INCLUDE_FLIGHT_EFFECTORS_H_

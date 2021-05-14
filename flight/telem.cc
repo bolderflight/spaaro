@@ -130,16 +130,16 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   telem_.gnss_track_acc_rad(data.sensor.gnss.track_acc_rad);
   /* Airdata */
   if (data.sensor.pitot_static_installed) {
-    telem_.static_pres_healthy(data.sensor.pitot_static_pres.healthy);
-    telem_.static_pres_pa(data.sensor.pitot_static_pres.pres_pa);
-    telem_.static_pres_die_temp_c(data.sensor.pitot_static_pres.die_temp_c);
-    telem_.diff_pres_healthy(data.sensor.pitot_diff_pres.healthy);
-    telem_.diff_pres_pa(data.sensor.pitot_diff_pres.pres_pa);
-    telem_.diff_pres_die_temp_c(data.sensor.pitot_diff_pres.die_temp_c);
+    telem_.static_pres_healthy(data.sensor.static_pres.healthy);
+    telem_.static_pres_pa(data.sensor.static_pres.pres_pa);
+    telem_.static_pres_die_temp_c(data.sensor.static_pres.die_temp_c);
+    telem_.diff_pres_healthy(data.sensor.diff_pres.healthy);
+    telem_.diff_pres_pa(data.sensor.diff_pres.pres_pa);
+    telem_.diff_pres_die_temp_c(data.sensor.diff_pres.die_temp_c);
   } else {
-    telem_.static_pres_healthy(data.sensor.fmu_static_pres.healthy);
-    telem_.static_pres_pa(data.sensor.fmu_static_pres.pres_pa);
-    telem_.static_pres_die_temp_c(data.sensor.fmu_static_pres.die_temp_c);
+    telem_.static_pres_healthy(data.sensor.static_pres.healthy);
+    telem_.static_pres_pa(data.sensor.static_pres.pres_pa);
+    telem_.static_pres_die_temp_c(data.sensor.static_pres.die_temp_c);
   }
   /* Nav data */
   telem_.nav_lat_rad(data.nav.lat_rad);

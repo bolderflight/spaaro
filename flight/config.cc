@@ -32,18 +32,54 @@ bool DEBUG = true;
 /* Aircraft config */
 AircraftConfig config = {
   .sensor = {
-    .pitot_static_installed = true,
+    .pitot_static_installed = false,
     .inceptor = {
       .hw = &SBUS_UART,
-      .throttle_en = {},
-      .mode0 = {},
-      .mode1 = {},
-      .mode2 = {},
-      .mode3 = {},
-      .throttle = {},
-      .pitch = {},
-      .roll = {},
-      .yaw = {}
+      .throttle_en = {
+        .ch = 0,
+        .num_coef = 2,
+        .poly_coef = {0.00061013f, -0.10494204f}
+      },
+      .mode0 = {
+        .ch = 1,
+        .num_coef = 2,
+        .poly_coef = {0.0012203f, -0.2098841f}
+      },
+      .mode1 = {
+        .ch = 2,
+        .num_coef = 2,
+        .poly_coef = {0.0012203f, -0.2098841f}
+      },
+      .mode2 = {
+        .ch = 3,
+        .num_coef = 2,
+        .poly_coef = {0.0012203f, -0.2098841f}
+      },
+      .mode3 = {
+        .ch = 4,
+        .num_coef = 2,
+        .poly_coef = {0.0012203f, -0.2098841f}
+      },
+      .throttle = {
+        .ch = 5,
+        .num_coef = 2,
+        .poly_coef = {0.00061013f, -0.10494204f}
+      },
+      .pitch = {
+        .ch = 6,
+        .num_coef = 2,
+        .poly_coef = {0.0012203f, -1.2098841f}
+      },
+      .roll = {
+        .ch = 7,
+        .num_coef = 2,
+        .poly_coef = {0.0012203f, -1.2098841f}
+      },
+      .yaw = {
+        .ch = 8,
+        .num_coef = 2,
+        .poly_coef = {0.0012203f, -1.2098841f}
+      }
     },
     .imu = {
       .dev = IMU_CS,
@@ -60,23 +96,18 @@ AircraftConfig config = {
       .baud = 921600,
       .bus = &Serial3
     },
-    .fmu_static_pres = {
+    .static_pres = {
       .dev = PRES_CS,
       .sampling_period_ms = FRAME_PERIOD_MS,
       .bus = &PRES_SPI_BUS
     },
-    .pitot_static_pres = {
-      .dev = 0x10,
-      .transducer = bfs::AMS5915_1200_B,
-      .sampling_period_ms = FRAME_PERIOD_MS,
-      .bus = &PRES_I2C_BUS
-    },
-    .pitot_diff_pres = {
-      .dev = 0x11,
-      .transducer = bfs::AMS5915_0010_D,
-      .sampling_period_ms = FRAME_PERIOD_MS,
-      .bus = &PRES_I2C_BUS
-    }
+  },
+  .nav = {
+    .accel_cutoff_hz = 20,
+    .gyro_cutoff_hz = 20,
+    .mag_cutoff_hz = 10,
+    .static_pres_cutoff_hz = 10,
+    .diff_pres_cutoff_hz = 10
   },
   .effector = {
     .sbus = {
@@ -89,7 +120,7 @@ AircraftConfig config = {
     }
   },
   .telem = {
-    .aircraft_type = bfs::FIXED_WING,
+    .aircraft_type = bfs::MULTIROTOR,
     .bus = &Serial4,
     .baud = 57600
   }

@@ -47,15 +47,7 @@ inline constexpr std::size_t NUM_TELEM_PARAMS = 24;
 inline constexpr std::size_t NUM_FLIGHT_PLAN_POINTS = 100;
 inline constexpr std::size_t NUM_FENCE_POINTS = 50;
 inline constexpr std::size_t NUM_RALLY_POINTS = 10;
-/* Sensor objects */
-struct Sensors {
-  bfs::SbusRx inceptor;
-  bfs::Mpu9250 imu;
-  bfs::Ublox gnss;
-  bfs::Bme280 fmu_static_pres;
-  bfs::Ams5915 pitot_static_pres;
-  bfs::Ams5915 pitot_diff_pres;
-};
+
 /* Effector objects */
 struct Effectors {
   bfs::SbusTx<NUM_SBUS_CH> sbus;
@@ -67,9 +59,8 @@ struct SensorConfig {
   bfs::InceptorConfig inceptor;
   bfs::ImuConfig imu;
   bfs::GnssConfig gnss;
-  bfs::PresConfig fmu_static_pres;
-  bfs::PresConfig pitot_static_pres;
-  bfs::PresConfig pitot_diff_pres;
+  bfs::PresConfig static_pres;
+  bfs::PresConfig diff_pres;
 };
 /* Nav config */
 struct NavConfig {
@@ -100,11 +91,13 @@ struct AircraftConfig {
 /* System data */
 struct SysData {
   int32_t frame_time_us;
+  float frame_time_s;
   float input_volt;
   float reg_volt;
   float pwm_volt;
   float sbus_volt;
   int64_t sys_time_us;
+  double sys_time_s;
 };
 /* Sensor data */
 struct SensorData {
@@ -112,9 +105,8 @@ struct SensorData {
   bfs::InceptorData inceptor;
   bfs::ImuData imu;
   bfs::GnssData gnss;
-  bfs::PresData fmu_static_pres;
-  bfs::PresData pitot_static_pres;
-  bfs::PresData pitot_diff_pres;
+  bfs::PresData static_pres;
+  bfs::PresData diff_pres;
 };
 /* Nav data */
 struct NavData {

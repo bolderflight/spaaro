@@ -28,33 +28,42 @@
 #include "flight/config.h"
 #include "flight/msg.h"
 
-void EffectorsInit(const EffectorConfig &cfg, Effectors * const obj) {
-  if (!obj) {return;}
+namespace {
+  /* Effectors */
+bfs::SbusTx<NUM_SBUS_CH> sbus;
+bfs::PwmTx<NUM_PWM_PINS> pwm;
+}  // namespace
+
+void EffectorsInit(const EffectorConfig &cfg) {
   MsgInfo("Intializing effectors...");
-  if (!obj->sbus.Init(cfg.sbus)) {
+  /* Init SBUS */
+  if (!sbus.Init(cfg.sbus)) {
     MsgError("Unable to initialize SBUS effectors.");
   }
-  if (!obj->pwm.Init(cfg.pwm)) {
+  /* Init PWM */
+  if (!pwm.Init(cfg.pwm)) {
     MsgError("Unable to initialize PWM effectors.");
   }
-  obj->sbus.EnableServos();
-  obj->pwm.EnableServos();
+  /* Servos enabled by default */
+  sbus.EnableServos();
+  pwm.EnableServos();
   MsgInfo("done.\n");
 }
-void EffectorsCmd(bool motor, const ControlData &cmd, Effectors * const obj) {
-  if (!obj) {return;}
+void EffectorsCmd(bool motor, const ControlData &cmd) {
+  /* Enable / disable motors */
   if (motor) {
-    obj->sbus.EnableMotors();
-    obj->pwm.EnableMotors();
+    sbus.EnableMotors();
+    pwm.EnableMotors();
   } else {
-    obj->sbus.DisableMotors();
-    obj->pwm.DisableMotors();
+    sbus.DisableMotors();
+    pwm.DisableMotors();
   }
-  obj->sbus.Cmd(cmd.sbus);
-  obj->pwm.Cmd(cmd.pwm);
+  /* Set effector commands */
+  sbus.Cmd(cmd.sbus);
+  pwm.Cmd(cmd.pwm);
 }
-void EffectorsWrite(Effectors * const obj) {
-  if (!obj) {return;}
-  obj->sbus.Write();
-  obj->pwm.Write();
+void EffectorsWrite() {
+  /* Write the effector commands */
+  sbus.Write();
+  pwm.Write();
 }

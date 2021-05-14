@@ -29,53 +29,68 @@
 #include "flight/msg.h"
 
 namespace {
+/* Whether pitot static is installed */
 bool pitot_static_installed_;
+/* Sensors */
+bfs::SbusRx inceptor;
+bfs::Mpu9250 imu;
+bfs::Ublox gnss;
+bfs::Bme280 fmu_static_pres;
+bfs::Ams5915 pitot_static_pres;
+bfs::Ams5915 pitot_diff_pres;
 }  // namespace
 
-void SensorsInit(const SensorConfig &cfg, Sensors * const obj) {
-  if (!obj) {return;}
+void SensorsInit(const SensorConfig &cfg) {
   pitot_static_installed_ = cfg.pitot_static_installed;
   MsgInfo("Intializing sensors...");
-  if (!obj->imu.Init(cfg.imu)) {
+  /* Initialize IMU */
+  if (!imu.Init(cfg.imu)) {
     MsgError("Unable to initialize IMU.");
   }
-  if (!obj->gnss.Init(cfg.gnss)) {
+  /* Initialize GNSS */
+  if (!gnss.Init(cfg.gnss)) {
     MsgError("Unable to initialize GNSS.");
   }
-  if (cfg.pitot_static_installed) {
-    if (!obj->pitot_static_pres.Init(cfg.pitot_static_pres)) {
-      MsgError("Unable to initialize pitot static pressure sensor.");
+  /* Initialize pressure transducers */
+  if (pitot_static_installed_) {
+    if (!pitot_static_pres.Init(cfg.static_pres)) {
+      MsgError("Unable to initialize static pressure sensor.");
     }
-    if (!obj->pitot_diff_pres.Init(cfg.pitot_diff_pres)) {
-      MsgError("Unable to initialize pitot differential pressure sensor.");
+    if (!pitot_diff_pres.Init(cfg.diff_pres)) {
+      MsgError("Unable to initialize differential pressure sensor.");
     }
   } else {
-    if (!obj->fmu_static_pres.Init(cfg.fmu_static_pres)) {
-      MsgError("Unable to initialize FMU static pressure sensor.");
+    if (!fmu_static_pres.Init(cfg.static_pres)) {
+      MsgError("Unable to initialize static pressure sensor.");
     }
   }
   MsgInfo("done.\n");
   MsgInfo("Initializing inceptors...");
-  while (!obj->inceptor.Init(cfg.inceptor)) {}
+  while (!inceptor.Init(cfg.inceptor)) {}
   MsgInfo("done.\n");
 }
-void SensorsRead(SensorData * const data, Sensors * const obj) {
-  if ((!data) || (!obj)) {return;}
-  obj->inceptor.Read(&data->inceptor);
-  if (!obj->imu.Read(&data->imu)) {
+void SensorsRead(SensorData * const data) {
+  if (!data) {return;}
+  /* Read inceptors */
+  inceptor.Read(&data->inceptor);
+  /* Read IMU */
+  if (!imu.Read(&data->imu)) {
     MsgWarning("Unable to read IMU data.\n");
   }
-  obj->gnss.Read(&data->gnss);
+  /* Read GNSS */
+  gnss.Read(&data->gnss);
+  /* Set whether pitot static is installed */
   data->pitot_static_installed = pitot_static_installed_;
+  /* Read pressure transducers */
   if (pitot_static_installed_) {
-    if (!obj->pitot_static_pres.Read(&data->pitot_static_pres)) {
+    if (!pitot_static_pres.Read(&data->static_pres)) {
       MsgError("Unable to read pitot static pressure data.\n");
     }
-    if (!obj->pitot_diff_pres.Read(&data->pitot_diff_pres)) {
+    if (!pitot_diff_pres.Read(&data->diff_pres)) {
       MsgError("Unable to read pitot diff pressure data.\n");
     }
   } else {
-    if (!obj->fmu_static_pres.Read(&data->fmu_static_pres)) {
+    if (!fmu_static_pres.Read(&data->static_pres)) {
       MsgError("Unable to read FMU static pressure data.\n");
     }
   }

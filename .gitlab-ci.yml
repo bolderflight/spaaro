@@ -18,7 +18,6 @@ Lint:
     - cpplint --verbose=0 include/flight/datalog.h
     - cpplint --verbose=0 include/flight/telem.h
     - cpplint --verbose=0 flight/flight.cc
-    - cpplint --verbose=0 flight/hardware_defs.cc
     - cpplint --verbose=0 flight/config.cc
     - cpplint --verbose=0 flight/msg.cc
     - cpplint --verbose=0 flight/sys.cc

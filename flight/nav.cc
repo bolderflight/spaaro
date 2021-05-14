@@ -95,21 +95,21 @@ void NavRun(const SensorData &ref, NavData * const ptr) {
         ref.gnss.new_data && ref.gnss.num_sats > MIN_SAT_) {
       /* Init air data filters */
       if (ref.pitot_static_installed) {
-        if (ref.pitot_static_pres.new_data && ref.pitot_diff_pres.new_data) {
+        if (ref.static_pres.new_data && ref.diff_pres.new_data) {
           static_pres_dlpf_.Init(config_.static_pres_cutoff_hz,
                                  static_cast<float>(FRAME_RATE_HZ),
-                                 ref.pitot_static_pres.pres_pa);
+                                 ref.static_pres.pres_pa);
           diff_pres_dlpf_.Init(config_.diff_pres_cutoff_hz,
                                static_cast<float>(FRAME_RATE_HZ),
-                               ref.pitot_diff_pres.pres_pa);
+                               ref.diff_pres.pres_pa);
         } else {
           return;
         }
       } else {
-        if (ref.fmu_static_pres.new_data) {
+        if (ref.static_pres.new_data) {
           static_pres_dlpf_.Init(config_.static_pres_cutoff_hz,
                                  static_cast<float>(FRAME_RATE_HZ),
-                                 ref.fmu_static_pres.pres_pa);
+                                 ref.static_pres.pres_pa);
         } else {
           return;
         }
@@ -235,20 +235,20 @@ void NavRun(const SensorData &ref, NavData * const ptr) {
     }
     /* Air data */
     if (ref.pitot_static_installed) {
-      if (ref.pitot_static_pres.new_data) {
+      if (ref.static_pres.new_data) {
         ptr->static_pres_pa =
-          static_pres_dlpf_.Filter(ref.pitot_static_pres.pres_pa);
+          static_pres_dlpf_.Filter(ref.static_pres.pres_pa);
         ptr->alt_pres_m = bfs::PressureAltitude_m(ptr->static_pres_pa);
       }
-      if (ref.pitot_diff_pres.new_data) {
+      if (ref.diff_pres.new_data) {
         ptr->diff_pres_pa =
-          diff_pres_dlpf_.Filter(ref.pitot_diff_pres.pres_pa);
+          diff_pres_dlpf_.Filter(ref.diff_pres.pres_pa);
         ptr->ias_mps = bfs::Ias_mps(ptr->diff_pres_pa);
       }
     } else {
-      if (ref.fmu_static_pres.new_data) {
+      if (ref.static_pres.new_data) {
         ptr->static_pres_pa =
-          static_pres_dlpf_.Filter(ref.fmu_static_pres.pres_pa);
+          static_pres_dlpf_.Filter(ref.static_pres.pres_pa);
         ptr->alt_pres_m = bfs::PressureAltitude_m(ptr->static_pres_pa);
       }
     }

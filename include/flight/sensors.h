@@ -28,7 +28,7 @@
 
 #include "flight/global_defs.h"
 
-void SensorsInit(const SensorConfig &cfg, Sensors * const obj);
-void SensorsRead(SensorData * const data, Sensors * const obj);
+void SensorsInit(const SensorConfig &cfg);
+void SensorsRead(SensorData * const data);
 
 #endif  // INCLUDE_FLIGHT_SENSORS_H_
