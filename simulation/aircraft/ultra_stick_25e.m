@@ -21,9 +21,10 @@ Aircraft.Mass.ixx_kgm2 = 0.07151;
 Aircraft.Mass.iyy_kgm2 = 0.08636;
 Aircraft.Mass.izz_kgm2 = 0.15364;
 Aircraft.Mass.ixz_kgm2 = 0.014;
-Aircraft.Mass.inertia_kgm2 = [Aircraft.Mass.ixx_kgm2    0   -Aircraft.Mass.ixz_kgm2;...
-                              0          Aircraft.Mass.iyy_kgm2          0;...
-                              -Aircraft.Mass.ixz_kgm2   0       Aircraft.Mass.izz_kgm2];
+Aircraft.Mass.inertia_kgm2 = ...
+    [Aircraft.Mass.ixx_kgm2    0   -Aircraft.Mass.ixz_kgm2;...
+              0          Aircraft.Mass.iyy_kgm2          0;...
+     -Aircraft.Mass.ixz_kgm2   0       Aircraft.Mass.izz_kgm2];
                         
 %% Geometric parameters
 % Reference chord, m
@@ -119,7 +120,8 @@ Aircraft.Battery.nCell = 3;
 % Maximum voltage per cell
 Aircraft.Battery.volt_per_cell = 4.2;
 % Voltage available
-Aircraft.Battery.voltage = Aircraft.Battery.nCell * Aircraft.Battery.volt_per_cell;
+Aircraft.Battery.voltage = Aircraft.Battery.nCell * ...
+    Aircraft.Battery.volt_per_cell;
 
 %% Motor
 % Number of motors
@@ -157,7 +159,8 @@ Aircraft.Sensors.Imu.Accel.scale_factor = eye(3);
 Aircraft.Sensors.Imu.Accel.bias_mps2 = [0 0 0]';
 Aircraft.Sensors.Imu.Accel.noise_mps2 = 0.0785 * ones(3, 1);
 Aircraft.Sensors.Imu.Accel.upper_limit_mps2 = 156.9064 * ones(3, 1);
-Aircraft.Sensors.Imu.Accel.lower_limit_mps2 = -1 * Aircraft.Sensors.Imu.Accel.upper_limit_mps2;
+Aircraft.Sensors.Imu.Accel.lower_limit_mps2 = -1 * ...
+    Aircraft.Sensors.Imu.Accel.upper_limit_mps2;
 % Gyro
 Aircraft.Sensors.Imu.Gyro.scale_factor = eye(3);
 Aircraft.Sensors.Imu.Gyro.bias_radps = [0 0 0]';
@@ -165,13 +168,15 @@ Aircraft.Sensors.Imu.Gyro.bias_radps = [0 0 0]';
 Aircraft.Sensors.Imu.Gyro.accel_sens_radps = [0 0 0]';  
 Aircraft.Sensors.Imu.Gyro.noise_radps = deg2rad(0.1) * ones(3, 1);
 Aircraft.Sensors.Imu.Gyro.upper_limit_radps = deg2rad(2000) * ones(3, 1);
-Aircraft.Sensors.Imu.Gyro.lower_limit_radps = -1 * Aircraft.Sensors.Imu.Gyro.upper_limit_radps;
+Aircraft.Sensors.Imu.Gyro.lower_limit_radps = -1 * ...
+    Aircraft.Sensors.Imu.Gyro.upper_limit_radps;
 % Magnetometer
 Aircraft.Sensors.Imu.Mag.scale_factor = eye(3);
 Aircraft.Sensors.Imu.Mag.bias_ut = [0 0 0]';
 Aircraft.Sensors.Imu.Mag.noise_ut =  0.6 * ones(3, 1);
 Aircraft.Sensors.Imu.Mag.upper_limit_ut =  4800 * ones(3, 1);
-Aircraft.Sensors.Imu.Mag.lower_limit_ut = -1 * Aircraft.Sensors.Imu.Mag.upper_limit_ut;
+Aircraft.Sensors.Imu.Mag.lower_limit_ut = -1 * ...
+    Aircraft.Sensors.Imu.Mag.upper_limit_ut;
 % GNSS model
 Aircraft.Sensors.Gnss.sample_rate_hz = 5;
 Aircraft.Sensors.Gnss.fix = 3; % 3D fix
@@ -180,17 +185,22 @@ Aircraft.Sensors.Gnss.horz_accuracy_m = 1.5;
 Aircraft.Sensors.Gnss.vert_accuracy_m = 5.5;
 Aircraft.Sensors.Gnss.vel_accuracy_mps = 0.05;
 % Air data model
+Aircraft.Sensors.PitotStaticInstalled = 1;
 % Static pressure
 Aircraft.Sensors.StaticPres.scale_factor = 1;
 Aircraft.Sensors.StaticPres.bias_pa = 0;
 Aircraft.Sensors.StaticPres.upper_limit_pa = 120000;
 Aircraft.Sensors.StaticPres.lower_limit_pa = 70000;
 % 1% of the full-scale range
-Aircraft.Sensors.StaticPres.noise_pa = 0.01 * (Aircraft.Sensors.StaticPres.upper_limit_pa - Aircraft.Sensors.StaticPres.lower_limit_pa);
-% Differential pressure
+Aircraft.Sensors.StaticPres.noise_pa = 0.01 * ...
+    (Aircraft.Sensors.StaticPres.upper_limit_pa - ...
+    Aircraft.Sensors.StaticPres.lower_limit_pa);
+% Pitot differential pressure
 Aircraft.Sensors.DiffPres.scale_factor = 1;
 Aircraft.Sensors.DiffPres.bias_pa = 0;
 Aircraft.Sensors.DiffPres.upper_limit_pa = 1000;
 Aircraft.Sensors.DiffPres.lower_limit_pa = 0;
 % 2% of the full-scale range
-Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_limit_pa - Aircraft.Sensors.DiffPres.lower_limit_pa);
+Aircraft.Sensors.DiffPres.noise_pa =  0.02 * ...
+    (Aircraft.Sensors.DiffPres.upper_limit_pa - ...
+    Aircraft.Sensors.DiffPres.lower_limit_pa);
