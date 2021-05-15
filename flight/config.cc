@@ -50,33 +50,23 @@ AircraftConfig config = {
         .num_coef = 2,
         .poly_coef = {0.0012203f, -0.2098841f}
       },
-      .mode2 = {
+      .throttle= {
         .ch = 3,
-        .num_coef = 2,
-        .poly_coef = {0.0012203f, -0.2098841f}
-      },
-      .mode3 = {
-        .ch = 4,
-        .num_coef = 2,
-        .poly_coef = {0.0012203f, -0.2098841f}
-      },
-      .throttle = {
-        .ch = 5,
         .num_coef = 2,
         .poly_coef = {0.00061013f, -0.10494204f}
       },
       .pitch = {
-        .ch = 6,
+        .ch = 4,
         .num_coef = 2,
         .poly_coef = {0.0012203f, -1.2098841f}
       },
       .roll = {
-        .ch = 7,
+        .ch = 5,
         .num_coef = 2,
         .poly_coef = {0.0012203f, -1.2098841f}
       },
       .yaw = {
-        .ch = 8,
+        .ch = 6,
         .num_coef = 2,
         .poly_coef = {0.0012203f, -1.2098841f}
       }
