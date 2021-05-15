@@ -50,7 +50,7 @@ AircraftConfig config = {
         .num_coef = 2,
         .poly_coef = {0.0012203f, -0.2098841f}
       },
-      .throttle= {
+      .throttle = {
         .ch = 3,
         .num_coef = 2,
         .poly_coef = {0.00061013f, -0.10494204f}
