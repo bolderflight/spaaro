@@ -23,12 +23,12 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef INCLUDE_FLIGHT_SENSORS_H_
-#define INCLUDE_FLIGHT_SENSORS_H_
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
 
 #include "flight/global_defs.h"
 
 void SensorsInit(const SensorConfig &cfg);
 void SensorsRead(SensorData * const data);
 
-#endif  // INCLUDE_FLIGHT_SENSORS_H_
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_

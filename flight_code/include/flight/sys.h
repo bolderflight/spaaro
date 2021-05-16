@@ -23,8 +23,8 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef INCLUDE_FLIGHT_SYS_H_
-#define INCLUDE_FLIGHT_SYS_H_
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_SYS_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_SYS_H_
 
 #include "flight/global_defs.h"
 
@@ -32,4 +32,4 @@ void SysInit();
 void SysRead(SysData * const ptr);
 void SysFrameEnd();
 
-#endif  // INCLUDE_FLIGHT_SYS_H_
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_SYS_H_

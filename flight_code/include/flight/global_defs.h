@@ -23,8 +23,8 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef INCLUDE_FLIGHT_GLOBAL_DEFS_H_
-#define INCLUDE_FLIGHT_GLOBAL_DEFS_H_
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_GLOBAL_DEFS_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_GLOBAL_DEFS_H_
 
 #include "flight/hardware_defs.h"
 #include "imu/imu.h"
@@ -165,4 +165,4 @@ struct AircraftData {
   TelemData telem;
 };
 
-#endif  // INCLUDE_FLIGHT_GLOBAL_DEFS_H_
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_GLOBAL_DEFS_H_

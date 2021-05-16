@@ -23,8 +23,8 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef INCLUDE_FLIGHT_CONFIG_H_
-#define INCLUDE_FLIGHT_CONFIG_H_
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_CONFIG_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_CONFIG_H_
 
 #include "flight/hardware_defs.h"
 #include "flight/global_defs.h"
@@ -34,4 +34,4 @@ extern bool DEBUG;
 /* Aircraft config */
 extern AircraftConfig config;
 
-#endif  // INCLUDE_FLIGHT_CONFIG_H_
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_CONFIG_H_

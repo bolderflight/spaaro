@@ -6,25 +6,24 @@ Lint:
   tags:
     - bfs
   script:
-    - cd flight_code
-    - cpplint --verbose=0 include/flight/global_defs.h
-    - cpplint --verbose=0 include/flight/hardware_defs.h
-    - cpplint --verbose=0 include/flight/config.h
-    - cpplint --verbose=0 include/flight/msg.h
-    - cpplint --verbose=0 include/flight/sys.h
-    - cpplint --verbose=0 include/flight/sensors.h
-    - cpplint --verbose=0 include/flight/effectors.h
-    - cpplint --verbose=0 include/flight/nav.h
-    - cpplint --verbose=0 include/flight/control.h
-    - cpplint --verbose=0 include/flight/datalog.h
-    - cpplint --verbose=0 include/flight/telem.h
-    - cpplint --verbose=0 flight/flight.cc
-    - cpplint --verbose=0 flight/config.cc
-    - cpplint --verbose=0 flight/msg.cc
-    - cpplint --verbose=0 flight/sys.cc
-    - cpplint --verbose=0 flight/sensors.cc
-    - cpplint --verbose=0 flight/effectors.cc
-    - cpplint --verbose=0 flight/nav.cc
-    - cpplint --verbose=0 flight/control.cc
-    - cpplint --verbose=0 flight/datalog.cc
-    - cpplint --verbose=0 flight/telem.cc
+    - cpplint --verbose=0 flight_code/include/flight/global_defs.h
+    - cpplint --verbose=0 flight_code/include/flight/hardware_defs.h
+    - cpplint --verbose=0 flight_code/include/flight/config.h
+    - cpplint --verbose=0 flight_code/include/flight/msg.h
+    - cpplint --verbose=0 flight_code/include/flight/sys.h
+    - cpplint --verbose=0 flight_code/include/flight/sensors.h
+    - cpplint --verbose=0 flight_code/include/flight/effectors.h
+    - cpplint --verbose=0 flight_code/include/flight/nav.h
+    - cpplint --verbose=0 flight_code/include/flight/control.h
+    - cpplint --verbose=0 flight_code/include/flight/datalog.h
+    - cpplint --verbose=0 flight_code/include/flight/telem.h
+    - cpplint --verbose=0 flight_code/flight/flight.cc
+    - cpplint --verbose=0 flight_code/flight/config.cc
+    - cpplint --verbose=0 flight_code/flight/msg.cc
+    - cpplint --verbose=0 flight_code/flight/sys.cc
+    - cpplint --verbose=0 flight_code/flight/sensors.cc
+    - cpplint --verbose=0 flight_code/flight/effectors.cc
+    - cpplint --verbose=0 flight_code/flight/nav.cc
+    - cpplint --verbose=0 flight_code/flight/control.cc
+    - cpplint --verbose=0 flight_code/flight/datalog.cc
+    - cpplint --verbose=0 flight_code/flight/telem.cc

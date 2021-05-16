@@ -23,8 +23,8 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef INCLUDE_FLIGHT_CONTROL_H_
-#define INCLUDE_FLIGHT_CONTROL_H_
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_CONTROL_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_CONTROL_H_
 
 #include "flight/global_defs.h"
 
@@ -33,4 +33,4 @@ void ControlRun(const SysData &sys, const SensorData &sensor,
                 const NavData &nav, const TelemData &telem,
                 ControlData *ctrl);
 
-#endif  // INCLUDE_FLIGHT_CONTROL_H_
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_CONTROL_H_

@@ -23,12 +23,12 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef INCLUDE_FLIGHT_TELEM_H_
-#define INCLUDE_FLIGHT_TELEM_H_
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_TELEM_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_TELEM_H_
 
 #include "flight/global_defs.h"
 
 void TelemInit(const AircraftConfig &cfg, TelemData * const ptr);
 void TelemUpdate(const AircraftData &data, TelemData * const ptr);
 
-#endif  // INCLUDE_FLIGHT_TELEM_H_
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_TELEM_H_

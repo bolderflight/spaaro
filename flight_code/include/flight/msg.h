@@ -23,8 +23,8 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef INCLUDE_FLIGHT_MSG_H_
-#define INCLUDE_FLIGHT_MSG_H_
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_MSG_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_MSG_H_
 
 #include <string>
 
@@ -37,4 +37,4 @@ void MsgWarning(std::string str);
 /* Error message */
 void MsgError(std::string str);
 
-#endif  // INCLUDE_FLIGHT_MSG_H_
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_MSG_H_

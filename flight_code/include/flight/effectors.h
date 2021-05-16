@@ -23,8 +23,8 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef INCLUDE_FLIGHT_EFFECTORS_H_
-#define INCLUDE_FLIGHT_EFFECTORS_H_
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_EFFECTORS_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_EFFECTORS_H_
 
 #include "flight/global_defs.h"
 
@@ -32,4 +32,4 @@ void EffectorsInit(const EffectorConfig &cfg);
 void EffectorsCmd(bool motor, const ControlData &cmd);
 void EffectorsWrite();
 
-#endif  // INCLUDE_FLIGHT_EFFECTORS_H_
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_EFFECTORS_H_
