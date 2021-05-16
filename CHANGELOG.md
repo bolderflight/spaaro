@@ -1,7 +1,11 @@
 # Changelog
 
 ## v2.0.0
-- WIP
+- Revamped to use interfaces for IMU, GNSS, pressure, inceptor, and effector
+- Added data output
+- Implemented much more comprehensive MAV Link implementation
+- Updated Simulink / Autocode and pulled into source to keep in sync with flight code better
+- Pulled mat converter intp source to keep in sync with flight code better
 
 ## v1.1.0
 - Added definition (HAVE_PITOT_STATIC) in *hardware_defs.h* to defined whether the aircraft has a pitot-static system or not
