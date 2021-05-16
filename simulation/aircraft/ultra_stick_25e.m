@@ -184,6 +184,9 @@ Aircraft.Sensors.Gnss.num_satellites = 16;
 Aircraft.Sensors.Gnss.horz_accuracy_m = 1.5;
 Aircraft.Sensors.Gnss.vert_accuracy_m = 5.5;
 Aircraft.Sensors.Gnss.vel_accuracy_mps = 0.05;
+Aircraft.Sensors.Gnss.track_accuracy_rad = deg2rad(2);
+Aircraft.Sensors.Gnss.hdop = 0.7;
+Aircraft.Sensors.Gnss.vdop = 0.7;
 % Air data model
 Aircraft.Sensors.PitotStaticInstalled = 1;
 % Static pressure
