@@ -31,7 +31,7 @@ set(NANOPB_SRC_ROOT_FOLDER "/usr/local/nanopb")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${NANOPB_SRC_ROOT_FOLDER}/extra)
 find_package(Nanopb REQUIRED)
 include_directories(${NANOPB_INCLUDE_DIRS})
-NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS flight/datalog.proto)
+NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ../common/datalog.proto)
 # Include directories
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 # Fetch dependencies
@@ -170,12 +170,12 @@ add_executable(flight
 	${PROTO_HDRS}
 )
 # Setup autocode
-if (DEFINED CNTRL)
-	include_directories(autocode/${CNTRL}_ert_rtw)
+if (DEFINED AUTOCODE)
+	include_directories(autocode/${AUTOCODE}_ert_rtw)
 	target_sources(flight
 		PUBLIC
-			autocode/${CNTRL}_ert_rtw/autocode.cpp
-			autocode/${CNTRL}_ert_rtw/autocode.h
+			autocode/${AUTOCODE}_ert_rtw/autocode.cpp
+			autocode/${AUTOCODE}_ert_rtw/autocode.h
 	)
 	add_definitions(-D__AUTOCODE__)
 endif()
