@@ -1,5 +1,12 @@
 # ignore the build directory
-/build*
+**/build
+
+# ignore the autocode directory
+**/autocode
 
 # ignore VS code
 .vscode
+
+# ignore matlab / simulink cache
+**/slprj
+*.slxc
