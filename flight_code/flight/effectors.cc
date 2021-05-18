@@ -49,7 +49,7 @@ void EffectorsInit(const EffectorConfig &cfg) {
   pwm.EnableServos();
   MsgInfo("done.\n");
 }
-void EffectorsCmd(bool motor, const ControlData &cmd) {
+void EffectorsCmd(bool motor, bool servo, const ControlData &cmd) {
   /* Enable / disable motors */
   if (motor) {
     sbus.EnableMotors();
@@ -57,6 +57,14 @@ void EffectorsCmd(bool motor, const ControlData &cmd) {
   } else {
     sbus.DisableMotors();
     pwm.DisableMotors();
+  }
+  /* Enable / disable servos */
+  if (servo) {
+    sbus.EnableServos();
+    pwm.EnableServos();
+  } else {
+    sbus.DisableServos();
+    pwm.DisableServos();
   }
   /* Set effector commands */
   sbus.Cmd(cmd.sbus);

@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.2
+- Updated to sbus v4.0.5, pwm v4.0.4, and effector v6.1.3, which add a check for whether an effector channel has been configured
+- Added a check for whether the receiver is in failsafe mode, if it is, then the effector will output the motor and servo failsafe commands
+
 ## v2.0.1
 - Updated sbus to v4.0.4
 - Updated inceptor to v2.2.0
