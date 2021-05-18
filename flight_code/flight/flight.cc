@@ -61,7 +61,11 @@ void run() {
   /* Control laws */
   ControlRun(data.sys, data.sensor, data.nav, data.telem, &data.control);
   /* Command effectors */
-  EffectorsCmd(data.sensor.inceptor.throttle_en, data.control);
+  if (data.sensor.inceptor.failsafe) {
+    EffectorsCmd(false, false, data.control);
+  } else {
+    EffectorsCmd(data.sensor.inceptor.throttle_en, true, data.control);
+  }
   /* Datalog */
   DatalogAdd(data);
   /* Telemetry */
