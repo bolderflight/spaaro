@@ -183,8 +183,6 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   inceptor_[inceptor_config_.throttle_en.ch] = data.sensor.inceptor.throttle_en;
   inceptor_[inceptor_config_.mode0.ch] = data.sensor.inceptor.mode0;
   inceptor_[inceptor_config_.mode1.ch] = data.sensor.inceptor.mode1;
-  inceptor_[inceptor_config_.mode2.ch] = data.sensor.inceptor.mode2;
-  inceptor_[inceptor_config_.mode3.ch] = data.sensor.inceptor.mode3;
   telem_.throttle_ch(inceptor_config_.throttle.ch);
   /* Mission */
   if (data.control.waypoint_reached) {
