@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.3
+- Updated to mavlink v3.1.2, which will re-request mission items that are received out of order, making the transfer much more robust
+- Fixed bugs in sending inceptor and effector telemetry data
+
 ## v2.0.2
 - Updated to sbus v4.0.5, pwm v4.0.4, and effector v6.1.3, which add a check for whether an effector channel has been configured
 - Added a check for whether the receiver is in failsafe mode, if it is, then the effector will output the motor and servo failsafe commands

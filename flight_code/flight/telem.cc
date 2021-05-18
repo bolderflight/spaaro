@@ -171,10 +171,12 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
     min_ = effector_config_.sbus.effectors[i].min;
     max_ = effector_config_.sbus.effectors[i].max;
     range_ = max_ - min_;
-    effector_[i] = (data.control.sbus[i] - min_) / range_;
+    effector_[i + NUM_PWM_PINS] = (data.control.sbus[i] - min_) / range_;
   }
   telem_.effector(effector_);
   /* Inceptor */
+  telem_.inceptor_healthy(!data.sensor.inceptor.failsafe);
+  telem_.throttle_ch(inceptor_config_.throttle.ch);
   inceptor_[inceptor_config_.pitch.ch] = data.sensor.inceptor.pitch * 0.5f +
                                          0.5f;
   inceptor_[inceptor_config_.roll.ch] = data.sensor.inceptor.roll * 0.5f + 0.5f;
@@ -183,7 +185,7 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   inceptor_[inceptor_config_.throttle_en.ch] = data.sensor.inceptor.throttle_en;
   inceptor_[inceptor_config_.mode0.ch] = data.sensor.inceptor.mode0;
   inceptor_[inceptor_config_.mode1.ch] = data.sensor.inceptor.mode1;
-  telem_.throttle_ch(inceptor_config_.throttle.ch);
+  telem_.inceptor(inceptor_);
   /* Mission */
   if (data.control.waypoint_reached) {
     telem_.AdvanceMissionItem();
