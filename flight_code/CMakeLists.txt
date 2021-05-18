@@ -5,7 +5,7 @@ set(MCU MK66FX1M0)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-	VERSION 2.0.0
+	VERSION 2.0.1
 	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )
@@ -63,7 +63,7 @@ FetchContent_MakeAvailable(pres)
 FetchContent_Declare(
 	inceptor
 	GIT_REPOSITORY https://github.com/bolderflight/inceptor.git
-	GIT_TAG v2.1.2
+	GIT_TAG v2.2.0
 )
 FetchContent_MakeAvailable(inceptor)
 FetchContent_Declare(
@@ -135,7 +135,7 @@ FetchContent_MakeAvailable(bme280)
 FetchContent_Declare(
 	sbus
 	GIT_REPOSITORY https://github.com/bolderflight/sbus.git
-	GIT_TAG v4.0.2
+	GIT_TAG v4.0.4
 )
 FetchContent_MakeAvailable(sbus)
 FetchContent_Declare(

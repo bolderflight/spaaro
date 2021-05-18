@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.1
+- Updated sbus to v4.0.4
+- Updated inceptor to v2.2.0
+
 ## v2.0.0
 - Revamped to use interfaces for IMU, GNSS, pressure, inceptor, and effector
 - Added data output
