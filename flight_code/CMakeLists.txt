@@ -5,7 +5,7 @@ set(MCU MK66FX1M0)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-	VERSION 2.0.3
+	VERSION 2.0.4
 	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )
@@ -103,6 +103,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(filter)
 FetchContent_Declare(
+	units
+	GIT_REPOSITORY https://github.com/bolderflight/units.git
+	GIT_TAG v3.2.0
+)
+FetchContent_MakeAvailable(units)
+FetchContent_Declare(
 	mavlink
 	GIT_REPOSITORY https://github.com/bolderflight/mavlink.git
 	GIT_TAG v3.1.2
@@ -198,6 +204,7 @@ target_link_libraries(flight
 		logger
 		framing
 		filter
+		units
 		mavlink
 		mpu9250
 		ublox
