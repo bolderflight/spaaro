@@ -39,6 +39,7 @@
 #include "bme280/bme280.h"
 #include "sbus/sbus.h"
 #include "pwm/pwm.h"
+#include "units/units.h"
 
 /* Control sizes */
 inline constexpr std::size_t NUM_AUX_VAR = 24;

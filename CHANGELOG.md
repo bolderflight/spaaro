@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.0.4
+- Added units to global_defs.h to make it easy to access unit conversions anywhere.
+
 ## v2.0.3
 - Updated to mavlink v3.1.2, which will re-request mission items that are received out of order, making the transfer much more robust
 - Fixed bugs in sending inceptor and effector telemetry data
