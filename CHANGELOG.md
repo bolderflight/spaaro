@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.0.5
+- Cleaning up Simulation base workspace.
+
 ## v2.0.4
 - Added units to global_defs.h to make it easy to access unit conversions anywhere.
 
