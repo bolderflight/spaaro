@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.0.7
+- Adding trim control surface / motor positions in effector dynamics block and subtracing trim pitch / roll angles in navigation filter block. This enables the control laws to work transient free in simulation without effecting flight code.
+
 ## v2.0.6
 - Added data logging in Simulink to model the flight data logs
 - Added unit delays where necessary to break algebraic loops
