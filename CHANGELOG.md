@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.6
+- Added data logging in Simulink to model the flight data logs
+- Added unit delays where necessary to break algebraic loops
+
 ## v2.0.5
 - Cleaning up Simulation base workspace.
 
