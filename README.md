@@ -35,7 +35,7 @@ FMU-R v1.x consists of:
    * Integrated measurement of input voltage, regulated voltage, and servo rail voltages (up to +9.9V).
    * Two UARTs from the BeagleBone are brought out to convenient connectors for interfacing with external sensors.
 
-The FMU-R v1.x schematic is [available]().
+The FMU-R v1.x schematic is [available](./docs/fmu_r_v1_schematic.pdf).
 
 ### GNSS Receiver
 [uBlox](https://www.u-blox.com/) 8 and 9 series GNSS receivers are supported via the UBX communication protocol. Bolder Flight Systems manufactures a small, low-cost GNSS receiver using the [SAM-M8Q module](https://www.u-blox.com/en/product/sam-m8q-module). If higher position accuracy is required, we recommend the [ZED-F9P dual frequency module](https://www.u-blox.com/en/product/zed-f9p-module). [ArduSimple](https://www.ardusimple.com/product/simplertk2blite/) manufactures a small ZED-F9P receiver, which we use frequently with the FMU-R.
