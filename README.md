@@ -619,12 +619,12 @@ Software for SPAARO can be developed in C++ or autocoded from Simulink. The inpu
          * bool new_data: whether new data was received by the GNSS receiver.
          * bool healthy: whether the GNSS receiver is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
          * int8_t fix: the GNSS fix type:
-            1. No fix
-            2. 2D fix
-            3. 3D fix
-            4. 3D fix with differential GNSS
-            5. 3D fix, RTK with floating integer ambiguity
-            6. 3D fix, RTK with fixed integer ambiguity
+            * 1: No fix
+            * 2: 2D fix
+            * 3: 3D fix
+            * 4: 3D fix with differential GNSS
+            * 5: 3D fix, RTK with floating integer ambiguity
+            * 6: 3D fix, RTK with fixed integer ambiguity
          * int8_t num_sats: the number of satellites used in the GNSS solution.
          * int16_t week: GNSS week number.
          * int32_t tow_ms: GNSS time of week, ms.
@@ -706,11 +706,11 @@ The output plane is defined as:
    * Control Data:
       * bool waypoint_reached: whether the current waypoint has been reached. This is used to indicate to the ground station that the active waypoint should be advanced to the next in the flight plan.
       * int8_t mode: the current aircraft mode:
-         0. manual flight mode.
-         1. stability augmented flight mode.
-         2. attitude feedback flight mode.
-         3. autonomous flight mode.
-         4. test point / research flight mode.
+         * 0: manual flight mode.
+         * 1: stability augmented flight mode.
+         * 2: attitude feedback flight mode.
+         * 3: autonomous flight mode.
+         * 4: test point / research flight mode.
       * std::array<float, NUM_SBUS_CH> sbus: an array of SBUS commands. The order of SBUS commands should match the order of the SBUS effector configuration. NUM_SBUS_CH is the number of SBUS channels available, currently 16.
       * std::array<float, NUM_PWM_PINS> pwm: an array of PWM commands. The order of PWM commands should match the order of the PWM effector configuration. NUM_PWM_PINS is the number of PWM channels available, currently 8.
       * std::array<float, NUM_AUX_VAR> aux: aux variables - these are undefined and can be used by the developer to output data for logging. Useful for logging internal control law states, research variables, or other values of interest. NUM_AUX_VAR defines the number of channels available, currently 24.
