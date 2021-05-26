@@ -719,8 +719,36 @@ The output plane is defined as:
 C++ software should be developed in */flight_code/flight/control.cc*. [Filters](https://github.com/bolderflight/filter), [control algorithm](https://github.com/bolderflight/control) templates, and [excitations](https://github.com/bolderflight/excitation/) are available to ease the development effort. An init function, *ControlInit*, is provided and is run once as the system boots. The *ControlRun* function is run every frame.
 
 ## Simulink
-A Simulink control law framework is located at */simulation/control/baseline.slx*. This can be modified or copied and used as a starting point for software development.
+A Simulink control law framework is located at */simulation/control/baseline.slx*. This can be modified or copied and used as a starting point for software development. Note that */simulation/setup.m* should be run first, to load bus definitions, before developing Simulink control laws.
 
-<!-- # Building and Uploading Software
+# Building and Uploading Software
+First, a build directory is created to store our cached compiled objects. Create a directory called *build* in */flight_code*.
+
+```shell
+cd flight_code
+mkdir build
+```
+
+Next, we let CMake configure our compilation and generate a makefile. If C++ based control laws are used:
+
+```shell
+cmake ..
+```
+
+If Simulink autocode control laws are used, we need to first generate code in our Simulink control law model. This should output code to */flight_code/autocode/&ast;_ert_rtw* where the asterisk is the name of the Simulink model. Next we issue the following CMake command from our */flight_code/build* directory:
+
+```shell
+cmake .. -DAUTOCODE=baseline
+```
+
+If the Simulink model was named *baseline.slx*. Otherwise, replace with the name of your Simulink model.
+
+To compile software, whether C++ or Simulink autocode based, issue the *make* command from */flight_code/build*:
+
+```shell
+make
+```
+
+<!-- # Simulation
 
 # Analyzing Data -->
