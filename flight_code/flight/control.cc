@@ -26,6 +26,9 @@
 #include "flight/control.h"
 #ifdef __AUTOCODE__
   #include "./autocode.h"
+#else
+  #include "control/control.h"
+  #include "excitation/excitation.h"
 #endif
 
 namespace {
