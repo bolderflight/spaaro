@@ -150,6 +150,18 @@ FetchContent_Declare(
 	GIT_TAG v4.0.4
 )
 FetchContent_MakeAvailable(pwm)
+FetchContent_Declare(
+	control
+	GIT_REPOSITORY https://github.com/bolderflight/control.git
+	GIT_TAG v2.0.0
+)
+FetchContent_MakeAvailable(control)
+FetchContent_Declare(
+	excitation
+	GIT_REPOSITORY https://github.com/bolderflight/excitation.git
+	GIT_TAG v2.0.1
+)
+FetchContent_MakeAvailable(excitation)
 # Add the executable
 add_executable(flight
 	include/flight/global_defs.h
@@ -212,6 +224,8 @@ target_link_libraries(flight
 		bme280
 		sbus
 		pwm
+		control
+		excitation
 )
 # Add hex and upload targets
 include(${CMAKE_SOURCE_DIR}/cmake/flash_mcu.cmake)

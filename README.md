@@ -715,11 +715,12 @@ The output plane is defined as:
       * std::array<float, NUM_PWM_PINS> pwm: an array of PWM commands. The order of PWM commands should match the order of the PWM effector configuration. NUM_PWM_PINS is the number of PWM channels available, currently 8.
       * std::array<float, NUM_AUX_VAR> aux: aux variables - these are undefined and can be used by the developer to output data for logging. Useful for logging internal control law states, research variables, or other values of interest. NUM_AUX_VAR defines the number of channels available, currently 24.
 
-<!-- ## C++
-
+## C++
+C++ software should be developed in */flight_code/flight/control.cc*. [Filters](https://github.com/bolderflight/filter), [control algorithm](https://github.com/bolderflight/control) templates, and [excitations](https://github.com/bolderflight/excitation/) are available to ease the development effort. An init function, *ControlInit*, is provided and is run once as the system boots. The *ControlRun* function is run every frame.
 
 ## Simulink
+A Simulink control law framework is located at */simulation/control/baseline.slx*. This can be modified or copied and used as a starting point for software development.
 
-# Building and Uploading Software
+<!-- # Building and Uploading Software
 
 # Analyzing Data -->
