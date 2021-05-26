@@ -550,10 +550,175 @@ An example configuration for a fixed-wing aircraft with the telemetry radio mode
   .baud = 57600
 }
 ```
-<!-- 
+
 # Software Overview
+On boot, SPAARO initializes the:
+1. Messaging bus, which provides status, warning, and error messages over the FMU micro USB.
+2. System, which includes:
+   * Initializing I2C and SPI buses
+   * Setting up the analog to digital converters for monitoring system voltages
+3. Sensors, which includes:
+   * IMU: establish communications, configure the IMU, and estimate gyro biases.
+   * GNSS: establish communications.
+   * Inceptors: establish communications.
+   * Pressure transducers: establish communications, configure the pressure transducers, and estimate differential pressure biases.
+4. Effectors, which establishes communications over SBUS and PWM protocols.
+5. Telemetry, which establishing communications with the radio modem.
+6. Datalog, which checks for an SD card present and creates a datalog file.
+
+After a succesful boot, a low priority loop is established to write datalog entries from a buffer to the SD card. An interrupt is attached to the IMU data ready pin to trigger the main flight software loop at the desired frame rate.
+
+The main flight software loop consists of:
+1. Reading system data: system time, frame duration, and input, regulated, and servo voltages.
+2. Reading sensor data, correcting scale factors and biases, and rotating sensor data into the vehicle frame.
+3. Running the navigation filter to filter the sensor data and estimate the aircraft states.
+4. Run the control software.
+5. Convert effector commands from engineering units to PWM and SBUS values.
+6. Add data to the datalog buffer.
+7. Send updated telemetry data. Check for updated in-flight-tunable parameters, flight plans, fences, and rally points.
+
+A timer to send commands to the effectors is started by the main flight software loop and triggers at 90% of the frame duration. On this trigger, the effector commands are sent to the effectors. This approach provides a fixed latency between sensing and actuation for developing robust control laws.
+
+This process continues until the system is powered down.
 
 # Developing Software
+Software for SPAARO can be developed in C++ or autocoded from Simulink. The input plane has the following data available:
+
+   * System Data:
+      * int32_t frame_time_us: time the previous frame took to complete, us. Useful for analyzing CPU load.
+      * float frame_time_s: same as frame_time_us, but converted to seconds and stored as a float.
+      * float input_volt: the input voltage to the voltage regulator.
+      * float reg_volt: the regulated voltage.
+      * float pwm_volt: the PWM servo rail voltage.
+      * float sbus_volt: the SBUS servo rail voltage.
+      * int64_t sys_time_us: the time since boot, us.
+      * double sys_time_s: same as sys_time_us, but converted to seconds and stored as a double.
+   * Sensor Data:
+      * bool pitot_static_installed: whether a pitot-static probe and air data sensor are installed.
+      * Inceptor Data:
+         * bool new_data: whether new data was received by the SBUS receiver.
+         * bool lost_frame: whether a frame of SBUS data was lost by the receiver.
+         * bool failsafe: whether the SBUS receiver has entered failsafe mode - this typically occurs if many frames of data are lost in a row and will trigger the servos and motors to their configured failsafe positions.
+         * bool throttle_en: whether the motors are enabled.
+         * int8_t mode0: the value from the mode 0 switch.
+         * int8_t mode1: the value from the mode 1 switch.
+         * float throttle: normalized throttle stick position. Typically 0 - 1.
+         * float pitch: normalized pitch stick position. Typically +/- 1.
+         * float roll: normalized roll stick position. Typically +/- 1.
+         * float yaw: normalized yaw stick position. Typically +/- 1.
+      * IMU Data:
+         * bool new_imu_data: whether new data was received from the accelerometer and gyro.
+         * bool new_mag_data: whether new data was received from the magnetometer.
+         * bool imu_healthy: whether the accelerometer and gyro are healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
+         * bool mag_healthy: whether the magnetometer is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
+         * float die_temp_c: the IMU die temperature, C.
+         * float accel_mps2[3]: the accelerometer data, with bias and scale factor corrected, and rotated into the vehicle frame, m/s/s [x y z].
+         * float gyro_radps[3]: the gyro data, with bias corrected, and rotated into the vehicle frame, rad/s [x y z].
+         * float mag_ut[3]: the magnetometer data, with bias and scale factor corrected, and rotated into the vehicle frame, uT [x y z].
+      * GNSS Data:
+         * bool new_data: whether new data was received by the GNSS receiver.
+         * bool healthy: whether the GNSS receiver is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
+         * int8_t fix: the GNSS fix type:
+            1. No fix
+            2. 2D fix
+            3. 3D fix
+            4. 3D fix with differential GNSS
+            5. 3D fix, RTK with floating integer ambiguity
+            6. 3D fix, RTK with fixed integer ambiguity
+         * int8_t num_sats: the number of satellites used in the GNSS solution.
+         * int16_t week: GNSS week number.
+         * int32_t tow_ms: GNSS time of week, ms.
+         * float alt_wgs84_m: Altitude above the WGS84 ellipsoid, m.
+         * float alt_msl_m: Altitude above Mean Sea Level (MSL), m.
+         * float hdop: horizontal dilution of precision.
+         * float vdop: vertical dilution of precision.
+         * float track_rad: ground track, rad.
+         * float spd_mps: ground speed, m/s.
+         * float horz_acc_m: estimated horizontal position accuracy, m.
+         * float vert_acc_m: estimated vertical position accuracy, m.
+         * float vel_acc_mps: estimated velocity accuracy, m/s.
+         * float track_acc_rad: estimated track accuracy, rad.
+         * float ned_vel_mps[3]: north east down velocity, m/s [North East Down].
+         * double lat_rad: latitude, rad.
+         * double lon_rad: longitude, rad.
+      * Static Pressure Data:
+         * bool new_data: whether new data was received from the pressure transducer.
+         * bool healthy: whether the pressure transducer is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
+         * float pres_pa: the measured pressure, Pa.
+         * float die_temp_c: the pressure transducer die temperature, C.
+      * Differential Pressure Data:
+         * bool new_data: whether new data was received from the pressure transducer.
+         * bool healthy: whether the pressure transducer is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
+         * float pres_pa: the measured pressure, Pa.
+         * float die_temp_c: the pressure transducer die temperature, C.
+   * Navigation Filter Data:
+      * bool nav_initialized: whether the navigation filter has been initialized. Do not use navigation filter data before it has been initialized. Requires a good GNSS solution to complete the initialization process.
+      * float pitch_rad: pitch angle, rad.
+      * float roll_rad: roll angle, rad.
+      * float heading_rad: heading angle relative to true north, rad.
+      * float alt_wgs84_m: altitude above the WGS84 ellipsoid, m.
+      * float alt_msl_m: altitude above Mean Sea Level (MSL), m.
+      * float alt_rel_m: altitude above where the navigation filter was initialized, m.
+      * float static_pres_pa: filtered static pressure, Pa.
+      * float diff_pres_pa: filtered differential pressure, Pa.
+      * float alt_pres_m: pressure altitude, m.
+      * float ias_mps: indicated airspeed, m/s.
+      * float gnd_spd_mps: ground speed, m/s.
+      * float gnd_track_rad: ground track, rad.
+      * float flight_path_rad: flight path angle, rad.
+      * float accel_bias_mps2[3]: accelerometer bias estimate from the EKF, m/s/s [x y z].
+      * float gyro_bias_radps[3]: gyro bias estimate from the EKF, rad/s [x y z].
+      * float accel_mps2[3]: IMU acceleterometer data with the EKF estimated biases removed and digital low pass filtereing applied, m/s/s [x y z].
+      * float gyro_radps[3]: IMU gyro data with the EKF estimated biases removed and digital low pass filtereing applied, rad/s [x y z].
+      * float mag_ut[3]: IMU magnetometer data with digital low pass filtering applied, uT [x y z].
+      * float ned_pos_m[3]: North east down position relative to where the navigation filter was initialized, m [north east down].
+      * float ned_vel_mps[3]: North east down ground velocity, m/s [north east down].
+      * double lat_rad: latitude, rad.
+      * double lon_rad: longitude, rad.
+   * Telemetry Data:
+      * bool waypoints_updated: whether the flight plan waypoints have been updated.
+      * bool fence_updated: whether the fence has been updated.
+      * bool rally_points_updated: whether the rally points have been updated.
+      * int16_t current_waypoint: the index of the current waypoint.
+      * int16_t num_waypoints: the number of waypoints in the current flight plan.
+      * int16_t num_fence_items: the number of fence items.
+      * int16_t num_rally_points: the number of rally points.
+      * std::array<float, NUM_TELEM_PARAMS> param: an array of in-flight-tunable parameters sent from the ground station. NUM_TELEM_PARAMS defines the number of parameters available, typically 24. These parameters can be used for anything that might be adjusted in flight, such as controlling gains, selecting excitation waveforms, etc.
+      * std::array<bfs::MissionItem, NUM_FLIGHT_PLAN_POINTS> flight_plan: an array storing all of the waypoints in the flight plan. NUM_FLIGHT_PLAN_POINTS defines the maximum number of waypoints that can be stored, num_waypoints is the number of waypoints currently stored, and current_waypoint is the 0-based index of the current waypoint.
+      * std::array<bfs::MissionItem, NUM_FENCE_POINTS> fence: an array storing all of the fence items. NUM_FENCE_POINTS defines the maximum number of fence items that can be stored, num_fence_items is the number of fence items currently stored.
+      * std::array<bfs::MissionItem, NUM_RALLY_POINTS> rally: an array storing all of the rally points. NUM_RALLY_POINTS defines the maximum number of rally points that can be stored, num_rally_points is the number of rally points currently stored.
+
+Mission Items are defined as:
+
+   * bool autocontinue: hether to automatically continue to the next MissionItem
+   * uint8_t frame: the [coordinate frame](https://mavlink.io/en/messages/common.html#MAV_FRAME) of the MissionItem
+   * uint16_t cmd: the [command](https://mavlink.io/en/messages/common.html#mav_commands) associated with the MissionItem
+   * float param1: command dependent parameter
+   * float param2: command dependent parameter
+   * float param3: command dependent parameter
+   * float param4: command dependent parameter
+   * int32_t x: typically latitude represented as 1e7 degrees
+   * int32_t y: typically longitude represented as 1e7 degrees
+   * float z: typically altitude, but can be dependent on the command and frame
+
+The output plane is defined as:
+
+   * Control Data:
+      * bool waypoint_reached: whether the current waypoint has been reached. This is used to indicate to the ground station that the active waypoint should be advanced to the next in the flight plan.
+      * int8_t mode: the current aircraft mode:
+         0. manual flight mode.
+         1. stability augmented flight mode.
+         2. attitude feedback flight mode.
+         3. autonomous flight mode.
+         4. test point / research flight mode.
+      * std::array<float, NUM_SBUS_CH> sbus: an array of SBUS commands. The order of SBUS commands should match the order of the SBUS effector configuration. NUM_SBUS_CH is the number of SBUS channels available, currently 16.
+      * std::array<float, NUM_PWM_PINS> pwm: an array of PWM commands. The order of PWM commands should match the order of the PWM effector configuration. NUM_PWM_PINS is the number of PWM channels available, currently 8.
+      * std::array<float, NUM_AUX_VAR> aux: aux variables - these are undefined and can be used by the developer to output data for logging. Useful for logging internal control law states, research variables, or other values of interest. NUM_AUX_VAR defines the number of channels available, currently 24.
+
+<!-- ## C++
+
+
+## Simulink
 
 # Building and Uploading Software
 
