@@ -117,7 +117,7 @@ FetchContent_MakeAvailable(mavlink)
 FetchContent_Declare(
 	mpu9250
 	GIT_REPOSITORY https://github.com/bolderflight/mpu9250.git
-	GIT_TAG v4.2.0
+	GIT_TAG v4.2.1
 )
 FetchContent_MakeAvailable(mpu9250)
 FetchContent_Declare(
