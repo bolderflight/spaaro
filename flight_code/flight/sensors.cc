@@ -27,6 +27,7 @@
 #include "flight/global_defs.h"
 #include "flight/config.h"
 #include "flight/msg.h"
+#include "flight/analog.h"
 
 namespace {
 /* Whether pitot static is installed */
@@ -64,7 +65,10 @@ void SensorsInit(const SensorConfig &cfg) {
       MsgError("Unable to initialize static pressure sensor.");
     }
   }
+  /* Initialize analog input */
+  AnalogInit(cfg.analog);
   MsgInfo("done.\n");
+  /* Initialize inceptors */
   MsgInfo("Initializing inceptors...");
   while (!inceptor.Init(cfg.inceptor)) {}
   MsgInfo("done.\n");
@@ -94,4 +98,6 @@ void SensorsRead(SensorData * const data) {
       MsgError("Unable to read FMU static pressure data.\n");
     }
   }
+  /* Read analog channels */
+  AnalogRead(&data->analog);
 }
