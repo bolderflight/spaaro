@@ -110,12 +110,9 @@ struct SysData {
   double sys_time_s;
 };
 /* Analog data */
-struct AnalogChannelData {
-  float volt;
-  float val;
-};
 struct AnalogData {
-  AnalogChannelData channels[NUM_AIN_PINS];
+  std::array<float, NUM_AIN_PINS> volt;
+  std::array<float, NUM_AIN_PINS> val;
 };
 /* Sensor data */
 struct SensorData {

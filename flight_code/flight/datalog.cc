@@ -116,8 +116,8 @@ void DatalogAdd(const AircraftData &ref) {
   datalog_msg_.pres_diff_die_temp_c = ref.sensor.diff_pres.die_temp_c;
   /* Analog data */
   for (std::size_t i = 0; i < NUM_AIN_PINS; i++) {
-    datalog_msg_.ain_volt[i] = ref.sensor.analog.channels[i].volt;
-    datalog_msg_.ain_val[i] = ref.sensor.analog.channels[i].val;
+    datalog_msg_.ain_volt[i] = ref.sensor.analog.volt[i];
+    datalog_msg_.ain_val[i] = ref.sensor.analog.val[i];
   }
   /* Nav data */
   datalog_msg_.nav_initialized = ref.nav.nav_initialized;
