@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.1.0
+- Adding support for the FMU-R-V2-Beta board. Use 'cmake .. -DFMU=V2-BETA' to enable.
+
 ## v2.0.7
 - Adding trim control surface / motor positions in effector dynamics block and subtracing trim pitch / roll angles in navigation filter block. This enables the control laws to work transient free in simulation without effecting flight code.
 

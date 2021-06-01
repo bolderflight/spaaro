@@ -57,6 +57,10 @@ void SysRead(SysData * const ptr) {
   ptr->sys_time_s = static_cast<double>(ptr->sys_time_us) / 1e6;
   ptr->frame_time_us = frame_time_us_;
   ptr->frame_time_s = static_cast<float>(ptr->frame_time_us) / 1000000.0f;
+
+  #ifdef __FMU_R_V2_BETA__
+
+  #else 
   ptr->input_volt = static_cast<float>(analogRead(INPUT_VOLTAGE_PIN)) *
                     INPUT_VOLTAGE_SCALE;
   ptr->reg_volt = static_cast<float>(analogRead(REGULATED_VOLTAGE_PIN)) *
@@ -65,6 +69,7 @@ void SysRead(SysData * const ptr) {
                    SBUS_VOLTAGE_SCALE;
   ptr->pwm_volt = static_cast<float>(analogRead(PWM_VOLTAGE_PIN)) *
                   PWM_VOLTAGE_SCALE;
+  #endif
 }
 void SysFrameEnd() {
   frame_time_us_ = static_cast<int32_t>(micros64() - frame_start_us_);

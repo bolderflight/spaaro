@@ -334,7 +334,7 @@ macro (configMcu MCU)
       -DUSB_SERIAL
       -DTEENSYDUINO=153
       -DARDUINO=10810
-      -DARDUINO_TEENSY40
+      -DARDUINO_TEENSY41
     )
     # Compile options
     add_compile_options(

@@ -1,11 +1,22 @@
 cmake_minimum_required(VERSION 3.13)
-# Using the MK66FX1M0 microcontroller
-set(MCU MK66FX1M0)
+if (FMU STREQUAL "V2-BETA")
+	# FMU-R-V2-BETA
+	set(MCU IMXRT1062_T41)
+	add_definitions(
+		-D__FMU_R_V2_BETA__
+	)
+else()
+	# FMU-R-V1
+	set(MCU MK66FX1M0)
+	add_definitions(
+		-D__FMU_R_V1__
+	)
+endif()
 # Setting up the toolchain
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-	VERSION 2.0.7
+	VERSION 2.1.0
 	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )
