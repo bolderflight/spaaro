@@ -32,6 +32,8 @@
 #include "core/core.h"
 #include "imu/imu.h"
 
+inline constexpr int8_t NUM_AIN_PINS = 8;
+
 #ifdef __FMU_R_V2_BETA__
 
 /* Messages */
@@ -63,7 +65,9 @@ inline constexpr int ANALOG_RESOLUTION_BITS = 12;
 inline constexpr float VOLTAGE_RANGE = 3.3;
 inline constexpr float ANALOG_COUNT_RANGE =
   std::pow(2.0f, ANALOG_RESOLUTION_BITS) - 1.0f;
-
+inline constexpr std::array<int8_t, NUM_AIN_PINS> AIN_PINS = {38, 39, 40, 41,
+                                                              24, 25, 26, 27};
+inline constexpr float AIN_VOLTAGE_SCALE = VOLTAGE_RANGE / ANALOG_COUNT_RANGE;
 #else
 
 /* Messages */

@@ -54,6 +54,14 @@ struct Effectors {
   bfs::SbusTx<NUM_SBUS_CH> sbus;
   bfs::PwmTx<NUM_PWM_PINS> pwm;
 };
+/* Analog input config */
+struct AnalogChannel {
+  int8_t num_coef = 0;
+  float poly_coef[bfs::MAX_POLY_COEF_SIZE];
+};
+struct AnalogConfig {
+  AnalogChannel channels[NUM_AIN_PINS];
+};
 /* Sensor config */
 struct SensorConfig {
   bool pitot_static_installed;
@@ -62,6 +70,7 @@ struct SensorConfig {
   bfs::GnssConfig gnss;
   bfs::PresConfig static_pres;
   bfs::PresConfig diff_pres;
+  AnalogConfig analog;
 };
 /* Nav config */
 struct NavConfig {
@@ -100,6 +109,14 @@ struct SysData {
   int64_t sys_time_us;
   double sys_time_s;
 };
+/* Analog data */
+struct AnalogChannelData {
+  float volt;
+  float val;
+};
+struct AnalogData {
+  AnalogChannelData channels[NUM_AIN_PINS];
+};
 /* Sensor data */
 struct SensorData {
   bool pitot_static_installed;
@@ -108,6 +125,7 @@ struct SensorData {
   bfs::GnssData gnss;
   bfs::PresData static_pres;
   bfs::PresData diff_pres;
+  AnalogData analog;
 };
 /* Nav data */
 struct NavData {

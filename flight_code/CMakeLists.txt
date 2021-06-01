@@ -185,6 +185,7 @@ add_executable(flight
 	include/flight/control.h
 	include/flight/datalog.h
 	include/flight/telem.h
+	include/flight/analog.h
 	flight/flight.cc
 	flight/config.cc
 	flight/msg.cc
@@ -195,6 +196,7 @@ add_executable(flight
 	flight/control.cc
 	flight/datalog.cc
 	flight/telem.cc
+	flight/analog.cc
 	${PROTO_SRCS}
 	${PROTO_HDRS}
 )
