@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 # Project information
 project(Mat-Converter
-	VERSION 2.0.7
+	VERSION 2.1.0
 	DESCRIPTION "Software to convert data logs to MATLAB v4 format"
 	LANGUAGES CXX
 )

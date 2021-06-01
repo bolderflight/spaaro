@@ -20,3 +20,5 @@ DatalogMessage.cntrl_sbus max_count:16 fixed_count:true
 DatalogMessage.cntrl_pwm max_count:8 fixed_count:true
 DatalogMessage.cntrl_aux max_count:24 fixed_count:true
 DatalogMessage.telem_param max_count:24 fixed_count:true
+DatalogMessage.ain_volt max_count:8 fixed_count:true
+DatalogMessage.ain_val max_count:8 fixed_count:true

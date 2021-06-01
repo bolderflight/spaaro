@@ -1,11 +1,22 @@
 cmake_minimum_required(VERSION 3.13)
-# Using the MK66FX1M0 microcontroller
-set(MCU MK66FX1M0)
+if (FMU STREQUAL "V2-BETA")
+	# FMU-R-V2-BETA
+	set(MCU IMXRT1062_T41)
+	add_definitions(
+		-D__FMU_R_V2_BETA__
+	)
+else()
+	# FMU-R-V1
+	set(MCU MK66FX1M0)
+	add_definitions(
+		-D__FMU_R_V1__
+	)
+endif()
 # Setting up the toolchain
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-	VERSION 2.0.7
+	VERSION 2.1.0
 	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )
@@ -117,7 +128,7 @@ FetchContent_MakeAvailable(mavlink)
 FetchContent_Declare(
 	mpu9250
 	GIT_REPOSITORY https://github.com/bolderflight/mpu9250.git
-	GIT_TAG v4.2.0
+	GIT_TAG v4.2.1
 )
 FetchContent_MakeAvailable(mpu9250)
 FetchContent_Declare(
@@ -174,6 +185,7 @@ add_executable(flight
 	include/flight/control.h
 	include/flight/datalog.h
 	include/flight/telem.h
+	include/flight/analog.h
 	flight/flight.cc
 	flight/config.cc
 	flight/msg.cc
@@ -184,6 +196,7 @@ add_executable(flight
 	flight/control.cc
 	flight/datalog.cc
 	flight/telem.cc
+	flight/analog.cc
 	${PROTO_SRCS}
 	${PROTO_HDRS}
 )

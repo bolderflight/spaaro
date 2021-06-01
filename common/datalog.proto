@@ -104,6 +104,9 @@ message DatalogMessage {
   repeated float nav_ned_vel_mps = 135;
   double nav_lat_rad = 136;
   double nav_lon_rad = 137;
+  /* Analog Data */
+  repeated float ain_volt = 140;
+  repeated float ain_val = 141;
   /* Control data */
   bool cntrl_waypoint_reached = 150;
   repeated float cntrl_sbus = 151;
