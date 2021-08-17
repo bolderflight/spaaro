@@ -1,4 +1,8 @@
 cmake_minimum_required(VERSION 3.13)
+# FMU version
+if (DEFINED FMU)
+	string(TOUPPER ${FMU} FMU)
+endif()
 if (FMU STREQUAL "V2-BETA")
 	# FMU-R-V2-BETA
 	set(MCU IMXRT1062_T41)
@@ -16,7 +20,7 @@ endif()
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-	VERSION 2.1.0
+	VERSION 2.2.0
 	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )
@@ -25,18 +29,28 @@ configure_file(${CMAKE_SOURCE_DIR}/cmake/version.h.cmake ${CMAKE_CURRENT_BINARY_
 # Grab the processor and set up definitions and compile options
 include(${CMAKE_SOURCE_DIR}/cmake/config_mcu.cmake)
 configMcu(${MCU})
-# Define a larger Serial 2 RX buffer
-add_definitions(
-	-DSERIAL2_RX_BUFFER_SIZE=1024
-)
-# Define a larger Serial 3 RX buffer
-add_definitions(
-	-DSERIAL3_RX_BUFFER_SIZE=2048
-)
-# Define a larger Serial 4 TX buffer
-add_definitions(
-	-DSERIAL4_TX_BUFFER_SIZE=2048
-)
+# Define larger Serial buffers
+if (FMU STREQUAL "V2-BETA")
+	add_definitions(
+		-DSERIAL2_RX_BUFFER_SIZE=1024
+		-DSERIAL3_RX_BUFFER_SIZE=2048
+		-DSERIAL3_TX_BUFFER_SIZE=2048
+		-DSERIAL4_RX_BUFFER_SIZE=2048
+		-DSERIAL4_TX_BUFFER_SIZE=2048
+		-DSERIAL5_RX_BUFFER_SIZE=2048
+		-DSERIAL5_TX_BUFFER_SIZE=2048
+		-DSERIAL7_RX_BUFFER_SIZE=2048
+		-DSERIAL7_TX_BUFFER_SIZE=2048
+	)
+else()
+	add_definitions(
+		-DSERIAL2_RX_BUFFER_SIZE=1024
+		-DSERIAL3_RX_BUFFER_SIZE=2048
+		-DSERIAL3_TX_BUFFER_SIZE=2048
+		-DSERIAL4_RX_BUFFER_SIZE=2048
+		-DSERIAL4_TX_BUFFER_SIZE=2048
+	)
+endif()
 # nanopb
 set(NANOPB_SRC_ROOT_FOLDER "/usr/local/nanopb")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${NANOPB_SRC_ROOT_FOLDER}/extra)

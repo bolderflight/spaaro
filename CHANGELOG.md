@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.2.0
+- Updated the tools and libs for the Teensy 4.1
+- Updated cmake to support upper and lowercase definitions of the "v2-beta" / "V2-Beta" board
+
 ## v2.1.0
 - Adding support for the FMU-R-V2-Beta board. Use 'cmake .. -DFMU=V2-BETA' to enable.
 
