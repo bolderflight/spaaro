@@ -3,7 +3,13 @@ cmake_minimum_required(VERSION 3.13)
 if (DEFINED FMU)
 	string(TOUPPER ${FMU} FMU)
 endif()
-if (FMU STREQUAL "V2-BETA")
+if (FMU STREQUAL "V2")
+	# FMU-R-V2-BETA
+	set(MCU IMXRT1062_T41)
+	add_definitions(
+		-D__FMU_R_V2__
+	)
+elseif(FMU STREQUAL "V2-BETA")
 	# FMU-R-V2-BETA
 	set(MCU IMXRT1062_T41)
 	add_definitions(
@@ -20,7 +26,7 @@ endif()
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-	VERSION 2.2.0
+	VERSION 2.3.0
 	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )

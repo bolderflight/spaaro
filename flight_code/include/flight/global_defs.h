@@ -48,7 +48,6 @@ inline constexpr std::size_t NUM_TELEM_PARAMS = 24;
 inline constexpr std::size_t NUM_FLIGHT_PLAN_POINTS = 100;
 inline constexpr std::size_t NUM_FENCE_POINTS = 50;
 inline constexpr std::size_t NUM_RALLY_POINTS = 10;
-
 /* Effector objects */
 struct Effectors {
   bfs::SbusTx<NUM_SBUS_CH> sbus;
