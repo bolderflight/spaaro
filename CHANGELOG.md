@@ -1,7 +1,7 @@
 # Changelog
 
 ## v2.3.0
-- Support for FMU v2.x
+- Support added for FMU v2.1
 
 ## v2.2.0
 - Updated the tools and libs for the Teensy 4.1

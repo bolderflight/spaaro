@@ -4,7 +4,7 @@ if (DEFINED FMU)
 	string(TOUPPER ${FMU} FMU)
 endif()
 if (FMU STREQUAL "V2")
-	# FMU-R-V2-BETA
+	# FMU-R-V2
 	set(MCU IMXRT1062_T41)
 	add_definitions(
 		-D__FMU_R_V2__
@@ -36,7 +36,7 @@ configure_file(${CMAKE_SOURCE_DIR}/cmake/version.h.cmake ${CMAKE_CURRENT_BINARY_
 include(${CMAKE_SOURCE_DIR}/cmake/config_mcu.cmake)
 configMcu(${MCU})
 # Define larger Serial buffers
-if (FMU STREQUAL "V2-BETA")
+if (FMU STREQUAL "V2" OR FMU STREQUAL "V2-BETA")
 	add_definitions(
 		-DSERIAL2_RX_BUFFER_SIZE=1024
 		-DSERIAL3_RX_BUFFER_SIZE=2048

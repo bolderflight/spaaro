@@ -32,10 +32,6 @@
 #include "core/core.h"
 #include "imu/imu.h"
 
-inline constexpr int8_t NUM_SBUS_CH = 16;
-inline constexpr int8_t NUM_PWM_PINS = 8;
-inline constexpr int8_t NUM_AIN_PINS = 8;
-
 /* FMU-R V2 */
 #if defined(__FMU_R_V2__)
 /* Messages */
@@ -45,6 +41,8 @@ inline constexpr bfs::FrameRate FRAME_RATE_HZ = bfs::FRAME_RATE_100HZ;
 inline constexpr int16_t FRAME_PERIOD_MS = 1000 /
                                            static_cast<uint8_t>(FRAME_RATE_HZ);
 /* Inceptor / Effector */
+inline constexpr int8_t NUM_SBUS_CH = 16;
+inline constexpr int8_t NUM_PWM_PINS = 8;
 inline constexpr HardwareSerial &SBUS_UART = Serial2;
 inline constexpr std::array<int8_t, NUM_PWM_PINS> PWM_PINS = {37, 9, 10, 6,
                                                               5, 4, 3, 2};
@@ -60,7 +58,8 @@ inline constexpr int8_t VN_DRDY = 33;
 inline constexpr TwoWire &PRES_I2C_BUS = Wire;
 inline constexpr SPIClass &PRES_SPI_BUS = SPI;
 inline constexpr int8_t PRES_CS = 32;
-/* Voltage */
+/* Analog */
+inline constexpr int8_t NUM_AIN_PINS = 8;
 inline constexpr int ANALOG_RESOLUTION_BITS = 12;
 inline constexpr float VOLTAGE_RANGE = 3.3;
 inline constexpr float ANALOG_COUNT_RANGE =
@@ -68,6 +67,9 @@ inline constexpr float ANALOG_COUNT_RANGE =
 inline constexpr std::array<int8_t, NUM_AIN_PINS> AIN_PINS = {38, 39, 41, 40,
                                                               24, 25, 26, 27};
 inline constexpr float AIN_VOLTAGE_SCALE = VOLTAGE_RANGE / ANALOG_COUNT_RANGE;
+/* Voltage and current */
+// inline constexpr unsigned int BATTERY_VOLTAGE_PIN = 15;
+// inline constexpr unsigned int BATTERY_CURRENT_PIN = 15;
 
 /* FMU-R V2-Beta */
 #elif defined(__FMU_R_V2_BETA__)
@@ -78,6 +80,8 @@ inline constexpr bfs::FrameRate FRAME_RATE_HZ = bfs::FRAME_RATE_100HZ;
 inline constexpr int16_t FRAME_PERIOD_MS = 1000 /
                                            static_cast<uint8_t>(FRAME_RATE_HZ);
 /* Inceptor / Effector */
+inline constexpr int8_t NUM_SBUS_CH = 16;
+inline constexpr int8_t NUM_PWM_PINS = 8;
 inline constexpr HardwareSerial &SBUS_UART = Serial2;
 inline constexpr std::array<int8_t, NUM_PWM_PINS> PWM_PINS = {37, 22, 23, 6,
                                                               5, 4, 3, 2};
@@ -93,7 +97,8 @@ inline constexpr int8_t VN_DRDY = 33;
 inline constexpr TwoWire &PRES_I2C_BUS = Wire;
 inline constexpr SPIClass &PRES_SPI_BUS = SPI;
 inline constexpr int8_t PRES_CS = 32;
-/* Voltage */
+/* Analog */
+inline constexpr int8_t NUM_AIN_PINS = 8;
 inline constexpr int ANALOG_RESOLUTION_BITS = 12;
 inline constexpr float VOLTAGE_RANGE = 3.3;
 inline constexpr float ANALOG_COUNT_RANGE =
@@ -111,6 +116,8 @@ inline constexpr bfs::FrameRate FRAME_RATE_HZ = bfs::FRAME_RATE_50HZ;
 inline constexpr int16_t FRAME_PERIOD_MS = 1000 /
                                            static_cast<uint8_t>(FRAME_RATE_HZ);
 /* Inceptor / Effector */
+inline constexpr int8_t NUM_SBUS_CH = 16;
+inline constexpr int8_t NUM_PWM_PINS = 8;
 inline constexpr HardwareSerial &SBUS_UART = Serial2;
 inline constexpr std::array<int8_t, NUM_PWM_PINS> PWM_PINS = {21, 22, 23, 2,
                                                               3, 4, 5, 6};
@@ -126,21 +133,23 @@ inline constexpr int8_t VN_DRDY = 28;
 inline constexpr TwoWire &PRES_I2C_BUS = Wire1;
 inline constexpr SPIClass &PRES_SPI_BUS = SPI;
 inline constexpr int8_t PRES_CS = 26;
+/* Analog */
+inline constexpr int8_t NUM_AIN_PINS = 8; // needed for data structs
 /* Voltage */
 inline constexpr int ANALOG_RESOLUTION_BITS = 16;
 inline constexpr float VOLTAGE_RANGE = 3.3;
 inline constexpr float ANALOG_COUNT_RANGE =
   std::pow(2.0f, ANALOG_RESOLUTION_BITS) - 1.0f;
-inline constexpr unsigned int INPUT_VOLTAGE_PIN = 15;
+inline constexpr int8_t INPUT_VOLTAGE_PIN = 15;
 inline constexpr float INPUT_VOLTAGE_SCALE = VOLTAGE_RANGE /
   ANALOG_COUNT_RANGE * (10000.0f + 1000.0f) / 1000.0f;
-inline constexpr unsigned int REGULATED_VOLTAGE_PIN = A22;
+inline constexpr int8_t REGULATED_VOLTAGE_PIN = A22;
 inline constexpr float REGULATED_VOLTAGE_SCALE = VOLTAGE_RANGE /
   ANALOG_COUNT_RANGE * (1000.0f + 1000.0f) / 1000.0f;
-inline constexpr unsigned int SBUS_VOLTAGE_PIN = A21;
+inline constexpr int8_t SBUS_VOLTAGE_PIN = A21;
 inline constexpr float SBUS_VOLTAGE_SCALE = VOLTAGE_RANGE /
   ANALOG_COUNT_RANGE * (1000.0f + 499.0f) / 499.0f;
-inline constexpr unsigned int PWM_VOLTAGE_PIN = 39;
+inline constexpr int8_t PWM_VOLTAGE_PIN = 39;
 inline constexpr float PWM_VOLTAGE_SCALE = VOLTAGE_RANGE /
   ANALOG_COUNT_RANGE * (1000.0f + 499.0f) / 499.0f;
 #endif
