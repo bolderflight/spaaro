@@ -134,7 +134,7 @@ inline constexpr TwoWire &PRES_I2C_BUS = Wire1;
 inline constexpr SPIClass &PRES_SPI_BUS = SPI;
 inline constexpr int8_t PRES_CS = 26;
 /* Analog */
-inline constexpr int8_t NUM_AIN_PINS = 8; // needed for data structs
+inline constexpr int8_t NUM_AIN_PINS = 8;  // needed for data structs
 /* Voltage */
 inline constexpr int ANALOG_RESOLUTION_BITS = 16;
 inline constexpr float VOLTAGE_RANGE = 3.3;
