@@ -68,8 +68,8 @@ inline constexpr std::array<int8_t, NUM_AIN_PINS> AIN_PINS = {38, 39, 41, 40,
                                                               24, 25, 26, 27};
 inline constexpr float AIN_VOLTAGE_SCALE = VOLTAGE_RANGE / ANALOG_COUNT_RANGE;
 /* Voltage and current */
-// inline constexpr unsigned int BATTERY_VOLTAGE_PIN = 15;
-// inline constexpr unsigned int BATTERY_CURRENT_PIN = 15;
+inline constexpr int8_t BATTERY_VOLTAGE_PIN = 23;
+inline constexpr int8_t BATTERY_CURRENT_PIN = 22;
 
 /* FMU-R V2-Beta */
 #elif defined(__FMU_R_V2_BETA__)

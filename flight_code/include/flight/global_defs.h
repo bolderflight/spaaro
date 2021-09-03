@@ -53,6 +53,11 @@ struct Effectors {
   bfs::SbusTx<NUM_SBUS_CH> sbus;
   bfs::PwmTx<NUM_PWM_PINS> pwm;
 };
+/* Battery monitoring config */
+struct BatteryConfig {
+  float voltage_scale = 10.1f;
+  float current_scale = 17.0f;
+};
 /* Analog input config */
 struct AnalogChannel {
   int8_t num_coef = 0;
@@ -64,6 +69,7 @@ struct AnalogConfig {
 /* Sensor config */
 struct SensorConfig {
   bool pitot_static_installed;
+  BatteryConfig battery;
   bfs::InceptorConfig inceptor;
   bfs::ImuConfig imu;
   bfs::GnssConfig gnss;
@@ -108,6 +114,11 @@ struct SysData {
   int64_t sys_time_us;
   double sys_time_s;
 };
+/* Battery data */
+struct BatteryData {
+  float voltage;
+  float current;
+};
 /* Analog data */
 struct AnalogData {
   std::array<float, NUM_AIN_PINS> volt;
@@ -122,6 +133,7 @@ struct SensorData {
   bfs::PresData static_pres;
   bfs::PresData diff_pres;
   AnalogData analog;
+  BatteryData battery;
 };
 /* Nav data */
 struct NavData {

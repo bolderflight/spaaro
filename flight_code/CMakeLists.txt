@@ -1,4 +1,14 @@
 cmake_minimum_required(VERSION 3.13)
+# Setting up the toolchain
+set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
+# Project information
+project(Flight
+	VERSION 2.3.0
+	DESCRIPTION "Flight software skeleton"
+	LANGUAGES C CXX
+)
+# Export project info
+configure_file(${CMAKE_SOURCE_DIR}/cmake/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 # FMU version
 if (DEFINED FMU)
 	string(TOUPPER ${FMU} FMU)
@@ -22,16 +32,6 @@ else()
 		-D__FMU_R_V1__
 	)
 endif()
-# Setting up the toolchain
-set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
-# Project information
-project(Flight
-	VERSION 2.3.0
-	DESCRIPTION "Flight software skeleton"
-	LANGUAGES C CXX
-)
-# Export project info
-configure_file(${CMAKE_SOURCE_DIR}/cmake/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 # Grab the processor and set up definitions and compile options
 include(${CMAKE_SOURCE_DIR}/cmake/config_mcu.cmake)
 configMcu(${MCU})
@@ -206,6 +206,7 @@ add_executable(flight
 	include/flight/datalog.h
 	include/flight/telem.h
 	include/flight/analog.h
+	include/flight/battery.h
 	flight/flight.cc
 	flight/config.cc
 	flight/msg.cc
@@ -217,6 +218,7 @@ add_executable(flight
 	flight/datalog.cc
 	flight/telem.cc
 	flight/analog.cc
+	flight/battery.cc
 	${PROTO_SRCS}
 	${PROTO_HDRS}
 )
