@@ -97,7 +97,11 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   telem_.gnss_installed(true);
   telem_.inceptor_installed(true);
   /* Battery data */
+  #if defined(__FMU_R_V2__)
+  telem_.battery_volt(data.sensor.battery.voltage);
+  #else
   telem_.battery_volt(data.sys.input_volt);
+  #endif
   /* IMU data */
   telem_.accel_healthy(data.sensor.imu.imu_healthy);
   telem_.gyro_healthy(data.sensor.imu.imu_healthy);
