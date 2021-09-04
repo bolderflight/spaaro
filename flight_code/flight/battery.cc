@@ -39,9 +39,9 @@ void BatteryInit(const BatteryConfig &cfg) {
 }
 void BatteryRead(BatteryData * const data) {
 #if defined(__FMU_R_V2__)
-  data->voltage = static_cast<float>(analogRead(BATTERY_VOLTAGE_PIN)) *
-                  AIN_VOLTAGE_SCALE * cfg_.voltage_scale;
-  data->current = static_cast<float>(analogRead(BATTERY_CURRENT_PIN)) *
-                  AIN_VOLTAGE_SCALE * cfg_.current_scale;
+  data->voltage_v = static_cast<float>(analogRead(BATTERY_VOLTAGE_PIN)) *
+                    AIN_VOLTAGE_SCALE * cfg_.voltage_scale;
+  data->current_ma = static_cast<float>(analogRead(BATTERY_CURRENT_PIN)) *
+                     AIN_VOLTAGE_SCALE * cfg_.current_scale * 1000.0f;
 #endif
 }

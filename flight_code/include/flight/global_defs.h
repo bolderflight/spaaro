@@ -116,8 +116,8 @@ struct SysData {
 };
 /* Battery data */
 struct BatteryData {
-  float voltage;
-  float current;
+  float voltage_v;
+  float current_ma;
 };
 /* Analog data */
 struct AnalogData {

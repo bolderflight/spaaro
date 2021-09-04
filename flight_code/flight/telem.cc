@@ -98,7 +98,7 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   telem_.inceptor_installed(true);
   /* Battery data */
   #if defined(__FMU_R_V2__)
-  telem_.battery_volt(data.sensor.battery.voltage);
+  telem_.battery_volt(data.sensor.battery.voltage_v);
   #else
   telem_.battery_volt(data.sys.input_volt);
   #endif
