@@ -43,6 +43,22 @@ The FMU-R v1.x schematic is [available here](./docs/fmu_r_v1_schematic.pdf).
 
 INSERT IMAGE -->
 
+### FMU-R v2.x
+
+<img src="https://github.com/bolderflight/spaaro/blob/main/docs/img/fmu-r-v2.png" alt="FMU-R v2" width="400">
+
+FMU-R v2.x consists of:
+   * Cortex M7 processor, 528 MHz CPU frequency and double precision hardware floating point unit.
+   * Integrated 9 axis IMU and static pressure sensor.
+   * SBUS input for integrating pilot commands.
+   * 16 channels of SBUS output and 8 channels of PWM output.
+   * 8 channels of analog input.
+   * One CAN 2.0/FD bus, one I2C bus, four UARTs, and one SPI bus for connecting external sensors, such as air data, GNSS receivers, telemetry, and additional IMUs.
+   * Measurement of battery voltage and current from an external power module.
+   * Two UARTs from the BeagleBone are brought out to convenient connectors for interfacing with external sensors.
+
+The FMU-R v2.x schematic is [available here](./docs/fmu_r_v2_schematic.pdf).
+
 ### GNSS Receiver
 [uBlox](https://www.u-blox.com/) 8 and 9 series GNSS receivers are supported via the UBX communication protocol. Bolder Flight Systems manufactures a small, low-cost GNSS receiver using the [SAM-M8Q module](https://www.u-blox.com/en/product/sam-m8q-module). If better position accuracy is required, we recommend the [ZED-F9P dual frequency module](https://www.u-blox.com/en/product/zed-f9p-module). [ArduSimple](https://www.ardusimple.com/product/simplertk2blite/) manufactures a small ZED-F9P receiver, which we use frequently with the FMU-R.
 
