@@ -213,6 +213,20 @@ AircraftConfig config = {
       .transducer = bfs::AMS5915_0010_D,
       .sampling_period_ms = FRAME_PERIOD_MS,
       .bus = &PRES_I2C_BUS
+    },
+    .analog = {
+      .channels = {
+        /* Analog channel 0 */
+        {
+          .num_coef = 2,
+          .poly_coef = {2, 0}  // y = 2 * x + 0
+        },
+        /* Analog channel 1 */
+        {
+          .num_coef = 2,
+          .poly_coef = {3, 1}  // y = 3 * x + 1
+        }
+      }
     }
   },
   .nav = {
