@@ -33,6 +33,12 @@ bool DEBUG = true;
 AircraftConfig config = {
   .sensor = {
     .pitot_static_installed = true,
+    .battery = {
+      .voltage_scale = 10.1f,
+      .current_scale = 17.0f,
+      .capacity_mah = 5000.0f,
+      .current_cutoff_hz = 0.1f
+    },
     .inceptor = {
       .hw = &SBUS_UART,
       .throttle_en = {
@@ -97,6 +103,20 @@ AircraftConfig config = {
       .transducer = bfs::AMS5915_0010_D,
       .sampling_period_ms = FRAME_PERIOD_MS,
       .bus = &PRES_I2C_BUS
+    },
+    .analog = {
+      .channels = {
+        /* Analog channel 0 */
+        {
+          .num_coef = 2,
+          .poly_coef = {2, 0}  // y = 2 * x + 0
+        },
+        /* Analog channel 1 */
+        {
+          .num_coef = 2,
+          .poly_coef = {3, 1}  // y = 3 * x + 1
+        }
+      }
     }
   },
   .nav = {
