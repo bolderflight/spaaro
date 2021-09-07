@@ -1,9 +1,25 @@
 cmake_minimum_required(VERSION 3.13)
+# Setting up the toolchain
+set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
+# Project information
+project(Flight
+	VERSION 2.3.0
+	DESCRIPTION "Flight software skeleton"
+	LANGUAGES C CXX
+)
+# Export project info
+configure_file(${CMAKE_SOURCE_DIR}/cmake/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 # FMU version
 if (DEFINED FMU)
 	string(TOUPPER ${FMU} FMU)
 endif()
-if (FMU STREQUAL "V2-BETA")
+if (FMU STREQUAL "V2")
+	# FMU-R-V2
+	set(MCU IMXRT1062_T41)
+	add_definitions(
+		-D__FMU_R_V2__
+	)
+elseif(FMU STREQUAL "V2-BETA")
 	# FMU-R-V2-BETA
 	set(MCU IMXRT1062_T41)
 	add_definitions(
@@ -16,21 +32,11 @@ else()
 		-D__FMU_R_V1__
 	)
 endif()
-# Setting up the toolchain
-set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
-# Project information
-project(Flight
-	VERSION 2.2.0
-	DESCRIPTION "Flight software skeleton"
-	LANGUAGES C CXX
-)
-# Export project info
-configure_file(${CMAKE_SOURCE_DIR}/cmake/version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
 # Grab the processor and set up definitions and compile options
 include(${CMAKE_SOURCE_DIR}/cmake/config_mcu.cmake)
 configMcu(${MCU})
 # Define larger Serial buffers
-if (FMU STREQUAL "V2-BETA")
+if (FMU STREQUAL "V2" OR FMU STREQUAL "V2-BETA")
 	add_definitions(
 		-DSERIAL2_RX_BUFFER_SIZE=1024
 		-DSERIAL3_RX_BUFFER_SIZE=2048
@@ -136,7 +142,7 @@ FetchContent_MakeAvailable(units)
 FetchContent_Declare(
 	mavlink
 	GIT_REPOSITORY https://github.com/bolderflight/mavlink.git
-	GIT_TAG v3.1.2
+	GIT_TAG v3.2.1
 )
 FetchContent_MakeAvailable(mavlink)
 FetchContent_Declare(
@@ -200,6 +206,7 @@ add_executable(flight
 	include/flight/datalog.h
 	include/flight/telem.h
 	include/flight/analog.h
+	include/flight/battery.h
 	flight/flight.cc
 	flight/config.cc
 	flight/msg.cc
@@ -211,6 +218,7 @@ add_executable(flight
 	flight/datalog.cc
 	flight/telem.cc
 	flight/analog.cc
+	flight/battery.cc
 	${PROTO_SRCS}
 	${PROTO_HDRS}
 )

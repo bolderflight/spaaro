@@ -6,6 +6,12 @@
 % Copyright (c) 2021 Bolder Flight Systems
 %
 
+%% Definitions
+% Vehicle
+vehicle = 'ultra_stick_25e';
+% FMU-R version
+fmu_version = "v2";
+
 %% Target trim conditions
 % Latitude and longitude [deg]
 Target.lat_deg = 35.691544;
@@ -19,9 +25,9 @@ Target.airspeed_mps = 17;
 Env.terrain_alt_msl_m = 0;
 
 %% Flight software frame rate
-frameRate_hz = 50;
+if strcmp(upper(fmu_version), "V2")
+    frameRate_hz = 100;
+else
+    frameRate_hz = 50;
+end
 framePeriod_s = 1/frameRate_hz;
-
-%% Definitions
-% Vehicle
-vehicle = 'ultra_stick_25e';

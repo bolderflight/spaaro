@@ -29,7 +29,7 @@
 #include "flight/msg.h"
 
 namespace {
-  /* Effectors */
+/* Effectors */
 bfs::SbusTx<NUM_SBUS_CH> sbus;
 bfs::PwmTx<NUM_PWM_PINS> pwm;
 }  // namespace

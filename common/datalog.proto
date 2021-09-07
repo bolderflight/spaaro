@@ -42,6 +42,12 @@ message DatalogMessage {
   float sys_pwm_volt = 4;
   float sys_sbus_volt = 5;
   double sys_time_s = 6;
+  /* Battery data */
+  float battery_voltage_v = 10;
+  float battery_current_ma = 11;
+  float battery_consumed_mah = 12;
+  float battery_remaining_prcnt = 13;
+  float battery_remaining_time_s = 14;
   /* Inceptor data */
   bool incept_new_data = 20;
   bool incept_lost_frame = 21;

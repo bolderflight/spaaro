@@ -67,6 +67,12 @@ void DatalogAdd(const AircraftData &ref) {
   datalog_msg_.sys_pwm_volt = ref.sys.pwm_volt;
   datalog_msg_.sys_sbus_volt = ref.sys.sbus_volt;
   datalog_msg_.sys_time_s = ref.sys.sys_time_s;
+  /* Battery data */
+  datalog_msg_.battery_voltage_v = ref.sensor.battery.voltage_v;
+  datalog_msg_.battery_current_ma = ref.sensor.battery.current_ma;
+  datalog_msg_.battery_consumed_mah = ref.sensor.battery.consumed_mah;
+  datalog_msg_.battery_remaining_prcnt = ref.sensor.battery.remaining_prcnt;
+  datalog_msg_.battery_remaining_time_s = ref.sensor.battery.remaining_time_s;
   /* Inceptor data */
   datalog_msg_.incept_new_data = ref.sensor.inceptor.new_data;
   datalog_msg_.incept_lost_frame = ref.sensor.inceptor.lost_frame;
