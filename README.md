@@ -76,14 +76,14 @@ Boards are available to breakout the JST-GH connectors to standard servo connect
 ### FMU-R v1.x
 The FMU-R v1.x should be mounted near the vehicle c.g. with the SD card slot accessible, for retrieving flight data, and the micro USB accessible for updating flight software. Orientation of the IMU is shown below - a rotation matrix can be defined in the vehicle configuration to rotate the IMU to the vehicle body frame.
 
-<img src="https://github.com/bolderflight/spaaro/blob/main/docs/img/fmu_r_v1_orientation.png" alt="FMU-R v1 Orientation" width="400">
+<img src="https://github.com/bolderflight/spaaro/blob/main/docs/img/fmu_r_v1_orientation.PNG" alt="FMU-R v1 Orientation" width="400">
 
 If the BeagleBone is used, ensure accessibility to its mini USB or ethernet connector for uploading software. 2-56 standoffs and screws are supplied with the PWM, SBUS, and VectorNav breakout boards for mounting them to the FMU-R or to the vehicle. 4-40 standoffs and screws are supplied for mounting the FMU-R to the BeagleBone and / or the vehicle.
 
 ### FMU-R v2.x
 The FMU-R v2.x should be mounted near the vehicle c.g. with the SD card slot accessible, for retrieving flight data, and the micro USB accessible for updating flight software. Orientation of the IMU is shown below - a rotation matrix can be defined in the vehicle configuration to rotate the IMU to the vehicle body frame.
 
-<img src="https://github.com/bolderflight/spaaro/blob/main/docs/img/fmu_r_v2_orientation.png" alt="FMU-R v2 Orientation" width="400">
+<img src="https://github.com/bolderflight/spaaro/blob/main/docs/img/fmu_r_v2_orientation.PNG" alt="FMU-R v2 Orientation" width="400">
 
 If the BeagleBone is used, ensure accessibility to its mini USB or ethernet connector for uploading software. 2-56 standoffs and screws are supplied with the PWM, SBUS, and VectorNav breakout boards for mounting them to the FMU-R or to the vehicle. 4-40 standoffs and screws are supplied for mounting the FMU-R to the BeagleBone and / or the vehicle.
 
