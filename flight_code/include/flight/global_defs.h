@@ -57,6 +57,8 @@ struct Effectors {
 struct BatteryConfig {
   float voltage_scale = 10.1f;
   float current_scale = 17.0f;
+  float capacity_mah = 5000.0f;
+  float current_cutoff_hz = 0.1f;
 };
 /* Analog input config */
 struct AnalogChannel {
@@ -118,6 +120,9 @@ struct SysData {
 struct BatteryData {
   float voltage_v;
   float current_ma;
+  float consumed_mah = 0.0f;
+  float remaining_prcnt;
+  float remaining_time_s;
 };
 /* Analog data */
 struct AnalogData {
