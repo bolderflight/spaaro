@@ -194,7 +194,7 @@ AircraftConfig config = {
   },
   .telem = {
     .aircraft_type = bfs::FIXED_WING,
-    .bus = &Serial7,
+    .bus = &Serial4,
     .baud = 57600
   }
 };

@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.3.1
+- Updated for new build tools install locations. Updated the telemetry serial port in the default config to work with FMU-R v1.
+
 ## v2.3.0
 - Support added for FMU v2.1
 
