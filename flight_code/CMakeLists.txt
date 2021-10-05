@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.13)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-	VERSION 2.3.1
+	VERSION 2.3.2
 	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )
@@ -58,7 +58,7 @@ else()
 	)
 endif()
 # nanopb
-set(NANOPB_SRC_ROOT_FOLDER "/usr/local/bfs/nanopb")
+set(NANOPB_SRC_ROOT_FOLDER "/usr/local/nanopb")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${NANOPB_SRC_ROOT_FOLDER}/extra)
 find_package(Nanopb REQUIRED)
 include_directories(${NANOPB_INCLUDE_DIRS})
