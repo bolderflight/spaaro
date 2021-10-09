@@ -42,12 +42,6 @@ message DatalogMessage {
   float sys_pwm_volt = 4;
   float sys_sbus_volt = 5;
   double sys_time_s = 6;
-  /* Battery data */
-  float battery_voltage_v = 10;
-  float battery_current_ma = 11;
-  float battery_consumed_mah = 12;
-  float battery_remaining_prcnt = 13;
-  float battery_remaining_time_s = 14;
   /* Inceptor data */
   bool incept_new_data = 20;
   bool incept_lost_frame = 21;
@@ -110,9 +104,6 @@ message DatalogMessage {
   repeated float nav_ned_vel_mps = 135;
   double nav_lat_rad = 136;
   double nav_lon_rad = 137;
-  /* Analog Data */
-  repeated float ain_volt = 140;
-  repeated float ain_val = 141;
   /* Control data */
   bool cntrl_waypoint_reached = 150;
   repeated float cntrl_sbus = 151;

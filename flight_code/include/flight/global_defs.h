@@ -117,10 +117,12 @@ struct AircraftConfig {
 struct SysData {
   int32_t frame_time_us;
   float frame_time_s;
+  #if defined(__FMU_R_V1__)
   float input_volt;
   float reg_volt;
   float pwm_volt;
   float sbus_volt;
+  #endif
   int64_t sys_time_us;
   double sys_time_s;
 };

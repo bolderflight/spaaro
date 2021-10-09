@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.13)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-	VERSION 2.3.2
+	VERSION 2.4.0
 	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )
@@ -62,7 +62,16 @@ set(NANOPB_SRC_ROOT_FOLDER "/usr/local/nanopb")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${NANOPB_SRC_ROOT_FOLDER}/extra)
 find_package(Nanopb REQUIRED)
 include_directories(${NANOPB_INCLUDE_DIRS})
-NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ../common/datalog.proto)
+if (FMU STREQUAL "V2")
+	# FMU-R-V2
+	NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ../common/datalog_fmu_v2.proto)
+elseif(FMU STREQUAL "V2-BETA")
+	# FMU-R-V2-BETA
+	NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ../common/datalog_fmu_v2_beta.proto)
+else()
+	# FMU-R-V1
+	NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ../common/datalog_fmu_v1.proto)
+endif()
 # Include directories
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 # Fetch dependencies
@@ -221,16 +230,18 @@ add_executable(flight
 if (FMU STREQUAL "V2")
 	# FMU-R-V2
 	target_sources(flight
-		include/flight/analog.h
-		include/flight/battery.h
-		flight/analog.cc
-		flight/battery.cc
+		PUBLIC
+			include/flight/analog.h
+			include/flight/battery.h
+			flight/analog.cc
+			flight/battery.cc
 	)
 elseif(FMU STREQUAL "V2-BETA")
 	# FMU-R-V2-BETA
 	target_sources(flight
-		include/flight/analog.h
-		flight/analog.cc
+		PUBLIC
+			include/flight/analog.h
+			flight/analog.cc
 	)
 endif()
 # Setup autocode

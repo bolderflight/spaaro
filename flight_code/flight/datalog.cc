@@ -27,9 +27,17 @@
 #include "flight/msg.h"
 #include "logger/logger.h"
 #include "framing/framing.h"
-#include "./datalog.pb.h"
 #include "./pb_encode.h"
 #include "./pb_decode.h"
+#if defined(__FMU_R_V2__)
+#include "./datalog_fmu_v2.pb.h"
+#endif
+#if defined(__FMU_R_V2_BETA__)
+#include "./datalog_fmu_v2_beta.pb.h"
+#endif
+#if defined(__FMU_R_V1__)
+#include "./datalog_fmu_v1.pb.h"
+#endif
 
 namespace {
 /* Datalog file name */
@@ -62,10 +70,12 @@ void DatalogAdd(const AircraftData &ref) {
   /* Assign to message */
   /* System data */
   datalog_msg_.sys_frame_time_s = ref.sys.frame_time_s;
+  #if defined(__FMU_R_V1__)
   datalog_msg_.sys_input_volt = ref.sys.input_volt;
   datalog_msg_.sys_reg_volt = ref.sys.reg_volt;
   datalog_msg_.sys_pwm_volt = ref.sys.pwm_volt;
   datalog_msg_.sys_sbus_volt = ref.sys.sbus_volt;
+  #endif
   datalog_msg_.sys_time_s = ref.sys.sys_time_s;
   /* Inceptor data */
   datalog_msg_.incept_new_data = ref.sensor.inceptor.new_data;

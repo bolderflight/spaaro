@@ -1,0 +1,129 @@
+/*
+* Brian R Taylor
+* brian.taylor@bolderflight.com
+* 
+* Copyright (c) 2021 Bolder Flight Systems Inc
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the “Software”), to
+* deal in the Software without restriction, including without limitation the
+* rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+* sell copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+* IN THE SOFTWARE.
+*/
+
+/*
+* This protobuf file describes the data log format, which is transpiled
+* to a C header and source file for use in the flight code. There should
+* only be a single message defined, DatalogMessage, which defines all
+* of the data to be logged. The message structure should be flat
+* (i.e. no nested messages), consisting of native types.
+*/
+
+syntax = "proto3";
+
+/* Data log message */
+message DatalogMessage {
+  /* System data */
+  float sys_frame_time_s = 1;
+  double sys_time_s = 2;
+  /* Battery data */
+  float battery_voltage_v = 10;
+  float battery_current_ma = 11;
+  float battery_consumed_mah = 12;
+  float battery_remaining_prcnt = 13;
+  float battery_remaining_time_s = 14;
+  /* Inceptor data */
+  bool incept_new_data = 20;
+  bool incept_lost_frame = 21;
+  bool incept_failsafe = 22;
+  bool incept_throttle_en = 23;
+  int32 incept_mode0 = 24;
+  int32 incept_mode1 = 25;
+  float incept_throttle = 26;
+  float incept_pitch = 27;
+  float incept_roll = 28;
+  float incept_yaw = 29;
+  /* IMU data */
+  bool imu_new_data = 40;
+  bool imu_new_mag_data = 41;
+  bool imu_healthy = 42;
+  bool imu_mag_healthy = 43;
+  float imu_die_temp_c = 44;
+  repeated float imu_accel_mps2 = 45;
+  repeated float imu_gyro_radps = 46;
+  repeated float imu_mag_ut = 47;
+  /* GNSS data */
+  bool gnss_new_data = 60;
+  bool gnss_healthy = 61;
+  int32 gnss_fix = 62;
+  int32 gnss_num_sats = 63;
+  int32 gnss_week = 64;
+  int32 gnss_tow_ms = 65;
+  float gnss_alt_wgs84_m = 66;
+  float gnss_horz_acc_m = 67;
+  float gnss_vert_acc_m = 68;
+  float gnss_vel_acc_mps = 69;
+  repeated float gnss_ned_vel_mps = 70;
+  double gnss_lat_rad = 71;
+  double gnss_lon_rad = 72;
+  /* Pressure data */
+  bool pres_static_new_data = 90;
+  bool pres_static_healthy = 91;
+  float pres_static_pres_pa = 92;
+  float pres_static_die_temp_c = 93;
+  bool pres_diff_new_data = 94;
+  bool pres_diff_healthy = 95;
+  float pres_diff_pres_pa = 96;
+  float pres_diff_die_temp_c = 97;
+  /* Nav data */
+  bool nav_initialized = 120;
+  float nav_pitch_rad = 121;
+  float nav_roll_rad = 122;
+  float nav_heading_rad = 123;
+  float nav_alt_wgs84_m = 124;
+  float nav_static_pres_pa = 125;
+  float nav_diff_pres_pa = 126;
+  float nav_alt_pres_m = 127;
+  float nav_ias_mps = 128;
+  repeated float nav_accel_bias_mps2 = 129;
+  repeated float nav_gyro_bias_radps = 130;
+  repeated float nav_accel_mps2 = 131;
+  repeated float nav_gyro_radps = 132;
+  repeated float nav_mag_ut = 133;
+  repeated float nav_ned_pos_m = 134;
+  repeated float nav_ned_vel_mps = 135;
+  double nav_lat_rad = 136;
+  double nav_lon_rad = 137;
+  /* Analog Data */
+  repeated float ain_volt = 140;
+  repeated float ain_val = 141;  
+  /* Control data */
+  bool cntrl_waypoint_reached = 150;
+  repeated float cntrl_sbus = 151;
+  repeated float cntrl_pwm = 152;
+  repeated float cntrl_aux = 153;
+  int32 cntrl_mode = 154;
+  /* Telemetry data */
+  repeated float telem_param = 170;
+  int32 waypoint_frame = 171;
+  int32 waypoint_cmd = 172;
+  float waypoint_param1 = 173;
+  float waypoint_param2 = 174;
+  float waypoint_param3 = 175;
+  float waypoint_param4 = 176;
+  sint32 waypoint_x = 177;
+  sint32 waypoint_y = 178;
+  float waypoint_z = 179;
+}
