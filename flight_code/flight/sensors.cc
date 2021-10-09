@@ -27,8 +27,12 @@
 #include "flight/global_defs.h"
 #include "flight/config.h"
 #include "flight/msg.h"
+#if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
 #include "flight/analog.h"
+#endif
+#if defined(__FMU_R_V2__)
 #include "flight/battery.h"
+#endif
 
 namespace {
 /* Whether pitot static is installed */
@@ -67,9 +71,13 @@ void SensorsInit(const SensorConfig &cfg) {
     }
   }
   /* Initialize analog input */
+  #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
   AnalogInit(cfg.analog);
+  #endif
   /* Initialize battery monitoring */
+  #if defined(__FMU_R_V2__)
   BatteryInit(cfg.battery);
+  #endif
   MsgInfo("done.\n");
   /* Initialize inceptors */
   MsgInfo("Initializing inceptors...");
@@ -102,7 +110,11 @@ void SensorsRead(SensorData * const data) {
     }
   }
   /* Read analog channels */
+  #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
   AnalogRead(&data->analog);
+  #endif
   /* Read battery voltage / current */
+  #if defined(__FMU_R_V2__)
   BatteryRead(&data->battery);
+  #endif
 }

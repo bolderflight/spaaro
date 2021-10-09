@@ -53,14 +53,8 @@ struct Effectors {
   bfs::SbusTx<NUM_SBUS_CH> sbus;
   bfs::PwmTx<NUM_PWM_PINS> pwm;
 };
-/* Battery monitoring config */
-struct BatteryConfig {
-  float voltage_scale = 10.1f;
-  float current_scale = 17.0f;
-  float capacity_mah = 5000.0f;
-  float current_cutoff_hz = 0.1f;
-};
 /* Analog input config */
+#if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
 struct AnalogChannel {
   int8_t num_coef = 0;
   float poly_coef[bfs::MAX_POLY_COEF_SIZE];
@@ -68,16 +62,30 @@ struct AnalogChannel {
 struct AnalogConfig {
   AnalogChannel channels[NUM_AIN_PINS];
 };
+#endif
+/* Battery monitoring config */
+#if defined(__FMU_R_V2__)
+struct BatteryConfig {
+  float voltage_scale = 10.1f;
+  float current_scale = 17.0f;
+  float capacity_mah = 5000.0f;
+  float current_cutoff_hz = 0.1f;
+};
+#endif
 /* Sensor config */
 struct SensorConfig {
   bool pitot_static_installed;
-  BatteryConfig battery;
   bfs::InceptorConfig inceptor;
   bfs::ImuConfig imu;
   bfs::GnssConfig gnss;
   bfs::PresConfig static_pres;
   bfs::PresConfig diff_pres;
+  #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
   AnalogConfig analog;
+  #endif
+  #if defined(__FMU_R_V2__)
+  BatteryConfig battery;
+  #endif
 };
 /* Nav config */
 struct NavConfig {
@@ -116,7 +124,15 @@ struct SysData {
   int64_t sys_time_us;
   double sys_time_s;
 };
+/* Analog data */
+#if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
+struct AnalogData {
+  std::array<float, NUM_AIN_PINS> volt;
+  std::array<float, NUM_AIN_PINS> val;
+};
+#endif
 /* Battery data */
+#if defined(__FMU_R_V2__)
 struct BatteryData {
   float voltage_v;
   float current_ma;
@@ -124,11 +140,7 @@ struct BatteryData {
   float remaining_prcnt;
   float remaining_time_s;
 };
-/* Analog data */
-struct AnalogData {
-  std::array<float, NUM_AIN_PINS> volt;
-  std::array<float, NUM_AIN_PINS> val;
-};
+#endif
 /* Sensor data */
 struct SensorData {
   bool pitot_static_installed;
@@ -137,8 +149,12 @@ struct SensorData {
   bfs::GnssData gnss;
   bfs::PresData static_pres;
   bfs::PresData diff_pres;
+  #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
   AnalogData analog;
+  #endif
+  #if defined(__FMU_R_V2__)
   BatteryData battery;
+  #endif
 };
 /* Nav data */
 struct NavData {

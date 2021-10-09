@@ -205,8 +205,6 @@ add_executable(flight
 	include/flight/control.h
 	include/flight/datalog.h
 	include/flight/telem.h
-	include/flight/analog.h
-	include/flight/battery.h
 	flight/flight.cc
 	flight/config.cc
 	flight/msg.cc
@@ -217,11 +215,24 @@ add_executable(flight
 	flight/control.cc
 	flight/datalog.cc
 	flight/telem.cc
-	flight/analog.cc
-	flight/battery.cc
 	${PROTO_SRCS}
 	${PROTO_HDRS}
 )
+if (FMU STREQUAL "V2")
+	# FMU-R-V2
+	target_sources(flight
+		include/flight/analog.h
+		include/flight/battery.h
+		flight/analog.cc
+		flight/battery.cc
+	)
+elseif(FMU STREQUAL "V2-BETA")
+	# FMU-R-V2-BETA
+	target_sources(flight
+		include/flight/analog.h
+		flight/analog.cc
+	)
+endif()
 # Setup autocode
 if (DEFINED AUTOCODE)
 	include_directories(autocode/${AUTOCODE}_ert_rtw)
