@@ -45,9 +45,16 @@
 inline constexpr std::size_t NUM_AUX_VAR = 24;
 /* Telem sizes */
 inline constexpr std::size_t NUM_TELEM_PARAMS = 24;
+#if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
+inline constexpr std::size_t NUM_FLIGHT_PLAN_POINTS = 500;
+inline constexpr std::size_t NUM_FENCE_POINTS = 200;
+inline constexpr std::size_t NUM_RALLY_POINTS = 10;
+#endif
+#if defined(__FMU_R_V1__)
 inline constexpr std::size_t NUM_FLIGHT_PLAN_POINTS = 100;
 inline constexpr std::size_t NUM_FENCE_POINTS = 50;
 inline constexpr std::size_t NUM_RALLY_POINTS = 10;
+#endif
 /* Effector objects */
 struct Effectors {
   bfs::SbusTx<NUM_SBUS_CH> sbus;
