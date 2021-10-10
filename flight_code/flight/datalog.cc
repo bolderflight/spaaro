@@ -45,12 +45,7 @@ static const char * DATA_LOG_NAME_ = "flight_data";
 /* SD card */
 SdFat32 sd_;
 /* Logger object */
-#if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
-bfs::Logger<800> logger_(&sd_);
-#endif
-#if defined(__FMU_R_V1__)
 bfs::Logger<400> logger_(&sd_);
-#endif
 /* Framing */
 bfs::Encoder<DatalogMessage_size> encoder;
 /* nanopb buffer for encoding */
