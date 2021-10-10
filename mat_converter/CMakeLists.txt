@@ -1,15 +1,44 @@
 cmake_minimum_required(VERSION 3.13)
 # Project information
 project(Mat-Converter
-	VERSION 2.1.0
+	VERSION 2.2.0
 	DESCRIPTION "Software to convert data logs to MATLAB v4 format"
 	LANGUAGES CXX
 )
+# FMU version
+if (DEFINED FMU)
+	string(TOUPPER ${FMU} FMU)
+endif()
+if (FMU STREQUAL "V2")
+	# FMU-R-V2
+	add_definitions(
+		-D__FMU_R_V2__
+	)
+elseif(FMU STREQUAL "V2-BETA")
+	# FMU-R-V2-BETA
+	add_definitions(
+		-D__FMU_R_V2_BETA__
+	)
+else()
+	# FMU-R-V1
+	add_definitions(
+		-D__FMU_R_V1__
+	)
+endif()
 # Protobuf
 find_package(Protobuf REQUIRED)
 include_directories(${Protobuf_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
-protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ../common/datalog.proto)
+if (FMU STREQUAL "V2")
+	# FMU-R-V2
+	protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ../common/datalog_fmu_v2.proto)
+elseif(FMU STREQUAL "V2-BETA")
+	# FMU-R-V2-BETA
+	protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ../common/datalog_fmu_v2_beta.proto)
+else()
+	# FMU-R-V1
+	protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ../common/datalog_fmu_v1.proto)
+endif()
 # Fetch dependencies
 include(FetchContent)
 FetchContent_Declare(
