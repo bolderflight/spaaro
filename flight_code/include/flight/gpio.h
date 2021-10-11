@@ -32,8 +32,6 @@
 
 void GpioInit(const GpioConfig &cfg);
 void GpioRead(GpioData * const data);
-void GpioCmd(bool motor, bool servo, const ControlData &cmd);
-void GpioWrite();
 
 #endif
 

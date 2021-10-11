@@ -77,6 +77,13 @@ void DatalogAdd(const AircraftData &ref) {
   datalog_msg_.sys_sbus_volt = ref.sys.sbus_volt;
   #endif
   datalog_msg_.sys_time_s = ref.sys.sys_time_s;
+  /* GPIO data */
+  #if defined(__FMU_R_V1__)
+  for (std::size_t i = 0; i < NUM_GPIO_PINS; i++) {
+    datalog_msg_.gpio_volt[i] = ref.gpio.volt[i];
+    datalog_msg_.gpio_val[i] = ref.gpio.val[i];
+  }
+  #endif
   /* Inceptor data */
   datalog_msg_.incept_new_data = ref.sensor.inceptor.new_data;
   datalog_msg_.incept_lost_frame = ref.sensor.inceptor.lost_frame;

@@ -81,20 +81,14 @@ struct BatteryConfig {
 #endif
 /* GPIO config */
 #if defined(__FMU_R_V1__)
-struct AnalogChannel {
-  int8_t num_coef = 0;
-  float poly_coef[bfs::MAX_POLY_COEF_SIZE];
-};
 enum GpioMode {
   GPIO_AIN,
-  GPIO_DIG_IN,
-  GPIO_DIG_OUT,
-  GPIO_PWM
+  GPIO_DIG_IN
 };
 struct GpioChannel {
   GpioMode mode;
-  AnalogChannel analog;
-  bfs::EffectorConfig<1> pwm;
+  int8_t num_coef = 0;
+  float poly_coef[bfs::MAX_POLY_COEF_SIZE];
 };
 struct GpioConfig {
   GpioChannel channels[NUM_GPIO_PINS];
@@ -230,9 +224,6 @@ struct ControlData {
   int8_t mode;
   std::array<float, NUM_SBUS_CH> sbus;
   std::array<float, NUM_PWM_PINS> pwm;
-  #if defined(__FMU_R_V1__)
-  std::array<float, NUM_GPIO_PINS> gpio;
-  #endif
   std::array<float, NUM_AUX_VAR> aux;
 };
 /* Telemetry data */

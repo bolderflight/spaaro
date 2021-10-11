@@ -54,9 +54,6 @@ void send_effectors() {
   #endif
   /* Send effector commands */
   EffectorsWrite();
-  #if defined(__FMU_R_V1__)
-  GpioWrite();
-  #endif
 }
 
 /* ISR to gather sensor data and run VMS */
@@ -83,14 +80,8 @@ void run() {
   /* Command effectors */
   if (data.sensor.inceptor.failsafe) {
     EffectorsCmd(false, false, data.control);
-    #if defined(__FMU_R_V1__)
-    GpioCmd(false, false, data.control);
-    #endif
   } else {
     EffectorsCmd(data.sensor.inceptor.throttle_en, true, data.control);
-    #if defined(__FMU_R_V1__)
-    GpioCmd(data.sensor.inceptor.throttle_en, true, data.control);
-    #endif
   }
   /* Datalog */
   DatalogAdd(data);

@@ -34,10 +34,6 @@
 namespace {
 /* GPIO config */
 GpioConfig cfg_;
-/* Digital output */
-std::array<bool, NUM_GPIO_PINS> digout;
-/* PWM effector */
-std::array<bfs::PwmTx<1>, NUM_GPIO_PINS> pwm;
 }  // namespace
 
 void GpioInit(const GpioConfig &cfg) {
@@ -48,14 +44,6 @@ void GpioInit(const GpioConfig &cfg) {
   for (std::size_t i = 0; i < NUM_GPIO_PINS; i++) {
     if (cfg_.channels[i].mode == GPIO_DIG_IN) {
       pinMode(GPIO_PINS[i], INPUT);
-    } else if (cfg_.channels[i].mode == GPIO_DIG_OUT) {
-      pinMode(GPIO_PINS[i], OUTPUT);
-    } else if (cfg_.channels[i].mode == GPIO_PWM) {
-      if (!pwm[i].Init(cfg_.channels[i].pwm)) {
-        MsgError("Unable to initialize GPIO effectors.");
-      } else {
-        pwm[i].EnableServos();
-      }
     }
   }
   MsgInfo("done.\n");
@@ -65,44 +53,12 @@ void GpioRead(GpioData * const data) {
     if (cfg_.channels[i].mode == GPIO_AIN) {
       data->volt[i] = static_cast<float>(analogRead(GPIO_PINS[i])) *
                       AIN_VOLTAGE_SCALE;
-      std::span<float> coef{cfg_.channels[i].analog.poly_coef,
-            static_cast<std::size_t>(cfg_.channels[i].analog.num_coef)};
+      std::span<float> coef{cfg_.channels[i].poly_coef,
+            static_cast<std::size_t>(cfg_.channels[i].num_coef)};
       data->val[i] = bfs::polyval<float>(coef, data->volt[i]);
     } else if (cfg_.channels[i].mode == GPIO_DIG_IN) {
       data->volt[i] = 0.0f;
       data->val[i] = static_cast<float>(digitalReadFast(GPIO_PINS[i]));
-    } else {
-      data->volt[i] = 0.0f;
-      data->val[i] = 0.0f;
-    }
-  }
-}
-void GpioCmd(bool motor, bool servo, const ControlData &cmd) {
-  for (std::size_t i = 0; i < NUM_GPIO_PINS; i++) {
-    if (cfg_.channels[i].mode == GPIO_DIG_OUT) {
-      digout[i] = (cmd.gpio[i] > 0) ? true : false;
-    } else if (cfg_.channels[i].mode == GPIO_PWM) {
-      if (motor) {
-        pwm[i].EnableMotors();
-      } else {
-        pwm[i].DisableMotors();
-      }
-      if (servo) {
-        pwm[i].EnableServos();
-      } else {
-        pwm[i].DisableServos();
-      }
-      float pwm_cmd[1] = {cmd.gpio[i]};
-      pwm[i].Cmd(pwm_cmd);
-    }
-  }
-}
-void GpioWrite() {
-  for (std::size_t i = 0; i < NUM_GPIO_PINS; i++) {
-    if (cfg_.channels[i].mode == GPIO_DIG_OUT) {
-      digitalWriteFast(GPIO_PINS[i], digout[i]);
-    } else if (cfg_.channels[i].mode == GPIO_PWM) {
-      pwm[i].Write();
     }
   }
 }
