@@ -19,6 +19,7 @@ Lint:
     - cpplint --verbose=0 flight_code/include/flight/telem.h
     - cpplint --verbose=0 flight_code/include/flight/analog.h
     - cpplint --verbose=0 flight_code/include/flight/battery.h
+    - cpplint --verbose=0 flight_code/include/flight/gpio.h
     - cpplint --verbose=0 flight_code/flight/flight.cc
     - cpplint --verbose=0 flight_code/flight/config.cc
     - cpplint --verbose=0 flight_code/flight/msg.cc
@@ -31,3 +32,4 @@ Lint:
     - cpplint --verbose=0 flight_code/flight/telem.cc
     - cpplint --verbose=0 flight_code/flight/analog.cc
     - cpplint --verbose=0 flight_code/flight/battery.cc
+    - cpplint --verbose=0 flight_code/flight/gpio.cc

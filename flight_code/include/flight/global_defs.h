@@ -121,8 +121,6 @@ struct NavConfig {
 struct EffectorConfig {
   bfs::EffectorConfig<NUM_SBUS_CH> sbus;
   bfs::EffectorConfig<NUM_PWM_PINS> pwm;
-
-  
 };
 /* Telem config */
 struct TelemConfig {
