@@ -243,6 +243,13 @@ elseif(FMU STREQUAL "V2-BETA")
 			include/flight/analog.h
 			flight/analog.cc
 	)
+else()
+	# FMU-R-V1
+	target_sources(flight
+		PUBLIC
+			include/flight/gpio.h
+			flight/gpio.cc
+	)
 endif()
 # Setup autocode
 if (DEFINED AUTOCODE)

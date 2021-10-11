@@ -23,31 +23,18 @@
 * IN THE SOFTWARE.
 */
 
-#if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_GPIO_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_GPIO_H_
 
-#include "flight/analog.h"
+#if defined(__FMU_R_V1__)
+
 #include "flight/global_defs.h"
-#include "flight/config.h"
-#include "flight/msg.h"
-#include "polytools/polytools.h"
 
-namespace {
-/* Analog config */
-AnalogConfig cfg_;
-}  // namespace
-
-void AnalogInit(const AnalogConfig &cfg) {
-  /* Copy the config */
-  cfg_ = cfg;
-}
-void AnalogRead(AnalogData * const data) {
-  for (std::size_t i = 0; i < NUM_AIN_PINS; i++) {
-    data->volt[i] = static_cast<float>(analogRead(AIN_PINS[i])) *
-                             AIN_VOLTAGE_SCALE;
-    std::span<float> coef{cfg_.channels[i].poly_coef,
-          static_cast<std::size_t>(cfg_.channels[i].num_coef)};
-    data->val[i] = bfs::polyval<float>(coef, data->volt[i]);
-  }
-}
+void GpioInit(const GpioConfig &cfg);
+void GpioRead(GpioData * const data);
+void GpioCmd(bool motor, bool servo, const ControlData &cmd);
+void GpioWrite();
 
 #endif
+
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_GPIO_H_

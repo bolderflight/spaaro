@@ -42,10 +42,19 @@ void SysInit() {
   digitalWriteFast(VN_CS, HIGH);
   digitalWriteFast(PRES_CS, HIGH);
   /* Initialize buses */
+  #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
+  /* I2C */
   Wire.begin();
   Wire.setClock(400000);
+  #endif
+  #if defined(__FMU_R_V1__)
+  /* I2C */
   Wire1.begin();
   Wire1.setClock(400000);
+  /* BFS */
+  pinMode(BFS_INT1, OUTPUT);
+  pinMode(BFS_INT2, OUTPUT);
+  #endif
   SPI.begin();
   /* Setup analog for voltage monitoring */
   analogReadResolution(ANALOG_RESOLUTION_BITS);

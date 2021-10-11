@@ -79,6 +79,27 @@ struct BatteryConfig {
   float current_cutoff_hz = 0.1f;
 };
 #endif
+/* GPIO config */
+#if defined(__FMU_R_V1__)
+struct AnalogChannel {
+  int8_t num_coef = 0;
+  float poly_coef[bfs::MAX_POLY_COEF_SIZE];
+};
+enum GpioMode {
+  GPIO_AIN,
+  GPIO_DIG_IN,
+  GPIO_DIG_OUT,
+  GPIO_PWM
+};
+struct GpioChannel {
+  GpioMode mode;
+  AnalogChannel analog;
+  bfs::EffectorConfig<1> pwm;
+};
+struct GpioConfig {
+  GpioChannel channels[NUM_GPIO_PINS];
+};
+#endif
 /* Sensor config */
 struct SensorConfig {
   bool pitot_static_installed;
@@ -106,6 +127,8 @@ struct NavConfig {
 struct EffectorConfig {
   bfs::EffectorConfig<NUM_SBUS_CH> sbus;
   bfs::EffectorConfig<NUM_PWM_PINS> pwm;
+
+  
 };
 /* Telem config */
 struct TelemConfig {
@@ -116,6 +139,9 @@ struct TelemConfig {
 /* Aircraft config */
 struct AircraftConfig {
   SensorConfig sensor;
+  #if defined(__FMU_R_V1__)
+  GpioConfig gpio;
+  #endif
   NavConfig nav;
   EffectorConfig effector;
   TelemConfig telem;
@@ -148,6 +174,13 @@ struct BatteryData {
   float consumed_mah = 0.0f;
   float remaining_prcnt;
   float remaining_time_s;
+};
+#endif
+/* GPIO data */
+#if defined(__FMU_R_V1__)
+struct GpioData {
+  std::array<float, NUM_GPIO_PINS> volt;
+  std::array<float, NUM_GPIO_PINS> val;
 };
 #endif
 /* Sensor data */
@@ -197,6 +230,9 @@ struct ControlData {
   int8_t mode;
   std::array<float, NUM_SBUS_CH> sbus;
   std::array<float, NUM_PWM_PINS> pwm;
+  #if defined(__FMU_R_V1__)
+  std::array<float, NUM_GPIO_PINS> gpio;
+  #endif
   std::array<float, NUM_AUX_VAR> aux;
 };
 /* Telemetry data */
@@ -217,6 +253,9 @@ struct TelemData {
 struct AircraftData {
   SysData sys;
   SensorData sensor;
+  #if defined(__FMU_R_V1__)
+  GpioData gpio;
+  #endif
   NavData nav;
   ControlData control;
   TelemData telem;

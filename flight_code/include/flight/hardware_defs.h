@@ -123,6 +123,12 @@ inline constexpr std::array<int8_t, NUM_PWM_PINS> PWM_PINS = {21, 22, 23, 2,
                                                               3, 4, 5, 6};
 /* 90% of the frame period */
 inline constexpr float EFFECTOR_DELAY_US = FRAME_PERIOD_MS * 0.9f * 1e3;
+/* GPIO */
+inline constexpr int8_t NUM_GPIO_PINS = 2;
+inline constexpr std::array<int8_t, NUM_GPIO_PINS> GPIO_PINS = {14, 16};
+/* BFS Bus */
+inline constexpr int8_t BFS_INT1 = 20;
+inline constexpr int8_t BFS_INT2 = 17;
 /* IMU */
 inline constexpr SPIClass &IMU_SPI_BUS = SPI;
 inline constexpr int8_t IMU_CS = 24;
@@ -138,6 +144,7 @@ inline constexpr int ANALOG_RESOLUTION_BITS = 16;
 inline constexpr float VOLTAGE_RANGE = 3.3;
 inline constexpr float ANALOG_COUNT_RANGE =
   std::pow(2.0f, ANALOG_RESOLUTION_BITS) - 1.0f;
+inline constexpr float AIN_VOLTAGE_SCALE = VOLTAGE_RANGE / ANALOG_COUNT_RANGE;
 inline constexpr int8_t INPUT_VOLTAGE_PIN = 15;
 inline constexpr float INPUT_VOLTAGE_SCALE = VOLTAGE_RANGE /
   ANALOG_COUNT_RANGE * (10000.0f + 1000.0f) / 1000.0f;

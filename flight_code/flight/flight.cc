@@ -34,6 +34,9 @@
 #include "flight/control.h"
 #include "flight/datalog.h"
 #include "flight/telem.h"
+#if defined(__FMU_R_V1__)
+#include "flight/gpio.h"
+#endif
 
 /* Aircraft data */
 AircraftData data;
@@ -44,18 +47,35 @@ IntervalTimer effector_timer;
 void send_effectors() {
   /* Stop the effector timer */
   effector_timer.end();
+  #if defined(__FMU_R_V1__)
+  /* Pulse the BFS bus */
+  digitalWriteFast(BFS_INT1, LOW);
+  digitalWriteFast(BFS_INT2, HIGH);
+  #endif
   /* Send effector commands */
   EffectorsWrite();
+  #if defined(__FMU_R_V1__)
+  GpioWrite();
+  #endif
 }
 
 /* ISR to gather sensor data and run VMS */
 void run() {
   /* Start the effector timer */
   effector_timer.begin(send_effectors, EFFECTOR_DELAY_US);
+  #if defined(__FMU_R_V1__)
+  /* Pulse the BFS bus */
+  digitalWriteFast(BFS_INT1, HIGH);
+  digitalWriteFast(BFS_INT2, LOW);
+  #endif
   /* System data */
   SysRead(&data.sys);
   /* Sensor data */
   SensorsRead(&data.sensor);
+  /* GPIO data */
+  #if defined(__FMU_R_V1__)
+  GpioRead(&data.gpio);
+  #endif
   /* Nav filter */
   NavRun(data.sensor, &data.nav);
   /* Control laws */
@@ -63,8 +83,14 @@ void run() {
   /* Command effectors */
   if (data.sensor.inceptor.failsafe) {
     EffectorsCmd(false, false, data.control);
+    #if defined(__FMU_R_V1__)
+    GpioCmd(false, false, data.control);
+    #endif
   } else {
     EffectorsCmd(data.sensor.inceptor.throttle_en, true, data.control);
+    #if defined(__FMU_R_V1__)
+    GpioCmd(data.sensor.inceptor.throttle_en, true, data.control);
+    #endif
   }
   /* Datalog */
   DatalogAdd(data);
@@ -81,6 +107,10 @@ int main() {
   SysInit();
   /* Init sensors */
   SensorsInit(config.sensor);
+  /* Init GPIO */
+  #if defined(__FMU_R_V1__)
+  GpioInit(config.gpio);
+  #endif
   /* Init nav */
   NavInit(config.nav);
   /* Init effectors */
