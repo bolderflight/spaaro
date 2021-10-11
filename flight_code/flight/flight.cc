@@ -34,9 +34,6 @@
 #include "flight/control.h"
 #include "flight/datalog.h"
 #include "flight/telem.h"
-#if defined(__FMU_R_V1__)
-#include "flight/gpio.h"
-#endif
 
 /* Aircraft data */
 AircraftData data;
@@ -69,10 +66,6 @@ void run() {
   SysRead(&data.sys);
   /* Sensor data */
   SensorsRead(&data.sensor);
-  /* GPIO data */
-  #if defined(__FMU_R_V1__)
-  GpioRead(&data.gpio);
-  #endif
   /* Nav filter */
   NavRun(data.sensor, &data.nav);
   /* Control laws */
@@ -98,10 +91,6 @@ int main() {
   SysInit();
   /* Init sensors */
   SensorsInit(config.sensor);
-  /* Init GPIO */
-  #if defined(__FMU_R_V1__)
-  GpioInit(config.gpio);
-  #endif
   /* Init nav */
   NavInit(config.nav);
   /* Init effectors */

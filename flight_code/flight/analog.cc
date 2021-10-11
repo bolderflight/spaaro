@@ -23,8 +23,6 @@
 * IN THE SOFTWARE.
 */
 
-#if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
-
 #include "flight/analog.h"
 #include "flight/global_defs.h"
 #include "flight/config.h"
@@ -49,5 +47,3 @@ void AnalogRead(AnalogData * const data) {
     data->val[i] = bfs::polyval<float>(coef, data->volt[i]);
   }
 }
-
-#endif

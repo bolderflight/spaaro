@@ -123,9 +123,9 @@ inline constexpr std::array<int8_t, NUM_PWM_PINS> PWM_PINS = {21, 22, 23, 2,
                                                               3, 4, 5, 6};
 /* 90% of the frame period */
 inline constexpr float EFFECTOR_DELAY_US = FRAME_PERIOD_MS * 0.9f * 1e3;
-/* GPIO */
-inline constexpr int8_t NUM_GPIO_PINS = 2;
-inline constexpr std::array<int8_t, NUM_GPIO_PINS> GPIO_PINS = {14, 16};
+/* Analog */
+inline constexpr int8_t NUM_AIN_PINS = 2;
+inline constexpr std::array<int8_t, NUM_AIN_PINS> AIN_PINS = {14, 16};
 /* BFS Bus */
 inline constexpr int8_t BFS_INT1 = 20;
 inline constexpr int8_t BFS_INT2 = 17;

@@ -77,13 +77,6 @@ void DatalogAdd(const AircraftData &ref) {
   datalog_msg_.sys_sbus_volt = ref.sys.sbus_volt;
   #endif
   datalog_msg_.sys_time_s = ref.sys.sys_time_s;
-  /* GPIO data */
-  #if defined(__FMU_R_V1__)
-  for (std::size_t i = 0; i < NUM_GPIO_PINS; i++) {
-    datalog_msg_.gpio_volt[i] = ref.gpio.volt[i];
-    datalog_msg_.gpio_val[i] = ref.gpio.val[i];
-  }
-  #endif
   /* Inceptor data */
   datalog_msg_.incept_new_data = ref.sensor.inceptor.new_data;
   datalog_msg_.incept_lost_frame = ref.sensor.inceptor.lost_frame;
@@ -187,12 +180,10 @@ void DatalogAdd(const AircraftData &ref) {
   datalog_msg_.waypoint_z =
     ref.telem.flight_plan[ref.telem.current_waypoint].z;
   /* Analog data */
-  #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
   for (std::size_t i = 0; i < NUM_AIN_PINS; i++) {
     datalog_msg_.ain_volt[i] = ref.sensor.analog.volt[i];
     datalog_msg_.ain_val[i] = ref.sensor.analog.val[i];
   }
-  #endif
   /* Battery data */
   #if defined(__FMU_R_V2__)
   datalog_msg_.battery_voltage_v = ref.sensor.battery.voltage_v;

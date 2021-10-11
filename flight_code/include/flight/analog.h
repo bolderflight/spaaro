@@ -26,13 +26,9 @@
 #ifndef FLIGHT_CODE_INCLUDE_FLIGHT_ANALOG_H_
 #define FLIGHT_CODE_INCLUDE_FLIGHT_ANALOG_H_
 
-#if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
-
 #include "flight/global_defs.h"
 
 void AnalogInit(const AnalogConfig &cfg);
 void AnalogRead(AnalogData * const data);
-
-#endif
 
 #endif  // FLIGHT_CODE_INCLUDE_FLIGHT_ANALOG_H_

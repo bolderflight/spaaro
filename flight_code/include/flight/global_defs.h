@@ -61,7 +61,6 @@ struct Effectors {
   bfs::PwmTx<NUM_PWM_PINS> pwm;
 };
 /* Analog input config */
-#if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
 struct AnalogChannel {
   int8_t num_coef = 0;
   float poly_coef[bfs::MAX_POLY_COEF_SIZE];
@@ -69,7 +68,6 @@ struct AnalogChannel {
 struct AnalogConfig {
   AnalogChannel channels[NUM_AIN_PINS];
 };
-#endif
 /* Battery monitoring config */
 #if defined(__FMU_R_V2__)
 struct BatteryConfig {
@@ -77,21 +75,6 @@ struct BatteryConfig {
   float current_scale = 17.0f;
   float capacity_mah = 5000.0f;
   float current_cutoff_hz = 0.1f;
-};
-#endif
-/* GPIO config */
-#if defined(__FMU_R_V1__)
-enum GpioMode {
-  GPIO_AIN,
-  GPIO_DIG_IN
-};
-struct GpioChannel {
-  GpioMode mode;
-  int8_t num_coef = 0;
-  float poly_coef[bfs::MAX_POLY_COEF_SIZE];
-};
-struct GpioConfig {
-  GpioChannel channels[NUM_GPIO_PINS];
 };
 #endif
 /* Sensor config */
@@ -102,9 +85,7 @@ struct SensorConfig {
   bfs::GnssConfig gnss;
   bfs::PresConfig static_pres;
   bfs::PresConfig diff_pres;
-  #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
   AnalogConfig analog;
-  #endif
   #if defined(__FMU_R_V2__)
   BatteryConfig battery;
   #endif
@@ -131,9 +112,6 @@ struct TelemConfig {
 /* Aircraft config */
 struct AircraftConfig {
   SensorConfig sensor;
-  #if defined(__FMU_R_V1__)
-  GpioConfig gpio;
-  #endif
   NavConfig nav;
   EffectorConfig effector;
   TelemConfig telem;
@@ -152,12 +130,10 @@ struct SysData {
   double sys_time_s;
 };
 /* Analog data */
-#if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
 struct AnalogData {
   std::array<float, NUM_AIN_PINS> volt;
   std::array<float, NUM_AIN_PINS> val;
 };
-#endif
 /* Battery data */
 #if defined(__FMU_R_V2__)
 struct BatteryData {
@@ -168,13 +144,6 @@ struct BatteryData {
   float remaining_time_s;
 };
 #endif
-/* GPIO data */
-#if defined(__FMU_R_V1__)
-struct GpioData {
-  std::array<float, NUM_GPIO_PINS> volt;
-  std::array<float, NUM_GPIO_PINS> val;
-};
-#endif
 /* Sensor data */
 struct SensorData {
   bool pitot_static_installed;
@@ -183,9 +152,7 @@ struct SensorData {
   bfs::GnssData gnss;
   bfs::PresData static_pres;
   bfs::PresData diff_pres;
-  #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
   AnalogData analog;
-  #endif
   #if defined(__FMU_R_V2__)
   BatteryData battery;
   #endif
@@ -242,9 +209,6 @@ struct TelemData {
 struct AircraftData {
   SysData sys;
   SensorData sensor;
-  #if defined(__FMU_R_V1__)
-  GpioData gpio;
-  #endif
   NavData nav;
   ControlData control;
   TelemData telem;
