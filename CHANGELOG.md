@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.4.0
+- Updated to include analog input from FMU v1 GPIO pins
+- Updated to have better granularity between FMU versions
+   - FMU v1 includes only 2 analog channels and no battery data
+   - FMU v2-beta includes 8 analog channels, no battery, and reduced system data (no input voltage, regulated voltage, SBUS voltage, or PWM voltage) compared to FMU v1
+   - FMU v2 includes the features of FMU v2-beta, but adds battery data through the power module port
+   - FMU v2-beta and FMU v2 support increased flight plan waypoints (500 instead of 100), fence points (100 instead of 50), and a higher frame rate (100 Hz instead of 50 Hz).
+- An FMU version define is now required in the MAT converter to set the appropriate version
+- Simulink and autocode updated to support the updated FMU I/O planes
+
 ## v2.3.2
 - Updated the build tools location.
 
