@@ -27,9 +27,17 @@
 #include "flight/msg.h"
 #include "logger/logger.h"
 #include "framing/framing.h"
-#include "./datalog.pb.h"
 #include "./pb_encode.h"
 #include "./pb_decode.h"
+#if defined(__FMU_R_V2__)
+#include "./datalog_fmu_v2.pb.h"
+#endif
+#if defined(__FMU_R_V2_BETA__)
+#include "./datalog_fmu_v2_beta.pb.h"
+#endif
+#if defined(__FMU_R_V1__)
+#include "./datalog_fmu_v1.pb.h"
+#endif
 
 namespace {
 /* Datalog file name */
@@ -62,17 +70,13 @@ void DatalogAdd(const AircraftData &ref) {
   /* Assign to message */
   /* System data */
   datalog_msg_.sys_frame_time_s = ref.sys.frame_time_s;
+  #if defined(__FMU_R_V1__)
   datalog_msg_.sys_input_volt = ref.sys.input_volt;
   datalog_msg_.sys_reg_volt = ref.sys.reg_volt;
   datalog_msg_.sys_pwm_volt = ref.sys.pwm_volt;
   datalog_msg_.sys_sbus_volt = ref.sys.sbus_volt;
+  #endif
   datalog_msg_.sys_time_s = ref.sys.sys_time_s;
-  /* Battery data */
-  datalog_msg_.battery_voltage_v = ref.sensor.battery.voltage_v;
-  datalog_msg_.battery_current_ma = ref.sensor.battery.current_ma;
-  datalog_msg_.battery_consumed_mah = ref.sensor.battery.consumed_mah;
-  datalog_msg_.battery_remaining_prcnt = ref.sensor.battery.remaining_prcnt;
-  datalog_msg_.battery_remaining_time_s = ref.sensor.battery.remaining_time_s;
   /* Inceptor data */
   datalog_msg_.incept_new_data = ref.sensor.inceptor.new_data;
   datalog_msg_.incept_lost_frame = ref.sensor.inceptor.lost_frame;
@@ -120,11 +124,6 @@ void DatalogAdd(const AircraftData &ref) {
   datalog_msg_.pres_diff_healthy = ref.sensor.diff_pres.healthy;
   datalog_msg_.pres_diff_pres_pa = ref.sensor.diff_pres.pres_pa;
   datalog_msg_.pres_diff_die_temp_c = ref.sensor.diff_pres.die_temp_c;
-  /* Analog data */
-  for (std::size_t i = 0; i < NUM_AIN_PINS; i++) {
-    datalog_msg_.ain_volt[i] = ref.sensor.analog.volt[i];
-    datalog_msg_.ain_val[i] = ref.sensor.analog.val[i];
-  }
   /* Nav data */
   datalog_msg_.nav_initialized = ref.nav.nav_initialized;
   datalog_msg_.nav_pitch_rad = ref.nav.pitch_rad;
@@ -180,6 +179,19 @@ void DatalogAdd(const AircraftData &ref) {
     ref.telem.flight_plan[ref.telem.current_waypoint].y;
   datalog_msg_.waypoint_z =
     ref.telem.flight_plan[ref.telem.current_waypoint].z;
+  /* Analog data */
+  for (std::size_t i = 0; i < NUM_AIN_PINS; i++) {
+    datalog_msg_.ain_volt[i] = ref.sensor.analog.volt[i];
+    datalog_msg_.ain_val[i] = ref.sensor.analog.val[i];
+  }
+  /* Battery data */
+  #if defined(__FMU_R_V2__)
+  datalog_msg_.battery_voltage_v = ref.sensor.battery.voltage_v;
+  datalog_msg_.battery_current_ma = ref.sensor.battery.current_ma;
+  datalog_msg_.battery_consumed_mah = ref.sensor.battery.consumed_mah;
+  datalog_msg_.battery_remaining_prcnt = ref.sensor.battery.remaining_prcnt;
+  datalog_msg_.battery_remaining_time_s = ref.sensor.battery.remaining_time_s;
+  #endif
   /* Encode */
   stream_ = pb_ostream_from_buffer(data_buffer_, sizeof(data_buffer_));
   if (!pb_encode(&stream_, DatalogMessage_fields, &datalog_msg_)) {

@@ -103,7 +103,8 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   telem_.battery_consumed_mah(data.sensor.battery.consumed_mah);
   telem_.battery_remaining_prcnt(data.sensor.battery.remaining_prcnt);
   telem_.battery_remaining_time_s(data.sensor.battery.remaining_time_s);
-  #else
+  #endif
+  #if defined(__FMU_R_V1__)
   telem_.battery_volt(data.sys.input_volt);
   #endif
   /* IMU data */

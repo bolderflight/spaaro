@@ -28,7 +28,9 @@
 #include "flight/config.h"
 #include "flight/msg.h"
 #include "flight/analog.h"
+#if defined(__FMU_R_V2__)
 #include "flight/battery.h"
+#endif
 
 namespace {
 /* Whether pitot static is installed */
@@ -69,7 +71,9 @@ void SensorsInit(const SensorConfig &cfg) {
   /* Initialize analog input */
   AnalogInit(cfg.analog);
   /* Initialize battery monitoring */
+  #if defined(__FMU_R_V2__)
   BatteryInit(cfg.battery);
+  #endif
   MsgInfo("done.\n");
   /* Initialize inceptors */
   MsgInfo("Initializing inceptors...");
@@ -104,5 +108,7 @@ void SensorsRead(SensorData * const data) {
   /* Read analog channels */
   AnalogRead(&data->analog);
   /* Read battery voltage / current */
+  #if defined(__FMU_R_V2__)
   BatteryRead(&data->battery);
+  #endif
 }

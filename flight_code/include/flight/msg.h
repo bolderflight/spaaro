@@ -26,15 +26,13 @@
 #ifndef FLIGHT_CODE_INCLUDE_FLIGHT_MSG_H_
 #define FLIGHT_CODE_INCLUDE_FLIGHT_MSG_H_
 
-#include <string>
-
 /* Initializes the messager */
 void MsgBegin();
 /* Info message */
-void MsgInfo(std::string str);
+void MsgInfo(const char * str);
 /* Warning message */
-void MsgWarning(std::string str);
+void MsgWarning(const char * str);
 /* Error message */
-void MsgError(std::string str);
+void MsgError(const char * str);
 
 #endif  // FLIGHT_CODE_INCLUDE_FLIGHT_MSG_H_

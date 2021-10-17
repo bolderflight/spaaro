@@ -44,6 +44,11 @@ IntervalTimer effector_timer;
 void send_effectors() {
   /* Stop the effector timer */
   effector_timer.end();
+  #if defined(__FMU_R_V1__)
+  /* Pulse the BFS bus */
+  digitalWriteFast(BFS_INT1, LOW);
+  digitalWriteFast(BFS_INT2, HIGH);
+  #endif
   /* Send effector commands */
   EffectorsWrite();
 }
@@ -52,6 +57,11 @@ void send_effectors() {
 void run() {
   /* Start the effector timer */
   effector_timer.begin(send_effectors, EFFECTOR_DELAY_US);
+  #if defined(__FMU_R_V1__)
+  /* Pulse the BFS bus */
+  digitalWriteFast(BFS_INT1, HIGH);
+  digitalWriteFast(BFS_INT2, LOW);
+  #endif
   /* System data */
   SysRead(&data.sys);
   /* Sensor data */

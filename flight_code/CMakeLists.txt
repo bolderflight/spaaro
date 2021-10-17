@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.13)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-	VERSION 2.3.2
+	VERSION 2.4.0
 	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )
@@ -39,22 +39,22 @@ configMcu(${MCU})
 if (FMU STREQUAL "V2" OR FMU STREQUAL "V2-BETA")
 	add_definitions(
 		-DSERIAL2_RX_BUFFER_SIZE=1024
-		-DSERIAL3_RX_BUFFER_SIZE=2048
-		-DSERIAL3_TX_BUFFER_SIZE=2048
-		-DSERIAL4_RX_BUFFER_SIZE=2048
-		-DSERIAL4_TX_BUFFER_SIZE=2048
-		-DSERIAL5_RX_BUFFER_SIZE=2048
-		-DSERIAL5_TX_BUFFER_SIZE=2048
-		-DSERIAL7_RX_BUFFER_SIZE=2048
-		-DSERIAL7_TX_BUFFER_SIZE=2048
+		-DSERIAL3_RX_BUFFER_SIZE=1024
+		-DSERIAL3_TX_BUFFER_SIZE=1024
+		-DSERIAL4_RX_BUFFER_SIZE=1024
+		-DSERIAL4_TX_BUFFER_SIZE=1024
+		-DSERIAL5_RX_BUFFER_SIZE=1024
+		-DSERIAL5_TX_BUFFER_SIZE=1024
+		-DSERIAL7_RX_BUFFER_SIZE=1024
+		-DSERIAL7_TX_BUFFER_SIZE=1024
 	)
 else()
 	add_definitions(
 		-DSERIAL2_RX_BUFFER_SIZE=1024
-		-DSERIAL3_RX_BUFFER_SIZE=2048
-		-DSERIAL3_TX_BUFFER_SIZE=2048
-		-DSERIAL4_RX_BUFFER_SIZE=2048
-		-DSERIAL4_TX_BUFFER_SIZE=2048
+		-DSERIAL3_RX_BUFFER_SIZE=1024
+		-DSERIAL3_TX_BUFFER_SIZE=1024
+		-DSERIAL4_RX_BUFFER_SIZE=1024
+		-DSERIAL4_TX_BUFFER_SIZE=1024
 	)
 endif()
 # nanopb
@@ -62,7 +62,16 @@ set(NANOPB_SRC_ROOT_FOLDER "/usr/local/nanopb")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${NANOPB_SRC_ROOT_FOLDER}/extra)
 find_package(Nanopb REQUIRED)
 include_directories(${NANOPB_INCLUDE_DIRS})
-NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ../common/datalog.proto)
+if (FMU STREQUAL "V2")
+	# FMU-R-V2
+	NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ../common/datalog_fmu_v2.proto)
+elseif(FMU STREQUAL "V2-BETA")
+	# FMU-R-V2-BETA
+	NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ../common/datalog_fmu_v2_beta.proto)
+else()
+	# FMU-R-V1
+	NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ../common/datalog_fmu_v1.proto)
+endif()
 # Include directories
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 # Fetch dependencies
@@ -206,7 +215,6 @@ add_executable(flight
 	include/flight/datalog.h
 	include/flight/telem.h
 	include/flight/analog.h
-	include/flight/battery.h
 	flight/flight.cc
 	flight/config.cc
 	flight/msg.cc
@@ -218,10 +226,17 @@ add_executable(flight
 	flight/datalog.cc
 	flight/telem.cc
 	flight/analog.cc
-	flight/battery.cc
 	${PROTO_SRCS}
 	${PROTO_HDRS}
 )
+if (FMU STREQUAL "V2")
+	# FMU-R-V2
+	target_sources(flight
+		PUBLIC
+			include/flight/battery.h
+			flight/battery.cc
+	)
+endif()
 # Setup autocode
 if (DEFINED AUTOCODE)
 	include_directories(autocode/${AUTOCODE}_ert_rtw)

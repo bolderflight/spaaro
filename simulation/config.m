@@ -10,6 +10,8 @@
 % Vehicle
 vehicle = 'ultra_stick_25e';
 % FMU-R version
+% fmu_version = "v1";
+% fmu_version = "v2-beta";
 fmu_version = "v2";
 
 %% Target trim conditions
@@ -23,11 +25,3 @@ Target.heading_deg = 90;  % +/-180 degrees relative to true north
 Target.airspeed_mps = 17;
 % Ground height above mean sea level [m]
 Env.terrain_alt_msl_m = 0;
-
-%% Flight software frame rate
-if strcmp(upper(fmu_version), "V2")
-    frameRate_hz = 100;
-else
-    frameRate_hz = 50;
-end
-framePeriod_s = 1/frameRate_hz;

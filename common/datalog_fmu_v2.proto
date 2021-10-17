@@ -37,11 +37,7 @@ syntax = "proto3";
 message DatalogMessage {
   /* System data */
   float sys_frame_time_s = 1;
-  float sys_input_volt = 2;
-  float sys_reg_volt = 3;
-  float sys_pwm_volt = 4;
-  float sys_sbus_volt = 5;
-  double sys_time_s = 6;
+  double sys_time_s = 2;
   /* Battery data */
   float battery_voltage_v = 10;
   float battery_current_ma = 11;
@@ -112,7 +108,7 @@ message DatalogMessage {
   double nav_lon_rad = 137;
   /* Analog Data */
   repeated float ain_volt = 140;
-  repeated float ain_val = 141;
+  repeated float ain_val = 141;  
   /* Control data */
   bool cntrl_waypoint_reached = 150;
   repeated float cntrl_sbus = 151;

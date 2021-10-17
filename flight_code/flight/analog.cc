@@ -39,7 +39,6 @@ void AnalogInit(const AnalogConfig &cfg) {
   cfg_ = cfg;
 }
 void AnalogRead(AnalogData * const data) {
-#if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
   for (std::size_t i = 0; i < NUM_AIN_PINS; i++) {
     data->volt[i] = static_cast<float>(analogRead(AIN_PINS[i])) *
                              AIN_VOLTAGE_SCALE;
@@ -47,5 +46,4 @@ void AnalogRead(AnalogData * const data) {
           static_cast<std::size_t>(cfg_.channels[i].num_coef)};
     data->val[i] = bfs::polyval<float>(coef, data->volt[i]);
   }
-#endif
 }

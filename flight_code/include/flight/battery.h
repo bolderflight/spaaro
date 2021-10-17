@@ -26,9 +26,13 @@
 #ifndef FLIGHT_CODE_INCLUDE_FLIGHT_BATTERY_H_
 #define FLIGHT_CODE_INCLUDE_FLIGHT_BATTERY_H_
 
+#if defined(__FMU_R_V2__)
+
 #include "flight/global_defs.h"
 
 void BatteryInit(const BatteryConfig &cfg);
 void BatteryRead(BatteryData * const data);
+
+#endif
 
 #endif  // FLIGHT_CODE_INCLUDE_FLIGHT_BATTERY_H_

@@ -40,16 +40,16 @@ void MsgBegin() {
   MSG_BUS.println("---------------------------------------");
 }
 
-void MsgInfo(std::string str) {
+void MsgInfo(const char * str) {
   MSG_BUS.print(str);
 }
 
-void MsgWarning(std::string str) {
+void MsgWarning(const char * str) {
   MSG_BUS.print("\nWARNING: ");
   MSG_BUS.print(str);
 }
 
-void MsgError(std::string str) {
+void MsgError(const char * str) {
   MSG_BUS.print("\nERROR: ");
   MSG_BUS.print(str);
   while (1) {}

@@ -26,11 +26,19 @@
 #include <stdio.h>
 #include <google/protobuf/message.h>
 #include <iostream>
-#include "datalog.pb.h"
 #include "framing/framing.h"
 #include "mat_v4/mat_v4.h"
 #include "Eigen/Core"
 #include "Eigen/Dense"
+#if defined(__FMU_R_V2__)
+#include "./datalog_fmu_v2.pb.h"
+#endif
+#if defined(__FMU_R_V2_BETA__)
+#include "./datalog_fmu_v2_beta.pb.h"
+#endif
+#if defined(__FMU_R_V1__)
+#include "./datalog_fmu_v1.pb.h"
+#endif
 
 int main(int argc, char** argv) {
   /* Verify version of protobuf */
@@ -224,9 +232,9 @@ int main(int argc, char** argv) {
         break;        
       }
       default: {
-        // std::cout << cpp_type << std::endl;
-        // std::cerr << "ERROR: Unsupported data type." << std::endl;
-        // return -1;
+        std::cout << cpp_type << std::endl;
+        std::cerr << "ERROR: Unsupported data type." << std::endl;
+        return -1;
       }
     }
   }

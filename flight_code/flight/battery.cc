@@ -23,6 +23,8 @@
 * IN THE SOFTWARE.
 */
 
+#if defined(__FMU_R_V2__)
+
 #include "flight/battery.h"
 #include "flight/global_defs.h"
 #include "flight/config.h"
@@ -43,7 +45,6 @@ void BatteryInit(const BatteryConfig &cfg) {
   current_ma.Init(cfg.current_cutoff_hz, static_cast<float>(FRAME_RATE_HZ));
 }
 void BatteryRead(BatteryData * const data) {
-#if defined(__FMU_R_V2__)
   data->voltage_v = static_cast<float>(analogRead(BATTERY_VOLTAGE_PIN)) *
                     AIN_VOLTAGE_SCALE * cfg_.voltage_scale;
   data->current_ma = static_cast<float>(analogRead(BATTERY_CURRENT_PIN)) *
@@ -53,5 +54,6 @@ void BatteryRead(BatteryData * const data) {
                            cfg_.capacity_mah * 100.0f;
   data->remaining_time_s = (cfg_.capacity_mah - data->consumed_mah) /
                             current_ma.Filter(data->consumed_mah) * 60.0f;
-#endif
 }
+
+#endif
