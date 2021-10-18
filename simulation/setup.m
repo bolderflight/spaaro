@@ -63,7 +63,7 @@ end
 framePeriod_s = 1/frameRate_hz;
 
 %% Trim
-trim();
+%trim();
 
 %% Create flight plan, fence, and rally point structs
 % Flight plan
@@ -106,5 +106,7 @@ for i = 1:Telem.NUM_RALLY_POINTS
     Telem.Rally(i).z = single(0);
 end
 
+multi_sim();
+
 %% Cleanup
-clear vehicle fh_vehicle op_point op_report op_spec opt i;
+%clear vehicle fh_vehicle op_point op_report op_spec opt i;
