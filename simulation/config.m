@@ -16,7 +16,7 @@ Target.alt_msl_m = 100;
 Target.heading_deg = 90;  % +/-180 degrees relative to true north
 Target.airspeed_mps = 17;
 % Ground height above mean sea level [m]
-Env.terrain_alt_msl_m = 0;
+Env.terrain_alt_wgs84 = 0;
 Env.wmm_nt = [22938.3 -33.7 -132.6];
 
 %% Initial Condition for simulation
@@ -35,3 +35,8 @@ framePeriod_s = 1/frameRate_hz;
 % Vehicle
 % vehicle = 'queso';
 vehicle = 'super';
+
+% FMU-R version
+fmu_version = "v1";
+% fmu_version = "v2-beta";
+% fmu_version = "v2";

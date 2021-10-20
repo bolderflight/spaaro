@@ -92,7 +92,9 @@ Aircraft.Motor.mix = [0.7,  -0.2,     0, -Aircraft.Motor.motor_yaw_factor;...
                       0.7,   0.1,  0.1, -Aircraft.Motor.motor_yaw_factor;...
                       0.7,  -0.1, -0.1,  Aircraft.Motor.motor_yaw_factor;...
                       0.7,  -0.1,  0.1, Aircraft.Motor.motor_yaw_factor;...
-                      0.7,   0.1, -0.1, -Aircraft.Motor.motor_yaw_factor];
+                      0.7,   0.1, -0.1, -Aircraft.Motor.motor_yaw_factor;
+                      0, 0, 0, 0; 
+                      0, 0, 0, 0];
 
     
 %% Propeller 
@@ -165,18 +167,14 @@ Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_li
 
 %% Controller parameters
 %% Altitude controller parameters
-% Vertical speed controller gain
-Aircraft.Control.P_alt = 0.5;
 % Vertical speed limit [m/s]
-Aircraft.Control.v_z_limit = [-1 2];
+Aircraft.Control.v_z_up_max = 2;
+Aircraft.Control.v_z_down_max = 1; %minimum of -1 m/s
 % Vertical accel controller gain
-Aircraft.Control.P_v_z = 0.05;
-Aircraft.Control.I_v_z = 0.05;
-% Aircraft vertical g limits [m/s^2]
-Aircraft.Control.a_z_limit = [-19 19];
-% Aircraft throttle PI gains
-Aircraft.Control.P_thr = 0.05;
-Aircraft.Control.I_thr = 0.05;
+Aircraft.Control.P_v_z = 0.09;
+Aircraft.Control.I_v_z = 0.01;
+Aircraft.Control.D_v_z = 0.005;
+
 
 %% Yaw rate controller parameters
 % Max yaw rate [radps]
@@ -185,34 +183,24 @@ Aircraft.Control.yaw_rate_max = 0.174;  %~10deg/s
 % cause some motors to slow down too much that hover cannot be maintained
 
 % Yaw accel PI gains
-Aircraft.Control.P_yaw_rate = 0.2;
-Aircraft.Control.I_yaw_rate = 0.;
-Aircraft.Control.D_yaw_rate = 0.;
+Aircraft.Control.P_yaw_rate = 0.5;
+Aircraft.Control.I_yaw_rate = 0.05;
+Aircraft.Control.D_yaw_rate = 0.02;
 
 %% Pitch controller parameters
 % Max pitch angle [rad]
 Aircraft.Control.pitch_angle_lim = 0.52; %~30deg
 
-% Pitch rate controller gains
-Aircraft.Control.P_pitch_rate = 0.2;
-Aircraft.Control.I_pitch_rate = 0.;
-Aircraft.Control.D_pitch_rate = 0.;
-
 % Pitch cmd controller gains
-Aircraft.Control.P_pitch_angle = 0.2;
-Aircraft.Control.I_pitch_angle = 0.2;
-Aircraft.Control.D_pitch_angle = 0.2;
+Aircraft.Control.P_pitch_angle = 0.04;
+Aircraft.Control.I_pitch_angle = 0.04;
+Aircraft.Control.D_pitch_angle = 0.02;
 
 %% Roll controller parameters
 % Max roll angle [rad]
 Aircraft.Control.roll_angle_lim = 0.52; %~30deg
 
-% Roll rate controller gains
-Aircraft.Control.P_roll_rate = 0.2;
-Aircraft.Control.I_roll_rate = 0.;
-Aircraft.Control.D_roll_rate = 0.;
-
 % Roll cmd controller gains
-Aircraft.Control.P_roll_angle = 0.2;
-Aircraft.Control.I_roll_angle = 0.;
-Aircraft.Control.D_roll_angle = 0.;
+Aircraft.Control.P_roll_angle = 0.04;
+Aircraft.Control.I_roll_angle = 0.04;
+Aircraft.Control.D_roll_angle = 0.02;

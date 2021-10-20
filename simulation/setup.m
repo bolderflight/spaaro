@@ -13,10 +13,11 @@ clear all;
 clc;
 
 %% Configure
-config();
+run('./config');
 
 %% Add paths
 addpath(genpath('aircraft'));
+addpath(genpath('data'));
 addpath(genpath('matlab'));
 addpath(genpath('models'));
 addpath(genpath('control'));
@@ -29,20 +30,42 @@ Simulink.fileGenControl('set', ...
     Simulink.filegen.CodeGenFolderStructure.ModelSpecific, ...
     'createDir', true);
 
-%% Load bus definitions
-load('bus_defs.mat');
+%% Setup aircraft
+run(strcat('./aircraft/', vehicle));
 
-%% Call the setup scripts
-fh_vehicle = str2func(vehicle);
-fh_vehicle();
+%% Setup FMU
+%% Setup the flight management unit
+if strcmpi(fmu_version, "V2")
+    Fmu.version = 3;
+    Fmu.NUM_AIN = 8;
+    frameRate_hz = 100;
+    Telem.NUM_FLIGHT_PLAN_POINTS = 500;
+    Telem.NUM_FENCE_POINTS = 100;
+    Telem.NUM_RALLY_POINTS = 10;
+    load('./data/fmu_v2_bus_defs.mat');
+elseif strcmpi(fmu_version, "V2-BETA")
+    Fmu.version = 2;
+    Fmu.NUM_AIN = 8;
+    frameRate_hz = 100;
+    Telem.NUM_FLIGHT_PLAN_POINTS = 500;
+    Telem.NUM_FENCE_POINTS = 100;
+    Telem.NUM_RALLY_POINTS = 10;
+    load('./data/fmu_v2_beta_bus_defs.mat');
+else
+    Fmu.version = 1;
+    Fmu.NUM_AIN = 2;
+    frameRate_hz = 50;
+    Telem.NUM_FLIGHT_PLAN_POINTS = 100;
+    Telem.NUM_FENCE_POINTS = 50;
+    Telem.NUM_RALLY_POINTS = 10;
+    load('./data/fmu_v1_bus_defs.mat');
+end
+framePeriod_s = 1/frameRate_hz;
 
 %% Trim
 %trim();
 
 %% Create flight plan, fence, and rally point structs
-Telem.NUM_FLIGHT_PLAN_POINTS = 100;
-Telem.NUM_FENCE_POINTS = 50;
-Telem.NUM_RALLY_POINTS = 10;
 % Flight plan
 for i = 1:Telem.NUM_FLIGHT_PLAN_POINTS
     Telem.FlightPlan(i).autocontinue = boolean(0);
@@ -83,10 +106,7 @@ for i = 1:Telem.NUM_RALLY_POINTS
     Telem.Rally(i).z = single(0);
 end
 
-%placeholder until we find a better way to do this for 
-ThrottleVelocityRange = 2;
-
-multirotor_sim();
+multirotor_sim
 
 %% Cleanup
 %clear vehicle fh_vehicle op_point op_report op_spec opt i;
