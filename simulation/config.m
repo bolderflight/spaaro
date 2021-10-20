@@ -6,14 +6,6 @@
 % Copyright (c) 2021 Bolder Flight Systems
 %
 
-%% Definitions
-% Vehicle
-vehicle = 'ultra_stick_25e';
-% FMU-R version
-% fmu_version = "v1";
-% fmu_version = "v2-beta";
-fmu_version = "v2";
-
 %% Target trim conditions
 % Latitude and longitude [deg]
 Target.lat_deg = 35.691544;
@@ -25,3 +17,21 @@ Target.heading_deg = 90;  % +/-180 degrees relative to true north
 Target.airspeed_mps = 17;
 % Ground height above mean sea level [m]
 Env.terrain_alt_msl_m = 0;
+Env.wmm_nt = [22938.3 -33.7 -132.6];
+
+%% Initial Condition for simulation
+InitCond.ned_pos_m = [0 0 -100];
+InitCond.body_vel_mps = [0.001 0 0];
+InitCond.euler_rad = [0 0 0];
+InitCond.body_rot_rate_radps = [0 0 0];
+InitCond.lat_rad = 0.579345551837;
+InitCond.lon_rad = -1.52682423982;
+
+%% Flight software frame rate
+frameRate_hz = 50;
+framePeriod_s = 1/frameRate_hz;
+
+%% Definitions
+% Vehicle
+% vehicle = 'queso';
+vehicle = 'super';
