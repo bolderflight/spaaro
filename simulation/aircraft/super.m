@@ -166,16 +166,6 @@ Aircraft.Sensors.DiffPres.lower_limit_pa = 0;
 Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_limit_pa - Aircraft.Sensors.DiffPres.lower_limit_pa);
 
 %% Controller parameters
-%% Altitude controller parameters
-% Vertical speed limit [m/s]
-Aircraft.Control.v_z_up_max = 2;
-Aircraft.Control.v_z_down_max = 1; %minimum of -1 m/s
-% Vertical accel controller gain
-Aircraft.Control.P_v_z = 0.09;
-Aircraft.Control.I_v_z = 0.01;
-Aircraft.Control.D_v_z = 0.005;
-
-
 %% Yaw rate controller parameters
 % Max yaw rate [radps]
 Aircraft.Control.yaw_rate_max = 0.174;  %~10deg/s
@@ -204,3 +194,21 @@ Aircraft.Control.roll_angle_lim = 0.52; %~30deg
 Aircraft.Control.P_roll_angle = 0.04;
 Aircraft.Control.I_roll_angle = 0.04;
 Aircraft.Control.D_roll_angle = 0.02;
+
+%% Altitude controller parameters
+% Vertical speed limit [m/s]
+Aircraft.Control.v_z_up_max = 2;
+Aircraft.Control.v_z_down_max = 1; %minimum of -1 m/s
+% Vertical speed controller gain
+Aircraft.Control.P_v_z = 0.09;
+Aircraft.Control.I_v_z = 0.01;
+Aircraft.Control.D_v_z = 0.005;
+
+%% Translational speed controller parameters
+% Horizontal spped limti [m/s]
+Aircraft.Control.v_hor_max = 4;
+
+% Horizontal speed controller gain
+Aircraft.Control.P_v_hor = 0.09;
+Aircraft.Control.I_v_hor = 0.1;
+Aircraft.Control.D_v_hor = 0.05;
