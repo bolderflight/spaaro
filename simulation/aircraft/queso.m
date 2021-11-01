@@ -9,13 +9,13 @@ Aircraft.name = 'queso';
 
 %% Mass properties (Obtained using Solidworks) CG is at body origin
 % Mass [kg]
-Aircraft.Mass.mass_kg = 20.4117;
+Aircraft.Mass.mass_kg = 1.2;
 % c.g. location [m]
 Aircraft.Mass.cg_m = [0 0 0];
 % Moments of inertia [kg*m^2] obtained from Solidworks model
-Aircraft.Mass.ixx_kgm2 = 0.07151;
-Aircraft.Mass.iyy_kgm2 = 0.08636;
-Aircraft.Mass.izz_kgm2 = 0.15364;
+Aircraft.Mass.ixx_kgm2 = 0.01249536;
+Aircraft.Mass.iyy_kgm2 = 0.01309266;
+Aircraft.Mass.izz_kgm2 = 0.02338074;
 Aircraft.Mass.ixz_kgm2 = 0.014;
 Aircraft.Mass.inertia_kgm2 = [Aircraft.Mass.ixx_kgm2    0   -Aircraft.Mass.ixz_kgm2;...
                               0          Aircraft.Mass.iyy_kgm2          0;...
@@ -56,10 +56,10 @@ Aircraft.Motor.map = [ 1 ; 2 ; 3 ; 4  ];
 % Motor numbers and order using Arducopter convention
 
 %neet to measure and modify these, should only be 4  rows
-Aircraft.Motor.pos_m = [0.5     0.5     0;...
-                        -0.5    -0.5    0;...
-                        -0.5     0.5    0;...
-                        0.5    -0.5     0]; 
+Aircraft.Motor.pos_m = [0.318     0.318     0;...
+                        -0.318    -0.318    0;...
+                        0.318     -0.318    0;...
+                        -0.318    0.318     0]; 
 
 % Alignment with body frame x, y, z axis 
 Aircraft.Motor.align = zeros ( Aircraft.Motor.nMotor , 3);
@@ -82,15 +82,19 @@ Aircraft.Motor.dir = [-1;-1;1;1];
 Aircraft.Motor.kq = 0.1495;     %N-m/A
 
 
-% Motor mixing laws [thrust, pitch, roll, yaw]
-% The cmd vector [thrust,pitch,roll, yaw] will by multiplied with the motor
+% Motor mixing laws [thrust, roll, pitch, yaw]
+% The cmd vector [thrust,roll,pitch, yaw] will by multiplied with the motor
 % mixing matrix to result in the individual motor outputs which is then
 % scaled to the PMW range that the ESC can decode
-Aircraft.Motor.motor_yaw_factor = 1;
-Aircraft.Motor.mix = [0.16,   0.2,   -0.2,  Aircraft.Motor.motor_yaw_factor;...
-                      0.16,   -0.2,    0.2,  Aircraft.Motor.motor_yaw_factor;...
-                      0.16,  0.2, 0.2, -Aircraft.Motor.motor_yaw_factor;...
-                      0.16,  -0.2, 0.2, -Aircraft.Motor.motor_yaw_factor];
+Aircraft.Motor.motor_yaw_factor = 0.2;
+Aircraft.Motor.mix = [0.8,  -0.2,   0.2,  Aircraft.Motor.motor_yaw_factor;...
+                      0.8,   0.2,  -0.2,  Aircraft.Motor.motor_yaw_factor;...
+                      0.8,   0.2,   0.2, -Aircraft.Motor.motor_yaw_factor;...
+                      0.8,  -0.2,  -0.2, -Aircraft.Motor.motor_yaw_factor;
+                      0,0,0,0;
+                      0,0,0,0;
+                      0,0,0,0;
+                      0,0,0,0];
     
 %% Propeller 
 %Diameter [inches]
@@ -161,54 +165,55 @@ Aircraft.Sensors.DiffPres.lower_limit_pa = 0;
 Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_limit_pa - Aircraft.Sensors.DiffPres.lower_limit_pa);
 
 %% Controller parameters
-%% Altitude controller parameters
-% Vertical speed controller gain
-Aircraft.Control.P_alt = 0.5;
-% Vertical speed limit [m/s]
-Aircraft.Control.v_z_limit = [-1 2];
-% Vertical accel controller gain
-Aircraft.Control.P_v_z = 0.05;
-Aircraft.Control.I_v_z = 0.05;
-% Aircraft vertical g limits [m/s^2]
-Aircraft.Control.a_z_limit = [-19 19];
-% Aircraft throttle PI gains
-Aircraft.Control.P_thr = 0.05;
-Aircraft.Control.I_thr = 0.05;
+%% Mode slection ranges
+Aircraft.Control.stab_range = [-0.1 0.4];
+Aircraft.Control.pos_hold_range = [0.5 0.8];
+Aircraft.Control.auto_range = [0.9 1.2];
 
 %% Yaw rate controller parameters
 % Max yaw rate [radps]
-Aircraft.Control.yaw_rate_max = 0.174;  %~10deg/s
+Aircraft.Control.yaw_rate_max = 0.349;  %~5deg/s
 % It's good to limit the maximum yaw rate because excessive yaw rate may
 % cause some motors to slow down too much that hover cannot be maintained
 
 % Yaw accel PI gains
-Aircraft.Control.P_yaw_rate = 0.05;
-Aircraft.Control.I_yaw_rate = 0.05;
+Aircraft.Control.P_yaw_rate = 0.6;
+Aircraft.Control.I_yaw_rate = 0.1;
+Aircraft.Control.D_yaw_rate = 0.1;
 
 %% Pitch controller parameters
 % Max pitch angle [rad]
-Aircraft.Control.pitch_angle_lim = 0.52; %~deg
-
-% Pitch rate controller gains
-Aircraft.Control.P_pitch_rate = 0.05;
-Aircraft.Control.I_pitch_rate = 0.05;
-Aircraft.Control.D_pitch_rate = 0.05;
+Aircraft.Control.pitch_angle_lim = 0.52; %~10deg
 
 % Pitch cmd controller gains
-Aircraft.Control.P_pitch_cmd = 0.05;
-Aircraft.Control.I_pitch_cmd = 0.05;
-Aircraft.Control.D_pitch_cmd = 0.05;
+Aircraft.Control.P_pitch_angle = 0.7;
+Aircraft.Control.I_pitch_angle = 0.1;
+Aircraft.Control.D_pitch_angle = 0.12;
 
 %% Roll controller parameters
 % Max roll angle [rad]
-Aircraft.Control.roll_angle_lim = 0.52; %~deg
-
-% Roll rate controller gains
-Aircraft.Control.P_roll_rate = 0.05;
-Aircraft.Control.I_roll_rate = 0.05;
-Aircraft.Control.D_roll_rate = 0.05;
+Aircraft.Control.roll_angle_lim = 0.52; %~10deg
 
 % Roll cmd controller gains
-Aircraft.Control.P_roll_cmd = 0.05;
-Aircraft.Control.I_roll_cmd = 0.05;
-Aircraft.Control.D_roll_cmd = 0.05;
+Aircraft.Control.P_roll_angle = 0.7;
+Aircraft.Control.I_roll_angle = 0.1;
+Aircraft.Control.D_roll_angle = 0.12;
+
+%% Altitude controller parameters
+Aircraft.Control.est_hover_thr = 0.9;
+% Vertical speed limit [m/s]
+Aircraft.Control.v_z_up_max = 0.5;
+Aircraft.Control.v_z_down_max = 0.5; %minimum of -1 m/s
+% Vertical speed controller gain
+Aircraft.Control.P_v_z = 0.5;
+Aircraft.Control.I_v_z = 0.01;
+Aircraft.Control.D_v_z = 0.01;
+
+%% Translational speed controller parameters
+% Horizontal spped limti [m/s]
+Aircraft.Control.v_hor_max = 1;
+
+% Horizontal speed controller gain
+Aircraft.Control.P_v_hor = 0.001;
+Aircraft.Control.I_v_hor = 0.0001;
+Aircraft.Control.D_v_hor = 0.0001;

@@ -22,7 +22,7 @@ Env.wmm_nt = [22938.3 -33.7 -132.6];
 %% Initial Condition for simulation
 InitCond.ned_pos_m = [0 0 -100];
 InitCond.body_vel_mps = [0.001 0 0];
-InitCond.euler_rad = [0 0 pi/2];
+InitCond.euler_rad = [0 0 0];
 InitCond.body_rot_rate_radps = [0 0 0];
 InitCond.lat_rad = 0.579345551837;
 InitCond.lon_rad = -1.52682423982;
@@ -33,8 +33,8 @@ framePeriod_s = 1/frameRate_hz;
 
 %% Definitions
 % Vehicle
-% vehicle = 'queso';
-vehicle = 'super';
+% vehicle = 'super';
+vehicle = 'queso';
 
 % FMU-R version
 fmu_version = "v1";
