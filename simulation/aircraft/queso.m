@@ -165,14 +165,9 @@ Aircraft.Sensors.DiffPres.lower_limit_pa = 0;
 Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_limit_pa - Aircraft.Sensors.DiffPres.lower_limit_pa);
 
 %% Controller parameters
-%% Mode slection ranges
-Aircraft.Control.stab_range = [-0.1 0.4];
-Aircraft.Control.pos_hold_range = [0.5 0.8];
-Aircraft.Control.auto_range = [0.9 1.2];
-
 %% Yaw rate controller parameters
 % Max yaw rate [radps]
-Aircraft.Control.yaw_rate_max = 0.349;  %~5deg/s
+Aircraft.Control.yaw_rate_max = 0.349;  %~20deg/s
 % It's good to limit the maximum yaw rate because excessive yaw rate may
 % cause some motors to slow down too much that hover cannot be maintained
 
@@ -183,7 +178,7 @@ Aircraft.Control.D_yaw_rate = 0.1;
 
 %% Pitch controller parameters
 % Max pitch angle [rad]
-Aircraft.Control.pitch_angle_lim = 0.52; %~10deg
+Aircraft.Control.pitch_angle_lim = 0.262; %~15deg
 
 % Pitch cmd controller gains
 Aircraft.Control.P_pitch_angle = 0.7;
@@ -192,7 +187,7 @@ Aircraft.Control.D_pitch_angle = 0.12;
 
 %% Roll controller parameters
 % Max roll angle [rad]
-Aircraft.Control.roll_angle_lim = 0.52; %~10deg
+Aircraft.Control.roll_angle_lim = 0.262; %~15deg
 
 % Roll cmd controller gains
 Aircraft.Control.P_roll_angle = 0.7;
