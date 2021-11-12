@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.4.1
+- Fixed a bug where the telemetry parameter was not passed to the rest of the flight code.
+
 ## v2.4.0
 - Updated to include analog input from FMU v1 GPIO pins
 - Updated to have better granularity between FMU versions

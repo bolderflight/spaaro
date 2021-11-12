@@ -51,6 +51,8 @@ float min_, max_, range_;
 /* Inceptor */
 bfs::InceptorConfig inceptor_config_;
 std::array<float, 16> inceptor_ = {0};
+/* Parameter */
+int32_t param_idx_;
 }  // namespace
 
 void TelemInit(const AircraftConfig &cfg, TelemData * const ptr) {
@@ -202,8 +204,9 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   /* Update */
   telem_.Update();
   /* Params */
-  if (telem_.updated_param() >= 0) {
-    ptr->param[telem_.updated_param()] = telem_.param(telem_.updated_param());
+  param_idx_ = telem_.updated_param();
+  if (param_idx_ >= 0) {
+    ptr->param[param_idx_] = telem_.param(param_idx_);
   }
   /* Flight plan */
   ptr->waypoints_updated = telem_.mission_updated();
