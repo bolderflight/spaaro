@@ -27,6 +27,9 @@
 #include "flight/global_defs.h"
 #include "flight/hardware_defs.h"
 #include "mavlink/mavlink.h"
+#include "checksum/checksum.h"
+#include "flight/msg.h"
+
 
 namespace {
 /* MavLink object */
@@ -53,6 +56,15 @@ bfs::InceptorConfig inceptor_config_;
 std::array<float, 16> inceptor_ = {0};
 /* Parameter */
 int32_t param_idx_;
+static constexpr uint8_t PARAM_STORE_HEADER[] = {'B','F','S'};
+static constexpr std::size_t PARAM_STORE_SIZE = sizeof(PARAM_STORE_HEADER) +
+                                                NUM_TELEM_PARAMS *
+                                                sizeof(float) +
+                                                sizeof(uint16_t);
+uint8_t param_buf[PARAM_STORE_SIZE];
+bfs::Fletcher16 param_checksum;
+uint16_t chk_computed, chk_read;
+uint8_t chk_buf[2];
 }  // namespace
 
 void TelemInit(const AircraftConfig &cfg, TelemData * const ptr) {
@@ -68,6 +80,79 @@ void TelemInit(const AircraftConfig &cfg, TelemData * const ptr) {
   effector_config_ = cfg.effector;
   /* Make a copy of the inceptor config */
   inceptor_config_ = cfg.sensor.inceptor;
+  /* Load the telemetry parameters from EEPROM */
+  for (std::size_t i = 0; i < PARAM_STORE_SIZE; i++) {
+    param_buf[i] = EEPROM.read(i);
+  }
+  /* Check whether the parameter store has been initialized */
+  /* If it hasn't... */
+  if ((param_buf[0] != PARAM_STORE_HEADER[0]) ||
+      (param_buf[1] != PARAM_STORE_HEADER[1]) ||
+      (param_buf[2] != PARAM_STORE_HEADER[2])) {
+    MsgInfo("Parameter storage not initialized, initializing...");
+    /* Set the header */
+    param_buf[0] = PARAM_STORE_HEADER[0];
+    param_buf[1] = PARAM_STORE_HEADER[1];
+    param_buf[2] = PARAM_STORE_HEADER[2];
+    /* Zero out the parameters */
+    for (std::size_t i = 0; i < NUM_TELEM_PARAMS * sizeof(float); i++) {
+      param_buf[i + 3] = 0;
+    }
+    /* Compute the checksum */
+    chk_computed = param_checksum.Compute(param_buf,
+                                          sizeof(PARAM_STORE_HEADER) +
+                                          NUM_TELEM_PARAMS * sizeof(float));
+    chk_buf[0] = static_cast<uint8_t>(chk_computed >> 8);
+    chk_buf[1] = static_cast<uint8_t>(chk_computed);
+    param_buf[PARAM_STORE_SIZE - 2] = chk_buf[0];
+    param_buf[PARAM_STORE_SIZE - 1] = chk_buf[1];
+    /* Write to EEPROM */
+    for (std::size_t i = 0; i < PARAM_STORE_SIZE; i++) {
+      EEPROM.write(i, param_buf[i]);
+    }
+    MsgInfo("done.\n");
+  /* If it has been initialized */
+  } else {
+    /* Check the checksum */
+    chk_computed = param_checksum.Compute(param_buf,
+                                          sizeof(PARAM_STORE_HEADER) +
+                                          NUM_TELEM_PARAMS * sizeof(float));
+    chk_buf[0] = param_buf[PARAM_STORE_SIZE - 2];
+    chk_buf[1] = param_buf[PARAM_STORE_SIZE - 1];
+    chk_read = static_cast<uint16_t>(chk_buf[0]) << 8 |
+               static_cast<uint16_t>(chk_buf[1]);
+    if (chk_computed != chk_read) {
+      /* Parameter store corrupted, reset and warn */
+      MsgWarning("Parameter storage corrupted, resetting...");
+      /* Set the header */
+      param_buf[0] = PARAM_STORE_HEADER[0];
+      param_buf[1] = PARAM_STORE_HEADER[1];
+      param_buf[2] = PARAM_STORE_HEADER[2];
+      /* Zero out the parameters */
+      for (std::size_t i = 0; i < NUM_TELEM_PARAMS * sizeof(float); i++) {
+        param_buf[i + 3] = 0;
+      }
+      /* Compute the checksum */
+      chk_computed = param_checksum.Compute(param_buf,
+                                            sizeof(PARAM_STORE_HEADER) +
+                                            NUM_TELEM_PARAMS * sizeof(float));
+      chk_buf[0] = static_cast<uint8_t>(chk_computed >> 8);
+      chk_buf[1] = static_cast<uint8_t>(chk_computed);
+      param_buf[PARAM_STORE_SIZE - 2] = chk_buf[0];
+      param_buf[PARAM_STORE_SIZE - 1] = chk_buf[1];
+      /* Write to EEPROM */
+      for (std::size_t i = 0; i < PARAM_STORE_SIZE; i++) {
+        EEPROM.write(i, param_buf[i]);
+      }
+      MsgInfo("done.\n");
+    } else {
+      /* Copy parameter data to global defs */
+      memcpy(ptr->param.data(), param_buf + sizeof(PARAM_STORE_HEADER),
+             NUM_TELEM_PARAMS * sizeof(float));
+      /* Update the parameter values in MAV Link */
+      telem_.params(ptr->param);
+    }
+  }
   /* Begin communication */
   telem_.Begin(cfg.telem.baud);
   /* Data stream rates */
@@ -206,7 +291,27 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   /* Params */
   param_idx_ = telem_.updated_param();
   if (param_idx_ >= 0) {
+    /* Update the value in global defs */
     ptr->param[param_idx_] = telem_.param(param_idx_);
+    /* Update the parameter buffer value */
+    memcpy(param_buf + sizeof(PARAM_STORE_HEADER) + param_idx_ * sizeof(float),
+           &ptr->param[param_idx_], sizeof(float));
+    /* Compute a new checksum */
+    chk_computed = param_checksum.Compute(param_buf,
+                                          sizeof(PARAM_STORE_HEADER) +
+                                          NUM_TELEM_PARAMS * sizeof(float));
+    chk_buf[0] = static_cast<uint8_t>(chk_computed >> 8);
+    chk_buf[1] = static_cast<uint8_t>(chk_computed);
+    param_buf[PARAM_STORE_SIZE - 2] = chk_buf[0];
+    param_buf[PARAM_STORE_SIZE - 1] = chk_buf[1];
+    /* Write to EEPROM */
+    for (std::size_t i = 0; i < sizeof(float); i++) {
+      std::size_t addr = i + sizeof(PARAM_STORE_HEADER) +
+                         param_idx_ * sizeof(float);
+      EEPROM.write(addr, param_buf[addr]);
+    }
+    EEPROM.write(PARAM_STORE_SIZE - 2, param_buf[PARAM_STORE_SIZE - 2]);
+    EEPROM.write(PARAM_STORE_SIZE - 1, param_buf[PARAM_STORE_SIZE - 1]);
   }
   /* Flight plan */
   ptr->waypoints_updated = telem_.mission_updated();
