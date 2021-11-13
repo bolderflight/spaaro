@@ -56,7 +56,7 @@ bfs::InceptorConfig inceptor_config_;
 std::array<float, 16> inceptor_ = {0};
 /* Parameter */
 int32_t param_idx_;
-static constexpr uint8_t PARAM_STORE_HEADER[] = {'B','F','S'};
+static constexpr uint8_t PARAM_STORE_HEADER[] = {'B', 'F', 'S'};
 static constexpr std::size_t PARAM_STORE_SIZE = sizeof(PARAM_STORE_HEADER) +
                                                 NUM_TELEM_PARAMS *
                                                 sizeof(float) +
