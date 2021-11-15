@@ -195,7 +195,7 @@ Aircraft.Control.P_roll_angle = 0.04;
 Aircraft.Control.I_roll_angle = 0.04;
 Aircraft.Control.D_roll_angle = 0.02;
 
-%% Altitude controller parameters
+%% Vertical speed controller parameters
 Aircraft.Control.est_hover_thr = 0.6724;
 % Vertical speed limit [m/s]
 Aircraft.Control.v_z_up_max = 2;
@@ -213,3 +213,7 @@ Aircraft.Control.v_hor_max = 4;
 Aircraft.Control.P_v_hor = 0.09;
 Aircraft.Control.I_v_hor = 0.1;
 Aircraft.Control.D_v_hor = 0.05;
+
+%% Altitude controller parameters
+Aircraft.Control.P_alt = 3;
+Aircraft.Control.I_alt = 0.1;
