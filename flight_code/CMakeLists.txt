@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.13)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-	VERSION 2.4.1
+	VERSION 2.6.0
 	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )
@@ -83,6 +83,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(core)
 FetchContent_Declare(
+	checksum
+	GIT_REPOSITORY https://github.com/bolderflight/checksum.git
+	GIT_TAG v2.0.0
+)
+FetchContent_MakeAvailable(checksum)
+FetchContent_Declare(
 	imu
 	GIT_REPOSITORY https://github.com/bolderflight/imu.git
 	GIT_TAG v2.2.0
@@ -151,7 +157,7 @@ FetchContent_MakeAvailable(units)
 FetchContent_Declare(
 	mavlink
 	GIT_REPOSITORY https://github.com/bolderflight/mavlink.git
-	GIT_TAG v3.2.1
+	GIT_TAG v3.4.0
 )
 FetchContent_MakeAvailable(mavlink)
 FetchContent_Declare(
@@ -256,6 +262,7 @@ target_include_directories(flight PUBLIC
 target_link_libraries(flight
 	PRIVATE
 		core
+		checksum
 		imu
 		gnss
 		pres
