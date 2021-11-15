@@ -71,6 +71,7 @@ void TelemInit(const AircraftConfig &cfg, TelemData * const ptr) {
   if (!ptr) {return;}
   /* Config */
   telem_.hardware_serial(cfg.telem.bus);
+  telem_.gnss_serial(cfg.sensor.gnss.bus);
   telem_.aircraft_type(cfg.telem.aircraft_type);
   telem_.mission(ptr->flight_plan.data(), ptr->flight_plan.size(),
                  temp_.data());
