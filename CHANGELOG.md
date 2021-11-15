@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.6.0
+- Added RTCM corrections from a GNSS base station, sent via MAV Link from the ground control station
+
 ## v2.5.0
 - Added a feature where telemetry parameters are now stored in EEPROM, so values persist between power cycles
 

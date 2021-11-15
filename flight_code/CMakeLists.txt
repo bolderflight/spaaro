@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.13)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-	VERSION 2.5.0
+	VERSION 2.6.0
 	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )
@@ -157,7 +157,7 @@ FetchContent_MakeAvailable(units)
 FetchContent_Declare(
 	mavlink
 	GIT_REPOSITORY https://github.com/bolderflight/mavlink.git
-	GIT_TAG v3.3.0
+	GIT_TAG v3.4.0
 )
 FetchContent_MakeAvailable(mavlink)
 FetchContent_Declare(
