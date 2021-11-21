@@ -28,9 +28,9 @@
 
 #include "flight/global_defs.h"
 
-void ControlInit();
-void ControlRun(const SysData &sys, const SensorData &sensor,
-                const NavData &nav, const TelemData &telem,
-                ControlData *ctrl);
+void VmsInit();
+void VmsRun(const SysData &sys, const SensorData &sensor,
+            const NavData &nav, const TelemData &telem,
+            VmsData *vms);
 
 #endif  // FLIGHT_CODE_INCLUDE_FLIGHT_CONTROL_H_

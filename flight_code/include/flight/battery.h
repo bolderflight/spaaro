@@ -30,8 +30,7 @@
 
 #include "flight/global_defs.h"
 
-void BatteryInit(const BatteryConfig &cfg);
-void BatteryRead(BatteryData * const data);
+void BatteryRead(PowerModuleData * const data);
 
 #endif
 
