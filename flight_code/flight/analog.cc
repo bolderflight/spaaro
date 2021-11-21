@@ -29,7 +29,7 @@
 #include "flight/msg.h"
 #include "polytools/polytools.h"
 
-void AnalogRead(AnalogData * const data) {
+void AnalogRead(AdcData * const data) {
   for (std::size_t i = 0; i < NUM_AIN_PINS; i++) {
     data->volt[i] = static_cast<float>(analogRead(AIN_PINS[i])) *
                              AIN_VOLTAGE_SCALE;

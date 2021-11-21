@@ -28,6 +28,6 @@
 
 #include "flight/global_defs.h"
 
-void AnalogRead(AnalogData * const data);
+void AnalogRead(AdcData * const data);
 
 #endif  // FLIGHT_CODE_INCLUDE_FLIGHT_ANALOG_H_

@@ -107,9 +107,9 @@ void SensorsRead(SensorData * const data) {
     }
   }
   /* Read analog channels */
-  AnalogRead(&data->analog);
+  AnalogRead(&data->adc);
   /* Read battery voltage / current */
   #if defined(__FMU_R_V2__)
-  BatteryRead(&data->battery);
+  BatteryRead(&data->power_module);
   #endif
 }

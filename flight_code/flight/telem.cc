@@ -160,9 +160,9 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   /* System data */
   telem_.sys_time_us(data.sys.sys_time_us);
   telem_.cpu_load(data.sys.frame_time_us, FRAME_PERIOD_US);
-  telem_.throttle_enabled(data.vms.inceptor.throttle_enabled);
+  telem_.throttle_enabled(data.vms.motors_enabled);
   telem_.aircraft_mode(data.vms.mode);
-  if (data.vms.inceptor.throttle_enabled) {
+  if (data.vms.motors_enabled) {
     telem_.aircraft_state(bfs::ACTIVE);
   } else {
     telem_.aircraft_state(bfs::STANDBY);
@@ -250,15 +250,15 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   telem_.nav_gyro_z_radps(data.nav.gyro_radps[2]);
   /* Effector */
   for (std::size_t i = 0; i < NUM_PWM_PINS; i++) {
-    effector_[i] = data.vms.pwm.cnts[i];
+    effector_[i] = data.vms.pwm.cnt[i];
   }
   for (std::size_t i = 0; i < NUM_SBUS; i++) {
-    effector_[i + NUM_PWM_PINS] = data.vms.sbus.cnts[i];
+    effector_[i + NUM_PWM_PINS] = data.vms.sbus.cnt[i];
   }
   telem_.effector(effector_);
   /* Inceptor */
   telem_.inceptor_healthy(!data.sensor.inceptor.failsafe);
-  telem_.throttle_prcnt(data.vms.inceptor.throttle_cmd_prcnt);
+  telem_.throttle_prcnt(data.vms.throttle_cmd_prcnt);
   telem_.inceptor(data.sensor.inceptor.ch);
   /* Mission */
   if (data.vms.waypoint_reached) {

@@ -84,7 +84,6 @@ struct AircraftConfig {
 /* System data */
 struct SysData {
   int32_t frame_time_us;
-  float frame_time_s;
   #if defined(__FMU_R_V1__)
   float input_volt;
   float reg_volt;
@@ -92,15 +91,14 @@ struct SysData {
   float sbus_volt;
   #endif
   int64_t sys_time_us;
-  double sys_time_s;
 };
 /* Analog data */
-struct AnalogData {
+struct AdcData {
   std::array<float, NUM_AIN_PINS> volt;
 };
-/* Battery data */
+/* Power module data */
 #if defined(__FMU_R_V2__)
-struct BatteryData {
+struct PowerModuleData {
   float voltage_v;
   float current_v;
 };
@@ -110,9 +108,9 @@ struct InceptorData {
   bool new_data;
   bool lost_frame;
   bool failsafe;
-  std::array<int16_t, bfs::SbusRx::NUM_CH> ch;
   bool ch17;
   bool ch18;
+  std::array<int16_t, bfs::SbusRx::NUM_CH> ch;
 };
 /* Sensor data */
 struct SensorData {
@@ -122,9 +120,9 @@ struct SensorData {
   bfs::GnssData gnss;
   bfs::PresData static_pres;
   bfs::PresData diff_pres;
-  AnalogData analog;
+  AdcData adc;
   #if defined(__FMU_R_V2__)
-  BatteryData battery;
+  PowerModuleData power_module;
   #endif
 };
 /* Nav data */
@@ -134,6 +132,7 @@ struct NavData {
   float roll_rad;
   float heading_rad;
   float alt_wgs84_m;
+  float home_alt_wgs84_m;
   float alt_msl_m;
   float alt_rel_m;
   float static_pres_pa;
@@ -152,48 +151,48 @@ struct NavData {
   std::array<float, 3> ned_vel_mps;
   double lat_rad;
   double lon_rad;
-};
-/* Inceptor data */
-struct InceptorOutput {
-  bool throttle_enabled;
-  float throttle_cmd_prcnt;
+  double home_lat_rad;
+  double home_lon_rad;
 };
 /* SBUS data */
-struct SbusOutput {
-  std::array<float, NUM_SBUS_CH> cmds;
-  std::array<int16_t, NUM_SBUS_CH> cnts;
+struct SbusCmd {
   bool ch17;
   bool ch18;
+  std::array<int16_t, NUM_SBUS_CH> cnt;
+  std::array<float, NUM_SBUS_CH> cmd;
 };
 /* PWM data */
-struct PwmOutput {
-  std::array<float, NUM_PWM_PINS> cmds;
-  std::array<int16_t, NUM_PWM_PINS> cnts;
+struct PwmCmd {
+  std::array<int16_t, NUM_PWM_PINS> cnt;
+  std::array<float, NUM_PWM_PINS> cmd;
 };
 /* Analog data */
-struct AnalogOutput {
+struct AnalogData {
   std::array<float, NUM_AIN_PINS> val;
 };
+#if defined(__FMU_R_V2__)
 /* Battery data */
-struct BatteryOutput {
+struct BatteryData {
   float voltage_v;
   float current_ma;
   float consumed_mah;
   float remaining_prcnt;
   float remaining_time_s;
 };
+#endif
 /* VMS data */
 struct VmsData {
+  bool motors_enabled;
   bool waypoint_reached;
   int8_t mode;
-  InceptorOutput inceptor;
-  SbusOutput sbus;
-  PwmOutput pwm;
-  AnalogOutput analog;
-  #if defined(__FMU_R_V2__)
-  BatteryOutput battery;
-  #endif
+  float throttle_cmd_prcnt;
   std::array<float, NUM_AUX_VAR> aux;
+  SbusCmd sbus;
+  PwmCmd pwm;
+  AnalogData analog;
+  #if defined(__FMU_R_V2__)
+  BatteryData battery;
+  #endif
 };
 /* Telemetry data */
 struct TelemData {

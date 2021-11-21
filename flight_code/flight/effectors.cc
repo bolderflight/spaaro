@@ -44,10 +44,10 @@ void EffectorsInit() {
 }
 void EffectorsCmd(const VmsData &vms) {
   /* Set effector commands */
-  sbus.ch(vms.sbus.cnts);
+  sbus.ch(vms.sbus.cnt);
   sbus.ch17(vms.sbus.ch17);
   sbus.ch18(vms.sbus.ch18);
-  pwm.ch(vms.pwm.cnts);
+  pwm.ch(vms.pwm.cnt);
 }
 void EffectorsWrite() {
   /* Write the effector commands */

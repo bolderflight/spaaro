@@ -30,7 +30,7 @@
 #include "flight/config.h"
 #include "flight/msg.h"
 
-void BatteryRead(BatteryData * const data) {
+void BatteryRead(PowerModuleData * const data) {
   data->voltage_v = static_cast<float>(analogRead(BATTERY_VOLTAGE_PIN)) *
                     AIN_VOLTAGE_SCALE;
   data->current_v = static_cast<float>(analogRead(BATTERY_CURRENT_PIN)) *
