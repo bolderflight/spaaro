@@ -33,44 +33,6 @@ bool DEBUG = true;
 AircraftConfig config = {
   .sensor = {
     .pitot_static_installed = true,
-    .inceptor = {
-      .hw = &SBUS_UART,
-      .throttle_en = {
-        .ch = 6,
-        .num_coef = 2,
-        .poly_coef = {0.0012202562538133f, -1.20988407565589f}
-      },
-      .mode0 = {
-        .ch = 4,
-        .num_coef = 2,
-        .poly_coef = {-0.0012202562538133f, 2.3f}
-      },
-      .mode1 = {
-        .ch = 5,
-        .num_coef = 2,
-        .poly_coef = {-0.0012202562538133f, 2.3f}
-      },
-      .throttle = {
-        .ch = 0,
-        .num_coef = 2,
-        .poly_coef = {0.00061013f, -0.10494204f}
-      },
-      .pitch = {
-        .ch = 2,
-        .num_coef = 2,
-        .poly_coef = {0.0012203f, -1.2098841f}
-      },
-      .roll = {
-        .ch = 1,
-        .num_coef = 2,
-        .poly_coef = {0.0012203f, -1.2098841f}
-      },
-      .yaw = {
-        .ch = 3,
-        .num_coef = 2,
-        .poly_coef = {0.0012203f, -1.2098841f}
-      }
-    },
     .imu = {
       .dev = IMU_CS,
       .frame_rate = FRAME_RATE_HZ,
@@ -105,72 +67,6 @@ AircraftConfig config = {
     .mag_cutoff_hz = 10,
     .static_pres_cutoff_hz = 10,
     .diff_pres_cutoff_hz = 10
-  },
-  .effector = {
-    .sbus = {
-      .hw = &SBUS_UART,
-      .effectors = {
-        {
-          /* Elevator */
-          .type = bfs::SERVO,
-          .ch = 2,
-          .min = bfs::deg2rad(-20.0f),
-          .max = bfs::deg2rad(20.0f),
-          .failsafe = 0,
-          .num_coef = 4,
-          .poly_coef = {1144.32190165984f, 167.225360182927f,
-                        1558.74885501875f, 1026.6382652891f}
-        },
-        {
-          /* Rudder */
-          .type = bfs::SERVO,
-          .ch = 3,
-          .min = bfs::deg2rad(-20.0f),
-          .max = bfs::deg2rad(20.0f),
-          .failsafe = 0,
-          .num_coef = 4,
-          .poly_coef = {-930.322085258545f, 148.612787752928f,
-                        -1476.11502090935f, 1006.01614399429f}
-        },
-        {
-          /* Left Aileron */
-          .type = bfs::SERVO,
-          .ch = 4,
-          .min = bfs::deg2rad(-20.0f),
-          .max = bfs::deg2rad(20.0f),
-          .failsafe = 0,
-          .num_coef = 4,
-          .poly_coef = {1097.27825386315f, 173.191562145482f,
-                        1642.60230905023f, 1054.30469578325f}
-        },
-        {
-          /* Right Aileron */
-          .type = bfs::SERVO,
-          .ch = 5,
-          .min = bfs::deg2rad(-20.0f),
-          .max = bfs::deg2rad(20.0f),
-          .failsafe = 0,
-          .num_coef = 4,
-          .poly_coef = {930.582953971947f, 132.665450728095f,
-                        1620.14796233637f, 1011.10438715363f}
-        }
-      }
-    },
-    .pwm = {
-      .hw = PWM_PINS,
-      .effectors = {
-        {
-          /* ESC */
-          .type = bfs::MOTOR,
-          .ch = 0,
-          .min = 0,
-          .max = 1,
-          .failsafe = 0,
-          .num_coef = 2,
-          .poly_coef = {1000.0f, 1000.0f}
-        }
-      }
-    }
   },
   .telem = {
     .aircraft_type = bfs::FIXED_WING,

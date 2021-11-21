@@ -30,45 +30,24 @@
 
 namespace {
 /* Effectors */
-bfs::SbusTx<NUM_SBUS_CH> sbus;
+bfs::SbusTx sbus;
 bfs::PwmTx<NUM_PWM_PINS> pwm;
 }  // namespace
 
-void EffectorsInit(const EffectorConfig &cfg) {
+void EffectorsInit() {
   MsgInfo("Intializing effectors...");
   /* Init SBUS */
-  if (!sbus.Init(cfg.sbus)) {
-    MsgError("Unable to initialize SBUS effectors.");
-  }
+  sbus.Init(&SBUS_UART);
   /* Init PWM */
-  if (!pwm.Init(cfg.pwm)) {
-    MsgError("Unable to initialize PWM effectors.");
-  }
-  /* Servos enabled by default */
-  sbus.EnableServos();
-  pwm.EnableServos();
+  pwm.Init(PWM_PINS);
   MsgInfo("done.\n");
 }
-void EffectorsCmd(bool motor, bool servo, const ControlData &cmd) {
-  /* Enable / disable motors */
-  if (motor) {
-    sbus.EnableMotors();
-    pwm.EnableMotors();
-  } else {
-    sbus.DisableMotors();
-    pwm.DisableMotors();
-  }
-  /* Enable / disable servos */
-  if (servo) {
-    sbus.EnableServos();
-    pwm.EnableServos();
-  } else {
-    sbus.DisableServos();
-    pwm.DisableServos();
-  }
+void EffectorsCmd(const VmsData &vms) {
   /* Set effector commands */
-  sbus.Cmd(cmd.sbus);
-  pwm.Cmd(cmd.pwm);
+  sbus.ch(vms.sbus.cnts);
+  sbus.ch17(vms.sbus.ch17);
+  sbus.ch18(vms.sbus.ch18);
+  pwm.ch(vms.pwm.cnts);
 }
 void EffectorsWrite() {
   /* Write the effector commands */

@@ -30,8 +30,6 @@
 #include "imu/imu.h"
 #include "gnss/gnss.h"
 #include "pres/pres.h"
-#include "inceptor/inceptor.h"
-#include "effector/effector.h"
 #include "global_defs/global_defs.h"
 #include "mpu9250/mpu9250.h"
 #include "ublox/ublox.h"
@@ -55,40 +53,13 @@ inline constexpr std::size_t NUM_FLIGHT_PLAN_POINTS = 100;
 inline constexpr std::size_t NUM_FENCE_POINTS = 50;
 inline constexpr std::size_t NUM_RALLY_POINTS = 10;
 #endif
-/* Effector objects */
-struct Effectors {
-  bfs::SbusTx<NUM_SBUS_CH> sbus;
-  bfs::PwmTx<NUM_PWM_PINS> pwm;
-};
-/* Analog input config */
-struct AnalogChannel {
-  int8_t num_coef = 0;
-  float poly_coef[bfs::MAX_POLY_COEF_SIZE];
-};
-struct AnalogConfig {
-  AnalogChannel channels[NUM_AIN_PINS];
-};
-/* Battery monitoring config */
-#if defined(__FMU_R_V2__)
-struct BatteryConfig {
-  float voltage_scale = 10.1f;
-  float current_scale = 17.0f;
-  float capacity_mah = 5000.0f;
-  float current_cutoff_hz = 0.1f;
-};
-#endif
 /* Sensor config */
 struct SensorConfig {
   bool pitot_static_installed;
-  bfs::InceptorConfig inceptor;
   bfs::ImuConfig imu;
   bfs::GnssConfig gnss;
   bfs::PresConfig static_pres;
   bfs::PresConfig diff_pres;
-  AnalogConfig analog;
-  #if defined(__FMU_R_V2__)
-  BatteryConfig battery;
-  #endif
 };
 /* Nav config */
 struct NavConfig {
@@ -97,11 +68,6 @@ struct NavConfig {
   float mag_cutoff_hz;
   float static_pres_cutoff_hz;
   float diff_pres_cutoff_hz;
-};
-/* Effector config */
-struct EffectorConfig {
-  bfs::EffectorConfig<NUM_SBUS_CH> sbus;
-  bfs::EffectorConfig<NUM_PWM_PINS> pwm;
 };
 /* Telem config */
 struct TelemConfig {
@@ -113,7 +79,6 @@ struct TelemConfig {
 struct AircraftConfig {
   SensorConfig sensor;
   NavConfig nav;
-  EffectorConfig effector;
   TelemConfig telem;
 };
 /* System data */
@@ -132,22 +97,27 @@ struct SysData {
 /* Analog data */
 struct AnalogData {
   std::array<float, NUM_AIN_PINS> volt;
-  std::array<float, NUM_AIN_PINS> val;
 };
 /* Battery data */
 #if defined(__FMU_R_V2__)
 struct BatteryData {
   float voltage_v;
-  float current_ma;
-  float consumed_mah = 0.0f;
-  float remaining_prcnt;
-  float remaining_time_s;
+  float current_v;
 };
 #endif
+/* Inceptor data */
+struct InceptorData {
+  bool new_data;
+  bool lost_frame;
+  bool failsafe;
+  std::array<int16_t, bfs::SbusRx::NUM_CH> ch;
+  bool ch17;
+  bool ch18;
+};
 /* Sensor data */
 struct SensorData {
   bool pitot_static_installed;
-  bfs::InceptorData inceptor;
+  InceptorData inceptor;
   bfs::ImuData imu;
   bfs::GnssData gnss;
   bfs::PresData static_pres;
@@ -183,12 +153,46 @@ struct NavData {
   double lat_rad;
   double lon_rad;
 };
-/* Control data */
-struct ControlData {
+/* Inceptor data */
+struct InceptorOutput {
+  bool throttle_enabled;
+  float throttle_cmd_prcnt;
+};
+/* SBUS data */
+struct SbusOutput {
+  std::array<float, NUM_SBUS_CH> cmds;
+  std::array<int16_t, NUM_SBUS_CH> cnts;
+  bool ch17;
+  bool ch18;
+};
+/* PWM data */
+struct PwmOutput {
+  std::array<float, NUM_PWM_PINS> cmds;
+  std::array<int16_t, NUM_PWM_PINS> cnts;
+};
+/* Analog data */
+struct AnalogOutput {
+  std::array<float, NUM_AIN_PINS> val;
+};
+/* Battery data */
+struct BatteryOutput {
+  float voltage_v;
+  float current_ma;
+  float consumed_mah;
+  float remaining_prcnt;
+  float remaining_time_s;
+};
+/* VMS data */
+struct VmsData {
   bool waypoint_reached;
   int8_t mode;
-  std::array<float, NUM_SBUS_CH> sbus;
-  std::array<float, NUM_PWM_PINS> pwm;
+  InceptorOutput inceptor;
+  SbusOutput sbus;
+  PwmOutput pwm;
+  AnalogOutput analog;
+  #if defined(__FMU_R_V2__)
+  BatteryOutput battery;
+  #endif
   std::array<float, NUM_AUX_VAR> aux;
 };
 /* Telemetry data */
@@ -210,7 +214,7 @@ struct AircraftData {
   SysData sys;
   SensorData sensor;
   NavData nav;
-  ControlData control;
+  VmsData vms;
   TelemData telem;
 };
 

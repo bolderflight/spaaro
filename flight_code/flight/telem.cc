@@ -45,15 +45,6 @@ static constexpr int16_t EXTRA1_STREAM_PERIOD_MS_ = 100;
 static constexpr int16_t EXTRA2_STREAM_PERIOD_MS_ = 100;
 /* Frame period, us */
 static constexpr int16_t FRAME_PERIOD_US = FRAME_PERIOD_MS * 1000;
-/* Effector */
-EffectorConfig effector_config_;
-std::array<float, 16> effector_ = {0};
-int NUM_SBUS = std::min(static_cast<std::size_t>(NUM_SBUS_CH),
-                        effector_.size() - NUM_PWM_PINS);
-float min_, max_, range_;
-/* Inceptor */
-bfs::InceptorConfig inceptor_config_;
-std::array<float, 16> inceptor_ = {0};
 /* Parameter */
 int32_t param_idx_;
 static constexpr uint8_t PARAM_STORE_HEADER[] = {'B', 'F', 'S'};
@@ -65,6 +56,10 @@ uint8_t param_buf[PARAM_STORE_SIZE];
 bfs::Fletcher16 param_checksum;
 uint16_t chk_computed, chk_read;
 uint8_t chk_buf[2];
+/* Effector */
+std::array<int16_t, 16> effector_;
+int NUM_SBUS = std::min(static_cast<std::size_t>(NUM_SBUS_CH),
+                        effector_.size() - NUM_PWM_PINS);
 }  // namespace
 
 void TelemInit(const AircraftConfig &cfg, TelemData * const ptr) {
@@ -77,10 +72,6 @@ void TelemInit(const AircraftConfig &cfg, TelemData * const ptr) {
                  temp_.data());
   telem_.fence(ptr->fence.data(), ptr->fence.size());
   telem_.rally(ptr->rally.data(), ptr->rally.size());
-  /* Make a copy of the effector config */
-  effector_config_ = cfg.effector;
-  /* Make a copy of the inceptor config */
-  inceptor_config_ = cfg.sensor.inceptor;
   /* Load the telemetry parameters from EEPROM */
   for (std::size_t i = 0; i < PARAM_STORE_SIZE; i++) {
     param_buf[i] = EEPROM.read(i);
@@ -169,9 +160,9 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   /* System data */
   telem_.sys_time_us(data.sys.sys_time_us);
   telem_.cpu_load(data.sys.frame_time_us, FRAME_PERIOD_US);
-  telem_.throttle_enabled(data.sensor.inceptor.throttle_en);
-  telem_.aircraft_mode(data.control.mode);
-  if (data.sensor.inceptor.throttle_en) {
+  telem_.throttle_enabled(data.vms.inceptor.throttle_enabled);
+  telem_.aircraft_mode(data.vms.mode);
+  if (data.vms.inceptor.throttle_enabled) {
     telem_.aircraft_state(bfs::ACTIVE);
   } else {
     telem_.aircraft_state(bfs::STANDBY);
@@ -186,11 +177,11 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   telem_.inceptor_installed(true);
   /* Battery data */
   #if defined(__FMU_R_V2__)
-  telem_.battery_volt(data.sensor.battery.voltage_v);
-  telem_.battery_current_ma(data.sensor.battery.current_ma);
-  telem_.battery_consumed_mah(data.sensor.battery.consumed_mah);
-  telem_.battery_remaining_prcnt(data.sensor.battery.remaining_prcnt);
-  telem_.battery_remaining_time_s(data.sensor.battery.remaining_time_s);
+  telem_.battery_volt(data.vms.battery.voltage_v);
+  telem_.battery_current_ma(data.vms.battery.current_ma);
+  telem_.battery_consumed_mah(data.vms.battery.consumed_mah);
+  telem_.battery_remaining_prcnt(data.vms.battery.remaining_prcnt);
+  telem_.battery_remaining_time_s(data.vms.battery.remaining_time_s);
   #endif
   #if defined(__FMU_R_V1__)
   telem_.battery_volt(data.sys.input_volt);
@@ -259,32 +250,18 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
   telem_.nav_gyro_z_radps(data.nav.gyro_radps[2]);
   /* Effector */
   for (std::size_t i = 0; i < NUM_PWM_PINS; i++) {
-    min_ = effector_config_.pwm.effectors[i].min;
-    max_ = effector_config_.pwm.effectors[i].max;
-    range_ = max_ - min_;
-    effector_[i] = (data.control.pwm[i] - min_) / range_;
+    effector_[i] = data.vms.pwm.cnts[i];
   }
   for (std::size_t i = 0; i < NUM_SBUS; i++) {
-    min_ = effector_config_.sbus.effectors[i].min;
-    max_ = effector_config_.sbus.effectors[i].max;
-    range_ = max_ - min_;
-    effector_[i + NUM_PWM_PINS] = (data.control.sbus[i] - min_) / range_;
+    effector_[i + NUM_PWM_PINS] = data.vms.sbus.cnts[i];
   }
   telem_.effector(effector_);
   /* Inceptor */
   telem_.inceptor_healthy(!data.sensor.inceptor.failsafe);
-  telem_.throttle_ch(inceptor_config_.throttle.ch);
-  inceptor_[inceptor_config_.pitch.ch] = data.sensor.inceptor.pitch * 0.5f +
-                                         0.5f;
-  inceptor_[inceptor_config_.roll.ch] = data.sensor.inceptor.roll * 0.5f + 0.5f;
-  inceptor_[inceptor_config_.yaw.ch] = data.sensor.inceptor.yaw * 0.5f + 0.5f;
-  inceptor_[inceptor_config_.throttle.ch]  = data.sensor.inceptor.throttle;
-  inceptor_[inceptor_config_.throttle_en.ch] = data.sensor.inceptor.throttle_en;
-  inceptor_[inceptor_config_.mode0.ch] = data.sensor.inceptor.mode0;
-  inceptor_[inceptor_config_.mode1.ch] = data.sensor.inceptor.mode1;
-  telem_.inceptor(inceptor_);
+  telem_.throttle_prcnt(data.vms.inceptor.throttle_cmd_prcnt);
+  telem_.inceptor(data.sensor.inceptor.ch);
   /* Mission */
-  if (data.control.waypoint_reached) {
+  if (data.vms.waypoint_reached) {
     telem_.AdvanceMissionItem();
   }
   /* Update */

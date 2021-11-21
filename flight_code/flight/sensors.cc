@@ -68,22 +68,23 @@ void SensorsInit(const SensorConfig &cfg) {
       MsgError("Unable to initialize static pressure sensor.");
     }
   }
-  /* Initialize analog input */
-  AnalogInit(cfg.analog);
-  /* Initialize battery monitoring */
-  #if defined(__FMU_R_V2__)
-  BatteryInit(cfg.battery);
-  #endif
   MsgInfo("done.\n");
   /* Initialize inceptors */
   MsgInfo("Initializing inceptors...");
-  while (!inceptor.Init(cfg.inceptor)) {}
+  while (!inceptor.Init(&SBUS_UART)) {}
   MsgInfo("done.\n");
 }
 void SensorsRead(SensorData * const data) {
   if (!data) {return;}
   /* Read inceptors */
-  inceptor.Read(&data->inceptor);
+  data->inceptor.new_data = inceptor.Read();
+  if (data->inceptor.new_data) {
+    data->inceptor.ch = inceptor.ch();
+    data->inceptor.ch17 = inceptor.ch17();
+    data->inceptor.ch18 = inceptor.ch18();
+    data->inceptor.lost_frame = inceptor.lost_frame();
+    data->inceptor.failsafe = inceptor.failsafe();
+  }
   /* Read IMU */
   if (!imu.Read(&data->imu)) {
     MsgWarning("Unable to read IMU data.\n");

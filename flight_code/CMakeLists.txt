@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.13)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-	VERSION 2.6.0
+	VERSION 3.0.0
 	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )
@@ -107,18 +107,6 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(pres)
 FetchContent_Declare(
-	inceptor
-	GIT_REPOSITORY https://github.com/bolderflight/inceptor.git
-	GIT_TAG v2.2.0
-)
-FetchContent_MakeAvailable(inceptor)
-FetchContent_Declare(
-	effector
-	GIT_REPOSITORY https://github.com/bolderflight/effector.git
-	GIT_TAG v6.1.3
-)
-FetchContent_MakeAvailable(effector)
-FetchContent_Declare(
 	navigation
 	GIT_REPOSITORY https://github.com/bolderflight/navigation.git
 	GIT_TAG v2.0.1
@@ -157,7 +145,7 @@ FetchContent_MakeAvailable(units)
 FetchContent_Declare(
 	mavlink
 	GIT_REPOSITORY https://github.com/bolderflight/mavlink.git
-	GIT_TAG v3.4.0
+	GIT_TAG v3.5.1
 )
 FetchContent_MakeAvailable(mavlink)
 FetchContent_Declare(
@@ -187,13 +175,13 @@ FetchContent_MakeAvailable(bme280)
 FetchContent_Declare(
 	sbus
 	GIT_REPOSITORY https://github.com/bolderflight/sbus.git
-	GIT_TAG v4.0.5
+	GIT_TAG v5.0.0
 )
 FetchContent_MakeAvailable(sbus)
 FetchContent_Declare(
 	pwm
 	GIT_REPOSITORY https://github.com/bolderflight/pwm.git
-	GIT_TAG v4.0.4
+	GIT_TAG v5.0.0
 )
 FetchContent_MakeAvailable(pwm)
 FetchContent_Declare(
@@ -208,6 +196,12 @@ FetchContent_Declare(
 	GIT_TAG v2.0.1
 )
 FetchContent_MakeAvailable(excitation)
+FetchContent_Declare(
+	polytools
+	GIT_REPOSITORY https://github.com/bolderflight/polytools.git
+	GIT_TAG v3.0.2
+)
+FetchContent_MakeAvailable(polytools)
 # Add the executable
 add_executable(flight
 	include/flight/global_defs.h
@@ -217,7 +211,7 @@ add_executable(flight
 	include/flight/sensors.h
 	include/flight/effectors.h
 	include/flight/nav.h
-	include/flight/control.h
+	include/flight/vms.h
 	include/flight/datalog.h
 	include/flight/telem.h
 	include/flight/analog.h
@@ -228,7 +222,7 @@ add_executable(flight
 	flight/sensors.cc
 	flight/effectors.cc
 	flight/nav.cc
-	flight/control.cc
+	flight/vms.cc
 	flight/datalog.cc
 	flight/telem.cc
 	flight/analog.cc
@@ -266,8 +260,6 @@ target_link_libraries(flight
 		imu
 		gnss
 		pres
-		inceptor
-		effector
 		navigation
 		airdata
 		logger
@@ -283,6 +275,7 @@ target_link_libraries(flight
 		pwm
 		control
 		excitation
+		polytools
 )
 # Add hex and upload targets
 include(${CMAKE_SOURCE_DIR}/cmake/flash_mcu.cmake)

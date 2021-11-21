@@ -28,7 +28,6 @@
 
 #include "flight/global_defs.h"
 
-void AnalogInit(const AnalogConfig &cfg);
 void AnalogRead(AnalogData * const data);
 
 #endif  // FLIGHT_CODE_INCLUDE_FLIGHT_ANALOG_H_

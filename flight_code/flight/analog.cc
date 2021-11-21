@@ -29,21 +29,9 @@
 #include "flight/msg.h"
 #include "polytools/polytools.h"
 
-namespace {
-/* Analog config */
-AnalogConfig cfg_;
-}  // namespace
-
-void AnalogInit(const AnalogConfig &cfg) {
-  /* Copy the config */
-  cfg_ = cfg;
-}
 void AnalogRead(AnalogData * const data) {
   for (std::size_t i = 0; i < NUM_AIN_PINS; i++) {
     data->volt[i] = static_cast<float>(analogRead(AIN_PINS[i])) *
                              AIN_VOLTAGE_SCALE;
-    std::span<float> coef{cfg_.channels[i].poly_coef,
-          static_cast<std::size_t>(cfg_.channels[i].num_coef)};
-    data->val[i] = bfs::polyval<float>(coef, data->volt[i]);
   }
 }

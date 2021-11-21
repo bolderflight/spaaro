@@ -42,13 +42,9 @@ message DatalogMessage {
   bool incept_new_data = 20;
   bool incept_lost_frame = 21;
   bool incept_failsafe = 22;
-  bool incept_throttle_en = 23;
-  int32 incept_mode0 = 24;
-  int32 incept_mode1 = 25;
-  float incept_throttle = 26;
-  float incept_pitch = 27;
-  float incept_roll = 28;
-  float incept_yaw = 29;
+  bool incept_ch17 = 23;
+  bool incept_ch18 = 24;
+  repeated int32 incept_ch = 25;
   /* IMU data */
   bool imu_new_data = 40;
   bool imu_new_mag_data = 41;
@@ -102,7 +98,7 @@ message DatalogMessage {
   double nav_lon_rad = 137;
   /* Analog Data */
   repeated float ain_volt = 140;
-  repeated float ain_val = 141;  
+  repeated float ain_val = 141;
   /* Control data */
   bool cntrl_waypoint_reached = 150;
   repeated float cntrl_sbus = 151;

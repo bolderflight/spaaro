@@ -5,6 +5,7 @@
 # Copyright (c) 2021 Bolder Flight Systems
 #
 
+DatalogMessage.incept_ch max_count:16 fixed_count:true
 DatalogMessage.imu_accel_mps2 max_count:3 fixed_count:true
 DatalogMessage.imu_gyro_radps max_count:3 fixed_count:true
 DatalogMessage.imu_mag_ut max_count:3 fixed_count:true

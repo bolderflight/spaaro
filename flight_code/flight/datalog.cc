@@ -81,13 +81,11 @@ void DatalogAdd(const AircraftData &ref) {
   datalog_msg_.incept_new_data = ref.sensor.inceptor.new_data;
   datalog_msg_.incept_lost_frame = ref.sensor.inceptor.lost_frame;
   datalog_msg_.incept_failsafe = ref.sensor.inceptor.failsafe;
-  datalog_msg_.incept_throttle_en = ref.sensor.inceptor.throttle_en;
-  datalog_msg_.incept_mode0 = ref.sensor.inceptor.mode0;
-  datalog_msg_.incept_mode1 = ref.sensor.inceptor.mode1;
-  datalog_msg_.incept_throttle = ref.sensor.inceptor.throttle;
-  datalog_msg_.incept_pitch = ref.sensor.inceptor.pitch;
-  datalog_msg_.incept_roll = ref.sensor.inceptor.roll;
-  datalog_msg_.incept_yaw = ref.sensor.inceptor.yaw;
+  datalog_msg_.incept_ch17 = ref.sensor.inceptor.ch17;
+  datalog_msg_.incept_ch18 = ref.sensor.inceptor.ch18;
+  for (std::size_t i = 0; i < NUM_SBUS_CH; i++) {
+    datalog_msg_.incept_ch[i] = ref.sensor.inceptor.ch[i];
+  }
   /* IMU data */
   datalog_msg_.imu_new_data = ref.sensor.imu.new_imu_data;
   datalog_msg_.imu_new_mag_data = ref.sensor.imu.new_mag_data;
@@ -146,17 +144,17 @@ void DatalogAdd(const AircraftData &ref) {
   datalog_msg_.nav_lat_rad = ref.nav.lat_rad;
   datalog_msg_.nav_lon_rad = ref.nav.lon_rad;
   /* Control data */
-  datalog_msg_.cntrl_waypoint_reached = ref.control.waypoint_reached;
+  datalog_msg_.cntrl_waypoint_reached = ref.vms.waypoint_reached;
   for (std::size_t i = 0; i < NUM_SBUS_CH; i++) {
-    datalog_msg_.cntrl_sbus[i] = ref.control.sbus[i];
+    datalog_msg_.cntrl_sbus[i] = ref.vms.sbus.cmds[i];
   }
   for (std::size_t i = 0; i < NUM_PWM_PINS; i++) {
-    datalog_msg_.cntrl_pwm[i] = ref.control.pwm[i];
+    datalog_msg_.cntrl_pwm[i] = ref.vms.pwm.cmds[i];
   }
   for (std::size_t i = 0; i < NUM_AUX_VAR; i++) {
-    datalog_msg_.cntrl_aux[i] = ref.control.aux[i];
+    datalog_msg_.cntrl_aux[i] = ref.vms.aux[i];
   }
-  datalog_msg_.cntrl_mode = ref.control.mode;
+  datalog_msg_.cntrl_mode = ref.vms.mode;
   /* Telemetry data */
   for (std::size_t i = 0; i < NUM_TELEM_PARAMS; i++) {
     datalog_msg_.telem_param[i] = ref.telem.param[i];
@@ -182,15 +180,15 @@ void DatalogAdd(const AircraftData &ref) {
   /* Analog data */
   for (std::size_t i = 0; i < NUM_AIN_PINS; i++) {
     datalog_msg_.ain_volt[i] = ref.sensor.analog.volt[i];
-    datalog_msg_.ain_val[i] = ref.sensor.analog.val[i];
+    datalog_msg_.ain_val[i] = ref.vms.analog.val[i];
   }
   /* Battery data */
   #if defined(__FMU_R_V2__)
-  datalog_msg_.battery_voltage_v = ref.sensor.battery.voltage_v;
-  datalog_msg_.battery_current_ma = ref.sensor.battery.current_ma;
-  datalog_msg_.battery_consumed_mah = ref.sensor.battery.consumed_mah;
-  datalog_msg_.battery_remaining_prcnt = ref.sensor.battery.remaining_prcnt;
-  datalog_msg_.battery_remaining_time_s = ref.sensor.battery.remaining_time_s;
+  datalog_msg_.battery_voltage_v = ref.vms.battery.voltage_v;
+  datalog_msg_.battery_current_ma = ref.vms.battery.current_ma;
+  datalog_msg_.battery_consumed_mah = ref.vms.battery.consumed_mah;
+  datalog_msg_.battery_remaining_prcnt = ref.vms.battery.remaining_prcnt;
+  datalog_msg_.battery_remaining_time_s = ref.vms.battery.remaining_time_s;
   #endif
   /* Encode */
   stream_ = pb_ostream_from_buffer(data_buffer_, sizeof(data_buffer_));
