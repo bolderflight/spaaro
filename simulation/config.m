@@ -10,9 +10,9 @@
 % Vehicle
 vehicle = 'ultra_stick_25e';
 % FMU-R version
-fmu_version = "v1";
+% fmu_version = "v1";
 % fmu_version = "v2-beta";
-% fmu_version = "v2";
+fmu_version = "v2";
 
 %% Target trim conditions
 % Latitude and longitude [deg]
