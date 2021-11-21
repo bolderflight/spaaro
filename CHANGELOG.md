@@ -1,5 +1,14 @@
 # Changelog
 
+## v3.0.0
+- Updated interfaces to:
+   - Use raw SBUS inceptor data
+   - Use raw ADC analog data
+   - Use raw power module voltage data
+   - Use raw effector (PWM and SBUS) effector data
+- Renamed Control Laws to Vehicle Management System (VMS) to reflect to increased scope.
+These changes simplify configuration and provides increased flexibility. Inceptors, analog data, and power module data can be mapped to desired units within VMS software. Effectors contain the raw values and the angle / PLA commands for driving the simulation and driving the actuators / ESCs.
+
 ## v2.6.0
 - Added RTCM corrections from a GNSS base station, sent via MAV Link from the ground control station
 
