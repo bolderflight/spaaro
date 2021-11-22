@@ -37,7 +37,7 @@ syntax = "proto3";
 message DatalogMessage {
   /* System data */
   int32 sys_frame_time_us = 1;
-  int64 sys_time_us = 6;
+  double sys_time_s = 6;
   /* Inceptor data */
   bool incept_new_data = 20;
   bool incept_lost_frame = 21;

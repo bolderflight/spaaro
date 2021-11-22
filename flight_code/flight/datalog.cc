@@ -76,7 +76,7 @@ void DatalogAdd(const AircraftData &ref) {
   datalog_msg_.sys_pwm_volt = ref.sys.pwm_volt;
   datalog_msg_.sys_sbus_volt = ref.sys.sbus_volt;
   #endif
-  datalog_msg_.sys_time_us = ref.sys.sys_time_us;
+  datalog_msg_.sys_time_s = static_cast<double>(ref.sys.sys_time_us) / 1e6;
   /* Inceptor data */
   datalog_msg_.incept_new_data = ref.sensor.inceptor.new_data;
   datalog_msg_.incept_lost_frame = ref.sensor.inceptor.lost_frame;
