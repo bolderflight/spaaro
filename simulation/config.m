@@ -20,7 +20,7 @@ Env.terrain_alt_wgs84 = 0;
 Env.wmm_nt = [22938.3 -33.7 -132.6];
 
 %% Initial Condition for simulation
-InitCond.ned_pos_m = [0 0 -100];
+InitCond.ned_pos_m = [0 0 -30];
 InitCond.body_vel_mps = [0.001 0 0];
 InitCond.euler_rad = [0 0 0];
 InitCond.body_rot_rate_radps = [0 0 0];

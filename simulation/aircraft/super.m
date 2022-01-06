@@ -214,6 +214,17 @@ Aircraft.Control.P_v_hor = 0.09;
 Aircraft.Control.I_v_hor = 0.1;
 Aircraft.Control.D_v_hor = 0.05;
 
+
 %% Altitude controller parameters
-Aircraft.Control.P_alt = 3;
+Aircraft.Control.P_alt = 2;
 Aircraft.Control.I_alt = 0.1;
+
+%% Distance controller parameters
+Aircraft.Control.P_xy = 3;
+Aircraft.Control.I_xy = 0.1;
+
+%% Heading controller parameters
+Aircraft.Control.P_heading = 0.5;
+Aircraft.Control.I_heading = 0.1;
+Aircraft.Control.D_heading = 0.1;
+%%

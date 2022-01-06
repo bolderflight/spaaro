@@ -106,7 +106,7 @@ for i = 1:Telem.NUM_RALLY_POINTS
     Telem.Rally(i).z = single(0);
 end
 
-%Telem.FlightPlan = load_waypoint(Telem.FlightPlan,'test_mission_upload.waypoints');
+Telem.FlightPlan = load_waypoint(Telem.FlightPlan,'test_alt.waypoints');
 
 multirotor_sim
 
