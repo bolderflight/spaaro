@@ -222,6 +222,7 @@ Aircraft.Control.I_alt = 0.1;
 %% Distance controller parameters
 Aircraft.Control.P_xy = 3;
 Aircraft.Control.I_xy = 0.1;
+Aircraft.Control.wp_radius = 1;
 
 %% Heading controller parameters
 Aircraft.Control.P_heading = 0.5;
