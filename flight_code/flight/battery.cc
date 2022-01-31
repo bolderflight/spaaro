@@ -29,31 +29,12 @@
 #include "flight/global_defs.h"
 #include "flight/config.h"
 #include "flight/msg.h"
-#include "filter/filter.h"
 
-namespace {
-/* Battery config */
-BatteryConfig cfg_;
-/* Filter for the current */
-bfs::Iir<float> current_ma;
-}  // namespace
-
-void BatteryInit(const BatteryConfig &cfg) {
-  /* Copy the config */
-  cfg_ = cfg;
-  /* Initialize the filter */
-  current_ma.Init(cfg.current_cutoff_hz, static_cast<float>(FRAME_RATE_HZ));
-}
-void BatteryRead(BatteryData * const data) {
+void BatteryRead(PowerModuleData * const data) {
   data->voltage_v = static_cast<float>(analogRead(BATTERY_VOLTAGE_PIN)) *
-                    AIN_VOLTAGE_SCALE * cfg_.voltage_scale;
-  data->current_ma = static_cast<float>(analogRead(BATTERY_CURRENT_PIN)) *
-                     AIN_VOLTAGE_SCALE * cfg_.current_scale * 1000.0f;
-  data->consumed_mah += data->current_ma * FRAME_PERIOD_MS / 1000.0f / 3600.0f;
-  data->remaining_prcnt = (cfg_.capacity_mah - data->consumed_mah) /
-                           cfg_.capacity_mah * 100.0f;
-  data->remaining_time_s = (cfg_.capacity_mah - data->consumed_mah) /
-                            current_ma.Filter(data->consumed_mah) * 60.0f;
+                    AIN_VOLTAGE_SCALE;
+  data->current_v = static_cast<float>(analogRead(BATTERY_CURRENT_PIN)) *
+                     AIN_VOLTAGE_SCALE;
 }
 
 #endif

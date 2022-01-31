@@ -143,50 +143,6 @@ The *config* struct has top-level items for *sensor*, *nav*, *effector*, and *te
 AircraftConfig config = {
   .sensor = {
     .pitot_static_installed = true,
-    .battery = {
-      .voltage_scale = 10.1f,
-      .current_scale = 17.0f,
-      .capacity_mah = 5000.0f,
-      .current_cutoff_hz = 0.1f
-    },
-    .inceptor = {
-      .hw = &SBUS_UART,
-      .throttle_en = {
-        .ch = 6,
-        .num_coef = 2,
-        .poly_coef = {0.0012202562538133f, -1.20988407565589f}
-      },
-      .mode0 = {
-        .ch = 4,
-        .num_coef = 2,
-        .poly_coef = {-0.0012202562538133f, 2.3f}
-      },
-      .mode1 = {
-        .ch = 5,
-        .num_coef = 2,
-        .poly_coef = {-0.0012202562538133f, 2.3f}
-      },
-      .throttle = {
-        .ch = 0,
-        .num_coef = 2,
-        .poly_coef = {0.00061013f, -0.10494204f}
-      },
-      .pitch = {
-        .ch = 2,
-        .num_coef = 2,
-        .poly_coef = {0.0012203f, -1.2098841f}
-      },
-      .roll = {
-        .ch = 1,
-        .num_coef = 2,
-        .poly_coef = {0.0012203f, -1.2098841f}
-      },
-      .yaw = {
-        .ch = 3,
-        .num_coef = 2,
-        .poly_coef = {0.0012203f, -1.2098841f}
-      }
-    },
     .imu = {
       .dev = IMU_CS,
       .frame_rate = FRAME_RATE_HZ,
@@ -213,94 +169,13 @@ AircraftConfig config = {
       .transducer = bfs::AMS5915_0010_D,
       .sampling_period_ms = FRAME_PERIOD_MS,
       .bus = &PRES_I2C_BUS
-    },
-    .analog = {
-      .channels = {
-        /* Analog channel 0 */
-        {
-          .num_coef = 2,
-          .poly_coef = {2, 0}  // y = 2 * x + 0
-        },
-        /* Analog channel 1 */
-        {
-          .num_coef = 2,
-          .poly_coef = {3, 1}  // y = 3 * x + 1
-        }
-      }
     }
-  },
   .nav = {
     .accel_cutoff_hz = 20,
     .gyro_cutoff_hz = 20,
     .mag_cutoff_hz = 10,
     .static_pres_cutoff_hz = 10,
     .diff_pres_cutoff_hz = 10
-  },
-  .effector = {
-    .sbus = {
-      .hw = &SBUS_UART,
-      .effectors = {
-        {
-          /* Elevator */
-          .type = bfs::SERVO,
-          .ch = 2,
-          .min = bfs::deg2rad(-20.0f),
-          .max = bfs::deg2rad(20.0f),
-          .failsafe = 0,
-          .num_coef = 4,
-          .poly_coef = {1144.32190165984f, 167.225360182927f,
-                        1558.74885501875f, 1026.6382652891f}
-        },
-        {
-          /* Rudder */
-          .type = bfs::SERVO,
-          .ch = 3,
-          .min = bfs::deg2rad(-20.0f),
-          .max = bfs::deg2rad(20.0f),
-          .failsafe = 0,
-          .num_coef = 4,
-          .poly_coef = {-930.322085258545f, 148.612787752928f,
-                        -1476.11502090935f, 1006.01614399429f}
-        },
-        {
-          /* Left Aileron */
-          .type = bfs::SERVO,
-          .ch = 4,
-          .min = bfs::deg2rad(-20.0f),
-          .max = bfs::deg2rad(20.0f),
-          .failsafe = 0,
-          .num_coef = 4,
-          .poly_coef = {1097.27825386315f, 173.191562145482f,
-                        1642.60230905023f, 1054.30469578325f}
-        },
-        {
-          /* Right Aileron */
-          .type = bfs::SERVO,
-          .ch = 5,
-          .min = bfs::deg2rad(-20.0f),
-          .max = bfs::deg2rad(20.0f),
-          .failsafe = 0,
-          .num_coef = 4,
-          .poly_coef = {930.582953971947f, 132.665450728095f,
-                        1620.14796233637f, 1011.10438715363f}
-        }
-      }
-    },
-    .pwm = {
-      .hw = PWM_PINS,
-      .effectors = {
-        {
-          /* ESC */
-          .type = bfs::MOTOR,
-          .ch = 0,
-          .min = 0,
-          .max = 1,
-          .failsafe = 0,
-          .num_coef = 2,
-          .poly_coef = {1000.0f, 1000.0f}
-        }
-      }
-    }
   },
   .telem = {
     .aircraft_type = bfs::FIXED_WING,
@@ -321,77 +196,6 @@ The first configurable item is whether an air data sensor is installed and shoul
 .sensor = {
   .pitot_static_installed = false,
 }
-```
-
-### Battery
-The *.battery* struct configures battery sensing for *FMU-R v2.x*. Configurable items include the battery voltage scale, the battery current scale, the battery capacity (mAh), and the filter coefficient on current draw used to estimate flight time remaining. The battery voltage scale is a multiplier on the measured voltage from the power connector to the battery voltage (i.e. volts battery per volt measured) and is dependent on the voltage divider used in the power module. Similarly, the battery current scale is a multiplier on the measured voltage from the power connector to the current draw from the battery (i.e. Amps per volt measured) and is dependent on the power module. The battery capacity should be specified in mAh to estimate remaining capacity as both a percentage and time of flight. To estimate time of flight remaining, a low-pass filter is used on the measured current, the low pass filter bandwidth can be configured. An example *.battery* struct for configuration is below.
-
-```C++
-.battery = {
-  .voltage_scale = 10.1f,
-  .current_scale = 17.0f,
-  .capacity_mah = 5000.0f,
-  .current_cutoff_hz = 0.1f
-}
-```
-
-### Inceptor
-The *.inceptor* struct configures the inceptor data from a pilot, i.e. converting the data from an SBUS receiver to meaningful information.
-
-First, the serial port used to receive SBUS data is specified. This is defined in */flight_code/include/flight/hardware_defs.h* based on the FMU version and should not be changed from the default value.
-
-Next, the inceptor channels are configured. The 7 channels are:
-   * *throttle_en*: provides for a switch on the pilot remote to safe the motors (false) or enable them (true). Useful for ground testing and providing an extra level of safety during flight operations.
-   * *mode0*: a mode switch, which can be used to select different flight modes in software. Typically, this is mapped to a 3 position switch on the pilot remote and configured to output an integer 0, 1, or 2 depending on switch position.
-   * *mode1*: a mode switch, which can be used to select different flight modes in software. Typically, this is mapped to a 3 position switch on the pilot remote and configured to output an integer 0, 1, or 2 depending on switch position.
-   * *throttle*: non-dimensional mapping of the pilot throttle stick. Typically, this is mapped to a float 0 - 1 value to provide a throttle percentage command from the pilot.
-   * *pitch*: non-dimensional mapping of the pilot pitch stick. Typically, this is mapped to a float -1 to +1 value with a positive value resulting in a positive rate or angle movement on the vehicle.
-   * *roll*: non-dimensional mapping of the pilot roll stick. Typically, this is mapped to a float -1 to +1 value with a positive value resulting in a positive rate or angle movement on the vehicle.
-   * *yaw*: non-dimensional mapping of the pilot yaw stick. Typically, this is mapped to a float -1 to +1 value with a positive value resulting in a positive rate or angle movement on the vehicle.
-
-Each channel is configured with an SBUS channel number and a polynomial mapping the SBUS data to the desired output value. A typical SBUS range is 172 - 1811 for FrSky receivers using 100% range. If extended range limits are used, the range is typically 0 - 2047.
-
-An example configuration is below. The *throttle_en* is mapped to -1 (false) to +1 (true). Mode switches are mapped to output 0, 1, or 2. *throttle* is mapped 0 to 1, and pitch / roll / yaw sticks are mapped -1 to +1. All of the polynomials are linear (i.e. 2 coefficients).
-
-```C++
-.inceptor = {
-  .hw = &SBUS_UART,
-  .throttle_en = {
-    .ch = 6,
-    .num_coef = 2,
-    .poly_coef = {0.0012202562538133f, -1.20988407565589f}
-  },
-  .mode0 = {
-    .ch = 4,
-    .num_coef = 2,
-    .poly_coef = {-0.0012202562538133f, 2.3f}
-  },
-  .mode1 = {
-    .ch = 5,
-    .num_coef = 2,
-    .poly_coef = {-0.0012202562538133f, 2.3f}
-  },
-  .throttle = {
-    .ch = 0,
-    .num_coef = 2,
-    .poly_coef = {0.00061013f, -0.10494204f}
-  },
-  .pitch = {
-    .ch = 2,
-    .num_coef = 2,
-    .poly_coef = {0.0012203f, -1.2098841f}
-  },
-  .roll = {
-    .ch = 1,
-    .num_coef = 2,
-    .poly_coef = {0.0012203f, -1.2098841f}
-  },
-  .yaw = {
-    .ch = 3,
-    .num_coef = 2,
-    .poly_coef = {0.0012203f, -1.2098841f}
-  }
-},
 ```
 
 ### IMU
@@ -477,26 +281,6 @@ The *.diff_pres* struct configures the differential pressure sensor. Configurabl
 },
 ```
 
-### Analog
-The *.analog* struct configures the analog channels available on *FMU-R v2.x*. For each channel, a polynomial can be defined to take the measured voltage to an engineering value (i.e. angle of attack, control surface position, etc.) These polynomials are given in descending order. An example of this configuration is below.
-
-```C++
-.analog = {
-  .channels = {
-    /* Analog channel 0 */
-    {
-      .num_coef = 2,
-      .poly_coef = {2, 0}  // y = 2 * x + 0
-    },
-    /* Analog channel 1 */
-    {
-      .num_coef = 2,
-      .poly_coef = {3, 1}  // y = 3 * x + 1
-    }
-  }
-}
-```
-
 ## Navigation Filter
 The *.nav* struct configures the navigation filter. 
 
@@ -522,64 +306,6 @@ Configurable items include the accelerometer, gyro, mag, static pressure, and di
   .diff_pres_cutoff_hz = 10
 },
 ```
-
-## Effectors
-The *.effector* struct configures the vehicle's effectors (motors and actuators). This configuration is split into SBUS and PWM effectors, depending on the communication protocol used. For the SBUS configuration, the SBUS-TX serial port is defined in */flight_code/include/flight/hardware_defs.h* and should not be modified. For the PWM configuration, the set of pin numbers defining the PWM output is defined in */flight_code/include/flight/hardware_defs.h* and should not be modified.
-
-The configurable item for each effector is:
-   * *type*: bfs::SERVO or bfs::MOTOR depending on whether it is a servo or motor.
-   * *ch*: the channel the effector is connected to.
-   * *min*: the minimum input value.
-   * *max*: the maximum input value.
-   * *failsafe*: the command that should be issued when the servo or motor is safed.
-   * *num_coef* and *poly_coef*: a polynomial taking input value, typically an angle command, to output value, typically 1000 - 2000 ms for a PWM effector or 172 - 1811 for an SBUS effector.
-
-Typically output commands from the control laws, which are inputs to the effectors, are in angle commands. The *min*, *max*, and *failsafe* are all defined in terms of these values.
-
-An example SBUS configuration for a servo is:
-
-```C++
-.sbus = {
-  .hw = &SBUS_UART,
-  .effectors = {
-    {
-      /* Elevator */
-      .type = bfs::SERVO,
-      .ch = 2,
-      .min = bfs::deg2rad(-20.0f),
-      .max = bfs::deg2rad(20.0f),
-      .failsafe = 0,
-      .num_coef = 4,
-      .poly_coef = {1144.32190165984f, 167.225360182927f,
-                    1558.74885501875f, 1026.6382652891f}
-    },
-  }
-}
-```
-
-An example PWM configuration for a motor is:
-
-```C++
-.pwm = {
-  .hw = PWM_PINS,
-  .effectors = {
-    {
-      /* ESC */
-      .type = bfs::MOTOR,
-      .ch = 0,
-      .min = 0,
-      .max = 1,
-      .failsafe = 0,
-      .num_coef = 2,
-      .poly_coef = {1000.0f, 1000.0f}
-    }
-  }
-}
-```
-
-Servos are commanded to their failsafe values if the inceptors receive a failsafe mode from the SBUS receiver, meaning the receiver has lost link with the transmitter for many frames in a row. The failsafe positions for servos could be designed such that the flight is terminated (i.e. a descending spiral).
-
-Motors are commanded to their failsafe values if the inceptors receiver a failsafe mode from the SBUS receiver or if the inceptor *throttle_en* value is false. Typically a motor failsafe would be set to the minimum throttle command.
 
 ## Telemetry
 The *.telem* struct configures the telemetry radio modem. The configurable items are the aircraft type, serial bus, and the baud rate.
@@ -640,26 +366,19 @@ Software for SPAARO can be developed in C++ or autocoded from Simulink. The inpu
 
    * System Data:
       * int32_t frame_time_us: time the previous frame took to complete, us. Useful for analyzing CPU load.
-      * float frame_time_s: same as frame_time_us, but converted to seconds and stored as a float.
       * float input_volt (*FMU-R v1.x*): the input voltage to the voltage regulator.
       * float reg_volt (*FMU-R v1.x*): the regulated voltage.
       * float pwm_volt (*FMU-R v1.x*): the PWM servo rail voltage.
       * float sbus_volt (*FMU-R v1.x*): the SBUS servo rail voltage.
       * int64_t sys_time_us: the time since boot, us.
-      * double sys_time_s: same as sys_time_us, but converted to seconds and stored as a double.
    * Sensor Data:
       * bool pitot_static_installed: whether a pitot-static probe and air data sensor are installed.
       * Inceptor Data:
          * bool new_data: whether new data was received by the SBUS receiver.
          * bool lost_frame: whether a frame of SBUS data was lost by the receiver.
-         * bool failsafe: whether the SBUS receiver has entered failsafe mode - this typically occurs if many frames of data are lost in a row and will trigger the servos and motors to their configured failsafe positions.
-         * bool throttle_en: whether the motors are enabled.
-         * int8_t mode0: the value from the mode 0 switch.
-         * int8_t mode1: the value from the mode 1 switch.
-         * float throttle: normalized throttle stick position. Typically 0 - 1.
-         * float pitch: normalized pitch stick position. Typically +/- 1.
-         * float roll: normalized roll stick position. Typically +/- 1.
-         * float yaw: normalized yaw stick position. Typically +/- 1.
+         * bool failsafe: whether the SBUS receiver has entered failsafe mode - this typically occurs if many frames of data are lost in a row.
+         * bool ch17 | ch18: some SBUS transmitters and receivers support two boolean outputs, CH 17 and CH 18, which are available here.
+         * int16_t ch[16]: SBUS channel values. SBUS is 11 bits with a range of 0 - 2048. Some SBUS receivers, such as FrSky, use a default range of 172 - 1811, unless an extended range is configured.
       * IMU Data:
          * bool new_imu_data: whether new data was received from the accelerometer and gyro.
          * bool new_mag_data: whether new data was received from the magnetometer.
@@ -705,12 +424,18 @@ Software for SPAARO can be developed in C++ or autocoded from Simulink. The inpu
          * bool healthy: whether the pressure transducer is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
          * float pres_pa: the measured pressure, Pa.
          * float die_temp_c: the pressure transducer die temperature, C.
+      * ADC Data:
+         * float volt[2(*FMU-R v1.x*)/8(*FMU-R v2.x*)]: voltages measured by the FMU analog to digital converters
+      * Power Module Data (*FMU-R v2.x*):
+         * float voltage_v: voltage measured on the power port voltage pin. Note that this is not the battery pack voltage, typically this value needs to be scaled by the power module volts / volt value and is power module specific.
+         * float current_v: voltage measured on the power port current pin. Typically this is scaled by the power module mA / volt value and is power module specific.
    * Navigation Filter Data:
       * bool nav_initialized: whether the navigation filter has been initialized. Do not use navigation filter data before it has been initialized. Requires a good GNSS solution to complete the initialization process.
       * float pitch_rad: pitch angle, rad.
       * float roll_rad: roll angle, rad.
       * float heading_rad: heading angle relative to true north, rad.
       * float alt_wgs84_m: altitude above the WGS84 ellipsoid, m.
+      * float home_alt_wgs84_m: home location (i.e. origin of the NED position) above the WGS84 ellipsoid, m.
       * float alt_msl_m: altitude above Mean Sea Level (MSL), m.
       * float alt_rel_m: altitude above where the navigation filter was initialized, m.
       * float static_pres_pa: filtered static pressure, Pa.
@@ -729,6 +454,8 @@ Software for SPAARO can be developed in C++ or autocoded from Simulink. The inpu
       * float ned_vel_mps[3]: North east down ground velocity, m/s [north east down].
       * double lat_rad: latitude, rad.
       * double lon_rad: longitude, rad.
+      * double home_lat_rad: home location (i.e. origin of the NED position) latitude, rad.
+      * double home_lon_rad: home location (i.e. origin of the NED position) longitude, rad.
    * Telemetry Data:
       * bool waypoints_updated: whether the flight plan waypoints have been updated.
       * bool fence_updated: whether the fence has been updated.
@@ -766,7 +493,8 @@ Mission Items are defined as:
 
 The output plane is defined as:
 
-   * Control Data:
+   * VMS Data:
+      * bool motors_enabled: whether the motors are enabled and can turn. This is not a command, rather just feedback provided from the VMS about whether the motors are "hot" and is used in telemetry and for operator situation awareness.
       * bool waypoint_reached: whether the current waypoint has been reached. This is used to indicate to the ground station that the active waypoint should be advanced to the next in the flight plan.
       * int8_t mode: the current aircraft mode:
          * 0: manual flight mode.
@@ -774,9 +502,24 @@ The output plane is defined as:
          * 2: attitude feedback flight mode.
          * 3: autonomous flight mode.
          * 4: test point / research flight mode.
-      * std::array<float, NUM_SBUS_CH> sbus: an array of SBUS commands. The order of SBUS commands should match the order of the SBUS effector configuration. NUM_SBUS_CH is the number of SBUS channels available, currently 16.
-      * std::array<float, NUM_PWM_PINS> pwm: an array of PWM commands. The order of PWM commands should match the order of the PWM effector configuration. NUM_PWM_PINS is the number of PWM channels available, currently 8.
+      * float throttle_cmd_prcnt: the throttle command given as a %, this is used for telemetry and situational awareness.
       * std::array<float, NUM_AUX_VAR> aux: aux variables - these are undefined and can be used by the developer to output data for logging. Useful for logging internal control law states, research variables, or other values of interest. NUM_AUX_VAR defines the number of channels available, currently 24.
+      * SbusCmd:
+         * bool ch17: output command to SBUS CH 17.
+         * bool ch18: output command to SBUS CH 18.
+         * float cmd[16]: angle or PLA commands to SBUS channels. This is used to drive the simulation.
+         * int16_t cnt[16]: raw SBUS counts to SBUS channels. This is sent to the aircraft effectors. Typically a polynomial evaluation would be used to convert from an angle command (i.e. an aileron deflection) to raw SBUS output.
+      * PwmCmd:
+         * float cmd[8]: angle or PLA commands to PWM channels. This is used to drive the simulation.
+         * int16_t cnt[8]: raw PWM counts to PWM channels. This is sent to the aircraft effectors. Typically a polynomial evaluation would be used to convert from an angle command (i.e. an aileron deflection) to raw PWM output.
+      * Analog:
+         * float val[2(*FMU-R v1.x*)/8(*FMU-R v2.x*)]: ADC voltages converted to engineering units (i.e. POT voltage to control surface deflection).
+      * Battery (*FMU-R v2.x*):
+         * float voltage_v: battery pack voltage.
+         * float current_ma: battery pack current draw, mA.
+         * float consumed_mah: battery pack capacity consumed, mAh.
+         * float remaining_prcnt: battery pack capacity remaining, %.
+         * float remaining_time_s: estimated flight time remaining, s.
 
 ## C++
 C++ software should be developed in */flight_code/flight/control.cc*. [Filters](https://github.com/bolderflight/filter), [control algorithm](https://github.com/bolderflight/control) templates, and [excitations](https://github.com/bolderflight/excitation/) are available to ease the development effort. An init function, *ControlInit*, is provided and is run once as the system boots. The *ControlRun* function is run every frame.
@@ -795,13 +538,20 @@ mkdir build
 Next, we let CMake configure our compilation and generate a makefile. If C++ based control laws are used:
 
 ```shell
-cmake ..
+cmake .. -D FMU=v1
 ```
+
+Notice, that the FMU version is specified. If no version is specified, FMU-R v1.x is selected by default. Available versions are:
+   * v1: FMU-R v1.x
+   * v2-beta: FMU-R v2.0 (i.e. FMU-R v2.x beta boards, these were not available outside of BFS staff)
+   * v2: FMU-R v2.x
+
+The board selection is not case specific (i.e. either lower or upper case will work).
 
 If Simulink autocode control laws are used, we need to first generate code in our Simulink control law model. This should output code to */flight_code/autocode/&ast;_ert_rtw* where the asterisk is the name of the Simulink model. Next we issue the following CMake command from our */flight_code/build* directory:
 
 ```shell
-cmake .. -DAUTOCODE=baseline
+cmake .. -D FMU=v1 -D AUTOCODE=baseline
 ```
 
 If the Simulink model was named *baseline.slx*. Otherwise, replace with the name of your Simulink model.
@@ -810,6 +560,12 @@ To compile software, whether C++ or Simulink autocode based, issue the *make* co
 
 ```shell
 make
+```
+
+Software can be uploaded with:
+
+```shell
+make flight_upload
 ```
 
 <!-- # Simulation

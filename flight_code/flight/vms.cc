@@ -23,7 +23,7 @@
 * IN THE SOFTWARE.
 */
 
-#include "flight/control.h"
+#include "flight/vms.h"
 #ifdef __AUTOCODE__
   #include "./autocode.h"
 #else
@@ -38,16 +38,16 @@ bfs::Autocode autocode;
 #endif
 }  // namespace
 
-void ControlInit() {
+void VmsInit() {
 #ifdef __AUTOCODE__
   autocode.initialize();
 #endif
 }
-void ControlRun(const SysData &sys, const SensorData &sensor,
-                const NavData &nav, const TelemData &telem,
-                ControlData *ctrl) {
-  if (!ctrl) {return;}
+void VmsRun(const SysData &sys, const SensorData &sensor,
+            const NavData &nav, const TelemData &telem,
+            VmsData *vms) {
+  if (!vms) {return;}
 #ifdef __AUTOCODE__
-  autocode.Run(sys, sensor, nav, telem, ctrl);
+  autocode.Run(sys, sensor, nav, telem, vms);
 #endif
 }

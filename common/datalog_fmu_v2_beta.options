@@ -5,10 +5,12 @@
 # Copyright (c) 2021 Bolder Flight Systems
 #
 
+DatalogMessage.incept_ch max_count:16 fixed_count:true
 DatalogMessage.imu_accel_mps2 max_count:3 fixed_count:true
 DatalogMessage.imu_gyro_radps max_count:3 fixed_count:true
 DatalogMessage.imu_mag_ut max_count:3 fixed_count:true
 DatalogMessage.gnss_ned_vel_mps max_count:3 fixed_count:true
+DatalogMessage.adc_volt max_count:8 fixed_count:true
 DatalogMessage.nav_accel_bias_mps2 max_count:3 fixed_count:true 
 DatalogMessage.nav_gyro_bias_radps max_count:3 fixed_count:true 
 DatalogMessage.nav_accel_mps2 max_count:3 fixed_count:true 
@@ -16,9 +18,10 @@ DatalogMessage.nav_gyro_radps max_count:3 fixed_count:true
 DatalogMessage.nav_mag_ut max_count:3 fixed_count:true 
 DatalogMessage.nav_ned_pos_m max_count:3 fixed_count:true 
 DatalogMessage.nav_ned_vel_mps max_count:3 fixed_count:true
-DatalogMessage.cntrl_sbus max_count:16 fixed_count:true
-DatalogMessage.cntrl_pwm max_count:8 fixed_count:true
-DatalogMessage.cntrl_aux max_count:24 fixed_count:true
+DatalogMessage.vms_sbus_cnt max_count:16 fixed_count:true
+DatalogMessage.vms_pwm_cnt max_count:8 fixed_count:true
+DatalogMessage.vms_analog max_count:8 fixed_count:true
+DatalogMessage.vms_sbus_cmd max_count:16 fixed_count:true
+DatalogMessage.vms_pwm_cmd max_count:8 fixed_count:true
+DatalogMessage.vms_aux max_count:24 fixed_count:true
 DatalogMessage.telem_param max_count:24 fixed_count:true
-DatalogMessage.ain_volt max_count:8 fixed_count:true
-DatalogMessage.ain_val max_count:8 fixed_count:true

@@ -31,7 +31,7 @@
 #include "flight/sensors.h"
 #include "flight/effectors.h"
 #include "flight/nav.h"
-#include "flight/control.h"
+#include "flight/vms.h"
 #include "flight/datalog.h"
 #include "flight/telem.h"
 
@@ -68,14 +68,10 @@ void run() {
   SensorsRead(&data.sensor);
   /* Nav filter */
   NavRun(data.sensor, &data.nav);
-  /* Control laws */
-  ControlRun(data.sys, data.sensor, data.nav, data.telem, &data.control);
+  /* VMS */
+  VmsRun(data.sys, data.sensor, data.nav, data.telem, &data.vms);
   /* Command effectors */
-  if (data.sensor.inceptor.failsafe) {
-    EffectorsCmd(true, false, data.control);
-  } else {
-    EffectorsCmd(data.sensor.inceptor.throttle_en, true, data.control);
-  }
+  EffectorsCmd(data.vms);
   /* Datalog */
   DatalogAdd(data);
   /* Telemetry */
@@ -94,9 +90,9 @@ int main() {
   /* Init nav */
   NavInit(config.nav);
   /* Init effectors */
-  EffectorsInit(config.effector);
-  /* Init control */
-  ControlInit();
+  EffectorsInit();
+  /* Init VMS */
+  VmsInit();
   /* Init telemetry */
   TelemInit(config, &data.telem);
   /* Init datalog */

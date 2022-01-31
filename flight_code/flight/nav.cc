@@ -219,6 +219,9 @@ void NavRun(const SensorData &ref, NavData * const ptr) {
     ptr->gnd_track_rad = std::atan2(ptr->ned_vel_mps[1], ptr->ned_vel_mps[0]);
     ptr->flight_path_rad = std::atan2(-1.0f * ptr->ned_vel_mps[2],
                                       ptr->gnd_spd_mps);
+    ptr->home_lat_rad = home_pos_lla_[0];
+    ptr->home_lon_rad = home_pos_lla_[1];
+    ptr->home_alt_wgs84_m = home_pos_lla_[2];
     /* Filtered IMU data */
     nav_accel_mps2_ = nav_filter_.accel_mps2();
     nav_gyro_radps_ = nav_filter_.gyro_radps();
