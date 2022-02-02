@@ -37,6 +37,19 @@ Aircraft.Aero.axis = 1;
 %Drag coefficient
 Aircraft.Aero.Cd = 0.8; %Based on CD of slanted cube [Jan Willem Vervoorst]
 
+%% Inceptor configuration
+% Configure function of main control channel as well as normalize them
+% Other channels are available as raw 172-1811 for FrSky sbus
+Aircraft.Inceptor.throttle = 1;
+Aircraft.Inceptor.pitch = 3;
+Aircraft.Inceptor.roll = 2;
+Aircraft.Inceptor.yaw = 4;
+Aircraft.Inceptor.mode0 = 5;
+Aircraft.Inceptor.throttle_en = 7;
+Aircraft.Inceptor.coef_1 = [0.00061013, -0.10494204]; %Coeff for sbus to 0:1
+Aircraft.Inceptor.coef_2 = [0.00122026, -1.20988408]; %Coeff for sbus to -1:1
+Aircraft.Inceptor.coef_3 = [0.00122026, -0.20988408]; %Coeff for sbus to 0:2
+
 %% Effectors
 % Number of PWM channels
 Aircraft.Eff.nPwm = 8;
