@@ -20,12 +20,12 @@ Env.terrain_alt_wgs84 = 0;
 Env.wmm_nt = [22938.3 -33.7 -132.6];
 
 %% Initial Condition for simulation
-InitCond.ned_pos_m = [0 0 -20];
-InitCond.body_vel_mps = [0.001 0 0];
+InitCond.ned_pos_m = [0 0 -5];
+InitCond.body_vel_mps = [1 0 0];
 InitCond.euler_rad = [0 0 0];
 InitCond.body_rot_rate_radps = [0 0 0];
-InitCond.lat_rad = 0.579345551837;
-InitCond.lon_rad = -1.52682423982;
+InitCond.lat_rad = 0.579621767644;
+InitCond.lon_rad = -1.527761279167;
 
 %% Flight software frame rate
 frameRate_hz = 50;

@@ -23,8 +23,15 @@ for i=1:size(waypoint,1)
     flightplan(i).param2 = single(waypoint(i,6));
     flightplan(i).param3 = single(waypoint(i,7));
     flightplan(i).param4 = single(waypoint(i,8));
-    flightplan(i).x = int32(waypoint(i,9)*10E6);
-    flightplan(i).y = int32(waypoint(i,10)*10E6);
-    flightplan(i).z = single(waypoint(i,11));
+    if uint16(waypoint (i,4)) == 16
+        flightplan(i).x = int32(waypoint(i,9)*10E6);
+        flightplan(i).y = int32(waypoint(i,10)*10E6);
+        flightplan(i).z = single(waypoint(i,11));
+    else
+        flightplan(i).x = int32(waypoint(i,9));
+        flightplan(i).y = int32(waypoint(i,10));
+        flightplan(i).z = single(waypoint(i,11));
+    end
+    
 end
 end

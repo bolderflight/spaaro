@@ -24,9 +24,9 @@ Aircraft.Mass.inertia_kgm2 = [Aircraft.Mass.ixx_kgm2    0   -Aircraft.Mass.ixz_k
 %% Geometric properties of the body
 % Axial area (m^2) in body frame
 % Frontal area at different angles
-Aircraft.Geo.front_area_m2 = [0.34,0.47,0.44,0.47,0.5,0.45,0.43,0.4,...
-    0.36,0.32,0.36,0.4,0.43,0.45,0.5,0.47,0.44,0.47,0.34];
+Aircraft.Geo.front_area_m2 = [0.32, 0.36, 0.4, 0.43, 0.45, 0.5, 0.47, 0.44, 0.47,0.34,0.47,0.44,0.47,0.5,0.45,0.43,0.4,0.36,0.32,0.36,0.4,0.43,0.45,0.5,0.47,0.44,0.47,0.34,0.47, 0.44, 0.47, 0.5, 0.45, 0.43,0.4,0.36,0.32];
 
+    
 %% Aerodymanics coef
 % Axis system for aerodynamic coefficients
 % https://www.mathworks.com/help/aeroblks/aerodynamicforcesandmoments.html
@@ -181,7 +181,7 @@ Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_li
 %% Controller parameters
 %% Yaw rate controller parameters
 % Max yaw rate [radps]
-Aircraft.Control.yaw_rate_max = 0.174;  %~10deg/s
+Aircraft.Control.yaw_rate_max = 0.524; %~30deg/s
 % It's good to limit the maximum yaw rate because excessive yaw rate may
 % cause some motors to slow down too much that hover cannot be maintained
 
@@ -192,7 +192,7 @@ Aircraft.Control.D_yaw_rate = 0.02;
 
 %% Pitch controller parameters
 % Max pitch angle [rad]
-Aircraft.Control.pitch_angle_lim = 0.52; %~30deg
+Aircraft.Control.pitch_angle_lim = 0.523;  %~30deg
 
 % Pitch cmd controller gains
 Aircraft.Control.P_pitch_angle = 0.04;
@@ -215,30 +215,34 @@ Aircraft.Control.v_z_up_max = 2;
 Aircraft.Control.v_z_down_max = 1; %minimum of -1 m/s
 % Vertical speed controller gain
 Aircraft.Control.P_v_z = 0.09;
-Aircraft.Control.I_v_z = 0.01;
+Aircraft.Control.I_v_z = 0.05;
 Aircraft.Control.D_v_z = 0.005;
 
 %% Translational speed controller parameters
-% Horizontal spped limti [m/s]
-Aircraft.Control.v_hor_max = 4;
+% Horizontal spped limit [m/s]
+Aircraft.Control.v_hor_max = 5;
 
 % Horizontal speed controller gain
-Aircraft.Control.P_v_hor = 0.09;
-Aircraft.Control.I_v_hor = 0.1;
-Aircraft.Control.D_v_hor = 0.05;
+Aircraft.Control.P_v_hor = 0.5;
+Aircraft.Control.I_v_hor = 0.01;
+Aircraft.Control.D_v_hor = 0.1;
 
 
 %% Altitude controller parameters
-Aircraft.Control.P_alt = 2;
-Aircraft.Control.I_alt = 0.1;
+Aircraft.Control.P_alt = 1;
 
 %% Distance controller parameters
 Aircraft.Control.P_xy = 3;
 Aircraft.Control.I_xy = 0.1;
-Aircraft.Control.wp_radius = 1;
+Aircraft.Control.wp_radius = 1.5;
+Aircraft.Control.wp_nav_speed = 3;
 
 %% Heading controller parameters
-Aircraft.Control.P_heading = 0.5;
-Aircraft.Control.I_heading = 0.1;
-Aircraft.Control.D_heading = 0.1;
-%%
+Aircraft.Control.P_heading = 1;
+Aircraft.Control.I_heading = 0.01;
+
+%% Return to land parameters
+Aircraft.Control.rtl_altitude = 100;
+Aircraft.Control.land_speed_fast = 1;
+Aircraft.Control.land_speed_slow = 0.3;
+Aircraft.Control.land_slow_alt = 10; % Altitude [m] where precision landing is engaged
