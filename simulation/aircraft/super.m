@@ -179,6 +179,11 @@ Aircraft.Sensors.DiffPres.lower_limit_pa = 0;
 Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_limit_pa - Aircraft.Sensors.DiffPres.lower_limit_pa);
 
 %% Controller parameters
+% Motor minimum throttle 
+% spin motor slowly when armed for safety reasons and anti lock-up
+Aircraft.Control.motor_spin_min = 0.15; 
+
+
 %% Yaw rate controller parameters
 % Max yaw rate [radps]
 Aircraft.Control.yaw_rate_max = 0.524; %~30deg/s
@@ -199,6 +204,9 @@ Aircraft.Control.P_pitch_angle = 0.04;
 Aircraft.Control.I_pitch_angle = 0.04;
 Aircraft.Control.D_pitch_angle = 0.02;
 
+% Max pitch rate [radps]
+Aircraft.Control.pitch_rate_max = 1; %~60deg/s
+
 %% Roll controller parameters
 % Max roll angle [rad]
 Aircraft.Control.roll_angle_lim = 0.52; %~30deg
@@ -207,6 +215,9 @@ Aircraft.Control.roll_angle_lim = 0.52; %~30deg
 Aircraft.Control.P_roll_angle = 0.04;
 Aircraft.Control.I_roll_angle = 0.04;
 Aircraft.Control.D_roll_angle = 0.02;
+
+% Max roll rate [radps]
+Aircraft.Control.roll_rate_max = 1; %~60deg/s
 
 %% Vertical speed controller parameters
 Aircraft.Control.est_hover_thr = 0.6724;
