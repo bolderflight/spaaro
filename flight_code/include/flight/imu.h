@@ -23,38 +23,30 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_IMU_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_IMU_H_
 
-#include "core/core.h"
-#include <variant>
-#include <optional>
+#include "flight/sensors.h"
+#include "eigen.h"
+#include <Eigen/Dense>
 
-/* Supported sensors */
-enum SensorType : int8_t {
-  NONE,
-  MPU9250,
-  VN100,
-  VN200,
-  VN300,
-  BME280,
-  AMS5915,
-  UBLOX
+struct ImuConfig {
+  SensorIface* dev;
+  bool primary = false;
+  Eigen::Vector3f accel_bias_mps2 = Eigen::Vector3f::Zero();
+  Eigen::Matrix3f accel_scale = Eigen::Matrix3f::Identity();
+  Eigen::Matrix3f rotation = Eigen::Matrix3f::Identity();
 };
-/* Sensor configuration */
-struct SensorConfig {
-  SensorType type;
-  std::optional<int8_t> transducer;
-  std::optional<int8_t> addr;
-  std::optional<int8_t> cs;
-  std::optional<int32_t> baud;
-  std::variant<TwoWire *, SPIClass *> bus;
+
+struct ImuData {
+  Eigen::Vector3f gyro_radps;
+  Eigen::Vector3f accel_mps2;
 };
-/* Common sensor interface */
-class SensorIface {
+
+class ImuIface {
  public:
-  virtual bool Init(const SensorConfig &config) = 0;
-  virtual bool Read() = 0;
+  virtual bool Config(const ImuConfig &ref) = 0;
+  virtual ImuData data() = 0;
 };
 
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_IMU_H_

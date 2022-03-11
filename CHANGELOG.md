@@ -1,5 +1,7 @@
 # Changelog
 
+## v4.0.0
+
 ## v3.0.1
 - Changing the save type for sys_time to double seconds instead of int64_t us, since MATLAB v4 format does not support int64 format.
 

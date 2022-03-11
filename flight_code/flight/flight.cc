@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -23,84 +23,10 @@
 * IN THE SOFTWARE.
 */
 
-#include "flight/hardware_defs.h"
 #include "flight/global_defs.h"
-#include "flight/config.h"
-#include "flight/msg.h"
-#include "flight/sys.h"
 #include "flight/sensors.h"
-#include "flight/effectors.h"
-#include "flight/nav.h"
-#include "flight/vms.h"
-#include "flight/datalog.h"
-#include "flight/telem.h"
-
-/* Aircraft data */
-AircraftData data;
-/* Timer for sending effector commands */
-IntervalTimer effector_timer;
-
-/* ISR to send effector commands */
-void send_effectors() {
-  /* Stop the effector timer */
-  effector_timer.end();
-  #if defined(__FMU_R_V1__)
-  /* Pulse the BFS bus */
-  digitalWriteFast(BFS_INT1, LOW);
-  digitalWriteFast(BFS_INT2, HIGH);
-  #endif
-  /* Send effector commands */
-  EffectorsWrite();
-}
-
-/* ISR to gather sensor data and run VMS */
-void run() {
-  /* Start the effector timer */
-  effector_timer.begin(send_effectors, EFFECTOR_DELAY_US);
-  #if defined(__FMU_R_V1__)
-  /* Pulse the BFS bus */
-  digitalWriteFast(BFS_INT1, HIGH);
-  digitalWriteFast(BFS_INT2, LOW);
-  #endif
-  /* System data */
-  SysRead(&data.sys);
-  /* Sensor data */
-  SensorsRead(&data.sensor);
-  /* Nav filter */
-  NavRun(data.sensor, &data.nav);
-  /* VMS */
-  VmsRun(data.sys, data.sensor, data.nav, data.telem, &data.vms);
-  /* Command effectors */
-  EffectorsCmd(data.vms);
-  /* Datalog */
-  DatalogAdd(data);
-  /* Telemetry */
-  TelemUpdate(data, &data.telem);
-  /* Frame duration */
-  SysFrameEnd();
-}
+#include "flight/imu.h"
 
 int main() {
-  /* Init the message bus */
-  MsgBegin();
-  /* Init system */
-  SysInit();
-  /* Init sensors */
-  SensorsInit(config.sensor);
-  /* Init nav */
-  NavInit(config.nav);
-  /* Init effectors */
-  EffectorsInit();
-  /* Init VMS */
-  VmsInit();
-  /* Init telemetry */
-  TelemInit(config, &data.telem);
-  /* Init datalog */
-  DatalogInit();
-  /* Attach data ready interrupt */
-  attachInterrupt(IMU_DRDY, run, RISING);
-  while (1) {
-    /* Flush datalog */
-    DatalogFlush();
-  }
+  
 }
