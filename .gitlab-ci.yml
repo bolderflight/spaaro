@@ -33,7 +33,7 @@ Lint:
     - cpplint --verbose=0 flight_code/flight/bfs_ekf.cc
     - cpplint --verbose=0 flight_code/flight/bme280_impl.cc
     - cpplint --verbose=0 flight_code/flight/config.cc
-    - cpplint --verbose=0 flight_code/flight/datalog.cc
+    - cpplint --verbose=0 --filter=-readability/fn_size flight_code/flight/datalog.cc
     - cpplint --verbose=0 flight_code/flight/effectors.cc
     - cpplint --verbose=0 flight_code/flight/mpu9250_impl.cc
     - cpplint --verbose=0 flight_code/flight/msg.cc
