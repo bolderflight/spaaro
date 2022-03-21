@@ -26,15 +26,15 @@
 #ifndef FLIGHT_CODE_INCLUDE_FLIGHT_HARDWARE_DEFS_H_
 #define FLIGHT_CODE_INCLUDE_FLIGHT_HARDWARE_DEFS_H_
 
-#include "core/core.h"
-#include "mpu9250.h"
 #include <array>
+#include "core/core.h"
 
 /* FMU-R V2 */
 #if defined(__FMU_R_V2__)
 /* Messages */
 inline constexpr usb_serial_class &MSG_BUS = Serial;
 /* Inceptor / Effector */
+inline constexpr int32_t SBUS_HEALTHY_TIMEOUT_MS = 100;
 inline constexpr int8_t NUM_SBUS_CH = 16;
 inline constexpr int8_t NUM_PWM_PINS = 8;
 inline constexpr HardwareSerial &SBUS_UART = Serial2;
@@ -54,7 +54,7 @@ inline constexpr float MPU9250_MAG_FRAME_RATE_HZ = 100;
 inline constexpr int8_t MPU9250_SRD = 9;
 inline constexpr int8_t MPU9250_CS = 36;
 inline constexpr int8_t MPU9250_DRDY = 35;
-inline constexpr int32_t HEALTHY_TIMEOUT_MS = 500;
+inline constexpr int32_t HEALTHY_TIMEOUT_MS = 50;
 /* VectorNav */
 inline constexpr int8_t VN_SRD = 3;
 inline constexpr int8_t VN_CS = 34;
@@ -79,6 +79,7 @@ inline constexpr int8_t BATTERY_CURRENT_PIN = 22;
 /* Messages */
 inline constexpr usb_serial_class &MSG_BUS = Serial;
 /* Inceptor / Effector */
+inline constexpr int32_t SBUS_HEALTHY_TIMEOUT_MS = 100;
 inline constexpr int8_t NUM_SBUS_CH = 16;
 inline constexpr int8_t NUM_PWM_PINS = 8;
 inline constexpr HardwareSerial &SBUS_UART = Serial2;
@@ -120,6 +121,7 @@ inline constexpr float AIN_VOLTAGE_SCALE = VOLTAGE_RANGE / ANALOG_COUNT_RANGE;
 /* Messages */
 inline constexpr usb_serial_class &MSG_BUS = Serial;
 /* Inceptor / Effector */
+inline constexpr int32_t SBUS_HEALTHY_TIMEOUT_MS = 100;
 inline constexpr int8_t NUM_SBUS_CH = 16;
 inline constexpr int8_t NUM_PWM_PINS = 8;
 inline constexpr HardwareSerial &SBUS_UART = Serial2;

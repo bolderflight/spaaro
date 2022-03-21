@@ -66,6 +66,7 @@ void InitSensors(const SensorConfig &cfg) {
 }
 
 void ReadSensors(SensorData * const data) {
+  if (!data) {return;}
   /* Read the SBUS RX */
   SbusRxRead();
   SbusRxInceptorData(&data->sbus_inceptor);

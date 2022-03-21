@@ -27,8 +27,8 @@
 #include "flight/global_defs.h"
 #include "flight/hardware_defs.h"
 #include "flight/msg.h"
-#include "navigation.h"
-#include "filter.h"
+#include "navigation.h"  // NOLINT
+#include "filter.h"  // NOLINT
 
 namespace {
 /* Config */
@@ -36,7 +36,7 @@ BfsNavConfig cfg;
 /* Initialized flag */
 bool nav_initialized = false;
 /* Navigation filter */
-bfs::Ekf15State ekf;
+Ekf15State ekf;
 /* IMU and GNSS data */
 ImuData imu;
 GnssData gnss;
@@ -54,21 +54,24 @@ Iir<float> hz;
 static constexpr int MIN_SAT = 9;
 /* Frame Period, s */
 static constexpr float FRAME_PERIOD_S = FRAME_PERIOD_MS / 1000.0f;
-
 /* Interim data */
 Vector3f accel_mps2, gyro_radps, mag_ut, ned_vel_mps;
 Vector3d llh;
-}
+}  // namespace
 
 void BfsNavInit(const BfsNavConfig &ref) {
   cfg = ref;
 }
 
 void BfsNavRun(const SensorData &ref, InertialData * const ptr) {
+  if (!ptr) {return;}
   ptr->healthy = nav_initialized;
   if (!nav_initialized) {
     switch (cfg.imu_source) {
       case EKF_IMU_MPU9250: {
+        if (!ref.mpu9250_imu.installed) {
+          MsgError("MPU-9250 selected for EKF IMU source, but not installed");
+        }
         imu = ref.mpu9250_imu;
       }
       case EKF_IMU_VECTORNAV: {

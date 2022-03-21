@@ -27,8 +27,8 @@
 #include "flight/global_defs.h"
 #include "flight/hardware_defs.h"
 #include "flight/msg.h"
-#include "mpu9250.h"
-#include "statistics.h"
+#include "mpu9250.h"  // NOLINT
+#include "statistics.h"  // NOLINT
 
 namespace {
 /* MPU-9250 object */
@@ -43,7 +43,7 @@ Vector3f gyro_bias_radps;
 /* Intermediate results */
 Vector3f accel_mps2, gyro_radps, mag_ut;
 bool status, healthy;
-}
+}  // namespace
 
 void Mpu9250Init(const Mpu9250Config &cfg) {
   config = cfg;
@@ -93,6 +93,7 @@ void Mpu9250Read() {
 }
 
 void Mpu9250ImuData(ImuData * const data) {
+  if (!data) {return;}
   data->installed = true;
   data->new_mag_data = false;
   data->new_imu_data = status;

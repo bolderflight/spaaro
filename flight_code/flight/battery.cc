@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -30,6 +30,7 @@
 #include "flight/hardware_defs.h"
 
 void BatteryRead(PowerModuleData * const data) {
+  if (!data) {return;}
   data->voltage_v = static_cast<float>(analogRead(BATTERY_VOLTAGE_PIN)) *
                     AIN_VOLTAGE_SCALE;
   data->current_v = static_cast<float>(analogRead(BATTERY_CURRENT_PIN)) *

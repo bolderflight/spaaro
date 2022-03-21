@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -27,10 +27,10 @@
 #ifdef __AUTOCODE__
   #include "./autocode.h"
 #else
-  #include "control.h"
-  #include "excitation.h"
-  #include "filter.h"
-  #include "polytools.h"
+  #include "control.h"  // NOLINT
+  #include "excitation.h"  // NOLINT
+  #include "filter.h"  // NOLINT
+  #include "polytools.h"  // NOLINT
 #endif
 
 namespace {

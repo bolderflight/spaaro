@@ -27,8 +27,8 @@
 #include "flight/global_defs.h"
 #include "flight/hardware_defs.h"
 #include "flight/msg.h"
-#include "ams5915.h"
-#include "statistics.h"
+#include "ams5915.h"  // NOLINT
+#include "statistics.h"  // NOLINT
 
 namespace {
 /* AMS-5915 objects */
@@ -36,7 +36,6 @@ Ams5915 ams5915_static_pres, ams5915_diff_pres;
 /* Configs */
 Ams5915Config cfg_static_pres, cfg_diff_pres;
 /* Remove diff pres bias */
-elapsedMillis time_ms;
 static constexpr int32_t INIT_TIME_MS = 5000;
 float diff_pres_bias_pa;
 RunningStats<float> dp;
@@ -45,7 +44,7 @@ bool sp_status, dp_status;
 /* Healthy */
 elapsedMillis sp_time_ms, dp_time_ms;
 bool sp_healthy, dp_healthy;
-}
+}  // namespace
 
 void Ams5915Init(const Ams5915Config &static_pres,
                  const Ams5915Config &diff_pres) {
@@ -62,8 +61,8 @@ void Ams5915Init(const Ams5915Config &static_pres,
     ams5915_diff_pres.Config(&I2C_BUS, cfg_diff_pres.addr,
       static_cast<Ams5915::Transducer>(cfg_diff_pres.transducer));
     if (!ams5915_diff_pres.Begin()) {
-      MsgError("unable to communicate with AMS5915 differential pressure \
-                transducer");
+      MsgError("unable to communicate with AMS5915 differential pressure"
+               "transducer");
     }
     dp_time_ms = 0;
     while (dp_time_ms < INIT_TIME_MS) {
@@ -98,26 +97,30 @@ void Ams5915Read() {
 }
 
 void Ams5915PresData(PresData * const static_pres, PresData * const diff_pres) {
-  if (cfg_static_pres.transducer != AMS5915_NONE) {
-    static_pres->installed = true;
-    static_pres->new_data = sp_status;
-    static_pres->healthy = sp_healthy;
-    if (static_pres->new_data) {
-      static_pres->die_temp_c = ams5915_static_pres.die_temp_c();
-      static_pres->pres_pa = ams5915_static_pres.pres_pa();
+  if (static_pres) {
+    if (cfg_static_pres.transducer != AMS5915_NONE) {
+      static_pres->installed = true;
+      static_pres->new_data = sp_status;
+      static_pres->healthy = sp_healthy;
+      if (static_pres->new_data) {
+        static_pres->die_temp_c = ams5915_static_pres.die_temp_c();
+        static_pres->pres_pa = ams5915_static_pres.pres_pa();
+      }
+    } else {
+      static_pres->installed = false;
     }
-  } else {
-    static_pres->installed = false;
   }
-  if (cfg_diff_pres.transducer != AMS5915_NONE) {
-    diff_pres->installed = true;
-    diff_pres->new_data = dp_status;
-    diff_pres->healthy = dp_healthy;
-    if (diff_pres->new_data) {
-      diff_pres->die_temp_c = ams5915_diff_pres.die_temp_c();
-      diff_pres->pres_pa = ams5915_diff_pres.pres_pa() + diff_pres_bias_pa;
+  if (diff_pres) {
+    if (cfg_diff_pres.transducer != AMS5915_NONE) {
+      diff_pres->installed = true;
+      diff_pres->new_data = dp_status;
+      diff_pres->healthy = dp_healthy;
+      if (diff_pres->new_data) {
+        diff_pres->die_temp_c = ams5915_diff_pres.die_temp_c();
+        diff_pres->pres_pa = ams5915_diff_pres.pres_pa() + diff_pres_bias_pa;
+      }
+    } else {
+      diff_pres->installed = false;
     }
-  } else {
-    diff_pres->installed = false;
   }
 }

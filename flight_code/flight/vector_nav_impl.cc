@@ -27,7 +27,7 @@
 #include "flight/global_defs.h"
 #include "flight/hardware_defs.h"
 #include "flight/msg.h"
-#include "vector_nav.h"
+#include "vector_nav.h"  // NOLINT
 
 namespace {
 /* VectorNav objects */
@@ -43,7 +43,7 @@ elapsedMillis time_gnss;
 /* Interim data */
 bool status, healthy;
 elapsedMillis time_ms;
-}
+}  // namespace
 
 void VectorNavInit(const VnConfig &cfg) {
   config = cfg;
@@ -145,7 +145,7 @@ void VectorNavInit(const VnConfig &cfg) {
 void VectorNavEnableDrdy() {
   switch (config.device) {
     case VECTORNAV_VN100: {
-      if (!vn100.EnableDrdyInt(Vn100::IMU_READY, VN_SRD)) {
+      if (!vn100.EnableDrdyInt(Vn100::AHRS, VN_SRD)) {
         MsgError("unable to enable VN-100 DRDY interrupt");
       }
       break;
@@ -201,6 +201,7 @@ void VectorNavRead() {
 }
 
 void VectorNavImuData(ImuData * const imu) {
+  if (!imu) {return;}
   switch (config.device) {
     case VECTORNAV_NONE: {
       imu->installed = false;
@@ -267,6 +268,7 @@ void VectorNavImuData(ImuData * const imu) {
 }
 
 void VectorNavPresData(PresData * const pres) {
+  if (!pres) {return;}
   switch (config.device) {
     case VECTORNAV_NONE: {
       pres->installed = false;
@@ -306,6 +308,7 @@ void VectorNavPresData(PresData * const pres) {
 }
 
 void VectorNavGnssData(GnssData * const gnss) {
+  if (!gnss) {return;}
   switch (config.device) {
     case VECTORNAV_NONE: {
       gnss->installed = false;
@@ -375,6 +378,7 @@ void VectorNavGnssData(GnssData * const gnss) {
 }
 
 void VectorNavInsData(InertialData * const ins) {
+  if (!ins) {return;}
   switch (config.device) {
     case VECTORNAV_VN100: {
       ins->healthy = true;

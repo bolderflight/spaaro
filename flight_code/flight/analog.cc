@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -28,6 +28,7 @@
 #include "flight/hardware_defs.h"
 
 void AnalogRead(AdcData * const data) {
+  if (!data) {return;}
   for (std::size_t i = 0; i < NUM_AIN_PINS; i++) {
     data->volt[i] = static_cast<float>(analogRead(AIN_PINS[i])) *
                              AIN_VOLTAGE_SCALE;

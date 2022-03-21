@@ -27,7 +27,7 @@
 #include "flight/global_defs.h"
 #include "flight/hardware_defs.h"
 #include "flight/msg.h"
-#include "sbus.h"
+#include "sbus.h"  // NOLINT
 
 namespace {
 /* SBUS-RX object */
@@ -66,11 +66,12 @@ void SbusRxRead() {
     if (status) {
       time_ms = 0;
     }
-    healthy = (time_ms < HEALTHY_TIMEOUT_MS);
+    healthy = (time_ms < SBUS_HEALTHY_TIMEOUT_MS);
   }
 }
 
 void SbusRxInceptorData(InceptorData * const data) {
+  if (!data) {return;}
   data->installed = config.installed;
   if (config.installed) {
     data->new_data = status;

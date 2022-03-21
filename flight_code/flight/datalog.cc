@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -26,7 +26,7 @@
 #include "flight/datalog.h"
 #include "flight/msg.h"
 #include "logger/logger.h"
-#include "framing.h"
+#include "framing.h"  // NOLINT
 #include "./pb_encode.h"
 #include "./pb_decode.h"
 #if defined(__FMU_R_V2__)
@@ -93,45 +93,70 @@ void DatalogAdd(const AircraftData &ref) {
   datalog_msg_.mpu9250_imu_new_mag_data = ref.sensor.mpu9250_imu.new_mag_data;
   datalog_msg_.mpu9250_imu_die_temp_c = ref.sensor.mpu9250_imu.die_temp_c;
   for (std::size_t i = 0; i < 3; i++) {
-    datalog_msg_.mpu9250_imu_accel_mps2[i] = ref.sensor.mpu9250_imu.accel_mps2[i];
-    datalog_msg_.mpu9250_imu_gyro_radps[i] = ref.sensor.mpu9250_imu.gyro_radps[i];
+    datalog_msg_.mpu9250_imu_accel_mps2[i] =
+      ref.sensor.mpu9250_imu.accel_mps2[i];
+    datalog_msg_.mpu9250_imu_gyro_radps[i] =
+      ref.sensor.mpu9250_imu.gyro_radps[i];
     datalog_msg_.mpu9250_imu_mag_ut[i] = ref.sensor.mpu9250_imu.mag_ut[i];
   }
   /* VectorNav imu */
   datalog_msg_.vector_nav_imu_installed = ref.sensor.vector_nav_imu.installed;
   datalog_msg_.vector_nav_imu_healthy = ref.sensor.vector_nav_imu.healthy;
-  datalog_msg_.vector_nav_imu_new_imu_data = ref.sensor.vector_nav_imu.new_imu_data;
-  datalog_msg_.vector_nav_imu_new_mag_data = ref.sensor.vector_nav_imu.new_mag_data;
+  datalog_msg_.vector_nav_imu_new_imu_data =
+    ref.sensor.vector_nav_imu.new_imu_data;
+  datalog_msg_.vector_nav_imu_new_mag_data =
+    ref.sensor.vector_nav_imu.new_mag_data;
   datalog_msg_.vector_nav_imu_die_temp_c = ref.sensor.vector_nav_imu.die_temp_c;
   for (std::size_t i = 0; i < 3; i++) {
-    datalog_msg_.vector_nav_imu_accel_mps2[i] = ref.sensor.vector_nav_imu.accel_mps2[i];
-    datalog_msg_.vector_nav_imu_gyro_radps[i] = ref.sensor.vector_nav_imu.gyro_radps[i];
+    datalog_msg_.vector_nav_imu_accel_mps2[i] =
+      ref.sensor.vector_nav_imu.accel_mps2[i];
+    datalog_msg_.vector_nav_imu_gyro_radps[i] =
+      ref.sensor.vector_nav_imu.gyro_radps[i];
     datalog_msg_.vector_nav_imu_mag_ut[i] = ref.sensor.vector_nav_imu.mag_ut[i];
   }
   /* BME280 static pressure */
-  datalog_msg_.bme280_static_pres_installed = ref.sensor.bme280_static_pres.installed;
-  datalog_msg_.bme280_static_pres_healthy = ref.sensor.bme280_static_pres.healthy;
-  datalog_msg_.bme280_static_pres_new_data = ref.sensor.bme280_static_pres.new_data;
-  datalog_msg_.bme280_static_pres_die_temp_c = ref.sensor.bme280_static_pres.die_temp_c;
+  datalog_msg_.bme280_static_pres_installed =
+    ref.sensor.bme280_static_pres.installed;
+  datalog_msg_.bme280_static_pres_healthy =
+    ref.sensor.bme280_static_pres.healthy;
+  datalog_msg_.bme280_static_pres_new_data =
+    ref.sensor.bme280_static_pres.new_data;
+  datalog_msg_.bme280_static_pres_die_temp_c =
+    ref.sensor.bme280_static_pres.die_temp_c;
   datalog_msg_.bme280_static_pres_pa = ref.sensor.bme280_static_pres.pres_pa;
   /* VectorNav static pressure */
-  datalog_msg_.vector_nav_static_pres_installed = ref.sensor.vector_nav_static_pres.installed;
-  datalog_msg_.vector_nav_static_pres_healthy = ref.sensor.vector_nav_static_pres.healthy;
-  datalog_msg_.vector_nav_static_pres_new_data = ref.sensor.vector_nav_static_pres.new_data;
-  datalog_msg_.vector_nav_static_pres_die_temp_c = ref.sensor.vector_nav_static_pres.die_temp_c;
-  datalog_msg_.vector_nav_static_pres_pa = ref.sensor.vector_nav_static_pres.pres_pa;
+  datalog_msg_.vector_nav_static_pres_installed =
+    ref.sensor.vector_nav_static_pres.installed;
+  datalog_msg_.vector_nav_static_pres_healthy =
+    ref.sensor.vector_nav_static_pres.healthy;
+  datalog_msg_.vector_nav_static_pres_new_data =
+    ref.sensor.vector_nav_static_pres.new_data;
+  datalog_msg_.vector_nav_static_pres_die_temp_c =
+    ref.sensor.vector_nav_static_pres.die_temp_c;
+  datalog_msg_.vector_nav_static_pres_pa =
+    ref.sensor.vector_nav_static_pres.pres_pa;
   /* AMS5915 static pressure */
-  datalog_msg_.ams5915_static_pres_installed = ref.sensor.ams5915_static_pres.installed;
-  datalog_msg_.ams5915_static_pres_healthy = ref.sensor.ams5915_static_pres.healthy;
-  datalog_msg_.ams5915_static_pres_new_data = ref.sensor.ams5915_static_pres.new_data;
-  datalog_msg_.ams5915_static_pres_die_temp_c = ref.sensor.ams5915_static_pres.die_temp_c;
-  datalog_msg_.ams5915_static_pres_pa = ref.sensor.ams5915_static_pres.pres_pa;
+  datalog_msg_.ams5915_static_pres_installed =
+    ref.sensor.ams5915_static_pres.installed;
+  datalog_msg_.ams5915_static_pres_healthy =
+    ref.sensor.ams5915_static_pres.healthy;
+  datalog_msg_.ams5915_static_pres_new_data =
+    ref.sensor.ams5915_static_pres.new_data;
+  datalog_msg_.ams5915_static_pres_die_temp_c =
+    ref.sensor.ams5915_static_pres.die_temp_c;
+  datalog_msg_.ams5915_static_pres_pa =
+    ref.sensor.ams5915_static_pres.pres_pa;
   /* AMS5915 differential pressure */
-  datalog_msg_.ams5915_diff_pres_installed = ref.sensor.ams5915_diff_pres.installed;
-  datalog_msg_.ams5915_diff_pres_healthy = ref.sensor.ams5915_diff_pres.healthy;
-  datalog_msg_.ams5915_diff_pres_new_data = ref.sensor.ams5915_diff_pres.new_data;
-  datalog_msg_.ams5915_diff_pres_die_temp_c = ref.sensor.ams5915_diff_pres.die_temp_c;
-  datalog_msg_.ams5915_diff_pres_pa = ref.sensor.ams5915_diff_pres.pres_pa;
+  datalog_msg_.ams5915_diff_pres_installed =
+    ref.sensor.ams5915_diff_pres.installed;
+  datalog_msg_.ams5915_diff_pres_healthy =
+    ref.sensor.ams5915_diff_pres.healthy;
+  datalog_msg_.ams5915_diff_pres_new_data =
+    ref.sensor.ams5915_diff_pres.new_data;
+  datalog_msg_.ams5915_diff_pres_die_temp_c =
+    ref.sensor.ams5915_diff_pres.die_temp_c;
+  datalog_msg_.ams5915_diff_pres_pa =
+    ref.sensor.ams5915_diff_pres.pres_pa;
   /* VectorNav GNSS data */
   datalog_msg_.vector_nav_gnss_installed = ref.sensor.vector_nav_gnss.installed;
   datalog_msg_.vector_nav_gnss_healthy = ref.sensor.vector_nav_gnss.healthy;
@@ -139,12 +164,17 @@ void DatalogAdd(const AircraftData &ref) {
   datalog_msg_.vector_nav_gnss_fix = ref.sensor.vector_nav_gnss.fix;
   datalog_msg_.vector_nav_gnss_num_sats = ref.sensor.vector_nav_gnss.num_sats;
   datalog_msg_.vector_nav_gnss_week = ref.sensor.vector_nav_gnss.gps_week;
-  datalog_msg_.vector_nav_gnss_alt_wgs84_m = ref.sensor.vector_nav_gnss.alt_wgs84_m;
-  datalog_msg_.vector_nav_gnss_horz_acc_m = ref.sensor.vector_nav_gnss.horz_acc_m;
-  datalog_msg_.vector_nav_gnss_vert_acc_m = ref.sensor.vector_nav_gnss.vert_acc_m;
-  datalog_msg_.vector_nav_gnss_vel_acc_mps = ref.sensor.vector_nav_gnss.vel_acc_mps;
+  datalog_msg_.vector_nav_gnss_alt_wgs84_m =
+    ref.sensor.vector_nav_gnss.alt_wgs84_m;
+  datalog_msg_.vector_nav_gnss_horz_acc_m =
+    ref.sensor.vector_nav_gnss.horz_acc_m;
+  datalog_msg_.vector_nav_gnss_vert_acc_m =
+    ref.sensor.vector_nav_gnss.vert_acc_m;
+  datalog_msg_.vector_nav_gnss_vel_acc_mps =
+    ref.sensor.vector_nav_gnss.vel_acc_mps;
   for (std::size_t i = 0; i < 3; i++) {
-    datalog_msg_.vector_nav_gnss_ned_vel_mps[i] = ref.sensor.vector_nav_gnss.ned_vel_mps[i];
+    datalog_msg_.vector_nav_gnss_ned_vel_mps[i] =
+      ref.sensor.vector_nav_gnss.ned_vel_mps[i];
   }
   datalog_msg_.vector_nav_gnss_tow_s = ref.sensor.vector_nav_gnss.gps_tow_s;
   datalog_msg_.vector_nav_gnss_lat_rad = ref.sensor.vector_nav_gnss.lat_rad;
@@ -161,7 +191,8 @@ void DatalogAdd(const AircraftData &ref) {
   datalog_msg_.ublox3_gnss_vert_acc_m = ref.sensor.ublox3_gnss.vert_acc_m;
   datalog_msg_.ublox3_gnss_vel_acc_mps = ref.sensor.ublox3_gnss.vel_acc_mps;
   for (std::size_t i = 0; i < 3; i++) {
-    datalog_msg_.ublox3_gnss_ned_vel_mps[i] = ref.sensor.ublox3_gnss.ned_vel_mps[i];
+    datalog_msg_.ublox3_gnss_ned_vel_mps[i] =
+      ref.sensor.ublox3_gnss.ned_vel_mps[i];
   }
   datalog_msg_.ublox3_gnss_tow_s = ref.sensor.ublox3_gnss.gps_tow_s;
   datalog_msg_.ublox3_gnss_lat_rad = ref.sensor.ublox3_gnss.lat_rad;
@@ -178,36 +209,52 @@ void DatalogAdd(const AircraftData &ref) {
   datalog_msg_.ublox4_gnss_vert_acc_m = ref.sensor.ublox4_gnss.vert_acc_m;
   datalog_msg_.ublox4_gnss_vel_acc_mps = ref.sensor.ublox4_gnss.vel_acc_mps;
   for (std::size_t i = 0; i < 3; i++) {
-    datalog_msg_.ublox4_gnss_ned_vel_mps[i] = ref.sensor.ublox4_gnss.ned_vel_mps[i];
+    datalog_msg_.ublox4_gnss_ned_vel_mps[i] =
+      ref.sensor.ublox4_gnss.ned_vel_mps[i];
   }
   datalog_msg_.ublox4_gnss_tow_s = ref.sensor.ublox4_gnss.gps_tow_s;
   datalog_msg_.ublox4_gnss_lat_rad = ref.sensor.ublox4_gnss.lat_rad;
   datalog_msg_.ublox4_gnss_lon_rad = ref.sensor.ublox4_gnss.lon_rad;
   /* uBlox3 rel pos data */
-  datalog_msg_.ublox3_relpos_avail = ref.sensor.ublox3_relpos.avail;
-  datalog_msg_.ublox3_relpos_moving_baseline = ref.sensor.ublox3_relpos.moving_baseline;
-  datalog_msg_.ublox3_relpos_heading_valid = ref.sensor.ublox3_relpos.heading_valid;
-  datalog_msg_.ublox3_relpos_normalized = ref.sensor.ublox3_relpos.baseline_normalized;
-  datalog_msg_.ublox3_relpos_len_acc_m = ref.sensor.ublox3_relpos.baseline_len_acc_m;
+  datalog_msg_.ublox3_relpos_avail =
+    ref.sensor.ublox3_relpos.avail;
+  datalog_msg_.ublox3_relpos_moving_baseline =
+    ref.sensor.ublox3_relpos.moving_baseline;
+  datalog_msg_.ublox3_relpos_heading_valid =
+    ref.sensor.ublox3_relpos.heading_valid;
+  datalog_msg_.ublox3_relpos_normalized =
+    ref.sensor.ublox3_relpos.baseline_normalized;
+  datalog_msg_.ublox3_relpos_len_acc_m =
+    ref.sensor.ublox3_relpos.baseline_len_acc_m;
   datalog_msg_.ublox3_relpos_heading_rad = ref.sensor.ublox3_relpos.heading_rad;
-  datalog_msg_.ublox3_relpos_heading_acc_rad = ref.sensor.ublox3_relpos.heading_acc_rad;
+  datalog_msg_.ublox3_relpos_heading_acc_rad =
+    ref.sensor.ublox3_relpos.heading_acc_rad;
   datalog_msg_.ublox3_relpos_len_m = ref.sensor.ublox3_relpos.baseline_len_m;
   for (std::size_t i = 0; i < 3; i++) {
-    datalog_msg_.ublox3_relpos_acc_ned_m[i] = ref.sensor.ublox3_relpos.rel_pos_acc_ned_m[i];
-    datalog_msg_.ublox3_relpos_ned_m[i] = ref.sensor.ublox3_relpos.rel_pos_ned_m[i];
+    datalog_msg_.ublox3_relpos_acc_ned_m[i] =
+      ref.sensor.ublox3_relpos.rel_pos_acc_ned_m[i];
+    datalog_msg_.ublox3_relpos_ned_m[i] =
+      ref.sensor.ublox3_relpos.rel_pos_ned_m[i];
   }
   /* uBlox4 rel pos data */
   datalog_msg_.ublox4_relpos_avail = ref.sensor.ublox4_relpos.avail;
-  datalog_msg_.ublox4_relpos_moving_baseline = ref.sensor.ublox4_relpos.moving_baseline;
-  datalog_msg_.ublox4_relpos_heading_valid = ref.sensor.ublox4_relpos.heading_valid;
-  datalog_msg_.ublox4_relpos_normalized = ref.sensor.ublox4_relpos.baseline_normalized;
-  datalog_msg_.ublox4_relpos_len_acc_m = ref.sensor.ublox4_relpos.baseline_len_acc_m;
+  datalog_msg_.ublox4_relpos_moving_baseline =
+    ref.sensor.ublox4_relpos.moving_baseline;
+  datalog_msg_.ublox4_relpos_heading_valid =
+    ref.sensor.ublox4_relpos.heading_valid;
+  datalog_msg_.ublox4_relpos_normalized =
+    ref.sensor.ublox4_relpos.baseline_normalized;
+  datalog_msg_.ublox4_relpos_len_acc_m =
+    ref.sensor.ublox4_relpos.baseline_len_acc_m;
   datalog_msg_.ublox4_relpos_heading_rad = ref.sensor.ublox4_relpos.heading_rad;
-  datalog_msg_.ublox4_relpos_heading_acc_rad = ref.sensor.ublox4_relpos.heading_acc_rad;
+  datalog_msg_.ublox4_relpos_heading_acc_rad =
+    ref.sensor.ublox4_relpos.heading_acc_rad;
   datalog_msg_.ublox4_relpos_len_m = ref.sensor.ublox4_relpos.baseline_len_m;
   for (std::size_t i = 0; i < 3; i++) {
-    datalog_msg_.ublox4_relpos_acc_ned_m[i] = ref.sensor.ublox4_relpos.rel_pos_acc_ned_m[i];
-    datalog_msg_.ublox4_relpos_ned_m[i] = ref.sensor.ublox4_relpos.rel_pos_ned_m[i];
+    datalog_msg_.ublox4_relpos_acc_ned_m[i] =
+      ref.sensor.ublox4_relpos.rel_pos_acc_ned_m[i];
+    datalog_msg_.ublox4_relpos_ned_m[i] =
+      ref.sensor.ublox4_relpos.rel_pos_ned_m[i];
   }
   /* ADC */
   for (std::size_t i = 0; i < NUM_AIN_PINS; i++) {

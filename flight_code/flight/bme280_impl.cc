@@ -27,7 +27,7 @@
 #include "flight/global_defs.h"
 #include "flight/hardware_defs.h"
 #include "flight/msg.h"
-#include "bme280.h"
+#include "bme280.h"  // NOLINT
 
 namespace {
 /* BME280 object */
@@ -53,6 +53,7 @@ void Bme280Read() {
 }
 
 void Bme280PresData(PresData * const data) {
+  if (!data) {return;}
   data->installed = true;
   data->healthy = healthy;
   data->new_data = status;

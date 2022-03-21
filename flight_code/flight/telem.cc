@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -26,8 +26,8 @@
 #include "flight/telem.h"
 #include "flight/global_defs.h"
 #include "flight/hardware_defs.h"
-#include "mavlink.h"
-#include "checksum.h"
+#include "mavlink.h"  // NOLINT
+#include "checksum.h"  // NOLINT
 #include "flight/msg.h"
 
 
@@ -71,7 +71,9 @@ void TelemInit(const AircraftConfig &cfg, TelemData * const ptr) {
   if (cfg_.telem.bus) {
     /* Config */
     telem_.hardware_serial(cfg.telem.bus);
-    telem_.gnss_serial(cfg.telem.gnss);
+    if (cfg.telem.rtk_uart) {
+      telem_.gnss_serial(cfg.telem.rtk_uart);
+    }
     telem_.aircraft_type(cfg.telem.aircraft_type);
     telem_.mission(ptr->flight_plan.data(), ptr->flight_plan.size(),
                    temp_.data());
@@ -174,21 +176,131 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
     } else {
       telem_.aircraft_state(bfs::STANDBY);
     }
-    /* Installed sensors */
-    telem_.accel_installed(true);
-    telem_.gyro_installed(true);
-    telem_.mag_installed(true);
-    telem_.static_pres_installed(true);
-    telem_.diff_pres_installed(data.sensor.ams5915_diff_pres.installed);
-    if ((data.sensor.ublox3_gnss.installed) ||
-        (data.sensor.ublox4_gnss.installed) ||
-        (data.sensor.vector_nav_gnss.installed)) {
-      telem_.gnss_installed(true);
-    } else {
-      telem_.gnss_installed(false);
+    /* IMU */
+    switch (cfg_.telem.imu_source) {
+      case TELEM_IMU_MPU9250: {
+        telem_.accel_installed(data.sensor.mpu9250_imu.installed);
+        telem_.gyro_installed(data.sensor.mpu9250_imu.installed);
+        telem_.mag_installed(data.sensor.mpu9250_imu.installed);
+        telem_.accel_healthy(data.sensor.mpu9250_imu.healthy);
+        telem_.gyro_healthy(data.sensor.mpu9250_imu.healthy);
+        telem_.mag_healthy(data.sensor.mpu9250_imu.healthy);
+        telem_.imu_accel_x_mps2(data.sensor.mpu9250_imu.accel_mps2[0]);
+        telem_.imu_accel_y_mps2(data.sensor.mpu9250_imu.accel_mps2[1]);
+        telem_.imu_accel_z_mps2(data.sensor.mpu9250_imu.accel_mps2[2]);
+        telem_.imu_gyro_x_radps(data.sensor.mpu9250_imu.gyro_radps[0]);
+        telem_.imu_gyro_y_radps(data.sensor.mpu9250_imu.gyro_radps[1]);
+        telem_.imu_gyro_z_radps(data.sensor.mpu9250_imu.gyro_radps[2]);
+        telem_.imu_mag_x_ut(data.sensor.mpu9250_imu.mag_ut[0]);
+        telem_.imu_mag_y_ut(data.sensor.mpu9250_imu.mag_ut[1]);
+        telem_.imu_mag_z_ut(data.sensor.mpu9250_imu.mag_ut[2]);
+        telem_.imu_die_temp_c(data.sensor.mpu9250_imu.die_temp_c);
+        break;
+      }
+      case TELEM_IMU_VECTORNAV: {
+        telem_.accel_installed(data.sensor.vector_nav_imu.installed);
+        telem_.gyro_installed(data.sensor.vector_nav_imu.installed);
+        telem_.mag_installed(data.sensor.vector_nav_imu.installed);
+        telem_.accel_healthy(data.sensor.vector_nav_imu.healthy);
+        telem_.gyro_healthy(data.sensor.vector_nav_imu.healthy);
+        telem_.mag_healthy(data.sensor.vector_nav_imu.healthy);
+        telem_.imu_accel_x_mps2(data.sensor.vector_nav_imu.accel_mps2[0]);
+        telem_.imu_accel_y_mps2(data.sensor.vector_nav_imu.accel_mps2[1]);
+        telem_.imu_accel_z_mps2(data.sensor.vector_nav_imu.accel_mps2[2]);
+        telem_.imu_gyro_x_radps(data.sensor.vector_nav_imu.gyro_radps[0]);
+        telem_.imu_gyro_y_radps(data.sensor.vector_nav_imu.gyro_radps[1]);
+        telem_.imu_gyro_z_radps(data.sensor.vector_nav_imu.gyro_radps[2]);
+        telem_.imu_mag_x_ut(data.sensor.vector_nav_imu.mag_ut[0]);
+        telem_.imu_mag_y_ut(data.sensor.vector_nav_imu.mag_ut[1]);
+        telem_.imu_mag_z_ut(data.sensor.vector_nav_imu.mag_ut[2]);
+        telem_.imu_die_temp_c(data.sensor.vector_nav_imu.die_temp_c);
+        break;
+      }
     }
-    
+    /* Static pressure */
+    switch (cfg_.telem.static_pres_source) {
+      case TELEM_STATIC_PRES_BME280: {
+        telem_.static_pres_installed(data.sensor.bme280_static_pres.installed);
+        telem_.static_pres_healthy(data.sensor.bme280_static_pres.healthy);
+        telem_.static_pres_pa(data.sensor.bme280_static_pres.pres_pa);
+        telem_.static_pres_die_temp_c(
+          data.sensor.bme280_static_pres.die_temp_c);
+        break;
+      }
+      case TELEM_STATIC_PRES_VECTORNAV: {
+        telem_.static_pres_installed(
+          data.sensor.vector_nav_static_pres.installed);
+        telem_.static_pres_healthy(data.sensor.vector_nav_static_pres.healthy);
+        telem_.static_pres_pa(data.sensor.vector_nav_static_pres.pres_pa);
+        telem_.static_pres_die_temp_c(
+          data.sensor.vector_nav_static_pres.die_temp_c);
+        break;
+      }
+      case TELEM_STATIC_PRES_AMS5915: {
+        telem_.static_pres_installed(data.sensor.ams5915_static_pres.installed);
+        telem_.static_pres_healthy(data.sensor.ams5915_static_pres.healthy);
+        telem_.static_pres_pa(data.sensor.ams5915_static_pres.pres_pa);
+        telem_.static_pres_die_temp_c(
+          data.sensor.ams5915_static_pres.die_temp_c);
+        break;
+      }
+    }
+    /* Differential pressure */
+    telem_.diff_pres_installed(data.sensor.ams5915_diff_pres.installed);
+    if (data.sensor.ams5915_diff_pres.installed) {
+      telem_.diff_pres_healthy(data.sensor.ams5915_diff_pres.healthy);
+      telem_.diff_pres_pa(data.sensor.ams5915_diff_pres.pres_pa);
+      telem_.diff_pres_die_temp_c(data.sensor.ams5915_diff_pres.die_temp_c);
+    }
+    /* GNSS */
+    switch (cfg_.telem.gnss_source) {
+      case TELEM_GNSS_UBLOX3: {
+        telem_.gnss_installed(data.sensor.ublox3_gnss.installed);
+        telem_.gnss_healthy(data.sensor.ublox3_gnss.healthy);
+        telem_.gnss_fix(data.sensor.ublox3_gnss.fix);
+        telem_.gnss_num_sats(data.sensor.ublox3_gnss.num_sats);
+        telem_.gnss_lat_rad(data.sensor.ublox3_gnss.lat_rad);
+        telem_.gnss_lon_rad(data.sensor.ublox3_gnss.lon_rad);
+        telem_.gnss_alt_wgs84_m(data.sensor.ublox3_gnss.alt_wgs84_m);
+        telem_.gnss_horz_acc_m(data.sensor.ublox3_gnss.horz_acc_m);
+        telem_.gnss_vert_acc_m(data.sensor.ublox3_gnss.vert_acc_m);
+        telem_.gnss_vel_acc_mps(data.sensor.ublox3_gnss.vel_acc_mps);
+        break;
+      }
+      case TELEM_GNSS_UBLOX4: {
+        telem_.gnss_installed(data.sensor.ublox4_gnss.installed);
+        telem_.gnss_healthy(data.sensor.ublox4_gnss.healthy);
+        telem_.gnss_fix(data.sensor.ublox4_gnss.fix);
+        telem_.gnss_num_sats(data.sensor.ublox4_gnss.num_sats);
+        telem_.gnss_lat_rad(data.sensor.ublox4_gnss.lat_rad);
+        telem_.gnss_lon_rad(data.sensor.ublox4_gnss.lon_rad);
+        telem_.gnss_alt_wgs84_m(data.sensor.ublox4_gnss.alt_wgs84_m);
+        telem_.gnss_horz_acc_m(data.sensor.ublox4_gnss.horz_acc_m);
+        telem_.gnss_vert_acc_m(data.sensor.ublox4_gnss.vert_acc_m);
+        telem_.gnss_vel_acc_mps(data.sensor.ublox4_gnss.vel_acc_mps);
+        break;
+      }
+      case TELEM_GNSS_VECTORNAV: {
+        telem_.gnss_installed(data.sensor.vector_nav_gnss.installed);
+        telem_.gnss_healthy(data.sensor.vector_nav_gnss.healthy);
+        telem_.gnss_fix(data.sensor.vector_nav_gnss.fix);
+        telem_.gnss_num_sats(data.sensor.vector_nav_gnss.num_sats);
+        telem_.gnss_lat_rad(data.sensor.vector_nav_gnss.lat_rad);
+        telem_.gnss_lon_rad(data.sensor.vector_nav_gnss.lon_rad);
+        telem_.gnss_alt_wgs84_m(data.sensor.vector_nav_gnss.alt_wgs84_m);
+        telem_.gnss_horz_acc_m(data.sensor.vector_nav_gnss.horz_acc_m);
+        telem_.gnss_vert_acc_m(data.sensor.vector_nav_gnss.vert_acc_m);
+        telem_.gnss_vel_acc_mps(data.sensor.vector_nav_gnss.vel_acc_mps);
+        break;
+      }
+    }
+    /* Inceptor */
     telem_.inceptor_installed(data.sensor.sbus_inceptor.installed);
+    if (data.sensor.sbus_inceptor.installed) {
+      telem_.inceptor_healthy(data.sensor.sbus_inceptor.healthy);
+      telem_.throttle_prcnt(data.vms.throttle_cmd_prcnt);
+      telem_.inceptor(data.sensor.sbus_inceptor.ch);
+    }
     /* Battery data */
     #if defined(__FMU_R_V2__)
     telem_.battery_volt(data.vms.battery.voltage_v);
@@ -200,74 +312,39 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
     #if defined(__FMU_R_V1__)
     telem_.battery_volt(data.sys.input_volt);
     #endif
-    /* IMU data */
-    telem_.accel_healthy(data.sensor.mpu9250_imu.healthy);
-    telem_.gyro_healthy(data.sensor.mpu9250_imu.healthy);
-    telem_.mag_healthy(data.sensor.mpu9250_imu.healthy);
-    telem_.imu_accel_x_mps2(data.sensor.mpu9250_imu.accel_mps2[0]);
-    telem_.imu_accel_y_mps2(data.sensor.mpu9250_imu.accel_mps2[1]);
-    telem_.imu_accel_z_mps2(data.sensor.mpu9250_imu.accel_mps2[2]);
-    telem_.imu_gyro_x_radps(data.sensor.mpu9250_imu.gyro_radps[0]);
-    telem_.imu_gyro_y_radps(data.sensor.mpu9250_imu.gyro_radps[1]);
-    telem_.imu_gyro_z_radps(data.sensor.mpu9250_imu.gyro_radps[2]);
-    telem_.imu_mag_x_ut(data.sensor.mpu9250_imu.mag_ut[0]);
-    telem_.imu_mag_y_ut(data.sensor.mpu9250_imu.mag_ut[1]);
-    telem_.imu_mag_z_ut(data.sensor.mpu9250_imu.mag_ut[2]);
-    telem_.imu_die_temp_c(data.sensor.mpu9250_imu.die_temp_c);
-    /* GNSS data */
-    if (data.sensor.ublox3_gnss.installed) {
-      telem_.gnss_healthy(data.sensor.ublox3_gnss.healthy);
-      telem_.gnss_fix(data.sensor.ublox3_gnss.fix);
-      telem_.gnss_num_sats(data.sensor.ublox3_gnss.num_sats);
-      telem_.gnss_lat_rad(data.sensor.ublox3_gnss.lat_rad);
-      telem_.gnss_lon_rad(data.sensor.ublox3_gnss.lon_rad);
-      telem_.gnss_alt_wgs84_m(data.sensor.ublox3_gnss.alt_wgs84_m);
-      telem_.gnss_horz_acc_m(data.sensor.ublox3_gnss.horz_acc_m);
-      telem_.gnss_vert_acc_m(data.sensor.ublox3_gnss.vert_acc_m);
-      telem_.gnss_vel_acc_mps(data.sensor.ublox3_gnss.vel_acc_mps);
-    } else if (data.sensor.ublox4_gnss.installed) {
-      telem_.gnss_healthy(data.sensor.ublox4_gnss.healthy);
-      telem_.gnss_fix(data.sensor.ublox4_gnss.fix);
-      telem_.gnss_num_sats(data.sensor.ublox4_gnss.num_sats);
-      telem_.gnss_lat_rad(data.sensor.ublox4_gnss.lat_rad);
-      telem_.gnss_lon_rad(data.sensor.ublox4_gnss.lon_rad);
-      telem_.gnss_alt_wgs84_m(data.sensor.ublox4_gnss.alt_wgs84_m);
-      telem_.gnss_horz_acc_m(data.sensor.ublox4_gnss.horz_acc_m);
-      telem_.gnss_vert_acc_m(data.sensor.ublox4_gnss.vert_acc_m);
-      telem_.gnss_vel_acc_mps(data.sensor.ublox4_gnss.vel_acc_mps);
-    } else if (data.sensor.vector_nav_gnss.installed) {
-      telem_.gnss_healthy(data.sensor.vector_nav_gnss.healthy);
-      telem_.gnss_fix(data.sensor.vector_nav_gnss.fix);
-      telem_.gnss_num_sats(data.sensor.vector_nav_gnss.num_sats);
-      telem_.gnss_lat_rad(data.sensor.vector_nav_gnss.lat_rad);
-      telem_.gnss_lon_rad(data.sensor.vector_nav_gnss.lon_rad);
-      telem_.gnss_alt_wgs84_m(data.sensor.vector_nav_gnss.alt_wgs84_m);
-      telem_.gnss_horz_acc_m(data.sensor.vector_nav_gnss.horz_acc_m);
-      telem_.gnss_vert_acc_m(data.sensor.vector_nav_gnss.vert_acc_m);
-      telem_.gnss_vel_acc_mps(data.sensor.vector_nav_gnss.vel_acc_mps);
-    }
-    /* Airdata */
-    telem_.static_pres_healthy(data.sensor.bme280_static_pres.healthy);
-    telem_.static_pres_pa(data.sensor.bme280_static_pres.pres_pa);
-    telem_.static_pres_die_temp_c(data.sensor.bme280_static_pres.die_temp_c);
-    if (data.sensor.ams5915_diff_pres.installed) {
-      telem_.diff_pres_healthy(data.sensor.ams5915_diff_pres.healthy);
-      telem_.diff_pres_pa(data.sensor.ams5915_diff_pres.pres_pa);
-      telem_.diff_pres_die_temp_c(data.sensor.ams5915_diff_pres.die_temp_c);
-    }
     /* Nav data */
-    telem_.nav_lat_rad(data.nav.bfs_ekf.lat_rad);
-    telem_.nav_lon_rad(data.nav.bfs_ekf.lon_rad);
-    telem_.nav_north_vel_mps(data.nav.bfs_ekf.ned_vel_mps[0]);
-    telem_.nav_east_vel_mps(data.nav.bfs_ekf.ned_vel_mps[1]);
-    telem_.nav_down_vel_mps(data.nav.bfs_ekf.ned_vel_mps[2]);
-    telem_.nav_ias_mps(data.nav.airdata.ias_mps);
-    telem_.nav_pitch_rad(data.nav.bfs_ekf.pitch_rad);
-    telem_.nav_roll_rad(data.nav.bfs_ekf.roll_rad);
-    telem_.nav_hdg_rad(data.nav.bfs_ekf.heading_rad);
-    telem_.nav_gyro_x_radps(data.nav.bfs_ekf.gyro_radps[0]);
-    telem_.nav_gyro_y_radps(data.nav.bfs_ekf.gyro_radps[1]);
-    telem_.nav_gyro_z_radps(data.nav.bfs_ekf.gyro_radps[2]);
+    switch (cfg_.telem.nav_source) {
+      case TELEM_NAV_BFS_EKF: {
+        telem_.nav_lat_rad(data.nav.bfs_ekf.lat_rad);
+        telem_.nav_lon_rad(data.nav.bfs_ekf.lon_rad);
+        telem_.nav_north_vel_mps(data.nav.bfs_ekf.ned_vel_mps[0]);
+        telem_.nav_east_vel_mps(data.nav.bfs_ekf.ned_vel_mps[1]);
+        telem_.nav_down_vel_mps(data.nav.bfs_ekf.ned_vel_mps[2]);
+        telem_.nav_ias_mps(data.nav.airdata.ias_mps);
+        telem_.nav_pitch_rad(data.nav.bfs_ekf.pitch_rad);
+        telem_.nav_roll_rad(data.nav.bfs_ekf.roll_rad);
+        telem_.nav_hdg_rad(data.nav.bfs_ekf.heading_rad);
+        telem_.nav_gyro_x_radps(data.nav.bfs_ekf.gyro_radps[0]);
+        telem_.nav_gyro_y_radps(data.nav.bfs_ekf.gyro_radps[1]);
+        telem_.nav_gyro_z_radps(data.nav.bfs_ekf.gyro_radps[2]);
+        break;
+      }
+      case TELEM_NAV_VECTORNAV: {
+        telem_.nav_lat_rad(data.nav.vector_nav.lat_rad);
+        telem_.nav_lon_rad(data.nav.vector_nav.lon_rad);
+        telem_.nav_north_vel_mps(data.nav.vector_nav.ned_vel_mps[0]);
+        telem_.nav_east_vel_mps(data.nav.vector_nav.ned_vel_mps[1]);
+        telem_.nav_down_vel_mps(data.nav.vector_nav.ned_vel_mps[2]);
+        telem_.nav_ias_mps(data.nav.airdata.ias_mps);
+        telem_.nav_pitch_rad(data.nav.vector_nav.pitch_rad);
+        telem_.nav_roll_rad(data.nav.vector_nav.roll_rad);
+        telem_.nav_hdg_rad(data.nav.vector_nav.heading_rad);
+        telem_.nav_gyro_x_radps(data.nav.vector_nav.gyro_radps[0]);
+        telem_.nav_gyro_y_radps(data.nav.vector_nav.gyro_radps[1]);
+        telem_.nav_gyro_z_radps(data.nav.vector_nav.gyro_radps[2]);
+        break;
+      }
+    }
     /* Effector */
     for (std::size_t i = 0; i < NUM_PWM_PINS; i++) {
       effector_[i] = data.vms.pwm.cnt[i];
@@ -276,10 +353,6 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
       effector_[i + NUM_PWM_PINS] = data.vms.sbus.cnt[i];
     }
     telem_.effector(effector_);
-    /* Inceptor */
-    telem_.inceptor_healthy(data.sensor.sbus_inceptor.healthy);
-    telem_.throttle_prcnt(data.vms.throttle_cmd_prcnt);
-    telem_.inceptor(data.sensor.sbus_inceptor.ch);
     /* Mission */
     if (data.vms.waypoint_reached) {
       telem_.AdvanceMissionItem();
@@ -292,8 +365,8 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
       /* Update the value in global defs */
       ptr->param[param_idx_] = telem_.param(param_idx_);
       /* Update the parameter buffer value */
-      memcpy(param_buf + sizeof(PARAM_STORE_HEADER) + param_idx_ * sizeof(float),
-            &ptr->param[param_idx_], sizeof(float));
+      memcpy(param_buf + sizeof(PARAM_STORE_HEADER) + param_idx_ *
+            sizeof(float), &ptr->param[param_idx_], sizeof(float));
       /* Compute a new checksum */
       chk_computed = param_checksum.Compute(param_buf,
                                             sizeof(PARAM_STORE_HEADER) +

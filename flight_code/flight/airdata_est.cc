@@ -26,8 +26,8 @@
 #include "flight/global_defs.h"
 #include "flight/hardware_defs.h"
 #include "flight/msg.h"
-#include "filter.h"
-#include "airdata.h"
+#include "filter.h"  // NOLINT
+#include "airdata.h"  // NOLINT
 
 namespace {
 /* Filters */
@@ -45,6 +45,7 @@ void AirDataInit(const AirDataConfig &cfg) {
 }
 
 void AirDataEst(const SensorData &sens, AirData * const data) {
+  if (!data) {return;}
   if (!airdata_initialized) {
     data->initialized = false;
     data->static_pres_pa = 0;
@@ -54,8 +55,8 @@ void AirDataEst(const SensorData &sens, AirData * const data) {
     switch (config.static_pres_source) {
       case AIR_DATA_STATIC_PRES_BME280: {
         if (!sens.bme280_static_pres.installed) {
-          MsgError("BME280 selected as air data static pressure source, \
-                    but not installed.");
+          MsgError("BME280 selected as air data static pressure source,"
+                   "but not installed.");
         }
         if ((!static_pres_init) && (sens.bme280_static_pres.new_data)) {
           static_pres_dlpf.Init(config.static_pres_cutoff_hz,
@@ -67,8 +68,8 @@ void AirDataEst(const SensorData &sens, AirData * const data) {
       }
       case AIR_DATA_STATIC_PRES_AMS5915: {
         if (!sens.ams5915_static_pres.installed) {
-          MsgError("AMS5915 selected as air data static pressure source, \
-                    but not installed.");
+          MsgError("AMS5915 selected as air data static pressure source,"
+                   "but not installed.");
         }
         if ((!static_pres_init) && (sens.ams5915_static_pres.new_data)) {
           static_pres_dlpf.Init(config.static_pres_cutoff_hz,
@@ -80,8 +81,8 @@ void AirDataEst(const SensorData &sens, AirData * const data) {
       }
       case AIR_DATA_STATIC_PRES_VECTORNAV: {
         if (!sens.vector_nav_static_pres.installed) {
-          MsgError("VectorNav selected as air data static pressure source, \
-                    but not installed.");
+          MsgError("VectorNav selected as air data static pressure source,"
+                   "but not installed.");
         }
         if ((!static_pres_init) && (sens.vector_nav_static_pres.new_data)) {
           static_pres_dlpf.Init(config.static_pres_cutoff_hz,

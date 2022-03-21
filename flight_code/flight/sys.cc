@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -59,6 +59,7 @@ void SysInit() {
   /* Setup analog for voltage monitoring */
   analogReadResolution(ANALOG_RESOLUTION_BITS);
 }
+
 void SysRead(SysData * const ptr) {
   if (!ptr) {return;}
   frame_start_us_ = micros64();
@@ -75,6 +76,7 @@ void SysRead(SysData * const ptr) {
                   PWM_VOLTAGE_SCALE;
   #endif
 }
+
 void SysFrameEnd() {
   frame_time_us_ = static_cast<int32_t>(micros64() - frame_start_us_);
 }

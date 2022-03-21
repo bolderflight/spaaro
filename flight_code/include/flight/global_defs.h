@@ -26,14 +26,14 @@
 #ifndef FLIGHT_CODE_INCLUDE_FLIGHT_GLOBAL_DEFS_H_
 #define FLIGHT_CODE_INCLUDE_FLIGHT_GLOBAL_DEFS_H_
 
-#include "flight/hardware_defs.h"
-#include "mpu9250.h"
-#include "mavlink.h"
-#include "eigen.h"
 #include <Eigen/Dense>
+#include "flight/hardware_defs.h"
+#include "mpu9250.h"  // NOLINT
+#include "mavlink.h"  // NOLINT
+#include "eigen.h"  // NOLINT
 
-using namespace bfs;
-using namespace Eigen;
+using namespace bfs;  // NOLINT
+using namespace Eigen;  // NOLINT
 
 /* Control sizes */
 inline constexpr std::size_t NUM_AUX_VAR = 24;
@@ -135,7 +135,7 @@ struct SensorConfig {
   GnssConfig gnss_uart4;
 };
 
-enum AirDataStaticPresSource {
+enum AirDataStaticPresSource : int8_t {
   AIR_DATA_STATIC_PRES_BME280,
   AIR_DATA_STATIC_PRES_AMS5915,
   AIR_DATA_STATIC_PRES_VECTORNAV
@@ -143,16 +143,16 @@ enum AirDataStaticPresSource {
 
 struct AirDataConfig {
   AirDataStaticPresSource static_pres_source = AIR_DATA_STATIC_PRES_BME280;
-  float static_pres_cutoff_hz;
-  float diff_pres_cutoff_hz;
+  float static_pres_cutoff_hz = 5;
+  float diff_pres_cutoff_hz = 5;
 };
 
-enum EkfImuSource {
+enum EkfImuSource : int8_t {
   EKF_IMU_MPU9250,
   EKF_IMU_VECTORNAV
 };
 
-enum EkfGnssSource {
+enum EkfGnssSource : int8_t {
   EKF_GNSS_UBLOX3,
   EKF_GNSS_UBLOX4,
   EKF_GNSS_VECTORNAV
@@ -162,17 +162,43 @@ struct BfsNavConfig {
   EkfImuSource imu_source = EKF_IMU_MPU9250;
   EkfGnssSource gnss_source_prim = EKF_GNSS_UBLOX3;
   // EkfGnssSource gnss_source_sec = EKF_GNSS_UBLOX4;
-  float accel_cutoff_hz;
-  float gyro_cutoff_hz;
-  float mag_cutoff_hz;
+  float accel_cutoff_hz = 10;
+  float gyro_cutoff_hz = 10;
+  float mag_cutoff_hz = 10;
   // Vector3f antenna_baseline_m = Vector3f::Zero();
 };
 
+enum TelemImu : int8_t {
+  TELEM_IMU_MPU9250,
+  TELEM_IMU_VECTORNAV
+};
+
+enum TelemGnss : int8_t {
+  TELEM_GNSS_UBLOX3,
+  TELEM_GNSS_UBLOX4,
+  TELEM_GNSS_VECTORNAV
+};
+
+enum TelemNav : int8_t {
+  TELEM_NAV_BFS_EKF,
+  TELEM_NAV_VECTORNAV
+};
+
+enum TelemStaticPres : int8_t {
+  TELEM_STATIC_PRES_BME280,
+  TELEM_STATIC_PRES_VECTORNAV,
+  TELEM_STATIC_PRES_AMS5915
+};
+
 struct TelemConfig {
-  bfs::AircraftType aircraft_type;
-  HardwareSerial *bus;
-  HardwareSerial *gnss = &Serial3;
-  int32_t baud;
+  bfs::AircraftType aircraft_type = FIXED_WING;
+  TelemImu imu_source = TELEM_IMU_MPU9250;
+  TelemStaticPres static_pres_source = TELEM_STATIC_PRES_BME280;
+  TelemGnss gnss_source = TELEM_GNSS_UBLOX3;
+  TelemNav nav_source = TELEM_NAV_BFS_EKF;
+  HardwareSerial *bus = &Serial5;
+  HardwareSerial *rtk_uart = &Serial3;
+  int32_t baud = 57600;
 };
 
 struct AircraftConfig {

@@ -59,7 +59,7 @@ AircraftConfig config = {
   },
   .telem = {
     .bus = &Serial4,
-    .gnss = &Serial3,
+    .rtk_uart = &Serial3,
     .baud = 57600
   }
 };
