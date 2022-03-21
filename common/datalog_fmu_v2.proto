@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -38,111 +38,203 @@ message DatalogMessage {
   /* System data */
   int32 sys_frame_time_us = 1;
   double sys_time_s = 6;
+
   /* Inceptor data */
-  bool incept_new_data = 20;
-  bool incept_lost_frame = 21;
-  bool incept_failsafe = 22;
+  bool incept_installed = 20;
+  bool incept_healthy = 21;
+  bool incept_new_data = 22;
   bool incept_ch17 = 23;
   bool incept_ch18 = 24;
   repeated int32 incept_ch = 25;
-  /* IMU data */
-  bool imu_new_data = 40;
-  bool imu_new_mag_data = 41;
-  bool imu_healthy = 42;
-  bool imu_mag_healthy = 43;
-  float imu_die_temp_c = 44;
-  repeated float imu_accel_mps2 = 45;
-  repeated float imu_gyro_radps = 46;
-  repeated float imu_mag_ut = 47;
-  /* GNSS data */
-  bool gnss_new_data = 60;
-  bool gnss_healthy = 61;
-  int32 gnss_fix = 62;
-  int32 gnss_num_sats = 63;
-  int32 gnss_week = 64;
-  int32 gnss_tow_ms = 65;
-  float gnss_alt_wgs84_m = 66;
-  float gnss_alt_msl_m = 67;
-  float gnss_hdop = 68;
-  float gnss_vdop = 69;
-  float gnss_track_rad = 70;
-  float gnss_spd_mps = 71;
-  float gnss_horz_acc_m = 72;
-  float gnss_vert_acc_m = 73;
-  float gnss_vel_acc_mps = 74;
-  float gnss_track_acc_rad = 75;
-  repeated float gnss_ned_vel_mps = 76;
-  double gnss_lat_rad = 77;
-  double gnss_lon_rad = 78;
-  /* Pressure data */
-  bool pitot_static_installed = 90;
-  bool pres_static_new_data = 91;
-  bool pres_static_healthy = 92;
-  float pres_static_pres_pa = 93;
-  float pres_static_die_temp_c = 94;
-  bool pres_diff_new_data = 95;
-  bool pres_diff_healthy = 96;
-  float pres_diff_pres_pa = 97;
-  float pres_diff_die_temp_c = 98;
+
+  /* MPU-9250 IMU data */
+  bool mpu9250_imu_installed = 40;
+  bool mpu9250_imu_healthy = 41;
+  bool mpu9250_imu_new_imu_data = 42;
+  bool mpu9250_imu_new_mag_data = 43;
+  float mpu9250_imu_die_temp_c = 44;
+  repeated float mpu9250_imu_accel_mps2 = 45;
+  repeated float mpu9250_imu_gyro_radps = 46;
+  repeated float mpu9250_imu_mag_ut = 47;
+
+  /* VectorNav IMU data */
+  bool vector_nav_imu_installed = 50;
+  bool vector_nav_imu_healthy = 51;
+  bool vector_nav_imu_new_imu_data = 52;
+  bool vector_nav_imu_new_mag_data = 53;
+  float vector_nav_imu_die_temp_c = 54;
+  repeated float vector_nav_imu_accel_mps2 = 55;
+  repeated float vector_nav_imu_gyro_radps = 56;
+  repeated float vector_nav_imu_mag_ut = 57;
+
+  /* BME280 Pressure data */
+  bool bme280_static_pres_installed = 60;
+  bool bme280_static_pres_healthy = 61;
+  bool bme280_static_pres_new_data = 62;
+  float bme280_static_pres_die_temp_c = 63;
+  float bme280_static_pres_pa = 64;
+
+  /* VectorNav Pressure data */
+  bool vector_nav_static_pres_installed = 70;
+  bool vector_nav_static_pres_healthy = 71;
+  bool vector_nav_static_pres_new_data = 72;
+  float vector_nav_static_pres_die_temp_c = 73;
+  float vector_nav_static_pres_pa = 74;
+
+  /* AMS5915 Static Pressure data */
+  bool ams5915_static_pres_installed = 80;
+  bool ams5915_static_pres_healthy = 81;
+  bool ams5915_static_pres_new_data = 82;
+  float ams5915_static_pres_die_temp_c = 83;
+  float ams5915_static_pres_pa = 84;
+
+  /* AMS5915 Differential Pressure data */
+  bool ams5915_diff_pres_installed = 90;
+  bool ams5915_diff_pres_healthy = 91;
+  bool ams5915_diff_pres_new_data = 92;
+  float ams5915_diff_pres_die_temp_c = 93;
+  float ams5915_diff_pres_pa = 94;
+
+  /* VectorNav GNSS data */
+  bool vector_nav_gnss_installed = 100;
+  bool vector_nav_gnss_healthy = 101;
+  bool vector_nav_gnss_new_data = 102;
+  int32 vector_nav_gnss_fix = 103;
+  int32 vector_nav_gnss_num_sats = 104;
+  int32 vector_nav_gnss_week = 105;
+  float vector_nav_gnss_alt_wgs84_m = 106;
+  float vector_nav_gnss_horz_acc_m = 107;
+  float vector_nav_gnss_vert_acc_m = 108;
+  float vector_nav_gnss_vel_acc_mps = 109;
+  repeated float vector_nav_gnss_ned_vel_mps = 110;
+  double vector_nav_gnss_tow_s = 111;
+  double vector_nav_gnss_lat_rad = 112;
+  double vector_nav_gnss_lon_rad = 113;
+
+  /* UBLOX3 GNSS data */
+  bool ublox3_gnss_installed = 120;
+  bool ublox3_gnss_healthy = 121;
+  bool ublox3_gnss_new_data = 122;
+  int32 ublox3_gnss_fix = 123;
+  int32 ublox3_gnss_num_sats = 124;
+  int32 ublox3_gnss_week = 125;
+  float ublox3_gnss_alt_wgs84_m = 126;
+  float ublox3_gnss_horz_acc_m = 127;
+  float ublox3_gnss_vert_acc_m = 128;
+  float ublox3_gnss_vel_acc_mps = 129;
+  repeated float ublox3_gnss_ned_vel_mps = 130;
+  double ublox3_gnss_tow_s = 131;
+  double ublox3_gnss_lat_rad = 132;
+  double ublox3_gnss_lon_rad = 133;
+
+  /* UBLOX4 GNSS data */
+  bool ublox4_gnss_installed = 140;
+  bool ublox4_gnss_healthy = 141;
+  bool ublox4_gnss_new_data = 142;
+  int32 ublox4_gnss_fix = 143;
+  int32 ublox4_gnss_num_sats = 144;
+  int32 ublox4_gnss_week = 145;
+  float ublox4_gnss_alt_wgs84_m = 146;
+  float ublox4_gnss_horz_acc_m = 147;
+  float ublox4_gnss_vert_acc_m = 148;
+  float ublox4_gnss_vel_acc_mps = 149;
+  repeated float ublox4_gnss_ned_vel_mps = 150;
+  double ublox4_gnss_tow_s = 151;
+  double ublox4_gnss_lat_rad = 152;
+  double ublox4_gnss_lon_rad = 153;
+
+  /* UBLOX3 REL POS data */
+  bool ublox3_relpos_avail = 200;
+  bool ublox3_relpos_moving_baseline = 201;
+  bool ublox3_relpos_heading_valid = 202;
+  bool ublox3_relpos_normalized = 203;
+  float ublox3_relpos_len_acc_m = 204;
+  float ublox3_relpos_heading_rad = 205;
+  float ublox3_relpos_heading_acc_rad = 206;
+  double ublox3_relpos_len_m = 207;
+  repeated float ublox3_relpos_acc_ned_m = 208;
+  repeated double ublox3_relpos_ned_m = 209;
+
+  /* UBLOX4 REL POS data */
+  bool ublox4_relpos_avail = 210;
+  bool ublox4_relpos_moving_baseline = 211;
+  bool ublox4_relpos_heading_valid = 212;
+  bool ublox4_relpos_normalized = 213;
+  float ublox4_relpos_len_acc_m = 214;
+  float ublox4_relpos_heading_rad = 215;
+  float ublox4_relpos_heading_acc_rad = 216;
+  double ublox4_relpos_len_m = 217;
+  repeated float ublox4_relpos_acc_ned_m = 218;
+  repeated double ublox4_relpos_ned_m = 219;
+
   /* Analog Data */
-  repeated float adc_volt = 110;
+  repeated float adc_volt = 220;
+
   /* Power Module Data */
-  float pwr_mod_volt_v = 120;
-  float pwr_mod_curr_v = 121;
-  /* Nav data */
-  bool nav_initialized = 130;
-  float nav_pitch_rad = 131;
-  float nav_roll_rad = 132;
-  float nav_heading_rad = 133;
-  float nav_alt_wgs84_m = 134;
-  float nav_home_alt_wgs84_m = 135;
-  float nav_alt_msl_m = 136;
-  float nav_alt_rel_m = 137;
-  float nav_static_pres_pa = 138;
-  float nav_diff_pres_pa = 139;
-  float nav_alt_pres_m = 140;
-  float nav_ias_mps = 141;
-  float nav_gnd_spd_mps = 142;
-  float nav_gnd_track_rad = 143;
-  float nav_flight_path_rad = 144;
-  repeated float nav_accel_bias_mps2 = 145;
-  repeated float nav_gyro_bias_radps = 146;
-  repeated float nav_accel_mps2 = 147;
-  repeated float nav_gyro_radps = 148;
-  repeated float nav_mag_ut = 149;
-  repeated float nav_ned_pos_m = 150;
-  repeated float nav_ned_vel_mps = 151;
-  double nav_lat_rad = 152;
-  double nav_lon_rad = 153;
-  double nav_home_lat_rad = 154;
-  double nav_home_lon_rad = 155;
+  float pwr_mod_volt_v = 230;
+  float pwr_mod_curr_v = 231;
+
+  /* Air data */
+  bool airdata_initialized = 240;
+  float airdata_static_pres_pa = 241;
+  float airdata_diff_pres_pa = 242;
+  float airdata_alt_pres_m = 243;
+  float airdata_ias_mps = 244;
+
+  /* BFS Nav data */
+  bool bfs_nav_healthy = 250;
+  float bfs_nav_pitch_rad = 251;
+  float bfs_nav_roll_rad = 252;
+  float bfs_nav_heading_rad = 253;
+  float bfs_nav_alt_wgs84_m = 254;
+  repeated float bfs_nav_accel_mps2 = 255;
+  repeated float bfs_nav_gyro_radps = 256;
+  repeated float bfs_nav_mag_ut = 257;
+  repeated float bfs_nav_ned_vel_mps = 258;
+  double bfs_nav_lat_rad = 259;
+  double bfs_nav_lon_rad = 260;
+
+  /* VectorNav data */
+  bool vector_nav_healthy = 270;
+  float vector_nav_pitch_rad = 271;
+  float vector_nav_roll_rad = 272;
+  float vector_nav_heading_rad = 273;
+  float vector_nav_alt_wgs84_m = 274;
+  repeated float vector_nav_accel_mps2 = 275;
+  repeated float vector_nav_gyro_radps = 276;
+  repeated float vector_nav_mag_ut = 277;
+  repeated float vector_nav_ned_vel_mps = 278;
+  double vector_nav_lat_rad = 279;
+  double vector_nav_lon_rad = 280;
+
   /* VMS data */
-  bool vms_waypoint_reached = 170;
-  bool vms_sbus_ch17 = 171;
-  bool vms_sbus_ch18 = 172;
-  bool vms_motors_enabled = 173;
-  int32 vms_mode = 174;
-  float vms_throttle_cmd_prcnt = 175;
-  float vms_batt_volt_v = 176;
-  float vms_batt_curr_ma = 177;
-  float vms_batt_consumed_mah = 178;
-  float vms_batt_remaining_prcnt = 179;
-  float vms_batt_remaining_time_s = 180;
-  repeated int32 vms_sbus_cnt = 181;
-  repeated int32 vms_pwm_cnt = 182;
-  repeated float vms_analog = 183;
-  repeated float vms_sbus_cmd = 184;
-  repeated float vms_pwm_cmd = 185;
-  repeated float vms_aux = 186;
+  bool vms_waypoint_reached = 300;
+  bool vms_sbus_ch17 = 301;
+  bool vms_sbus_ch18 = 302;
+  bool vms_motors_enabled = 303;
+  int32 vms_mode = 304;
+  float vms_throttle_cmd_prcnt = 305;
+  float vms_batt_volt_v = 306;
+  float vms_batt_curr_ma = 307;
+  float vms_batt_consumed_mah = 308;
+  float vms_batt_remaining_prcnt = 309;
+  float vms_batt_remaining_time_s = 310;
+  repeated int32 vms_sbus_cnt = 311;
+  repeated int32 vms_pwm_cnt = 312;
+  repeated float vms_analog = 313;
+  repeated float vms_sbus_cmd = 314;
+  repeated float vms_pwm_cmd = 315;
+  repeated float vms_aux = 316;
+
   /* Telemetry data */
-  int32 waypoint_frame = 200;
-  int32 waypoint_cmd = 201;
-  float waypoint_param1 = 202;
-  float waypoint_param2 = 203;
-  float waypoint_param3 = 204;
-  float waypoint_param4 = 205;
-  sint32 waypoint_x = 206;
-  sint32 waypoint_y = 207;
-  float waypoint_z = 208;
-  repeated float telem_param = 209;
+  int32 waypoint_frame = 320;
+  int32 waypoint_cmd = 321;
+  float waypoint_param1 = 322;
+  float waypoint_param2 = 323;
+  float waypoint_param3 = 324;
+  float waypoint_param4 = 325;
+  sint32 waypoint_x = 326;
+  sint32 waypoint_y = 327;
+  float waypoint_z = 328;
+  repeated float telem_param = 329;
 }

@@ -1,6 +1,11 @@
 # Changelog
 
 ## v4.0.0
+- Updated to include multiple data sources:
+   - MPU-9250 IMU and VectorNav IMU, if installed.
+   - Up to 2 uBlox GNSS receivers and GNSS data from the VectorNav
+   - BME280, VectorNav, and AMS5915 static pressure data
+   - BFS 15 state EKF and VectorNav EKF
 
 ## v3.0.1
 - Changing the save type for sys_time to double seconds instead of int64_t us, since MATLAB v4 format does not support int64 format.
