@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -25,90 +25,72 @@
 
 #include "flight/sensors.h"
 #include "flight/global_defs.h"
-#include "flight/config.h"
+#include "flight/hardware_defs.h"
 #include "flight/msg.h"
+#include "flight/mpu9250_impl.h"
+#include "flight/bme280_impl.h"
+#include "flight/vector_nav_impl.h"
+#include "flight/ams5915_impl.h"
+#include "flight/sbus_rx_impl.h"
+#include "flight/ubx_impl.h"
 #include "flight/analog.h"
 #if defined(__FMU_R_V2__)
 #include "flight/battery.h"
 #endif
 
-namespace {
-/* Whether pitot static is installed */
-bool pitot_static_installed_;
-/* Sensors */
-bfs::SbusRx inceptor;
-bfs::Mpu9250 imu;
-bfs::Ublox gnss;
-bfs::Bme280 fmu_static_pres;
-bfs::Ams5915 pitot_static_pres;
-bfs::Ams5915 pitot_diff_pres;
-}  // namespace
-
-void SensorsInit(const SensorConfig &cfg) {
-  pitot_static_installed_ = cfg.pitot_static_installed;
-  MsgInfo("Intializing sensors...");
-  /* Initialize IMU */
-  if (!imu.Init(cfg.imu)) {
-    MsgError("Unable to initialize IMU.");
-  }
-  /* Initialize GNSS */
-  if (!gnss.Init(cfg.gnss)) {
-    MsgError("Unable to initialize GNSS.");
-  }
-  /* Initialize pressure transducers */
-  if (pitot_static_installed_) {
-    if (!pitot_static_pres.Init(cfg.static_pres)) {
-      MsgError("Unable to initialize static pressure sensor.");
-    }
-    if (!pitot_diff_pres.Init(cfg.diff_pres)) {
-      MsgError("Unable to initialize differential pressure sensor.");
-    }
+void InitSensors(const SensorConfig &cfg) {
+  MsgInfo("Initializing sensors...");
+  /* Initialize the SBUS inceptors */
+  SbusRxInit(cfg.sbus);
+  /* Initialize the MPU-9250 */
+  Mpu9250Init(cfg.mpu9250);
+  /* Initialize the BME280 */
+  Bme280Init();
+  /* Initialize the VectorNav */
+  VectorNavInit(cfg.vector_nav);
+  /* Initialize the AMS5915 transducers */
+  Ams5915Init(cfg.ams5915_static_pres, cfg.ams5915_diff_pres);
+  /* Initialize the uBlox receivers */
+  UbxInit(cfg.gnss_uart3, cfg.gnss_uart4);
+  /* Enable the data ready source */
+  if (cfg.drdy_source == DRDY_MPU9250) {
+    Mpu9250EnableDrdy();
   } else {
-    if (!fmu_static_pres.Init(cfg.static_pres)) {
-      MsgError("Unable to initialize static pressure sensor.");
+    if (cfg.vector_nav.device != VECTORNAV_NONE) {
+      VectorNavEnableDrdy();
+    } else {
+      MsgError("VectorNav cannot support DRDY since it's not configured");
     }
   }
-  MsgInfo("done.\n");
-  /* Initialize inceptors */
-  MsgInfo("Initializing inceptors...");
-  while (!inceptor.Init(&SBUS_UART)) {}
   MsgInfo("done.\n");
 }
-void SensorsRead(SensorData * const data) {
-  if (!data) {return;}
-  /* Read inceptors */
-  data->inceptor.new_data = inceptor.Read();
-  if (data->inceptor.new_data) {
-    data->inceptor.ch = inceptor.ch();
-    data->inceptor.ch17 = inceptor.ch17();
-    data->inceptor.ch18 = inceptor.ch18();
-    data->inceptor.lost_frame = inceptor.lost_frame();
-    data->inceptor.failsafe = inceptor.failsafe();
-  }
-  /* Read IMU */
-  if (!imu.Read(&data->imu)) {
-    MsgWarning("Unable to read IMU data.\n");
-  }
-  /* Read GNSS */
-  gnss.Read(&data->gnss);
-  /* Set whether pitot static is installed */
-  data->pitot_static_installed = pitot_static_installed_;
-  /* Read pressure transducers */
-  if (pitot_static_installed_) {
-    if (!pitot_static_pres.Read(&data->static_pres)) {
-      MsgError("Unable to read pitot static pressure data.\n");
-    }
-    if (!pitot_diff_pres.Read(&data->diff_pres)) {
-      MsgError("Unable to read pitot diff pressure data.\n");
-    }
-  } else {
-    if (!fmu_static_pres.Read(&data->static_pres)) {
-      MsgError("Unable to read FMU static pressure data.\n");
-    }
-  }
-  /* Read analog channels */
+
+void ReadSensors(SensorData * const data) {
+  /* Read the SBUS RX */
+  SbusRxRead();
+  SbusRxInceptorData(&data->sbus_inceptor);
+  /* Read the MPU-9250 */
+  Mpu9250Read();
+  Mpu9250ImuData(&data->mpu9250_imu);
+  /* Read the BME280 */
+  Bme280Read();
+  Bme280PresData(&data->bme280_static_pres);
+  /* Read the VectorNav */
+  VectorNavRead();
+  VectorNavImuData(&data->vector_nav_imu);
+  VectorNavPresData(&data->vector_nav_static_pres);
+  VectorNavGnssData(&data->vector_nav_gnss);
+  /* Read the AMS5915 */
+  Ams5915Read();
+  Ams5915PresData(&data->ams5915_static_pres,
+                  &data->ams5915_diff_pres);
+  /* Read the uBlox */
+  UbxRead();
+  UbxGnssData(&data->ublox3_gnss, &data->ublox3_relpos,
+              &data->ublox4_gnss, &data->ublox4_relpos);
+  /* Analog to digital converters */
   AnalogRead(&data->adc);
-  /* Read battery voltage / current */
+  /* Power module */
   #if defined(__FMU_R_V2__)
   BatteryRead(&data->power_module);
   #endif

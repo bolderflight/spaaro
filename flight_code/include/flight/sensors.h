@@ -26,35 +26,9 @@
 #ifndef FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
 #define FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
 
-#include "core/core.h"
-#include <variant>
-#include <optional>
+#include "flight/global_defs.h"
 
-/* Supported sensors */
-enum SensorType : int8_t {
-  NONE,
-  MPU9250,
-  VN100,
-  VN200,
-  VN300,
-  BME280,
-  AMS5915,
-  UBLOX
-};
-/* Sensor configuration */
-struct SensorConfig {
-  SensorType type;
-  std::optional<int8_t> transducer;
-  std::optional<int8_t> addr;
-  std::optional<int8_t> cs;
-  std::optional<int32_t> baud;
-  std::variant<TwoWire *, SPIClass *> bus;
-};
-/* Common sensor interface */
-class SensorIface {
- public:
-  virtual bool Init(const SensorConfig &config) = 0;
-  virtual bool Read() = 0;
-};
+void InitSensors(const SensorConfig &cfg);
+void ReadSensors(SensorData * const data);
 
 #endif  // FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_

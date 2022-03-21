@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -23,12 +23,10 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_NAV_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_NAV_H_
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_AIRDATA_EST_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_AIRDATA_EST_H_
 
-#include "flight/global_defs.h"
+void AirDataInit(const AirDataConfig &cfg);
+void AirDataEst(const SensorData &sens, AirData * const data);
 
-void NavInit(const NavConfig &ref);
-void NavRun(const SensorData &ref, NavData * const ptr);
-
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_NAV_H_
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_AIRDATA_EST_H_

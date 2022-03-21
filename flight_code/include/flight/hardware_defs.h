@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -26,46 +26,49 @@
 #ifndef FLIGHT_CODE_INCLUDE_FLIGHT_HARDWARE_DEFS_H_
 #define FLIGHT_CODE_INCLUDE_FLIGHT_HARDWARE_DEFS_H_
 
-#include <array>
-#include <cstdint>
-#include <cmath>
 #include "core/core.h"
-#include "imu/imu.h"
+#include "mpu9250.h"
+#include <array>
 
 /* FMU-R V2 */
 #if defined(__FMU_R_V2__)
 /* Messages */
 inline constexpr usb_serial_class &MSG_BUS = Serial;
-/* Frame rate */
-inline constexpr bfs::FrameRate FRAME_RATE_HZ = bfs::FRAME_RATE_100HZ;
-inline constexpr int16_t FRAME_PERIOD_MS = 1000 /
-                                           static_cast<uint8_t>(FRAME_RATE_HZ);
 /* Inceptor / Effector */
 inline constexpr int8_t NUM_SBUS_CH = 16;
 inline constexpr int8_t NUM_PWM_PINS = 8;
 inline constexpr HardwareSerial &SBUS_UART = Serial2;
 inline constexpr std::array<int8_t, NUM_PWM_PINS> PWM_PINS = {37, 9, 10, 6,
-                                                              5, 4, 3, 2};
+                                                               5, 4, 3, 2};
+/* Frame period */
+inline constexpr float FRAME_RATE_HZ = 100.0f;
+inline constexpr float FRAME_PERIOD_MS = 10.0f;
 /* 90% of the frame period */
 inline constexpr float EFFECTOR_DELAY_US = FRAME_PERIOD_MS * 0.9f * 1e3;
-/* IMU */
-inline constexpr SPIClass &IMU_SPI_BUS = SPI;
-inline constexpr int8_t IMU_CS = 36;
-inline constexpr int8_t IMU_DRDY = 35;
+/* SPI BUS */
+inline constexpr SPIClass &SPI_BUS = SPI;
+/* I2C Bus */
+inline constexpr TwoWire &I2C_BUS = Wire;
+/* MPU-9250 */
+inline constexpr float MPU9250_MAG_FRAME_RATE_HZ = 100;
+inline constexpr int8_t MPU9250_SRD = 9;
+inline constexpr int8_t MPU9250_CS = 36;
+inline constexpr int8_t MPU9250_DRDY = 35;
+inline constexpr int32_t HEALTHY_TIMEOUT_MS = 500;
+/* VectorNav */
+inline constexpr int8_t VN_SRD = 3;
 inline constexpr int8_t VN_CS = 34;
 inline constexpr int8_t VN_DRDY = 33;
-/* Pressure transducers */
-inline constexpr TwoWire &PRES_I2C_BUS = Wire;
-inline constexpr SPIClass &PRES_SPI_BUS = SPI;
-inline constexpr int8_t PRES_CS = 32;
+/* BME-280 */
+inline constexpr int8_t BME280_CS = 32;
 /* Analog */
 inline constexpr int8_t NUM_AIN_PINS = 8;
 inline constexpr int ANALOG_RESOLUTION_BITS = 12;
 inline constexpr float VOLTAGE_RANGE = 3.3;
 inline constexpr float ANALOG_COUNT_RANGE =
   std::pow(2.0f, ANALOG_RESOLUTION_BITS) - 1.0f;
-inline constexpr std::array<int8_t, NUM_AIN_PINS> AIN_PINS = {38, 39, 41, 40,
-                                                              24, 25, 26, 27};
+inline constexpr int8_t AIN_PINS[NUM_AIN_PINS] = {38, 39, 41, 40,
+                                                  24, 25, 26, 27};
 inline constexpr float AIN_VOLTAGE_SCALE = VOLTAGE_RANGE / ANALOG_COUNT_RANGE;
 /* Voltage and current */
 inline constexpr int8_t BATTERY_VOLTAGE_PIN = 23;
@@ -75,70 +78,80 @@ inline constexpr int8_t BATTERY_CURRENT_PIN = 22;
 #elif defined(__FMU_R_V2_BETA__)
 /* Messages */
 inline constexpr usb_serial_class &MSG_BUS = Serial;
-/* Frame rate */
-inline constexpr bfs::FrameRate FRAME_RATE_HZ = bfs::FRAME_RATE_100HZ;
-inline constexpr int16_t FRAME_PERIOD_MS = 1000 /
-                                           static_cast<uint8_t>(FRAME_RATE_HZ);
 /* Inceptor / Effector */
 inline constexpr int8_t NUM_SBUS_CH = 16;
 inline constexpr int8_t NUM_PWM_PINS = 8;
 inline constexpr HardwareSerial &SBUS_UART = Serial2;
 inline constexpr std::array<int8_t, NUM_PWM_PINS> PWM_PINS = {37, 22, 23, 6,
-                                                              5, 4, 3, 2};
+                                                               5, 4, 3, 2};
+/* Frame period */
+inline constexpr float FRAME_RATE_HZ = 100.0f;
+inline constexpr float FRAME_PERIOD_MS = 10.0f;
 /* 90% of the frame period */
 inline constexpr float EFFECTOR_DELAY_US = FRAME_PERIOD_MS * 0.9f * 1e3;
-/* IMU */
-inline constexpr SPIClass &IMU_SPI_BUS = SPI;
-inline constexpr int8_t IMU_CS = 36;
-inline constexpr int8_t IMU_DRDY = 35;
+/* SPI BUS */
+inline constexpr SPIClass &SPI_BUS = SPI;
+/* I2C Bus */
+inline constexpr TwoWire &I2C_BUS = Wire;
+/* MPU-9250 */
+inline constexpr float MPU9250_MAG_FRAME_RATE_HZ = 100;
+inline constexpr int8_t MPU9250_SRD = 9;
+inline constexpr int8_t MPU9250_CS = 36;
+inline constexpr int8_t MPU9250_DRDY = 35;
+inline constexpr int32_t HEALTHY_TIMEOUT_MS = 50;
+/* VectorNav */
+inline constexpr int8_t VN_SRD = 3;
 inline constexpr int8_t VN_CS = 34;
 inline constexpr int8_t VN_DRDY = 33;
-/* Pressure transducers */
-inline constexpr TwoWire &PRES_I2C_BUS = Wire;
-inline constexpr SPIClass &PRES_SPI_BUS = SPI;
-inline constexpr int8_t PRES_CS = 32;
+/* BME-280 */
+inline constexpr int8_t BME280_CS = 32;
 /* Analog */
 inline constexpr int8_t NUM_AIN_PINS = 8;
 inline constexpr int ANALOG_RESOLUTION_BITS = 12;
 inline constexpr float VOLTAGE_RANGE = 3.3;
 inline constexpr float ANALOG_COUNT_RANGE =
   std::pow(2.0f, ANALOG_RESOLUTION_BITS) - 1.0f;
-inline constexpr std::array<int8_t, NUM_AIN_PINS> AIN_PINS = {38, 39, 41, 40,
-                                                              24, 25, 26, 27};
+inline constexpr int8_t AIN_PINS[NUM_AIN_PINS] = {38, 39, 41, 40,
+                                                  24, 25, 26, 27};
 inline constexpr float AIN_VOLTAGE_SCALE = VOLTAGE_RANGE / ANALOG_COUNT_RANGE;
 
 /* FMU-R V1 */
 #else
 /* Messages */
 inline constexpr usb_serial_class &MSG_BUS = Serial;
-/* Frame rate */
-inline constexpr bfs::FrameRate FRAME_RATE_HZ = bfs::FRAME_RATE_50HZ;
-inline constexpr int16_t FRAME_PERIOD_MS = 1000 /
-                                           static_cast<uint8_t>(FRAME_RATE_HZ);
 /* Inceptor / Effector */
 inline constexpr int8_t NUM_SBUS_CH = 16;
 inline constexpr int8_t NUM_PWM_PINS = 8;
 inline constexpr HardwareSerial &SBUS_UART = Serial2;
 inline constexpr std::array<int8_t, NUM_PWM_PINS> PWM_PINS = {21, 22, 23, 2,
-                                                              3, 4, 5, 6};
+                                                               3, 4, 5, 6};
+/* Frame period */
+inline constexpr float FRAME_RATE_HZ = 50.0f;
+inline constexpr float FRAME_PERIOD_MS = 20.0f;
 /* 90% of the frame period */
 inline constexpr float EFFECTOR_DELAY_US = FRAME_PERIOD_MS * 0.9f * 1e3;
+/* SPI BUS */
+inline constexpr SPIClass &SPI_BUS = SPI;
+/* I2C Bus */
+inline constexpr TwoWire &I2C_BUS = Wire1;
+/* MPU-9250 */
+inline constexpr float MPU9250_MAG_FRAME_RATE_HZ = 8;
+inline constexpr int8_t MPU9250_SRD = 19;
+inline constexpr int8_t MPU9250_CS = 24;
+inline constexpr int8_t MPU9250_DRDY = 27;
+inline constexpr int32_t HEALTHY_TIMEOUT_MS = 100;
+/* VectorNav */
+inline constexpr int8_t VN_SRD = 7;
+inline constexpr int8_t VN_CS = 25;
+inline constexpr int8_t VN_DRDY = 28;
+/* BME-280 */
+inline constexpr int8_t BME280_CS = 26;
 /* Analog */
 inline constexpr int8_t NUM_AIN_PINS = 2;
-inline constexpr std::array<int8_t, NUM_AIN_PINS> AIN_PINS = {14, 16};
+inline constexpr int8_t AIN_PINS[NUM_AIN_PINS] = {14, 16};
 /* BFS Bus */
 inline constexpr int8_t BFS_INT1 = 20;
 inline constexpr int8_t BFS_INT2 = 17;
-/* IMU */
-inline constexpr SPIClass &IMU_SPI_BUS = SPI;
-inline constexpr int8_t IMU_CS = 24;
-inline constexpr int8_t IMU_DRDY = 27;
-inline constexpr int8_t VN_CS = 25;
-inline constexpr int8_t VN_DRDY = 28;
-/* Pressure transducers */
-inline constexpr TwoWire &PRES_I2C_BUS = Wire1;
-inline constexpr SPIClass &PRES_SPI_BUS = SPI;
-inline constexpr int8_t PRES_CS = 26;
 /* Voltage */
 inline constexpr int ANALOG_RESOLUTION_BITS = 16;
 inline constexpr float VOLTAGE_RANGE = 3.3;

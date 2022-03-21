@@ -23,10 +23,90 @@
 * IN THE SOFTWARE.
 */
 
+#include "flight/msg.h"
 #include "flight/global_defs.h"
+#include "flight/config.h"
 #include "flight/sensors.h"
-#include "flight/imu.h"
+#include "flight/effectors.h"
+#include "flight/sys.h"
+#include "flight/vms.h"
+#include "flight/datalog.h"
+#include "flight/telem.h"
+#include "flight/airdata_est.h"
+#include "flight/vector_nav_impl.h"
+#include "flight/bfs_ekf.h"
+
+/* Aircraft data */
+AircraftData data;
+/* Timer for sending effector commands */
+IntervalTimer effector_timer;
+/* ISR to send effector commands */
+void send_effectors() {
+  /* Stop the effector timer */
+  effector_timer.end();
+  #if defined(__FMU_R_V1__)
+  /* Pulse the BFS bus */
+  digitalWriteFast(BFS_INT1, LOW);
+  digitalWriteFast(BFS_INT2, HIGH);
+  #endif
+  /* Send effector commands */
+  EffectorsWrite();
+}
+/* ISR to gather sensor data and run VMS */
+void run() {
+  /* Start the effector timer */
+  effector_timer.begin(send_effectors, EFFECTOR_DELAY_US);
+  #if defined(__FMU_R_V1__)
+  /* Pulse the BFS bus */
+  digitalWriteFast(BFS_INT1, HIGH);
+  digitalWriteFast(BFS_INT2, LOW);
+  #endif
+  /* System data */
+  SysRead(&data.sys);
+  /* Sensor data */
+  ReadSensors(&data.sensor);
+  /* Nav filter */
+  AirDataEst(data.sensor, &data.nav.airdata);
+  BfsNavRun(data.sensor, &data.nav.bfs_ekf);
+  VectorNavInsData(&data.nav.vector_nav);
+  /* VMS */
+  VmsRun(data.sys, data.sensor, data.nav, data.telem, &data.vms);
+  /* Command effectors */
+  EffectorsCmd(data.vms.sbus, data.vms.pwm);
+  /* Datalog */
+  DatalogAdd(data);
+  /* Telemetry */
+  TelemUpdate(data, &data.telem);
+  /* Frame duration */
+  SysFrameEnd();
+}
 
 int main() {
-  
+  /* Init the message bus */
+  MsgBegin();
+  /* Init system */
+  SysInit();
+  /* Init sensors */
+  InitSensors(config.sensor);
+  /* Init nav filter */
+  AirDataInit(config.airdata);
+  BfsNavInit(config.bfs_ekf);
+  /* Init effectors */
+  EffectorsInit();
+  /* Init VMS */
+  VmsInit();
+  /* Init telemetry */
+  TelemInit(config, &data.telem);
+  /* Init datalog */
+  DatalogInit();
+  /* Attach data ready interrupt */
+  if (config.sensor.drdy_source == DRDY_MPU9250) {
+    attachInterrupt(MPU9250_DRDY, run, RISING);
+  } else {
+    attachInterrupt(VN_DRDY, run, RISING);
+  }
+  while (1) {
+    /* Flush datalog */
+    DatalogFlush();
+  }
 }

@@ -23,30 +23,14 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_IMU_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_IMU_H_
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_AMS5915_IMPL_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_AMS5915_IMPL_H_
 
-#include "flight/sensors.h"
-#include "eigen.h"
-#include <Eigen/Dense>
+#include "flight/global_defs.h"
 
-struct ImuConfig {
-  SensorIface* dev;
-  bool primary = false;
-  Eigen::Vector3f accel_bias_mps2 = Eigen::Vector3f::Zero();
-  Eigen::Matrix3f accel_scale = Eigen::Matrix3f::Identity();
-  Eigen::Matrix3f rotation = Eigen::Matrix3f::Identity();
-};
+void Ams5915Init(const Ams5915Config &static_pres,
+                 const Ams5915Config &diff_pres);
+void Ams5915Read();
+void Ams5915PresData(PresData * const static_pres, PresData * const diff_pres);
 
-struct ImuData {
-  Eigen::Vector3f gyro_radps;
-  Eigen::Vector3f accel_mps2;
-};
-
-class ImuIface {
- public:
-  virtual bool Config(const ImuConfig &ref) = 0;
-  virtual ImuData data() = 0;
-};
-
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_IMU_H_
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_AMS5915_IMPL_H_

@@ -25,9 +25,7 @@
 
 #include "flight/analog.h"
 #include "flight/global_defs.h"
-#include "flight/config.h"
-#include "flight/msg.h"
-#include "polytools/polytools.h"
+#include "flight/hardware_defs.h"
 
 void AnalogRead(AdcData * const data) {
   for (std::size_t i = 0; i < NUM_AIN_PINS; i++) {

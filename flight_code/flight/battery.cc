@@ -27,8 +27,7 @@
 
 #include "flight/battery.h"
 #include "flight/global_defs.h"
-#include "flight/config.h"
-#include "flight/msg.h"
+#include "flight/hardware_defs.h"
 
 void BatteryRead(PowerModuleData * const data) {
   data->voltage_v = static_cast<float>(analogRead(BATTERY_VOLTAGE_PIN)) *

@@ -35,12 +35,12 @@ int32_t frame_time_us_ = 0;
 
 void SysInit() {
   /* Pullup CS pins */
-  pinMode(IMU_CS, OUTPUT);
+  pinMode(MPU9250_CS, OUTPUT);
   pinMode(VN_CS, OUTPUT);
-  pinMode(PRES_CS, OUTPUT);
-  digitalWriteFast(IMU_CS, HIGH);
+  pinMode(BME280_CS, OUTPUT);
+  digitalWriteFast(MPU9250_CS, HIGH);
   digitalWriteFast(VN_CS, HIGH);
-  digitalWriteFast(PRES_CS, HIGH);
+  digitalWriteFast(BME280_CS, HIGH);
   /* Initialize buses */
   #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
   /* I2C */

@@ -23,34 +23,41 @@
 * IN THE SOFTWARE.
 */
 
-#include "flight/msg.h"
+#include "flight/bme280_impl.h"
+#include "flight/global_defs.h"
 #include "flight/hardware_defs.h"
-#include "flight/config.h"
-#include "./version.h"
+#include "flight/msg.h"
+#include "bme280.h"
 
-void MsgBegin() {
-  MSG_BUS.begin(115200);
-  if (DEBUG) {
-    while (!MSG_BUS) {}
+namespace {
+/* BME280 object */
+Bme280 bme280(&SPI_BUS, BME280_CS);
+/* Interim data */
+bool status, healthy;
+elapsedMillis time_ms;
+}
+
+void Bme280Init() {
+  if (!bme280.Begin()) {
+    MsgError("unable to establish communication with BME280");
   }
-  MSG_BUS.println("---------Bolder Flight Systems---------");
-  MSG_BUS.println("Flight Software");
-  MSG_BUS.print("Version: ");
-  MSG_BUS.println(PROJECT_VERSION);
-  MSG_BUS.println("---------------------------------------");
+}
+void Bme280Read() {
+  status = bme280.Read();
+  if (status) {
+    time_ms = 0;
+  } else {
+    MsgWarning("error reading BME280");
+  }
+  healthy = (time_ms < HEALTHY_TIMEOUT_MS);
 }
 
-void MsgInfo(const char * str) {
-  MSG_BUS.print(str);
-}
-
-void MsgWarning(const char * str) {
-  MSG_BUS.print("\nWARNING: ");
-  MSG_BUS.print(str);
-}
-
-void MsgError(const char * str) {
-  MSG_BUS.print("\nERROR: ");
-  MSG_BUS.print(str);
-  while (1) {}
+void Bme280PresData(PresData * const data) {
+  data->installed = true;
+  data->healthy = healthy;
+  data->new_data = status;
+  if (data->new_data) {
+    data->die_temp_c = bme280.die_temp_c();
+    data->pres_pa = bme280.pres_pa();
+  }
 }

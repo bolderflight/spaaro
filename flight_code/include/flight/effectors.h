@@ -29,7 +29,7 @@
 #include "flight/global_defs.h"
 
 void EffectorsInit();
-void EffectorsCmd(const VmsData &vms);
+void EffectorsCmd(const SbusCmd &s, const PwmCmd &p);
 void EffectorsWrite();
 
 #endif  // FLIGHT_CODE_INCLUDE_FLIGHT_EFFECTORS_H_

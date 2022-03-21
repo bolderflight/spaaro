@@ -27,8 +27,10 @@
 #ifdef __AUTOCODE__
   #include "./autocode.h"
 #else
-  #include "control/control.h"
-  #include "excitation/excitation.h"
+  #include "control.h"
+  #include "excitation.h"
+  #include "filter.h"
+  #include "polytools.h"
 #endif
 
 namespace {

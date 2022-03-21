@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -24,7 +24,6 @@
 */
 
 #include "flight/config.h"
-#include "flight/hardware_defs.h"
 #include "flight/global_defs.h"
 
 /* Debug */
@@ -32,45 +31,35 @@ bool DEBUG = true;
 /* Aircraft config */
 AircraftConfig config = {
   .sensor = {
-    .pitot_static_installed = true,
-    .imu = {
-      .dev = IMU_CS,
-      .frame_rate = FRAME_RATE_HZ,
-      .bus = &IMU_SPI_BUS,
-      .accel_bias_mps2 = {0, 0, 0},
-      .mag_bias_ut = {0, 0, 0},
-      .accel_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-      .mag_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-      .rotation = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}
+    .sbus = {
+      .installed = true
     },
-    .gnss = {
-      .sampling_period_ms = 100,  // 10 Hz
-      .baud = 921600,
-      .bus = &Serial3
+    .vector_nav = {
+      .device = VECTORNAV_VN300
     },
-    .static_pres = {
-      .dev = 0x10,
-      .transducer = bfs::AMS5915_1200_B,
-      .sampling_period_ms = FRAME_PERIOD_MS,
-      .bus = &PRES_I2C_BUS
+    .ams5915_static_pres = {
+      .addr = 0x10,
+      .transducer = AMS5915_1200_B
     },
-    .diff_pres = {
-      .dev = 0x11,
-      .transducer = bfs::AMS5915_0010_D,
-      .sampling_period_ms = FRAME_PERIOD_MS,
-      .bus = &PRES_I2C_BUS
+    .ams5915_diff_pres = {
+      .addr = 0x11,
+      .transducer = AMS5915_0020_D
+    },
+    .gnss_uart3 = {
+      .baud = 921600
+    },
+    .gnss_uart4 = {
+      .baud = 921600
     }
   },
-  .nav = {
-    .accel_cutoff_hz = 20,
-    .gyro_cutoff_hz = 20,
-    .mag_cutoff_hz = 10,
-    .static_pres_cutoff_hz = 10,
-    .diff_pres_cutoff_hz = 10
+  .airdata = {
+    .static_pres_source = AIR_DATA_STATIC_PRES_AMS5915,
+    .static_pres_cutoff_hz = 5,
+    .diff_pres_cutoff_hz = 5
   },
   .telem = {
-    .aircraft_type = bfs::FIXED_WING,
     .bus = &Serial4,
+    .gnss = &Serial3,
     .baud = 57600
   }
 };

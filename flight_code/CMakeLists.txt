@@ -140,7 +140,7 @@ FetchContent_MakeAvailable(pwm)
 FetchContent_Declare(
   mavlink
   GIT_REPOSITORY https://github.com/bolderflight/mavlink.git
-  GIT_TAG v4.0.0
+  GIT_TAG v4.0.1
 )
 FetchContent_MakeAvailable(mavlink)
 FetchContent_Declare(
@@ -152,26 +152,107 @@ FetchContent_MakeAvailable(airdata)
 FetchContent_Declare(
   navigation
   GIT_REPOSITORY https://github.com/bolderflight/navigation.git
-  GIT_TAG v4.0.0
+  GIT_TAG v4.0.1
 )
 FetchContent_MakeAvailable(navigation)
+FetchContent_Declare(
+  statistics
+  GIT_REPOSITORY https://github.com/bolderflight/statistics.git
+  GIT_TAG v4.0.3
+)
+FetchContent_MakeAvailable(statistics)
+FetchContent_Declare(
+  logger
+  GIT_REPOSITORY https://github.com/bolderflight/logger.git
+  GIT_TAG v2.1.0
+)
+FetchContent_MakeAvailable(logger)
+FetchContent_Declare(
+  control
+  GIT_REPOSITORY https://github.com/bolderflight/control.git
+  GIT_TAG v3.0.0
+)
+FetchContent_MakeAvailable(control)
+FetchContent_Declare(
+  excitation
+  GIT_REPOSITORY https://github.com/bolderflight/excitation.git
+  GIT_TAG v3.0.0
+)
+FetchContent_MakeAvailable(excitation)
+FetchContent_Declare(
+  filter
+  GIT_REPOSITORY https://github.com/bolderflight/filter.git
+  GIT_TAG v3.1.0
+)
+FetchContent_MakeAvailable(filter)
+FetchContent_Declare(
+  polytools
+  GIT_REPOSITORY https://github.com/bolderflight/polytools.git
+  GIT_TAG v4.0.1
+)
+FetchContent_MakeAvailable(polytools)
+FetchContent_Declare(
+  checksum
+  GIT_REPOSITORY https://github.com/bolderflight/checksum.git
+  GIT_TAG v3.1.1
+)
+FetchContent_MakeAvailable(checksum)
+FetchContent_Declare(
+  framing
+  GIT_REPOSITORY https://github.com/bolderflight/framing.git
+  GIT_TAG v3.1.1
+)
+FetchContent_MakeAvailable(framing)
 # Add the executable
 add_executable(flight
+  include/flight/hardware_defs.h
   include/flight/global_defs.h
+  include/flight/msg.h
+  include/flight/config.h
   include/flight/sensors.h
-  include/flight/imu.h
-	flight/flight.cc
-	${PROTO_SRCS}
-	${PROTO_HDRS}
+  include/flight/mpu9250_impl.h
+  include/flight/bme280_impl.h
+  include/flight/vector_nav_impl.h
+  include/flight/ams5915_impl.h
+  include/flight/sbus_rx_impl.h
+  include/flight/ubx_impl.h
+  include/flight/effectors.h
+  include/flight/sys.h
+  include/flight/vms.h
+  include/flight/analog.h
+  include/flight/telem.h
+  include/flight/airdata_est.h
+  include/flight/datalog.h
+  include/flight/bfs_ekf.h
+  flight/flight.cc
+  flight/config.cc
+  flight/msg.cc
+  flight/sensors.cc
+  flight/mpu9250_impl.cc
+  flight/bme280_impl.cc
+  flight/vector_nav_impl.cc
+  flight/ams5915_impl.cc
+  flight/sbus_rx_impl.cc
+  flight/ubx_impl.cc
+  flight/effectors.cc
+  flight/sys.cc
+  flight/vms.cc
+  flight/analog.cc
+  flight/telem.cc
+  flight/airdata_est.cc
+  flight/datalog.cc
+  flight/bfs_ekf.cc
+  ${PROTO_SRCS}
+  ${PROTO_HDRS}
 )
-# if (FMU STREQUAL "V2")
-#   # FMU-R-V2
-#   target_sources(flight
-#     PUBLIC
-#       include/flight/battery.h
-#       flight/battery.cc
-#   )
-# endif()
+if (FMU STREQUAL "V2")
+  # FMU-R-V2
+  target_sources(flight
+    PUBLIC
+      include/flight/battery.h
+      flight/battery.cc
+  )
+endif()
 # Setup autocode
 if (DEFINED AUTOCODE)
   include_directories(autocode/${AUTOCODE}_ert_rtw)
@@ -202,8 +283,16 @@ target_link_libraries(flight
     mavlink
     airdata
     navigation
+    statistics
+    logger
+    control
+    excitation
+    filter
+    polytools
+    checksum
+    framing
 )
-# Need std::variant
+# Need std::variant and std::optional
 target_compile_options(flight PUBLIC -std=c++20)
 # Add hex and upload targets
 include(${mcu_support_SOURCE_DIR}/cmake/flash_mcu.cmake)

@@ -23,34 +23,14 @@
 * IN THE SOFTWARE.
 */
 
-#include "flight/msg.h"
-#include "flight/hardware_defs.h"
-#include "flight/config.h"
-#include "./version.h"
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_MPU9250_IMPL_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_MPU9250_IMPL_H_
 
-void MsgBegin() {
-  MSG_BUS.begin(115200);
-  if (DEBUG) {
-    while (!MSG_BUS) {}
-  }
-  MSG_BUS.println("---------Bolder Flight Systems---------");
-  MSG_BUS.println("Flight Software");
-  MSG_BUS.print("Version: ");
-  MSG_BUS.println(PROJECT_VERSION);
-  MSG_BUS.println("---------------------------------------");
-}
+#include "flight/global_defs.h"
 
-void MsgInfo(const char * str) {
-  MSG_BUS.print(str);
-}
+void Mpu9250Init(const Mpu9250Config &cfg);
+void Mpu9250EnableDrdy();
+void Mpu9250Read();
+void Mpu9250ImuData(ImuData * const data);
 
-void MsgWarning(const char * str) {
-  MSG_BUS.print("\nWARNING: ");
-  MSG_BUS.print(str);
-}
-
-void MsgError(const char * str) {
-  MSG_BUS.print("\nERROR: ");
-  MSG_BUS.print(str);
-  while (1) {}
-}
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_MPU9250_IMPL_H_

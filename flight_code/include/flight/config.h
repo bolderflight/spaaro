@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -26,7 +26,6 @@
 #ifndef FLIGHT_CODE_INCLUDE_FLIGHT_CONFIG_H_
 #define FLIGHT_CODE_INCLUDE_FLIGHT_CONFIG_H_
 
-#include "flight/hardware_defs.h"
 #include "flight/global_defs.h"
 
 /* Debug */
