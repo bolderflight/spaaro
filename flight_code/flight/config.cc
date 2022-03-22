@@ -34,6 +34,9 @@ AircraftConfig config = {
     .sbus = {
       .installed = true
     },
+    .mpu9250 = {
+
+    },
     .vector_nav = {
       .device = VECTORNAV_VN300
     },
@@ -56,6 +59,9 @@ AircraftConfig config = {
     .static_pres_source = AIR_DATA_STATIC_PRES_AMS5915,
     .static_pres_cutoff_hz = 5,
     .diff_pres_cutoff_hz = 5
+  },
+  .bfs_ekf = {
+
   },
   .telem = {
     .bus = &Serial4,
