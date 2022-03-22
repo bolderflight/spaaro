@@ -14,6 +14,7 @@ SPAARO and Bolder Flight control systems handle low-level processor startup, tim
 SPAARO supports fixed-wing, multi-rotor, helicopter, and V/STOL vehicles. Software can be developed in Simulink or C++. A Simulink simulation is available for developing and validating algorithms prior to flight. Flight data is converted to MATLAB format for analysis, which can be opened by [MATLAB](https://www.mathworks.com/products/matlab.html), [Octave](https://www.gnu.org/software/octave/index), and [SciPy](https://www.scipy.org/). [MAVLink](https://mavlink.io/) is fully supported for real-time telemetry, in-flight-tunable parameters, flight plans, fences, and rally points. All Bolder Flight control systems are designed and assembled in the United States.
 
 # Flight Control Systems
+Flight control system hardware can be purchased directly from [Bolder Flight Systems](https://bolderflight.com/store.html) or you can [contact Bolder Flight Systems](mailto:info@bolderflight.com) with your requirements to help design a solution for you.
 
 ## FMU-R
 The Research Flight Management Unit (FMU-R) is designed to provide unsurpassed data quality, determinism, and flexibility. FMU-R is ideally suited for early-stage R&D and features a plethora of ports for integrating new peripherals. FMU-R has the option of using a low-cost integrated IMU or adding a VectorNav VN-100, VN-200, or VN-300 IMU/INS. FMU-R can be used stand-alone or a BeagleBone Black or BeagleBone AI can be added for additional compute power; high bandwidth serial and USB connections are available for sharing data between the FMU-R and BeagleBone. FMU-R is designed around a consumer temperature range of 0C to +50C.
@@ -67,7 +68,7 @@ Bolder Flight Systems developed an air data sensor, which uses AMS5915 pressure 
 VectorNav [VN-100](https://www.vectornav.com/products/vn-100), [VN-200](https://www.vectornav.com/products/vn-200), and [VN-300](https://www.vectornav.com/products/vn-300) IMU and INS sensors can be added to the FMU-R. These sensors are temperature calibrated and feature integrated navigation filter algorithms. The VN-200 and VN-300 include integrated GNSS receivers. The VN-300 includes dual GNSS receivers, which can be used to estimate the vehicle heading more accurately than magnetometer based approaches.
 
 ## PWM and SBUS Breakouts
-Boards are available to breakout the JST-GH connectors to standard servo connectors. 8 channels are available on each board and the SBUS boards can be daisy-chained for 16 total output channels. Servo power is bused and can be provided by a connected ESC, BEC, or via screw terminals. Servo rail voltage is measured up to +9.9V.
+Boards are available to breakout the JST-GH connectors to standard servo connectors. 8 channels are available on each board and the SBUS boards can be daisy-chained for 16 total output channels. Servo power is bused and can be provided by a connected ESC, BEC, or via screw terminals. Servo rail voltage is measured on FMU v1.x up to +9.9V.
 
 # Hardware Integration
 
@@ -99,7 +100,7 @@ Prior to installing the GNSS receiver, it must be configured in the uBlox u-cent
    * UBX-NAV-VELECEF
    * UBX-NAV-TIMEGPS
 
-Optionally, if it's available, the following packet should be enabled for higher precision navigation:
+Optionally, if it's available, the following packets should be enabled for higher precision navigation:
    * UBX-NAV-HPPOSLLH
    * UBX-NAV-HPPOSECEF
 
@@ -119,8 +120,8 @@ JST-GH cables are supplied with each of the components.
    * The PWM and SBUS breakouts should be connected to the PWM and SBUS-TX ports, respectively.
    * An SBUS receiver should be connected to the SBUS-RX port.
    * If a VectorNav IMU/INS is used, it should be connected to the SPI port.
-   * (FMU-R v1) Power should be connected to the FMU-R PWR screw terminal. Typically this would be wired in parallel with the main aircraft battery so voltage could be monitored in flight. Supported voltage range is +6.5V to +36V.
-   * (FMU-R v2) The power module should be connected to the FMU-R power port.
+   * (FMU-R v1.x) Power should be connected to the FMU-R PWR screw terminal. Typically this would be wired in parallel with the main aircraft battery so voltage could be monitored in flight. Supported voltage range is +6.5V to +36V.
+   * (FMU-R v2.x) The power module should be connected to the FMU-R power port.
    * Servo power should be supplied by either an ESC, BEC, or via the screw terminal on the PWM or SBUS breakout boards. Ensure that servo voltage does not exceed +9.9V.
 
 # Setting up the Development Environment
@@ -136,53 +137,77 @@ If you plan on autocoding flight software, you will also need:
    * Embedded Coder
 
 # Aircraft Configuration
-The aircraft sensors, real-time filtering and estimation, and effectors are configured with a configuration file, */flight_code/flight/config.cc*. Within that file, you'll find a bool *DEBUG* and a struct *config*. 
+The aircraft sensors and real-time filtering and estimation are configured with a configuration file, */flight_code/flight/config.cc*. Within that file, you'll find a bool *DEBUG* and a struct *config*. 
 
 The software will output messages over the FMU-R micro USB. If *DEBUG* is set to *true*, the software will wait for a serial monitor to be opened before it starts booting, ensuring that you will receive all messages, which is useful for debugging any issues. If *DEBUG* is set to false, the software will immediately start booting on power-up, which is the typical configuration for flight.
 
-The *config* struct has top-level items for *sensor*, *airdata*, *bfs-ekf*, and *telem*, which will be described in detail in the following sections. An example, complete aircraft configuration is:
+The *config* struct has top-level items for *sensor*, *airdata*, *bfs-ekf*, and *telem*, which will be described in detail in the following sections. An example, complete aircraft configuration is below. Note that many of these items are optional and a typical aircraft config will be much shorter.
 
 ```C++
+/* Aircraft config */
 AircraftConfig config = {
   .sensor = {
-    .pitot_static_installed = true,
-    .imu = {
-      .dev = IMU_CS,
-      .frame_rate = FRAME_RATE_HZ,
-      .bus = &IMU_SPI_BUS,
-      .accel_bias_mps2 = {0, 0, 0},
-      .mag_bias_ut = {0, 0, 0},
-      .accel_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-      .mag_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-      .rotation = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}
+    .drdy_source = DRDY_MPU9250,
+    .sbus = {
+      .installed = true
     },
-    .gnss = {
-      .sampling_period_ms = 200,  // 5 Hz
-      .baud = 921600,
-      .bus = &Serial3
+    .mpu9250 = {
+      .accel_range_g = Mpu9250::ACCEL_RANGE_16G,
+      .gyro_range_dps = Mpu9250::GYRO_RANGE_2000DPS,
+      .dlpf_hz = Mpu9250::DLPF_BANDWIDTH_20HZ,
+      .accel_bias_mps2 = Vector3f::Zero(),
+      .mag_bias_ut = Vector3f::Zero(),
+      .accel_scale = Matrix3f::Identity(),
+      .mag_scale = Matrix3f::Identity(),
+      .rotation = Matrix3f::Identity()
     },
-    .static_pres = {
-      .dev = 0x10,
-      .transducer = bfs::AMS5915_1200_B,
-      .sampling_period_ms = FRAME_PERIOD_MS,
-      .bus = &PRES_I2C_BUS
+    .vector_nav = {
+      .device = VECTORNAV_VN300,
+      .accel_filt_window = 4,
+      .gyro_filt_window = 4,
+      .mag_filt_window = 0,
+      .temp_filt_window = 4,
+      .pres_filt_window = 0,
+      .antenna_offset_m = Vector3f::Zero(),
+      .antenna_baseline_m = Vector3f::Zero(),
+      .baseline_uncertainty_m = Vector3f::Zero(),
+      .rotation = Matrix3f::Identity()
     },
-    .diff_pres = {
-      .dev = 0x11,
-      .transducer = bfs::AMS5915_0010_D,
-      .sampling_period_ms = FRAME_PERIOD_MS,
-      .bus = &PRES_I2C_BUS
+    .ams5915_static_pres = {
+      .addr = 0x10,
+      .transducer = AMS5915_1200_B
+    },
+    .ams5915_diff_pres = {
+      .addr = 0x11,
+      .transducer = AMS5915_0020_D
+    },
+    .gnss_uart3 = {
+      .baud = 921600
+    },
+    .gnss_uart4 = {
+      .baud = 921600
     }
-  .nav = {
-    .accel_cutoff_hz = 20,
-    .gyro_cutoff_hz = 20,
-    .mag_cutoff_hz = 10,
-    .static_pres_cutoff_hz = 10,
-    .diff_pres_cutoff_hz = 10
+  },
+  .airdata = {
+    .static_pres_source = AIR_DATA_STATIC_PRES_AMS5915,
+    .static_pres_cutoff_hz = 5,
+    .diff_pres_cutoff_hz = 5
+  },
+  .bfs_ekf = {
+    .imu_source = EKF_IMU_MPU9250,
+    .gnss_source_prim = EKF_GNSS_UBLOX3,
+    .accel_cutoff_hz = 10,
+    .gyro_cutoff_hz = 10,
+    .mag_cutoff_hz = 10
   },
   .telem = {
-    .aircraft_type = bfs::FIXED_WING,
-    .bus = &Serial4,
+    .aircraft_type = FIXED_WING,
+    .imu_source = TELEM_IMU_MPU9250,
+    .static_pres_source = TELEM_STATIC_PRES_BME280,
+    .gnss_source = TELEM_GNSS_UBLOX3,
+    .nav_source = TELEM_NAV_BFS_EKF,
+    .bus = &Serial5,
+    .rtk_uart = &Serial3,
     .baud = 57600
   }
 };
@@ -192,17 +217,58 @@ AircraftConfig config = {
 *.sensor* configures the aircraft sensors.
 
 ### Data Ready Source
+The IMU data ready interrupt is used to drive the data acquisition, state estimation, and Vehicle Management System (VMS) loop. This approach ensures that SPAARO maintains exceptionally high levels of determinism and low latency. By default, the data ready interrupt is driven by the FMU-R integrated IMU. Alternatively, this interrupt can be generated by a VectorNav VN-100, VN-200, or VN-300 integrated with the FMU SPI port. The configurable options are:
 
+| Enum | Description |
+| --- | --- |
+| DRDY_MPU9250 | Drive the FMU-R with the FMU integrated IMU |
+| DRDY_VECTORNAV | Drive the FMU-R with a VectorNav integrated via the SPI port |
+
+### SBUS-RX
+An SBUS receiver is used to receive real-time commands from a pilot. The configurable options are to specify whether an SBUS receiver is installed or not.
+
+### MPU-9250
+The FMU integrated MPU-9250 9-axis IMU can be configured. Default values are:
 
 ```C++
-/* Pitot static sensor not installed */
-.sensor = {
-  .pitot_static_installed = false,
+.mpu9250 = {
+  .accel_range_g = Mpu9250::ACCEL_RANGE_16G,
+  .gyro_range_dps = Mpu9250::GYRO_RANGE_2000DPS,
+  .dlpf_hz = Mpu9250::DLPF_BANDWIDTH_20HZ,
+  .accel_bias_mps2 = Vector3f::Zero(),
+  .mag_bias_ut = Vector3f::Zero(),
+  .accel_scale = Matrix3f::Identity(),
+  .mag_scale = Matrix3f::Identity(),
+  .rotation = Matrix3f::Identity()
 }
 ```
 
-### IMU
-The *.imu* struct configures the integrated IMU. First, the communication bus information and frame rate is specified, which are defined in */flight_code/include/flight/hardware_defs.h* and should not be modified.
+The accelerometer and gyro range can be changed from their defaults of +/- 16G and +/- 2,000 deg/s. The options are:
+
+| Range | Enum Value |
+| --- | --- |
+| +/- 2g | ACCEL_RANGE_2G |
+| +/- 4g | ACCEL_RANGE_4G |
+| +/- 8g | ACCEL_RANGE_8G |
+| +/- 16g | ACCEL_RANGE_16G |
+
+| Range | Enum Value |
+| --- | --- |
+| +/- 250 deg/s | GYRO_RANGE_250DPS |
+| +/- 500 deg/s | GYRO_RANGE_500DPS |
+| +/- 1000 deg/s | GYRO_RANGE_1000DPS |
+| +/- 2000 deg/s | GYRO_RANGE_2000DPS |
+
+Digital low pass filters are incorporated into the MPU-9250 sensor, by default these are set to a cutoff frequency of 20 Hz. Available options are:
+
+| DLPF Bandwidth | Enum Value |
+| --- | --- |
+| 184 Hz | DLPF_BANDWIDTH_184HZ |
+| 92 Hz | DLPF_BANDWIDTH_92HZ |
+| 41 Hz | DLPF_BANDWIDTH_41HZ |
+| 20 Hz | DLPF_BANDWIDTH_20HZ |
+| 10 Hz | DLPF_BANDWIDTH_10HZ |
+| 5 Hz | DLPF_BANDWIDTH_5HZ |
 
 Next, the accelerometer bias, magnetometer bias, accelerometer scale factor, and magnetometer scale factor can be configured. These are defined such that:
 
@@ -224,113 +290,204 @@ y = c * x
 
 Where *x* is the sensor data, *c* is the rotation matrix, and *y* is the sensor data rotated into the vehicle frame.
 
-An example IMU configuration is:
+### VectorNav
+A VectorNav VN-100, VN-200, or VN-300 can be optionally integrated with the FMU via the SPI port. The default configuration for the VectorNav is:
 
 ```C++
-.imu = {
-  .dev = IMU_CS,
-  .frame_rate = FRAME_RATE_HZ,
-  .bus = &IMU_SPI_BUS,
-  .accel_bias_mps2 = {0, 0, 0},
-  .mag_bias_ut = {0, 0, 0},
-  .accel_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-  .mag_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-  .rotation = {{0, 1, 0}, {-1, 0, 0}, {0, 0, 1}}
+.vector_nav = {
+  .device = VECTORNAV_NONE,
+  .accel_filt_window = 4,
+  .gyro_filt_window = 4,
+  .mag_filt_window = 0,
+  .temp_filt_window = 4,
+  .pres_filt_window = 0,
+  .antenna_offset_m = Vector3f::Zero(),
+  .antenna_baseline_m = Vector3f::Zero(),
+  .baseline_uncertainty_m = Vector3f::Zero(),
+  .rotation = Matrix3f::Identity()
+}
+```
+
+The device enables specifying which VectorNav device is connected. The options are:
+
+| Enum | Description |
+| --- | --- |
+| VECTORNAV_NONE | No VectorNav sensor is connected |
+| VECTORNAV_VN100 | A VN-100 is integrated |
+| VECTORNAV_VN200 | A VN-200 is integrated |
+| VECTORNAV_VN300 | A VN-300 is integrated |
+
+A first-order FIR boxcar filter is implemented by the VectorNav on both the uncompensated and compensated data. The filter length can be configured for the accelerometer, gyro, magnetometer, die temperature, and static pressure sensor. The VN-200 and VN-300 antenna offset relative to the sensor in the body frame can be specified. For the VN-300, the antenna baseline and baseline uncertainty for GNSS yaw can be configured. Finally, a rotation matrix can be configured to rotate the VectorNav data into the vehicle frame.
+
+### AMS5915
+AMS5915 can optionally be added to support measuring static and differential pressure from pitot-tubes. These can be configured by selecting the I2C address and transducer type. A typical configuration is:
+
+```C++
+.ams5915_static_pres = {
+  .addr = 0x10,
+  .transducer = AMS5915_1200_B
+},
+.ams5915_diff_pres = {
+  .addr = 0x11,
+  .transducer = AMS5915_0020_D
 },
 ```
+
+The static pressure sensor is always the AMS5915-1200-B on I2C address 0x10. The differential pressure sensor address is typically 0x11 and is either an AMS5915-0010-D or AMS5915-0020-D transducer. The AMS5915 v4.x board can be either transducer and is typically written on the sensor itself. The AMS5915 v5.x board only uses the AMS5915-0020-D transducer.
+
+Options for specifying the transducer are:
+
+| Sensor Name       | Enumerated Type  | Pressure Type              | Pressure Range       |
+| -----------       | ---------------  | ---------------            | ---------------      |
+| - | AMS5915_NONE | None, no sensor installed | - |
+| AMS 5915-0005-D   | AMS5915_0005_D   | differential / relative    | 0...500 Pa           |
+| AMS 5915-0010-D   | AMS5915_0010_D   | differential / relative    | 0...1000 Pa          |
+| AMS 5915-0005-D-B | AMS5915_0005_D_B | bidirectional differential | -500...+500 Pa       |
+| AMS 5915-0010-D-B | AMS5915_0010_D_B | bidirectional differential | -1000...+1000 Pa     |
+| AMS 5915-0020-D   | AMS5915_0020_D   | differential / relative    | 0...2000 Pa          |
+| AMS 5915-0050-D   | AMS5915_0050_D   | differential / relative    | 0...5000 Pa          |
+| AMS 5915-0100-D   | AMS5915_0100_D   | differential / relative    | 0...10000 Pa         |
+| AMS 5915-0020-D-B | AMS5915_0020_D_B | bidirectional differential | -2000...+2000 Pa     |
+| AMS 5915-0050-D-B | AMS5915_0050_D_B | bidirectional differential | -5000...+5000 Pa     |
+| AMS 5915-0100-D-B | AMS5915_0100_D_B | bidirectional differential | -10000...+10000 Pa   |
+| AMS 5915-0200-D   | AMS5915_0200_D   | differential / relative    | 0...20000 Pa         |
+| AMS 5915-0350-D   | AMS5915_0350_D   | differential / relative    | 0...35000 Pa         |
+| AMS 5915-1000-D   | AMS5915_1000_D   | differential / relative    | 0...100000 Pa        |
+| AMS 5915-2000-D   | AMS5915_2000_D   | differential / relative    | 0...200000 Pa        |
+| AMS 5915-4000-D   | AMS5915_4000_D   | differential / relative    | 0...400000 Pa        |
+| AMS 5915-7000-D   | AMS5915_7000_D   | differential / relative    | 0...700000 Pa        |
+| AMS 5915-10000-D  | AMS5915_10000_D  | differential / relative    | 0...1000000 Pa       |
+| AMS 5915-0200-D-B | AMS5915_0200_D_B | bidirectional differential | -20000...+20000 Pa   |
+| AMS 5915-0350-D-B | AMS5915_0350_D_B | bidirectional differential | -35000...+35000 Pa   |
+| AMS 5915-1000-D-B | AMS5915_1000_D_B | bidirectional differential | -100000...+100000 Pa |
+| AMS 5915-1000-A   | AMS5915_1000_A   | absolute                   | 0...100000 Pa        |
+| AMS 5915-1200-B   | AMS5915_1200_B   | barometric                 | 70000...120000 Pa    |
+
+By default, the AMS5915 is configured such that there are no sensors installed.
 
 ### GNSS
-The *.gnss* struct configures the GNSS receiver. The configurable items are the sampling period, in ms, the baud rate, and the serial bus the receiver is connected to. Below is an example configuration of a receiver connected to FMU-UART3, with a baud rate of 921600, and an update rate of 5 Hz.
+The *.gnss* struct configures the GNSS receiver. The configurable item is the baud rate. GNSS receivers can be installed on UART3 and UART4; if the baud rate is negative, it means that there is no GNSS receiver installed on that port, otherwise a valid baudrate means that there is a GNSS receiver installed that the SPAARO software will look for and use. By default the baud rate is set to -1, so if the configuration isn't specified, it defaults to a GNSS receiver not installed. The following example shows two GNSS receivers in use, both with a baud rate of 921600.
 
 ```C++
-.gnss = {
-  .sampling_period_ms = 200,  // 5 Hz
-  .baud = 921600,
-  .bus = &Serial3
+.gnss_uart3 = {
+  .baud = 921600
 },
+.gnss_uart4 = {
+  .baud = 921600
+}
 ```
 
-### Static Pressure
-The *.static_pres* struct configures the static pressure sensor. If an air data sensor is not used, all of the items are defined in */flight_code/include/flight/hardware_defs.h* and should not be modified.
+The following shows an example of a single GNSS receiver used on UART3.
 
 ```C++
-.static_pres = {
-  .dev = PRES_CS,
-  .sampling_period_ms = FRAME_PERIOD_MS,
-  .bus = &PRES_SPI_BUS
-},
+.gnss_uart3 = {
+  .baud = 921600
+}
 ```
 
-If an air data sensor is used, configurable items include the I2C bus, I2C address, and transducer type. Typically the AMS1200B is used as a static pressure sensor.
+## Airdata
+Digital low pass filters can be applied to the static and differential pressure data and the filetered data used to estimate pressure altitude and airspeed. Configurable items include the static pressure source and cutoff frequencies for the static and differential pressures. An example configuration is:
 
 ```C++
-.static_pres = {
-  .dev = 0x10,
-  .transducer = bfs::AMS5915_1200_B,
-  .sampling_period_ms = FRAME_PERIOD_MS,
-  .bus = &PRES_I2C_BUS
-},
+.airdata = {
+  .static_pres_source = AIR_DATA_STATIC_PRES_AMS5915,
+  .static_pres_cutoff_hz = 5,
+  .diff_pres_cutoff_hz = 5
+}
 ```
 
-### Differential Pressure
-The *.diff_pres* struct configures the differential pressure sensor. Configurable items include the I2C bus, I2C address, and transducer type. Typically the AMS1200B is used as a static pressure sensor.
+The optional static pressure sources are:
+
+| Enum | Description |
+| --- | --- |
+| AIR_DATA_STATIC_PRES_BME280 | Use the FMU integrated BME280 sensor as a static pressure source |
+| AIR_DATA_STATIC_PRES_AMS5915 | Use the AMS5915 as a static pressure source |
+| AIR_DATA_STATIC_PRES_VECTORNA | Use the VectorNav as a static pressure source |
+
+## BFS-EKF
+Bolder Flight Systems uses a 15 state Extended Kalman Filter (EKF) to estimate inertial state data. This filter uses accelerometer and gyro data to perform a time update of the vehicle states. GNSS data is used to provide a measurement update of states. This filter can be configured to select the IMU and GNSS data sources and cutoff frequencies for filtering IMU data. An example configuration is:
 
 ```C++
-.diff_pres = {
-  .dev = 0x11,
-  .transducer = bfs::AMS5915_0010_D,
-  .sampling_period_ms = FRAME_PERIOD_MS,
-  .bus = &PRES_I2C_BUS
-},
+.bfs_ekf = {
+  .imu_source = EKF_IMU_MPU9250,
+  .gnss_source_prim = EKF_GNSS_UBLOX3,
+  .accel_cutoff_hz = 10,
+  .gyro_cutoff_hz = 10,
+  .mag_cutoff_hz = 10
+}
 ```
 
-## Navigation Filter
-The *.nav* struct configures the navigation filter. 
+The available IMU sources are:
 
-Data flow from the sensor is:
-1. Anti-alias filtering is applied, if available, based on the FMU sample rate.
-2. Bias and scale factor corrections are applied. For the accelerometer and magnetometer, these are defined in the sensor configuration. For the gyro and differential pressure sensor, biases are estimated on startup.
-3. The IMU is rotated into the vehicle frame.
+| Enum | Description |
+| --- | --- |
+| EKF_IMU_MPU9250 | Use the FMU integrated IMU data |
+| EKF_IMU_VECTORNAV | Use the VectorNav IMU data |
 
-This process yields the sensor data that is output. In the navigation filter:
-1. An Extended Kalman Filter (EKF) uses IMU and GNSS data to estimate vehicle position, velocity, attitude, and accelerometer and gyro biases.
-2. Accelerometer and gyro biases are removed.
-3. Digital low pass filters are applied to the IMU and pressure transducer data.
-4. This data is used to estimate derived quantities, such as pressure altitude, airspeed, NED position, etc.
+The available GNSS sources are:
 
-Configurable items include the accelerometer, gyro, mag, static pressure, and differential pressure digital low pass filter cutoff frequencies. An example *nav* configuration is:
-
-```C++
-.nav = {
-  .accel_cutoff_hz = 20,
-  .gyro_cutoff_hz = 20,
-  .mag_cutoff_hz = 10,
-  .static_pres_cutoff_hz = 10,
-  .diff_pres_cutoff_hz = 10
-},
-```
+| Enum | Description |
+| --- | --- |
+| EKF_GNSS_UBLOX3 | Use the uBlox data on UART3 |
+| EKF_GNSS_UBLOX4 | Use the uBlox data on UART4 |
+| EKF_GNSS_VECTORNAV | Use the VectorNav VN-200 or VN-300 GNSS data |
 
 ## Telemetry
-The *.telem* struct configures the telemetry radio modem. The configurable items are the aircraft type, serial bus, and the baud rate.
-
-The aircraft type can be:
-
-| Aircraft Type | Description |
-| --- | --- |
-| bfs::FIXED_WING | Fixed-wing aircraft |
-| bfs::HELICOPTER | Helicopter |
-| bfs::MULTIROTOR | Multirotor |
-| bfs::VTOL | VTOL aircraft |
-
-An example configuration for a fixed-wing aircraft with the telemetry radio modem connected to FMU-UART4, and a baud rate of 57600 is below.
+MAV Link telemetry is supported by SPAARO. Configurable items include the vehicle type, which determines the interface presented by the GCS, data sources for driving the real-time telemetry, the hardware UART port and baud rate for the telemetry radio modem, and the GNSS to send RTK corrections to (MAV Link can send RTK corrections from a stationary GNSS receiver connected to a GCS). An example configuration is:
 
 ```C++
 .telem = {
-  .aircraft_type = bfs::FIXED_WING,
-  .bus = &Serial4,
+  .aircraft_type = FIXED_WING,
+  .imu_source = TELEM_IMU_MPU9250,
+  .static_pres_source = TELEM_STATIC_PRES_BME280,
+  .gnss_source = TELEM_GNSS_UBLOX3,
+  .nav_source = TELEM_NAV_BFS_EKF,
+  .bus = &Serial5,
+  .rtk_uart = &Serial3,
   .baud = 57600
 }
 ```
+
+Available aircraft types are:
+
+| Enum | Description |
+| --- | --- |
+| FIXED_WING | Fixed-wing vehicles |
+| HELICOPTER | Single rotor helicopters |
+| MULTIROTOR | Multi-rotors |
+| VTOL | VTOL vehicles |
+
+Available IMU sources are:
+
+| Enum | Description |
+| --- | --- |
+| TELEM_IMU_MPU9250 | Send the MPU9250 data over telemetry |
+| TELEM_IMU_VECTORNAV | Send the VectorNav data over telemetry |
+
+Available static pressure sources are:
+
+| Enum | Description |
+| --- | --- |
+| TELEM_STATIC_PRES_BME280 | Send static pressure data from the FMU integrated BME280 |
+| TELEM_STATIC_PRES_VECTORNAV | Send static pressure data from the VectorNav |
+| TELEM_STATIC_PRES_AMS5915 | Send static pressure data from the AMS5915 |
+
+Available GNSS sources are:
+
+| Enum | Description |
+| --- | --- |
+| TELEM_GNSS_UBLOX3 | Send data from a uBlox receiver on UART3 |
+| TELEM_GNSS_UBLOX4 | Send data from a uBlox receiver on UART4 |
+| TELEM_GNSS_VECTORNAV | Send data from a VectorNav VN-200 or VN-300 |
+
+Available state estimation sources are:
+
+| Enum | Description |
+| --- | --- |
+| TELEM_NAV_BFS_EKF | Send state estimation data from the BFS EKF |
+| TELEM_NAV_VECTORNAV | Send state estimation data from the VectorNav |
+
+The *bus* is a reference to the serial port that the radio modem is connected to and the *baud* is the baud rate that should be used. If RTK corrections will be sent from the GCS, the *rtk_uart* configurable item is the GNSS UART port to send the corrections to.
 
 # Software Overview
 On boot, SPAARO initializes the:
@@ -343,8 +500,8 @@ On boot, SPAARO initializes the:
    * GNSS: establish communications.
    * Inceptors: establish communications.
    * Pressure transducers: establish communications, configure the pressure transducers, and estimate differential pressure biases.
-   * Battery monitoring (FMU-R v2.x): measures battery voltage and current, estimates battery capacity remaining and remaining flight time.
-   * Analog: measures analog inputs, converts to engineering units.
+   * Battery monitoring (FMU-R v2.x): measures battery voltage and current.
+   * Analog: measures analog inputs.
 4. Effectors, which establishes communications over SBUS and PWM protocols.
 5. Telemetry, which establishing communications with the radio modem.
 6. Datalog, which checks for an SD card present and creates a datalog file.
@@ -356,9 +513,8 @@ The main flight software loop consists of:
 2. Reading sensor data, correcting scale factors and biases, and rotating sensor data into the vehicle frame.
 3. Running the navigation filter to filter the sensor data and estimate the aircraft states.
 4. Run the control software.
-5. Convert effector commands from engineering units to PWM and SBUS values.
-6. Add data to the datalog buffer.
-7. Send updated telemetry data. Check for updated in-flight-tunable parameters, flight plans, fences, and rally points.
+5. Add data to the datalog buffer.
+6. Send updated telemetry data. Check for updated in-flight-tunable parameters, flight plans, fences, and rally points.
 
 A timer to send commands to the effectors is started by the main flight software loop and triggers at 90% of the frame duration. On this trigger, the effector commands are sent to the effectors. This approach provides a fixed latency between sensing and actuation for developing robust control laws.
 
@@ -375,25 +531,60 @@ Software for SPAARO can be developed in C++ or autocoded from Simulink. The inpu
       * float sbus_volt (*FMU-R v1.x*): the SBUS servo rail voltage.
       * int64_t sys_time_us: the time since boot, us.
    * Sensor Data:
-      * bool pitot_static_installed: whether a pitot-static probe and air data sensor are installed.
       * Inceptor Data:
+         * bool installed: whether an SBUS receiver is installed.
+         * bool healthy: whether the SBUS receiver is healthy and sending data at the expected rate.
          * bool new_data: whether new data was received by the SBUS receiver.
-         * bool lost_frame: whether a frame of SBUS data was lost by the receiver.
-         * bool failsafe: whether the SBUS receiver has entered failsafe mode - this typically occurs if many frames of data are lost in a row.
          * bool ch17 | ch18: some SBUS transmitters and receivers support two boolean outputs, CH 17 and CH 18, which are available here.
          * int16_t ch[16]: SBUS channel values. SBUS is 11 bits with a range of 0 - 2048. Some SBUS receivers, such as FrSky, use a default range of 172 - 1811, unless an extended range is configured.
-      * IMU Data:
+      * MPU-9250 IMU Data:
+         * bool installed: whether the sensor is installed.
+         * bool healthy: whether the sensor is healthy and sending data at the expected rate.
          * bool new_imu_data: whether new data was received from the accelerometer and gyro.
          * bool new_mag_data: whether new data was received from the magnetometer.
-         * bool imu_healthy: whether the accelerometer and gyro are healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
          * bool mag_healthy: whether the magnetometer is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
          * float die_temp_c: the IMU die temperature, C.
          * float accel_mps2[3]: the accelerometer data, with bias and scale factor corrected, and rotated into the vehicle frame, m/s/s [x y z].
          * float gyro_radps[3]: the gyro data, with bias corrected, and rotated into the vehicle frame, rad/s [x y z].
          * float mag_ut[3]: the magnetometer data, with bias and scale factor corrected, and rotated into the vehicle frame, uT [x y z].
-      * GNSS Data:
-         * bool new_data: whether new data was received by the GNSS receiver.
+      * VectorNav IMU Data:
+         * bool installed: whether the sensor is installed.
+         * bool healthy: whether the sensor is healthy and sending data at the expected rate.
+         * bool new_imu_data: whether new data was received from the accelerometer and gyro.
+         * bool new_mag_data: whether new data was received from the magnetometer.
+         * bool mag_healthy: whether the magnetometer is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
+         * float die_temp_c: the IMU die temperature, C.
+         * float accel_mps2[3]: the accelerometer data, with bias and scale factor corrected, and rotated into the vehicle frame, m/s/s [x y z].
+         * float gyro_radps[3]: the gyro data, with bias corrected, and rotated into the vehicle frame, rad/s [x y z].
+         * float mag_ut[3]: the magnetometer data, with bias and scale factor corrected, and rotated into the vehicle frame, uT [x y z].
+      * BME280 Static Pressure Data:
+         * bool installed: whether the sensor is installed.
+         * bool healthy: whether the pressure transducer is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
+         * bool new_data: whether new data was received from the pressure transducer.
+         * float pres_pa: the measured pressure, Pa.
+         * float die_temp_c: the pressure transducer die temperature, C.
+      * VectorNav Static Pressure Data:
+         * bool installed: whether the sensor is installed.
+         * bool healthy: whether the pressure transducer is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
+         * bool new_data: whether new data was received from the pressure transducer.
+         * float pres_pa: the measured pressure, Pa.
+         * float die_temp_c: the pressure transducer die temperature, C.
+      * AMS5915 Static Pressure Data:
+         * bool installed: whether the sensor is installed.
+         * bool healthy: whether the pressure transducer is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
+         * bool new_data: whether new data was received from the pressure transducer.
+         * float pres_pa: the measured pressure, Pa.
+         * float die_temp_c: the pressure transducer die temperature, C.
+      * AMS5915 Differential Pressure Data:
+         * bool installed: whether the sensor is installed.
+         * bool healthy: whether the pressure transducer is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
+         * bool new_data: whether new data was received from the pressure transducer.
+         * float pres_pa: the measured pressure, Pa.
+         * float die_temp_c: the pressure transducer die temperature, C.
+      * VectorNav GNSS Data:
+         * bool installed: whether the sensor is installed.
          * bool healthy: whether the GNSS receiver is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
+         * bool new_data: whether new data was received by the GNSS receiver.
          * int8_t fix: the GNSS fix type:
             * 1: No fix
             * 2: 2D fix
@@ -402,63 +593,115 @@ Software for SPAARO can be developed in C++ or autocoded from Simulink. The inpu
             * 5: 3D fix, RTK with floating integer ambiguity
             * 6: 3D fix, RTK with fixed integer ambiguity
          * int8_t num_sats: the number of satellites used in the GNSS solution.
-         * int16_t week: GNSS week number.
-         * int32_t tow_ms: GNSS time of week, ms.
+         * int16_t gps_week: GNSS week number.
          * float alt_wgs84_m: Altitude above the WGS84 ellipsoid, m.
-         * float alt_msl_m: Altitude above Mean Sea Level (MSL), m.
-         * float hdop: horizontal dilution of precision.
-         * float vdop: vertical dilution of precision.
-         * float track_rad: ground track, rad.
-         * float spd_mps: ground speed, m/s.
          * float horz_acc_m: estimated horizontal position accuracy, m.
          * float vert_acc_m: estimated vertical position accuracy, m.
          * float vel_acc_mps: estimated velocity accuracy, m/s.
-         * float track_acc_rad: estimated track accuracy, rad.
          * float ned_vel_mps[3]: north east down velocity, m/s [North East Down].
+         * double gps_tow_s: GPS time of week, s.
          * double lat_rad: latitude, rad.
          * double lon_rad: longitude, rad.
-      * Static Pressure Data:
-         * bool new_data: whether new data was received from the pressure transducer.
-         * bool healthy: whether the pressure transducer is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
-         * float pres_pa: the measured pressure, Pa.
-         * float die_temp_c: the pressure transducer die temperature, C.
-      * Differential Pressure Data:
-         * bool new_data: whether new data was received from the pressure transducer.
-         * bool healthy: whether the pressure transducer is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
-         * float pres_pa: the measured pressure, Pa.
-         * float die_temp_c: the pressure transducer die temperature, C.
+      * uBlox 3 GNSS Data:
+         * bool installed: whether the sensor is installed.
+         * bool healthy: whether the GNSS receiver is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
+         * bool new_data: whether new data was received by the GNSS receiver.
+         * int8_t fix: the GNSS fix type:
+            * 1: No fix
+            * 2: 2D fix
+            * 3: 3D fix
+            * 4: 3D fix with differential GNSS
+            * 5: 3D fix, RTK with floating integer ambiguity
+            * 6: 3D fix, RTK with fixed integer ambiguity
+         * int8_t num_sats: the number of satellites used in the GNSS solution.
+         * int16_t gps_week: GNSS week number.
+         * float alt_wgs84_m: Altitude above the WGS84 ellipsoid, m.
+         * float horz_acc_m: estimated horizontal position accuracy, m.
+         * float vert_acc_m: estimated vertical position accuracy, m.
+         * float vel_acc_mps: estimated velocity accuracy, m/s.
+         * float ned_vel_mps[3]: north east down velocity, m/s [North East Down].
+         * double gps_tow_s: GPS time of week, s.
+         * double lat_rad: latitude, rad.
+         * double lon_rad: longitude, rad.
+      * uBlox 4 GNSS Data:
+         * bool installed: whether the sensor is installed.
+         * bool healthy: whether the GNSS receiver is healthy. Unhealthy is defined as missing 5 frames of data in a row at the expected rate.
+         * bool new_data: whether new data was received by the GNSS receiver.
+         * int8_t fix: the GNSS fix type:
+            * 1: No fix
+            * 2: 2D fix
+            * 3: 3D fix
+            * 4: 3D fix with differential GNSS
+            * 5: 3D fix, RTK with floating integer ambiguity
+            * 6: 3D fix, RTK with fixed integer ambiguity
+         * int8_t num_sats: the number of satellites used in the GNSS solution.
+         * int16_t gps_week: GNSS week number.
+         * float alt_wgs84_m: Altitude above the WGS84 ellipsoid, m.
+         * float horz_acc_m: estimated horizontal position accuracy, m.
+         * float vert_acc_m: estimated vertical position accuracy, m.
+         * float vel_acc_mps: estimated velocity accuracy, m/s.
+         * float ned_vel_mps[3]: north east down velocity, m/s [North East Down].
+         * double gps_tow_s: GPS time of week, s.
+         * double lat_rad: latitude, rad.
+         * double lon_rad: longitude, rad.
+      * uBlox 3 GNSS Relative Position Data:
+         * bool avail: whether relative position data is available.
+         * bool moving_baseline: whether the reference station is moving or stationary.
+         * bool heading_valid: whether the measured heading is valid.
+         * bool baseline_normalized: whether the baseline length is normalized to 1m or using the actual baseline distance.
+         * float baseline_len_acc_m: estimated accuracy of the baseline length measurement, m.
+         * float heading_rad: measured heading, rad.
+         * float heading_acc_rad: estimated heading accuracy, rad.
+         * double baseline_len_m: baseline length, m.
+         * float rel_pos_acc_ned_m[3]: estimated accuracy of the relative position measurement, north-east-down, m.
+         * double rel_pos_ned_m[3]: relative position, north-east-down, m.
+      * uBlox 4 GNSS Relative Position Data:
+         * bool avail: whether relative position data is available.
+         * bool moving_baseline: whether the reference station is moving or stationary.
+         * bool heading_valid: whether the measured heading is valid.
+         * bool baseline_normalized: whether the baseline length is normalized to 1m or using the actual baseline distance.
+         * float baseline_len_acc_m: estimated accuracy of the baseline length measurement, m.
+         * float heading_rad: measured heading, rad.
+         * float heading_acc_rad: estimated heading accuracy, rad.
+         * double baseline_len_m: baseline length, m.
+         * float rel_pos_acc_ned_m[3]: estimated accuracy of the relative position measurement, north-east-down, m.
+         * double rel_pos_ned_m[3]: relative position, north-east-down, m.
       * ADC Data:
          * float volt[2(*FMU-R v1.x*)/8(*FMU-R v2.x*)]: voltages measured by the FMU analog to digital converters
       * Power Module Data (*FMU-R v2.x*):
          * float voltage_v: voltage measured on the power port voltage pin. Note that this is not the battery pack voltage, typically this value needs to be scaled by the power module volts / volt value and is power module specific.
          * float current_v: voltage measured on the power port current pin. Typically this is scaled by the power module mA / volt value and is power module specific.
    * Navigation Filter Data:
-      * bool nav_initialized: whether the navigation filter has been initialized. Do not use navigation filter data before it has been initialized. Requires a good GNSS solution to complete the initialization process.
-      * float pitch_rad: pitch angle, rad.
-      * float roll_rad: roll angle, rad.
-      * float heading_rad: heading angle relative to true north, rad.
-      * float alt_wgs84_m: altitude above the WGS84 ellipsoid, m.
-      * float home_alt_wgs84_m: home location (i.e. origin of the NED position) above the WGS84 ellipsoid, m.
-      * float alt_msl_m: altitude above Mean Sea Level (MSL), m.
-      * float alt_rel_m: altitude above where the navigation filter was initialized, m.
-      * float static_pres_pa: filtered static pressure, Pa.
-      * float diff_pres_pa: filtered differential pressure, Pa.
-      * float alt_pres_m: pressure altitude, m.
-      * float ias_mps: indicated airspeed, m/s.
-      * float gnd_spd_mps: ground speed, m/s.
-      * float gnd_track_rad: ground track, rad.
-      * float flight_path_rad: flight path angle, rad.
-      * float accel_bias_mps2[3]: accelerometer bias estimate from the EKF, m/s/s [x y z].
-      * float gyro_bias_radps[3]: gyro bias estimate from the EKF, rad/s [x y z].
-      * float accel_mps2[3]: IMU acceleterometer data with the EKF estimated biases removed and digital low pass filtereing applied, m/s/s [x y z].
-      * float gyro_radps[3]: IMU gyro data with the EKF estimated biases removed and digital low pass filtereing applied, rad/s [x y z].
-      * float mag_ut[3]: IMU magnetometer data with digital low pass filtering applied, uT [x y z].
-      * float ned_pos_m[3]: North east down position relative to where the navigation filter was initialized, m [north east down].
-      * float ned_vel_mps[3]: North east down ground velocity, m/s [north east down].
-      * double lat_rad: latitude, rad.
-      * double lon_rad: longitude, rad.
-      * double home_lat_rad: home location (i.e. origin of the NED position) latitude, rad.
-      * double home_lon_rad: home location (i.e. origin of the NED position) longitude, rad.
+      * Air data:
+         * bool initialized: whether the airdata state estimation has been initialized.
+         * float static_pres_pa: filtered static pressure, Pa.
+         * float diff_pres_pa: filtered differential pressure, Pa.
+         * float alt_pres_m: pressure altitude, m.
+         * float ias_mps: indicated airspeed (IAS), m/s.
+      * BFS EKF inertial data:
+         * bool healthy: whether the navigation filter has been initialized and tracking. Do not use navigation filter data before it has been initialized. Requires a good GNSS solution to complete the initialization process.
+         * float pitch_rad: pitch angle, rad.
+         * float roll_rad: roll angle, rad.
+         * float heading_rad: heading angle relative to true north, rad.
+         * float alt_wgs84_m: altitude above the WGS84 ellipsoid, m.
+         * float accel_mps2[3]: IMU acceleterometer data with the EKF estimated biases removed and digital low pass filtereing applied, m/s/s [x y z].
+         * float gyro_radps[3]: IMU gyro data with the EKF estimated biases removed and digital low pass filtereing applied, rad/s [x y z].
+         * float mag_ut[3]: IMU magnetometer data with digital low pass filtering applied, uT [x y z].
+         * float ned_vel_mps[3]: North east down ground velocity, m/s [north east down].
+         * double lat_rad: latitude, rad.
+         * double lon_rad: longitude, rad.
+      * VectorNav inertial data:
+         * bool healthy: whether the navigation filter has been initialized and tracking. Do not use navigation filter data before it has been initialized. Requires a good GNSS solution to complete the initialization process.
+         * float pitch_rad: pitch angle, rad.
+         * float roll_rad: roll angle, rad.
+         * float heading_rad: heading angle relative to true north, rad.
+         * float alt_wgs84_m: altitude above the WGS84 ellipsoid, m.
+         * float accel_mps2[3]: IMU acceleterometer data with the EKF estimated biases removed and digital low pass filtereing applied, m/s/s [x y z].
+         * float gyro_radps[3]: IMU gyro data with the EKF estimated biases removed and digital low pass filtereing applied, rad/s [x y z].
+         * float mag_ut[3]: IMU magnetometer data with digital low pass filtering applied, uT [x y z].
+         * float ned_vel_mps[3]: North east down ground velocity, m/s [north east down].
+         * double lat_rad: latitude, rad.
+         * double lon_rad: longitude, rad.
    * Telemetry Data:
       * bool waypoints_updated: whether the flight plan waypoints have been updated.
       * bool fence_updated: whether the fence has been updated.
@@ -525,10 +768,10 @@ The output plane is defined as:
          * float remaining_time_s: estimated flight time remaining, s.
 
 ## C++
-C++ software should be developed in */flight_code/flight/control.cc*. [Filters](https://github.com/bolderflight/filter), [control algorithm](https://github.com/bolderflight/control) templates, and [excitations](https://github.com/bolderflight/excitation/) are available to ease the development effort. An init function, *ControlInit*, is provided and is run once as the system boots. The *ControlRun* function is run every frame.
+C++ software should be developed in */flight_code/flight/vms.cc*. [Filters](https://github.com/bolderflight/filter), [control algorithm](https://github.com/bolderflight/control) templates, and [excitations](https://github.com/bolderflight/excitation/) are available to ease the development effort. An init function, *VmsInit*, is provided and is run once as the system boots. The *VmsRun* function is run every frame.
 
 ## Simulink
-A Simulink control law framework is located at */simulation/control/baseline.slx*. This can be modified or copied and used as a starting point for software development. Note that */simulation/setup.m* should be run first, to load bus definitions, before developing Simulink control laws.
+A Simulink control law framework is located at */simulation/vms/baseline.slx*. This can be modified or copied and used as a starting point for software development. Note that */simulation/autocode_setup.m* should be run first, to load bus definitions, before developing Simulink control laws. The configuration in */simulation/config.m* specifies the FMU version and aircraft / trim conditions for running the full sim. The autocode setup automatically calls the configuration when it is run. Alternatively, if the full sim is to be used, run the setup file in */simulation/setup.m*. We split the autocode setup from the simulation setup, since the full simulation requires additional licenses (i.e. Aerospace Toolbox) that autocoding does not.
 
 # Building and Uploading Software
 First, a build directory is created to store our cached compiled objects. Create a directory called *build* in */flight_code*.
