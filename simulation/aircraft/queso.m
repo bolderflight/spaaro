@@ -24,8 +24,10 @@ Aircraft.Mass.inertia_kgm2 = [Aircraft.Mass.ixx_kgm2    0   -Aircraft.Mass.ixz_k
 %% Geometric properties of the body
 % Axial area (m^2) in body frame
 % Frontal area at different angles
-Aircraft.Geo.front_area_m2 = [0.34,0.47,0.44,0.47,0.5,0.45,0.43,0.4,...
-    0.36,0.32,0.36,0.4,0.43,0.45,0.5,0.47,0.44,0.47,0.34];
+Aircraft.Geo.front_area_m2 = [0.32, 0.36, 0.4, 0.43, 0.45, 0.5, 0.47,...
+    0.44, 0.47,0.34,0.47,0.44,0.47,0.5,0.45,0.43,0.4,0.36,0.32,0.36,...
+    0.4,0.43,0.45,0.5,0.47,0.44,0.47,0.34,0.47, 0.44, 0.47, 0.5, 0.45, ...
+    0.43,0.4,0.36,0.32];
 
 %% Aerodymanics coef
 % Axis system for aerodynamic coefficients
@@ -36,6 +38,19 @@ Aircraft.Geo.front_area_m2 = [0.34,0.47,0.44,0.47,0.5,0.45,0.43,0.4,...
 Aircraft.Aero.axis = 1;
 %Drag coefficient
 Aircraft.Aero.Cd = 0.8; %Based on CD of slanted cube [Jan Willem Vervoorst]
+
+%% Inceptor configuration
+% Configure function of main control channel as well as normalize them
+% Other channels are available as raw 172-1811 for FrSky sbus
+Aircraft.Inceptor.throttle = 1;
+Aircraft.Inceptor.pitch = 3;
+Aircraft.Inceptor.roll = 2;
+Aircraft.Inceptor.yaw = 4;
+Aircraft.Inceptor.mode0 = 5;
+Aircraft.Inceptor.throttle_en = 7;
+Aircraft.Inceptor.coef_1 = [0.00061013, -0.10494204]; %Coeff for sbus to 0:1
+Aircraft.Inceptor.coef_2 = [0.00122026, -1.20988408]; %Coeff for sbus to -1:1
+Aircraft.Inceptor.coef_3 = [0.00122026, -0.20988408]; %Coeff for sbus to 0:2
 
 %% Effectors
 % Number of PWM channels
@@ -86,11 +101,11 @@ Aircraft.Motor.kq = 0.1495;     %N-m/A
 % The cmd vector [thrust,roll,pitch, yaw] will by multiplied with the motor
 % mixing matrix to result in the individual motor outputs which is then
 % scaled to the PMW range that the ESC can decode
-Aircraft.Motor.motor_yaw_factor = 0.2;
-Aircraft.Motor.mix = [0.8,  -0.2,   0.2,  Aircraft.Motor.motor_yaw_factor;...
-                      0.8,   0.2,  -0.2,  Aircraft.Motor.motor_yaw_factor;...
-                      0.8,   0.2,   0.2, -Aircraft.Motor.motor_yaw_factor;...
-                      0.8,  -0.2,  -0.2, -Aircraft.Motor.motor_yaw_factor;
+Aircraft.Motor.motor_yaw_factor = 0.1;
+Aircraft.Motor.mix = [0.7,  -0.25,   0.25,  Aircraft.Motor.motor_yaw_factor;...
+                      0.7,   0.25,  -0.25,  Aircraft.Motor.motor_yaw_factor;...
+                      0.7,   0.25,   0.25, -Aircraft.Motor.motor_yaw_factor;...
+                      0.7,  -0.25,  -0.25, -Aircraft.Motor.motor_yaw_factor;
                       0,0,0,0;
                       0,0,0,0;
                       0,0,0,0;
@@ -98,7 +113,7 @@ Aircraft.Motor.mix = [0.8,  -0.2,   0.2,  Aircraft.Motor.motor_yaw_factor;...
     
 %% Propeller 
 %Diameter [inches]
-Aircraft.Prop.dia_in = 32;
+Aircraft.Prop.dia_in = 9;
 
 % Coefficient of thrust constant obtained from T-motor's website data
 Aircraft.Prop.kt = 0.0388;   %N-m/N
@@ -109,7 +124,7 @@ Aircraft.Prop.poly_torque = [-0.1532 0.2401 -0.0427 0.0046];
 
 %% Battery
 % Number of battery cells
-Aircraft.Battery.nCell = 12;
+Aircraft.Battery.nCell = 3;
 % Maximum voltage per cell [V]
 Aircraft.Battery.volt_per_cell = 4.2;
 % Voltage available
@@ -165,50 +180,80 @@ Aircraft.Sensors.DiffPres.lower_limit_pa = 0;
 Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_limit_pa - Aircraft.Sensors.DiffPres.lower_limit_pa);
 
 %% Controller parameters
+% Motor minimum throttle 
+% spin motor slowly when armed for safety reasons and anti lock-up
+Aircraft.Control.motor_spin_min = 0.0; 
+
 %% Yaw rate controller parameters
 % Max yaw rate [radps]
-Aircraft.Control.yaw_rate_max = 0.349;  %~20deg/s
+Aircraft.Control.yaw_rate_max = 0.524; %~30deg/s
 % It's good to limit the maximum yaw rate because excessive yaw rate may
 % cause some motors to slow down too much that hover cannot be maintained
 
 % Yaw accel PI gains
-Aircraft.Control.P_yaw_rate = 0.6;
-Aircraft.Control.I_yaw_rate = 0.1;
-Aircraft.Control.D_yaw_rate = 0.1;
+Aircraft.Control.P_yaw_rate = 0.5;
+Aircraft.Control.I_yaw_rate = 0.05;
+Aircraft.Control.D_yaw_rate = 0.02;
 
 %% Pitch controller parameters
 % Max pitch angle [rad]
-Aircraft.Control.pitch_angle_lim = 0.262; %~15deg
+Aircraft.Control.pitch_angle_lim = 0.523;  %~30deg
 
 % Pitch cmd controller gains
-Aircraft.Control.P_pitch_angle = 0.7;
-Aircraft.Control.I_pitch_angle = 0.1;
-Aircraft.Control.D_pitch_angle = 0.12;
+Aircraft.Control.P_pitch_angle = 0.04;
+Aircraft.Control.I_pitch_angle = 0.04;
+Aircraft.Control.D_pitch_angle = 0.02;
+
+% Max pitch rate [radps]
+Aircraft.Control.pitch_rate_max = 1; %~60deg/s
 
 %% Roll controller parameters
 % Max roll angle [rad]
-Aircraft.Control.roll_angle_lim = 0.262; %~15deg
+Aircraft.Control.roll_angle_lim = 0.52; %~30deg
 
 % Roll cmd controller gains
-Aircraft.Control.P_roll_angle = 0.7;
-Aircraft.Control.I_roll_angle = 0.1;
-Aircraft.Control.D_roll_angle = 0.12;
+Aircraft.Control.P_roll_angle = 0.04;
+Aircraft.Control.I_roll_angle = 0.04;
+Aircraft.Control.D_roll_angle = 0.02;
 
-%% Altitude controller parameters
-Aircraft.Control.est_hover_thr = 0.9;
+% Max roll rate [radps]
+Aircraft.Control.roll_rate_max = 1; %~60deg/s
+
+%% Vertical speed controller parameters
+Aircraft.Control.est_hover_thr = 0.6724;
 % Vertical speed limit [m/s]
-Aircraft.Control.v_z_up_max = 0.5;
-Aircraft.Control.v_z_down_max = 0.5; %minimum of -1 m/s
+Aircraft.Control.v_z_up_max = 2;
+Aircraft.Control.v_z_down_max = 1; %minimum of -1 m/s
 % Vertical speed controller gain
-Aircraft.Control.P_v_z = 0.5;
-Aircraft.Control.I_v_z = 0.01;
-Aircraft.Control.D_v_z = 0.01;
+Aircraft.Control.P_v_z = 0.09;
+Aircraft.Control.I_v_z = 0.05;
+Aircraft.Control.D_v_z = 0.005;
 
 %% Translational speed controller parameters
-% Horizontal spped limti [m/s]
-Aircraft.Control.v_hor_max = 1;
+% Horizontal spped limit [m/s]
+Aircraft.Control.v_hor_max = 5;
 
 % Horizontal speed controller gain
-Aircraft.Control.P_v_hor = 0.001;
-Aircraft.Control.I_v_hor = 0.0001;
-Aircraft.Control.D_v_hor = 0.0001;
+Aircraft.Control.P_v_hor = 0.5;
+Aircraft.Control.I_v_hor = 0.01;
+Aircraft.Control.D_v_hor = 0.1;
+
+
+%% Altitude controller parameters
+Aircraft.Control.P_alt = 1;
+
+%% Distance controller parameters
+Aircraft.Control.P_xy = 3;
+Aircraft.Control.I_xy = 0.1;
+Aircraft.Control.wp_radius = 1.5;
+Aircraft.Control.wp_nav_speed = 3;
+
+%% Heading controller parameters
+Aircraft.Control.P_heading = 1;
+Aircraft.Control.I_heading = 0.01;
+
+%% Return to land parameters
+Aircraft.Control.rtl_altitude = 100;
+Aircraft.Control.land_speed_fast = 1;
+Aircraft.Control.land_speed_slow = 0.3;
+Aircraft.Control.land_slow_alt = 10; % Altitude [m] where precision landing is engaged
