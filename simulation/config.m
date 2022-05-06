@@ -34,9 +34,11 @@ framePeriod_s = 1/frameRate_hz;
 %% Definitions
 % Vehicle
 % vehicle = 'super';
-vehicle = 'queso';
+% vehicle = 'queso';
+vehicle = 'ale';
 
 % FMU-R version
-fmu_version = "v1";
+% fmu_version = "v1";
 % fmu_version = "v2-beta";
 % fmu_version = "v2";
+fmu_version = "v1";
