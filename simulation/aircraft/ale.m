@@ -70,10 +70,11 @@ Aircraft.Motor.map = [ 1 ; 2 ];
 % The cmd vector [thrust,roll,pitch, yaw] will by multiplied with the motor
 % mixing matrix to result in the individual motor outputs which is then
 % scaled to the PMW range that the ESC can decode
-Aircraft.Motor.mix = [0.7, 0.3, 0;...
-                      0.7,-0.3, 0;...
-                      0, 0, 1;...
-                      zeros(5, 3)];
+Aircraft.Motor.mix = [0.95,  0.2, 0, 0; ...
+                      0.95, -0.2, 0, 0; ...
+                      0,     0,   1, 0; ...
+                      0,     0,   0, 1; ...
+                      zeros(4, 4)];
                   
 
 %% Battery
@@ -136,7 +137,8 @@ Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_li
 %% Controller parameters
 % Motor minimum throttle 
 % spin motor slowly when armed for safety reasons and anti lock-up
-Aircraft.Control.motor_spin_min = 0.0; 
+Aircraft.Control.motor_spin_min = 0.0;
+Aircraft.Control.off_state = [0, 0, -1, -1, 0, 0, 0, 0];
 
 %% Yaw rate controller parameters
 % Max yaw rate [radps]
