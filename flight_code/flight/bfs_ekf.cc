@@ -73,12 +73,14 @@ void BfsNavRun(const SensorData &ref, InertialData * const ptr) {
           MsgError("MPU-9250 selected for EKF IMU source, but not installed");
         }
         imu = ref.mpu9250_imu;
+        break;
       }
       case EKF_IMU_VECTORNAV: {
         if (!ref.vector_nav_imu.installed) {
           MsgError("VectorNav selected for EKF IMU source, but not installed");
         }
         imu = ref.vector_nav_imu;
+        break;
       }
     }
     switch (cfg.gnss_source_prim) {
@@ -87,18 +89,21 @@ void BfsNavRun(const SensorData &ref, InertialData * const ptr) {
           MsgError("uBlox3 selected for EKF GNSS source, but not installed");
         }
         gnss = ref.ublox3_gnss;
+        break;
       }
       case EKF_GNSS_UBLOX4: {
         if (!ref.ublox4_gnss.installed) {
           MsgError("uBlox4 selected for EKF GNSS source, but not installed");
         }
         gnss = ref.ublox4_gnss;
+        break;
       }
       case EKF_GNSS_VECTORNAV: {
         if (!ref.vector_nav_gnss.installed) {
           MsgError("VectorNav selected for EKF GNSS source, but not installed");
         }
         gnss = ref.vector_nav_gnss;
+        break;
       }
     }
     if ((imu.new_imu_data) && (imu.new_mag_data) && (gnss.new_data) &&
@@ -136,20 +141,25 @@ void BfsNavRun(const SensorData &ref, InertialData * const ptr) {
     switch (cfg.imu_source) {
       case EKF_IMU_MPU9250: {
         imu = ref.mpu9250_imu;
+        break;
       }
       case EKF_IMU_VECTORNAV: {
         imu = ref.vector_nav_imu;
+        break;
       }
     }
     switch (cfg.gnss_source_prim) {
       case EKF_GNSS_UBLOX3: {
         gnss = ref.ublox3_gnss;
+        break;
       }
       case EKF_GNSS_UBLOX4: {
         gnss = ref.ublox4_gnss;
+        break;
       }
       case EKF_GNSS_VECTORNAV: {
         gnss = ref.vector_nav_gnss;
+        break;
       }
     }
     /* EKF time update */

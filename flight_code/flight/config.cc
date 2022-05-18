@@ -32,9 +32,9 @@ bool DEBUG = true;
 AircraftConfig config = {
   .sensor = {
     .drdy_source = DRDY_MPU9250,
-    .sbus = {
-      .installed = true
-    },
+    // .sbus = {
+    //   .installed = true
+    // },
     .mpu9250 = {
       .accel_range_g = Mpu9250::ACCEL_RANGE_16G,
       .gyro_range_dps = Mpu9250::GYRO_RANGE_2000DPS,
@@ -45,35 +45,35 @@ AircraftConfig config = {
       .mag_scale = Matrix3f::Identity(),
       .rotation = Matrix3f::Identity()
     },
-    .vector_nav = {
-      .device = VECTORNAV_VN300,
-      .accel_filt_window = 4,
-      .gyro_filt_window = 4,
-      .mag_filt_window = 0,
-      .temp_filt_window = 4,
-      .pres_filt_window = 0,
-      .antenna_offset_m = Vector3f::Zero(),
-      .antenna_baseline_m = Vector3f::Zero(),
-      .baseline_uncertainty_m = Vector3f::Zero(),
-      .rotation = Matrix3f::Identity()
-    },
-    .ams5915_static_pres = {
-      .addr = 0x10,
-      .transducer = AMS5915_1200_B
-    },
-    .ams5915_diff_pres = {
-      .addr = 0x11,
-      .transducer = AMS5915_0020_D
-    },
+    // .vector_nav = {
+    //   .device = VECTORNAV_VN300,
+    //   .accel_filt_window = 4,
+    //   .gyro_filt_window = 4,
+    //   .mag_filt_window = 0,
+    //   .temp_filt_window = 4,
+    //   .pres_filt_window = 0,
+    //   .antenna_offset_m = Vector3f::Zero(),
+    //   .antenna_baseline_m = Vector3f::Zero(),
+    //   .baseline_uncertainty_m = Vector3f::Zero(),
+    //   .rotation = Matrix3f::Identity()
+    // },
+    // .ams5915_static_pres = {
+    //   .addr = 0x10,
+    //   .transducer = AMS5915_1200_B
+    // },
+    // .ams5915_diff_pres = {
+    //   .addr = 0x11,
+    //   .transducer = AMS5915_0020_D
+    // },
     .gnss_uart3 = {
       .baud = 921600
     },
-    .gnss_uart4 = {
-      .baud = 921600
-    }
+    // .gnss_uart4 = {
+    //   .baud = 921600
+    // }
   },
   .airdata = {
-    .static_pres_source = AIR_DATA_STATIC_PRES_AMS5915,
+    .static_pres_source = AIR_DATA_STATIC_PRES_BME280,
     .static_pres_cutoff_hz = 5,
     .diff_pres_cutoff_hz = 5
   },
