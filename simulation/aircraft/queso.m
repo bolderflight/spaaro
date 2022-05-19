@@ -182,7 +182,7 @@ Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_li
 %% Controller parameters
 % Motor minimum throttle 
 % spin motor slowly when armed for safety reasons and anti lock-up
-Aircraft.Control.motor_spin_min = 0.0; 
+Aircraft.Control.motor_spin_min = 0.35; 
 
 %% Yaw rate controller parameters
 % Max yaw rate [radps]
@@ -191,18 +191,18 @@ Aircraft.Control.yaw_rate_max = 0.524; %~30deg/s
 % cause some motors to slow down too much that hover cannot be maintained
 
 % Yaw accel PI gains
-Aircraft.Control.P_yaw_rate = 0.5;
-Aircraft.Control.I_yaw_rate = 0.05;
-Aircraft.Control.D_yaw_rate = 0.02;
+Aircraft.Control.P_yaw_rate = 1;
+Aircraft.Control.I_yaw_rate = 0;
+Aircraft.Control.D_yaw_rate = 0.05;
 
 %% Pitch controller parameters
 % Max pitch angle [rad]
 Aircraft.Control.pitch_angle_lim = 0.523;  %~30deg
 
 % Pitch cmd controller gains
-Aircraft.Control.P_pitch_angle = 0.04;
-Aircraft.Control.I_pitch_angle = 0.04;
-Aircraft.Control.D_pitch_angle = 0.02;
+Aircraft.Control.P_pitch_angle = 0.4;
+Aircraft.Control.I_pitch_angle = 0;
+Aircraft.Control.D_pitch_angle = 0.095;
 
 % Max pitch rate [radps]
 Aircraft.Control.pitch_rate_max = 1; %~60deg/s
@@ -212,9 +212,9 @@ Aircraft.Control.pitch_rate_max = 1; %~60deg/s
 Aircraft.Control.roll_angle_lim = 0.52; %~30deg
 
 % Roll cmd controller gains
-Aircraft.Control.P_roll_angle = 0.04;
-Aircraft.Control.I_roll_angle = 0.04;
-Aircraft.Control.D_roll_angle = 0.02;
+Aircraft.Control.P_roll_angle = 0.4;
+Aircraft.Control.I_roll_angle = 0;
+Aircraft.Control.D_roll_angle = 0.095;
 
 % Max roll rate [radps]
 Aircraft.Control.roll_rate_max = 1; %~60deg/s
