@@ -101,11 +101,11 @@ Aircraft.Motor.kq = 0.1495;     %N-m/A
 % The cmd vector [thrust,roll,pitch, yaw] will by multiplied with the motor
 % mixing matrix to result in the individual motor outputs which is then
 % scaled to the PMW range that the ESC can decode
-Aircraft.Motor.motor_yaw_factor = 0.1;
-Aircraft.Motor.mix = [0.7,  -0.25,   0.25,  Aircraft.Motor.motor_yaw_factor;...
-                      0.7,   0.25,  -0.25,  Aircraft.Motor.motor_yaw_factor;...
-                      0.7,   0.25,   0.25, -Aircraft.Motor.motor_yaw_factor;...
-                      0.7,  -0.25,  -0.25, -Aircraft.Motor.motor_yaw_factor;
+Aircraft.Motor.motor_yaw_factor = 0.14;
+Aircraft.Motor.mix = [0.7,  -0.13,  -0.13, -Aircraft.Motor.motor_yaw_factor;...
+                      0.7,   0.13,  -0.13,  Aircraft.Motor.motor_yaw_factor;...
+                      0.7,   0.13,   0.13, -Aircraft.Motor.motor_yaw_factor;...
+                      0.7,  -0.13,   0.13,  Aircraft.Motor.motor_yaw_factor;
                       0,0,0,0;
                       0,0,0,0;
                       0,0,0,0;
@@ -182,11 +182,11 @@ Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_li
 %% Controller parameters
 % Motor minimum throttle 
 % spin motor slowly when armed for safety reasons and anti lock-up
-Aircraft.Control.motor_spin_min = 0.35; 
+Aircraft.Control.motor_spin_min = 0.32; 
 
 %% Yaw rate controller parameters
 % Max yaw rate [radps]
-Aircraft.Control.yaw_rate_max = 0.524; %~30deg/s
+Aircraft.Control.yaw_rate_max = 1.74; %
 % It's good to limit the maximum yaw rate because excessive yaw rate may
 % cause some motors to slow down too much that hover cannot be maintained
 
@@ -197,7 +197,7 @@ Aircraft.Control.D_yaw_rate = 0.05;
 
 %% Pitch controller parameters
 % Max pitch angle [rad]
-Aircraft.Control.pitch_angle_lim = 0.523;  %~30deg
+Aircraft.Control.pitch_angle_lim = 0.52;  %~30deg
 
 % Pitch cmd controller gains
 Aircraft.Control.P_pitch_angle = 0.4;
@@ -205,7 +205,7 @@ Aircraft.Control.I_pitch_angle = 0;
 Aircraft.Control.D_pitch_angle = 0.095;
 
 % Max pitch rate [radps]
-Aircraft.Control.pitch_rate_max = 1; %~60deg/s
+Aircraft.Control.pitch_rate_max = 0.524; %~30deg/s
 
 %% Roll controller parameters
 % Max roll angle [rad]
@@ -217,7 +217,7 @@ Aircraft.Control.I_roll_angle = 0;
 Aircraft.Control.D_roll_angle = 0.095;
 
 % Max roll rate [radps]
-Aircraft.Control.roll_rate_max = 1; %~60deg/s
+Aircraft.Control.roll_rate_max = 0.524; %~30deg/s
 
 %% Vertical speed controller parameters
 Aircraft.Control.est_hover_thr = 0.6724;
@@ -231,7 +231,7 @@ Aircraft.Control.D_v_z = 0.005;
 
 %% Translational speed controller parameters
 % Horizontal spped limit [m/s]
-Aircraft.Control.v_hor_max = 5;
+Aircraft.Control.v_hor_max = 1;
 
 % Horizontal speed controller gain
 Aircraft.Control.P_v_hor = 0.5;

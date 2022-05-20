@@ -9,7 +9,7 @@
 %% Cleanup
 bdclose all;
 close all;
-clear all;
+clear;
 clc;
 
 %% Configure
