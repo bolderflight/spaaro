@@ -34,6 +34,7 @@
 #include "flight/sbus_rx_impl.h"
 #include "flight/ubx_impl.h"
 #include "flight/analog.h"
+#include "flight/ms4525do_impl.h"
 #if defined(__FMU_R_V2__)
 #include "flight/battery.h"
 #endif
@@ -50,6 +51,8 @@ void InitSensors(const SensorConfig &cfg) {
   VectorNavInit(cfg.vector_nav);
   /* Initialize the AMS5915 transducers */
   Ams5915Init(cfg.ams5915_static_pres, cfg.ams5915_diff_pres);
+  /* Initialize the MS4525DO transducer */
+  Ms4525doInit(cfg.ms4525do);
   /* Initialize the uBlox receivers */
   UbxInit(cfg.gnss_uart3, cfg.gnss_uart4);
   /* Enable the data ready source */
@@ -85,6 +88,9 @@ void ReadSensors(SensorData * const data) {
   Ams5915Read();
   Ams5915PresData(&data->ams5915_static_pres,
                   &data->ams5915_diff_pres);
+  /* Read the MS4525DO */
+  Ms4525doRead();
+  Ms4525doPresData(&data->ms4525do_diff_pres);
   /* Read the uBlox */
   UbxRead();
   UbxGnssData(&data->ublox3_gnss, &data->ublox3_relpos,

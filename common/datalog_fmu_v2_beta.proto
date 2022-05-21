@@ -233,4 +233,11 @@ message DatalogMessage {
   sint32 waypoint_y = 327;
   float waypoint_z = 328;
   repeated float telem_param = 329;
+
+  /* MS4525DO Differential Pressure data */
+  bool ms4525do_diff_pres_installed = 340;
+  bool ms4525do_diff_pres_healthy = 341;
+  bool ms4525do_diff_pres_new_data = 342;
+  float ms4525do_diff_pres_die_temp_c = 343;
+  float ms4525do_diff_pres_pa = 344;
 }

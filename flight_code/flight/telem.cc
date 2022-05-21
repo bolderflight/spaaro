@@ -246,11 +246,25 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
       }
     }
     /* Differential pressure */
-    telem_.diff_pres_installed(data.sensor.ams5915_diff_pres.installed);
-    if (data.sensor.ams5915_diff_pres.installed) {
-      telem_.diff_pres_healthy(data.sensor.ams5915_diff_pres.healthy);
-      telem_.diff_pres_pa(data.sensor.ams5915_diff_pres.pres_pa);
-      telem_.diff_pres_die_temp_c(data.sensor.ams5915_diff_pres.die_temp_c);
+    switch(cfg_.telem.diff_pres_source) {
+      case TELEM_DIFF_PRES_NONE: {
+        telem_.diff_pres_installed(false);
+        break;
+      }
+      case TELEM_DIFF_PRES_AMS5915: {
+        telem_.diff_pres_installed(data.sensor.ams5915_diff_pres.installed);
+        telem_.diff_pres_healthy(data.sensor.ams5915_diff_pres.healthy);
+        telem_.diff_pres_pa(data.sensor.ams5915_diff_pres.pres_pa);
+        telem_.diff_pres_die_temp_c(data.sensor.ams5915_diff_pres.die_temp_c);
+        break;
+      }
+      case TELEM_DIFF_PRES_MS4525DO: {
+        telem_.diff_pres_installed(data.sensor.ms4525do_diff_pres.installed);
+        telem_.diff_pres_healthy(data.sensor.ms4525do_diff_pres.healthy);
+        telem_.diff_pres_pa(data.sensor.ms4525do_diff_pres.pres_pa);
+        telem_.diff_pres_die_temp_c(data.sensor.ms4525do_diff_pres.die_temp_c);
+        break;
+      }
     }
     /* GNSS */
     switch (cfg_.telem.gnss_source) {

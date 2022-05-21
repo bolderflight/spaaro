@@ -350,6 +350,17 @@ void DatalogAdd(const AircraftData &ref) {
   datalog_msg_.waypoint_z =
     ref.telem.flight_plan[ref.telem.current_waypoint].z;
 
+  /* MS4525DO Differential Pressure data */
+  datalog_msg_.ms4525do_diff_pres_installed =
+    ref.sensor.ms4525do_diff_pres.installed;
+  datalog_msg_.ms4525do_diff_pres_healthy =
+    ref.sensor.ms4525do_diff_pres.healthy;
+  datalog_msg_.ms4525do_diff_pres_new_data =
+    ref.sensor.ms4525do_diff_pres.new_data;
+  datalog_msg_.ms4525do_diff_pres_die_temp_c =
+    ref.sensor.ms4525do_diff_pres.die_temp_c;
+  datalog_msg_.ms4525do_diff_pres_pa = ref.sensor.ms4525do_diff_pres.pres_pa;
+
   /* Encode */
   stream_ = pb_ostream_from_buffer(data_buffer_, sizeof(data_buffer_));
   if (!pb_encode(&stream_, DatalogMessage_fields, &datalog_msg_)) {

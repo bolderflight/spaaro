@@ -93,15 +93,29 @@ void AirDataEst(const SensorData &sens, AirData * const data) {
         break;
       }
     }
-    if (sens.ams5915_diff_pres.installed) {
-      if ((!diff_pres_init) && (sens.ams5915_diff_pres.new_data)) {
-        diff_pres_dlpf.Init(config.diff_pres_cutoff_hz,
-                              FRAME_RATE_HZ,
-                              sens.ams5915_diff_pres.pres_pa);
+    switch (config.diff_pres_source) {
+      case AIR_DATA_DIFF_PRES_NONE: {
         diff_pres_init = true;
+        break;
       }
-    } else {
-      diff_pres_init = true;
+      case AIR_DATA_DIFF_PRES_AMS5915: {
+        if ((!diff_pres_init) && (sens.ams5915_diff_pres.new_data)) {
+          diff_pres_dlpf.Init(config.diff_pres_cutoff_hz,
+                                FRAME_RATE_HZ,
+                                sens.ams5915_diff_pres.pres_pa);
+          diff_pres_init = true;
+        }
+        break;
+      }
+      case AIR_DATA_DIFF_PRES_MS4525DO: {
+        if ((!diff_pres_init) && (sens.ms4525do_diff_pres.new_data)) {
+          diff_pres_dlpf.Init(config.diff_pres_cutoff_hz,
+                                FRAME_RATE_HZ,
+                                sens.ms4525do_diff_pres.pres_pa);
+          diff_pres_init = true;
+        }
+        break;
+      }
     }
     if ((static_pres_init) && (diff_pres_init)) {
       airdata_initialized = true;
@@ -134,15 +148,28 @@ void AirDataEst(const SensorData &sens, AirData * const data) {
         break;
       }
     }
-    if (sens.ams5915_diff_pres.installed) {
-      if (sens.ams5915_diff_pres.new_data) {
-        data->diff_pres_pa =
-          diff_pres_dlpf.Filter(sens.ams5915_diff_pres.pres_pa);
-        data->ias_mps = Ias_mps(data->diff_pres_pa);
+    switch(config.diff_pres_source) {
+      case AIR_DATA_DIFF_PRES_NONE: {
+        data->diff_pres_pa = 0;
+        data->ias_mps = 0;
+        break;
       }
-    } else {
-      data->diff_pres_pa = 0;
-      data->ias_mps = 0;
+      case AIR_DATA_DIFF_PRES_AMS5915: {
+        if (sens.ams5915_diff_pres.new_data) {
+          data->diff_pres_pa =
+            diff_pres_dlpf.Filter(sens.ams5915_diff_pres.pres_pa);
+          data->ias_mps = Ias_mps(data->diff_pres_pa);
+        }
+        break;
+      }
+      case AIR_DATA_DIFF_PRES_MS4525DO: {
+        if (sens.ms4525do_diff_pres.new_data) {
+          data->diff_pres_pa =
+            diff_pres_dlpf.Filter(sens.ms4525do_diff_pres.pres_pa);
+          data->ias_mps = Ias_mps(data->diff_pres_pa);
+        }
+        break;
+      }
     }
   }
 }

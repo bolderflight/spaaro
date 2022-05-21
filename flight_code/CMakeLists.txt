@@ -203,6 +203,12 @@ FetchContent_Declare(
   GIT_TAG v3.1.1
 )
 FetchContent_MakeAvailable(framing)
+FetchContent_Declare(
+  ms4525do
+  GIT_REPOSITORY https://github.com/bolderflight/ms4525do.git
+  GIT_TAG v1.0.0
+)
+FetchContent_MakeAvailable(ms4525do)
 # Add the executable
 add_executable(flight
   include/flight/hardware_defs.h
@@ -224,6 +230,7 @@ add_executable(flight
   include/flight/airdata_est.h
   include/flight/datalog.h
   include/flight/bfs_ekf.h
+  include/flight/ms4525do_impl.h
   flight/flight.cc
   flight/config.cc
   flight/msg.cc
@@ -242,6 +249,7 @@ add_executable(flight
   flight/airdata_est.cc
   flight/datalog.cc
   flight/bfs_ekf.cc
+  flight/ms4525do_impl.cc
   ${PROTO_SRCS}
   ${PROTO_HDRS}
 )
@@ -291,6 +299,7 @@ target_link_libraries(flight
     polytools
     checksum
     framing
+    ms4525do
 )
 # Need std::variant and std::optional
 target_compile_options(flight PUBLIC -std=c++20)

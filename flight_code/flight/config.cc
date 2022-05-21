@@ -65,6 +65,11 @@ AircraftConfig config = {
     //   .addr = 0x11,
     //   .transducer = AMS5915_0020_D
     // },
+    .ms4525do = {
+      .addr = 0x28,
+      .min_pres = -1,
+      .max_pres = 1
+    },
     .gnss_uart3 = {
       .baud = 921600
     },
@@ -74,6 +79,7 @@ AircraftConfig config = {
   },
   .airdata = {
     .static_pres_source = AIR_DATA_STATIC_PRES_BME280,
+    .diff_pres_source = AIR_DATA_DIFF_PRES_MS4525DO,
     .static_pres_cutoff_hz = 5,
     .diff_pres_cutoff_hz = 5
   },
@@ -88,9 +94,10 @@ AircraftConfig config = {
     .aircraft_type = FIXED_WING,
     .imu_source = TELEM_IMU_MPU9250,
     .static_pres_source = TELEM_STATIC_PRES_BME280,
+    .diff_pres_source = TELEM_DIFF_PRES_MS4525DO,
     .gnss_source = TELEM_GNSS_UBLOX3,
     .nav_source = TELEM_NAV_BFS_EKF,
-    .bus = &Serial5,
+    .bus = &Serial4,
     .rtk_uart = &Serial3,
     .baud = 57600
   }

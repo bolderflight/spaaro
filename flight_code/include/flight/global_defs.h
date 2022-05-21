@@ -31,6 +31,7 @@
 #include "mpu9250.h"  // NOLINT
 #include "mavlink.h"  // NOLINT
 #include "eigen.h"  // NOLINT
+#include "ms4525do.h"  // NOLINT
 
 using namespace bfs;  // NOLINT
 using namespace Eigen;  // NOLINT
@@ -116,6 +117,13 @@ struct Ams5915Config {
   Ams5915Transducer transducer = AMS5915_NONE;
 };
 
+struct Ms4525doConfig {
+  uint8_t addr = 0;
+  float min_pres;
+  float max_pres;
+  Ms4525do::OutputType output_type = Ms4525do::OUTPUT_TYPE_A;
+};
+
 struct GnssConfig {
   int32_t baud = -1;
 };
@@ -131,6 +139,7 @@ struct SensorConfig {
   VnConfig vector_nav;
   Ams5915Config ams5915_static_pres;
   Ams5915Config ams5915_diff_pres;
+  Ms4525doConfig ms4525do;
   GnssConfig gnss_uart3;
   GnssConfig gnss_uart4;
 };
@@ -141,8 +150,15 @@ enum AirDataStaticPresSource : int8_t {
   AIR_DATA_STATIC_PRES_VECTORNAV
 };
 
+enum AirDataDiffPresSource : int8_t {
+  AIR_DATA_DIFF_PRES_NONE,
+  AIR_DATA_DIFF_PRES_AMS5915,
+  AIR_DATA_DIFF_PRES_MS4525DO
+};
+
 struct AirDataConfig {
   AirDataStaticPresSource static_pres_source = AIR_DATA_STATIC_PRES_BME280;
+  AirDataDiffPresSource diff_pres_source = AIR_DATA_DIFF_PRES_NONE;
   float static_pres_cutoff_hz = 5;
   float diff_pres_cutoff_hz = 5;
 };
@@ -190,10 +206,17 @@ enum TelemStaticPres : int8_t {
   TELEM_STATIC_PRES_AMS5915
 };
 
+enum TelemDiffPres : int8_t {
+  TELEM_DIFF_PRES_NONE,
+  TELEM_DIFF_PRES_AMS5915,
+  TELEM_DIFF_PRES_MS4525DO
+};
+
 struct TelemConfig {
   bfs::AircraftType aircraft_type = FIXED_WING;
   TelemImu imu_source = TELEM_IMU_MPU9250;
   TelemStaticPres static_pres_source = TELEM_STATIC_PRES_BME280;
+  TelemDiffPres diff_pres_source = TELEM_DIFF_PRES_NONE;
   TelemGnss gnss_source = TELEM_GNSS_UBLOX3;
   TelemNav nav_source = TELEM_NAV_BFS_EKF;
   HardwareSerial *bus = &Serial5;
@@ -296,6 +319,7 @@ struct SensorData {
   PresData vector_nav_static_pres;
   PresData ams5915_static_pres;
   PresData ams5915_diff_pres;
+  PresData ms4525do_diff_pres;
   GnssData vector_nav_gnss;
   GnssData ublox3_gnss;
   GnssData ublox4_gnss;
