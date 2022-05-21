@@ -36,6 +36,9 @@
 using namespace bfs;  // NOLINT
 using namespace Eigen;  // NOLINT
 
+/* DroneCAN sizes */
+inline constexpr std::size_t NUM_DRONE_CAN_ACT_CH = 15;
+inline constexpr std::size_t NUM_DRONE_CAN_ESC_CH = 20;
 /* Control sizes */
 inline constexpr std::size_t NUM_AUX_VAR = 24;
 /* Telem sizes */
@@ -224,10 +227,23 @@ struct TelemConfig {
   int32_t baud = 57600;
 };
 
+struct DroneCanActConfig {
+  uint8_t actuator_id;
+  uint8_t command_type;
+};
+
+struct DroneCanConfig {
+  uint32_t baud = 1000000;
+  uint8_t num_actuators;
+  uint8_t num_esc;
+  DroneCanActConfig config[NUM_DRONE_CAN_ACT_CH];
+};
+
 struct AircraftConfig {
   SensorConfig sensor;
   AirDataConfig airdata;
   BfsNavConfig bfs_ekf;
+  DroneCanConfig drone_can;
   TelemConfig telem;
 };
 
@@ -359,6 +375,16 @@ struct NavData {
   InertialData vector_nav;
 };
 
+struct DroneCanActCmd {
+  std::array<float, NUM_DRONE_CAN_ACT_CH> cnt;
+  std::array<float, NUM_DRONE_CAN_ACT_CH> cmd;
+};
+
+struct DroneCanEscCmd {
+  std::array<float, NUM_DRONE_CAN_ESC_CH> cnt;
+  std::array<float, NUM_DRONE_CAN_ESC_CH> cmd;
+};
+
 struct SbusCmd {
   bool ch17;
   bool ch18;
@@ -393,6 +419,8 @@ struct VmsData {
   std::array<float, NUM_AUX_VAR> aux;
   SbusCmd sbus;
   PwmCmd pwm;
+  DroneCanActCmd drone_can_act;
+  DroneCanEscCmd drone_can_esc;
   AnalogData analog;
   #if defined(__FMU_R_V2__)
   BatteryData battery;

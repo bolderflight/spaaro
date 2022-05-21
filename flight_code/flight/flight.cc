@@ -35,6 +35,7 @@
 #include "flight/airdata_est.h"
 #include "flight/vector_nav_impl.h"
 #include "flight/bfs_ekf.h"
+#include "flight/dronecan.h"
 
 /* Aircraft data */
 AircraftData data;
@@ -51,6 +52,7 @@ void send_effectors() {
   #endif
   /* Send effector commands */
   EffectorsWrite();
+  DroneCanActuatorSend();
 }
 /* ISR to gather sensor data and run VMS */
 void run() {
@@ -73,6 +75,7 @@ void run() {
   VmsRun(data.sys, data.sensor, data.nav, data.telem, &data.vms);
   /* Command effectors */
   EffectorsCmd(data.vms.sbus, data.vms.pwm);
+  DroneCanActuatorWrite(data.vms.drone_can_act, data.vms.drone_can_esc);
   /* Datalog */
   DatalogAdd(data);
   /* Telemetry */
@@ -86,6 +89,8 @@ int main() {
   MsgBegin();
   /* Init system */
   SysInit();
+  /* Init DroneCAN */
+  DroneCanInit(config.drone_can);
   /* Init sensors */
   InitSensors(config.sensor);
   /* Init nav filter */

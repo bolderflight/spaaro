@@ -23,35 +23,14 @@
 * IN THE SOFTWARE.
 */
 
-#include "flight/vms.h"
-#ifdef __AUTOCODE__
-  #include "./autocode.h"
-#else
-  #include "control.h"  // NOLINT
-  #include "excitation.h"  // NOLINT
-  #include "filter.h"  // NOLINT
-  #include "polytools.h"  // NOLINT
-#endif
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_DRONECAN_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_DRONECAN_H_
 
-namespace {
-#ifdef __AUTOCODE__
-/* Autocode instance */
-bfs::Autocode autocode;
-#endif
-}  // namespace
+#include "flight/global_defs.h"
 
-void VmsInit() {
-#ifdef __AUTOCODE__
-  autocode.initialize();
-#endif
-}
-void VmsRun(const SysData &sys, const SensorData &sensor,
-            const NavData &nav, const TelemData &telem,
-            VmsData *vms) {
-  if (!vms) {return;}
-#ifdef __AUTOCODE__
-  autocode.Run(sys, sensor, nav, telem, vms);
-#endif
-  vms->drone_can_act.cnt[0] = sensor.sbus_inceptor.ch[0] * 0.0012202562538133f
-                              - 1.20988407565589f;
-}
+void DroneCanInit(const DroneCanConfig &cfg);
+void DroneCanActuatorWrite(const DroneCanActCmd &act,
+                           const DroneCanEscCmd &esc);
+void DroneCanActuatorSend();
+
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_DRONECAN_H_

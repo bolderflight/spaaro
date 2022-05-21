@@ -32,9 +32,9 @@ bool DEBUG = true;
 AircraftConfig config = {
   .sensor = {
     .drdy_source = DRDY_MPU9250,
-    // .sbus = {
-    //   .installed = true
-    // },
+    .sbus = {
+      .installed = true
+    },
     .mpu9250 = {
       .accel_range_g = Mpu9250::ACCEL_RANGE_16G,
       .gyro_range_dps = Mpu9250::GYRO_RANGE_2000DPS,
@@ -89,6 +89,16 @@ AircraftConfig config = {
     .accel_cutoff_hz = 10,
     .gyro_cutoff_hz = 10,
     .mag_cutoff_hz = 10
+  },
+  .drone_can = {
+    .baud = 1000000,
+    .num_actuators = 1,
+    .config = {
+      {
+        .actuator_id = 3,
+        .command_type = 0
+      }
+    }
   },
   .telem = {
     .aircraft_type = FIXED_WING,

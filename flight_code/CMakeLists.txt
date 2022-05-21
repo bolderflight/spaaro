@@ -209,6 +209,12 @@ FetchContent_Declare(
   GIT_TAG v1.0.0
 )
 FetchContent_MakeAvailable(ms4525do)
+FetchContent_Declare(
+  dronecan
+  GIT_REPOSITORY https://github.com/bolderflight/dronecan.git
+  GIT_TAG main
+)
+FetchContent_MakeAvailable(dronecan)
 # Add the executable
 add_executable(flight
   include/flight/hardware_defs.h
@@ -231,6 +237,7 @@ add_executable(flight
   include/flight/datalog.h
   include/flight/bfs_ekf.h
   include/flight/ms4525do_impl.h
+  include/flight/dronecan.h
   flight/flight.cc
   flight/config.cc
   flight/msg.cc
@@ -250,6 +257,7 @@ add_executable(flight
   flight/datalog.cc
   flight/bfs_ekf.cc
   flight/ms4525do_impl.cc
+  flight/dronecan.cc
   ${PROTO_SRCS}
   ${PROTO_HDRS}
 )
@@ -300,6 +308,7 @@ target_link_libraries(flight
     checksum
     framing
     ms4525do
+    dronecan
 )
 # Need std::variant and std::optional
 target_compile_options(flight PUBLIC -std=c++20)
