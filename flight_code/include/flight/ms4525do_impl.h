@@ -23,8 +23,8 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_MS4525_IMPL_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_MS4525_IMPL_H_
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_MS4525DO_IMPL_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_MS4525DO_IMPL_H_
 
 #include "flight/global_defs.h"
 
@@ -32,4 +32,4 @@ void Ms4525doInit(const Ms4525doConfig &cfg);
 void Ms4525doRead();
 void Ms4525doPresData(PresData * const data);
 
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_MS4525_IMPL_H_
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_MS4525DO_IMPL_H_

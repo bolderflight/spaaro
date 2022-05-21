@@ -148,7 +148,7 @@ void AirDataEst(const SensorData &sens, AirData * const data) {
         break;
       }
     }
-    switch(config.diff_pres_source) {
+    switch (config.diff_pres_source) {
       case AIR_DATA_DIFF_PRES_NONE: {
         data->diff_pres_pa = 0;
         data->ias_mps = 0;

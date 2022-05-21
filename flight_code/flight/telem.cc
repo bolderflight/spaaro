@@ -246,7 +246,7 @@ void TelemUpdate(const AircraftData &data, TelemData * const ptr) {
       }
     }
     /* Differential pressure */
-    switch(cfg_.telem.diff_pres_source) {
+    switch (cfg_.telem.diff_pres_source) {
       case TELEM_DIFF_PRES_NONE: {
         telem_.diff_pres_installed(false);
         break;
