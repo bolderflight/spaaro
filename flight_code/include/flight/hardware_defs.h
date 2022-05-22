@@ -27,6 +27,7 @@
 #define FLIGHT_CODE_INCLUDE_FLIGHT_HARDWARE_DEFS_H_
 
 #include <array>
+#include <cmath>
 #include "core/core.h"
 
 /* FMU-R V2 */

@@ -27,6 +27,8 @@
 #include "uavcan.h"  // NOLINT
 #include "flight/msg.h"
 
+#if defined(__FMU_R_V2__) ||  defined(__FMU_R_V2_BETA__)
+
 namespace {
 /* Config */
 DroneCanConfig cfg_;
@@ -119,3 +121,5 @@ void DroneCanActuatorSend() {
     MsgWarning("issue publishing ESC message");
   }
 }
+
+#endif

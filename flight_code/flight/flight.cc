@@ -52,7 +52,9 @@ void send_effectors() {
   #endif
   /* Send effector commands */
   EffectorsWrite();
+  #if defined(__FMU_R_V2__) ||  defined(__FMU_R_V2_BETA__)
   DroneCanActuatorSend();
+  #endif
 }
 /* ISR to gather sensor data and run VMS */
 void run() {
@@ -75,7 +77,9 @@ void run() {
   VmsRun(data.sys, data.sensor, data.nav, data.telem, &data.vms);
   /* Command effectors */
   EffectorsCmd(data.vms.sbus, data.vms.pwm);
+  #if defined(__FMU_R_V2__) ||  defined(__FMU_R_V2_BETA__)
   DroneCanActuatorWrite(data.vms.drone_can_act, data.vms.drone_can_esc);
+  #endif
   /* Datalog */
   DatalogAdd(data);
   /* Telemetry */
@@ -90,7 +94,9 @@ int main() {
   /* Init system */
   SysInit();
   /* Init DroneCAN */
+  #if defined(__FMU_R_V2__) ||  defined(__FMU_R_V2_BETA__)
   DroneCanInit(config.drone_can);
+  #endif
   /* Init sensors */
   InitSensors(config.sensor);
   /* Init nav filter */
