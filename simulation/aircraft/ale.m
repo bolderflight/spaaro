@@ -7,37 +7,12 @@
 %% Platform's name
 Aircraft.name = 'ale';
 
-%% Mass properties (Obtained using Solidworks) CG is at body origin
-% Mass [kg]
-Aircraft.Mass.mass_kg = 1.2;
-% c.g. location [m]
-Aircraft.Mass.cg_m = [0 0 0];
-% Moments of inertia [kg*m^2] obtained from Solidworks model
-Aircraft.Mass.ixx_kgm2 = 0.01249536;
-Aircraft.Mass.iyy_kgm2 = 0.01309266;
-Aircraft.Mass.izz_kgm2 = 0.02338074;
-Aircraft.Mass.ixz_kgm2 = 0.014;
-Aircraft.Mass.inertia_kgm2 = [Aircraft.Mass.ixx_kgm2    0   -Aircraft.Mass.ixz_kgm2;...
-                              0          Aircraft.Mass.iyy_kgm2          0;...
-                              -Aircraft.Mass.ixz_kgm2   0       Aircraft.Mass.izz_kgm2];
+%% Geometric properties
+% Wheel radius (m)
+Aircraft.Geo.wheel_radius_m = 0.0325;
 
-%% Geometric properties of the body
-% Axial area (m^2) in body frame
-% Frontal area at different angles
-Aircraft.Geo.front_area_m2 = [0.32, 0.36, 0.4, 0.43, 0.45, 0.5, 0.47,...
-    0.44, 0.47,0.34,0.47,0.44,0.47,0.5,0.45,0.43,0.4,0.36,0.32,0.36,...
-    0.4,0.43,0.45,0.5,0.47,0.44,0.47,0.34,0.47, 0.44, 0.47, 0.5, 0.45, ...
-    0.43,0.4,0.36,0.32];
-
-%% Aerodymanics coef
-% Axis system for aerodynamic coefficients
-% https://www.mathworks.com/help/aeroblks/aerodynamicforcesandmoments.html
-% 1 = Wind axis
-% 2 = Stability axis
-% 3 = Body axis
-Aircraft.Aero.axis = 1;
-%Drag coefficient
-Aircraft.Aero.Cd = 0.8; %Based on CD of slanted cube [Jan Willem Vervoorst]
+% Wheel base (m)
+Aircraft.Geo.wheel_base_m = 0.118;
 
 %% Inceptor configuration
 % Configure function of main control channel as well as normalize them
@@ -75,6 +50,9 @@ Aircraft.Motor.mix = [0.95,  0.2, 0, 0; ...
                       0,     0,   1, 0; ...
                       0,     0,   0, 1; ...
                       zeros(4, 4)];
+                  
+% Maximum roational rate of motor (rad/s)
+Aircraft.Motor.max_wheel_speed_radps = 20;  %~190 rpm
                   
 
 %% Battery
@@ -140,32 +118,3 @@ Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_li
 Aircraft.Control.motor_spin_min = 0.0;
 Aircraft.Control.off_state = [0, 0, -1, -1, 0, 0, 0, 0];
 
-%% Yaw rate controller parameters
-% Max yaw rate [radps]
-Aircraft.Control.yaw_rate_max = 0.524; %~30deg/s
-% It's good to limit the maximum yaw rate because excessive yaw rate may
-% cause some motors to slow down too much that hover cannot be maintained
-
-% Yaw accel PI gains
-Aircraft.Control.P_yaw_rate = 0.5;
-Aircraft.Control.I_yaw_rate = 0.05;
-Aircraft.Control.D_yaw_rate = 0.02;
-
-%% Translational speed controller parameters
-% Horizontal spped limit [m/s]
-Aircraft.Control.v_hor_max = 5;
-
-% Horizontal speed controller gain
-Aircraft.Control.P_v_hor = 0.5;
-Aircraft.Control.I_v_hor = 0.01;
-Aircraft.Control.D_v_hor = 0.1;
-
-%% Distance controller parameters
-Aircraft.Control.P_xy = 3;
-Aircraft.Control.I_xy = 0.1;
-Aircraft.Control.wp_radius = 1.5;
-Aircraft.Control.wp_nav_speed = 3;
-
-%% Heading controller parameters
-Aircraft.Control.P_heading = 1;
-Aircraft.Control.I_heading = 0.01;
