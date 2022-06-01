@@ -101,11 +101,11 @@ Aircraft.Motor.kq = 0.1495;     %N-m/A
 % The cmd vector [thrust,roll,pitch, yaw] will by multiplied with the motor
 % mixing matrix to result in the individual motor outputs which is then
 % scaled to the PMW range that the ESC can decode
-Aircraft.Motor.motor_yaw_factor = 0.14;
-Aircraft.Motor.mix = [0.7,  -0.13,  -0.13, -Aircraft.Motor.motor_yaw_factor;...
-                      0.7,   0.13,  -0.13,  Aircraft.Motor.motor_yaw_factor;...
-                      0.7,   0.13,   0.13, -Aircraft.Motor.motor_yaw_factor;...
-                      0.7,  -0.13,   0.13,  Aircraft.Motor.motor_yaw_factor;
+Aircraft.Motor.motor_yaw_factor = 0.20;
+Aircraft.Motor.mix = [0.7,  -0.10,  -0.10, -Aircraft.Motor.motor_yaw_factor;...
+                      0.7,   0.10,  -0.10,  Aircraft.Motor.motor_yaw_factor;...
+                      0.7,   0.10,   0.10, -Aircraft.Motor.motor_yaw_factor;...
+                      0.7,  -0.10,   0.10,  Aircraft.Motor.motor_yaw_factor;
                       0,0,0,0;
                       0,0,0,0;
                       0,0,0,0;
@@ -186,7 +186,7 @@ Aircraft.Control.motor_spin_min = 0.32;
 
 %% Yaw rate controller parameters
 % Max yaw rate [radps]
-Aircraft.Control.yaw_rate_max = 1.74; %
+Aircraft.Control.yaw_rate_max = 6.28; %
 % It's good to limit the maximum yaw rate because excessive yaw rate may
 % cause some motors to slow down too much that hover cannot be maintained
 
