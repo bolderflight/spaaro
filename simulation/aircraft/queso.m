@@ -186,7 +186,7 @@ Aircraft.Control.motor_spin_min = 0.32;
 
 %% Yaw rate controller parameters
 % Max yaw rate [radps]
-Aircraft.Control.yaw_rate_max = 6.28; %~360 deg/s
+Aircraft.Control.yaw_rate_max = 6.28; %
 % It's good to limit the maximum yaw rate because excessive yaw rate may
 % cause some motors to slow down too much that hover cannot be maintained
 
@@ -205,7 +205,7 @@ Aircraft.Control.I_pitch_angle = 0;
 Aircraft.Control.D_pitch_angle = 0.095;
 
 % Max pitch rate [radps]
-Aircraft.Control.pitch_rate_max = 1.04; %~60deg/s
+Aircraft.Control.pitch_rate_max = 0.524; %~30deg/s
 
 %% Roll controller parameters
 % Max roll angle [rad]
@@ -217,7 +217,7 @@ Aircraft.Control.I_roll_angle = 0;
 Aircraft.Control.D_roll_angle = 0.095;
 
 % Max roll rate [radps]
-Aircraft.Control.roll_rate_max = 1.04; %~60deg/s
+Aircraft.Control.roll_rate_max = 0.524; %~30deg/s
 
 %% Vertical speed controller parameters
 Aircraft.Control.est_hover_thr = 0.6724;
