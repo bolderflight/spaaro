@@ -43,14 +43,14 @@ Aircraft.Aero.Cd = 0.8; %Based on CD of slanted cube [Jan Willem Vervoorst]
 % Configure function of main control channel as well as normalize them
 % Other channels are available as raw 172-1811 for FrSky sbus
 Aircraft.Inceptor.throttle = 1;
-Aircraft.Inceptor.pitch = 3;
 Aircraft.Inceptor.roll = 2;
+Aircraft.Inceptor.pitch = 3;
 Aircraft.Inceptor.yaw = 4;
 Aircraft.Inceptor.mode0 = 5;
-Aircraft.Inceptor.throttle_en = 7;
-Aircraft.Inceptor.coef_1 = [0.00061013, -0.10494204]; %Coeff for sbus to 0:1
-Aircraft.Inceptor.coef_2 = [0.00122026, -1.20988408]; %Coeff for sbus to -1:1
-Aircraft.Inceptor.coef_3 = [0.00122026, -0.20988408]; %Coeff for sbus to 0:2
+Aircraft.Inceptor.relay = 6;
+Aircraft.Inceptor.throttle_e_stop = 7;
+Aircraft.Inceptor.engine_cmd = 8;
+Aircraft.Inceptor.rtl = 9;
 
 %% Effectors
 % Number of PWM channels
@@ -132,10 +132,10 @@ Aircraft.Battery.volt_per_cell = 4.2;
 Aircraft.Battery.voltage = Aircraft.Battery.nCell * Aircraft.Battery.volt_per_cell;
 % Power module voltage gain. Gain between battery voltage and voltage
 % output by power modele
-Aircraft.Battery.voltage_gain = 10;
+Aircraft.Battery.voltage_gain = 18.95684;
 % Power module current to voltage gain. Gain between current draw and
 % voltage output by power module
-Aircraft.Battery.current_to_voltage_gain_vpma = 10;     %volt per mA
+Aircraft.Battery.current_to_voltage_gain_vpma = 1/125.6524 * 1000; %volt per mA
 
 %% Sensors (copied from BFS existing model due to same FMS)
 % MPU-9250 IMU
