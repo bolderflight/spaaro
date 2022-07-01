@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.13)
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-	VERSION 3.0.1
+	VERSION 3.1.0
 	DESCRIPTION "Flight software skeleton"
 	LANGUAGES C CXX
 )
