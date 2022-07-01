@@ -8,7 +8,7 @@
 
 %% Definitions
 % Vehicle
-vehicle = 'ultra_stick_25e';
+vehicle = 'sig_kadet';
 % FMU-R version
 % fmu_version = "v1";
 % fmu_version = "v2-beta";
