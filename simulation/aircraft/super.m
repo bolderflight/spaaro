@@ -40,7 +40,7 @@ Aircraft.Aero.axis = 1;
 Aircraft.Aero.Cd = 0.8; %Based on CD of slanted cube [Jan Willem Vervoorst]
 
 %% Inceptor configuration
-% Configure function of main control channel as well as normalize them
+% Configure function of main control
 % Other channels are available as raw 172-1811 for FrSky sbus
 Aircraft.Inceptor.throttle = 1;
 Aircraft.Inceptor.roll = 2;
@@ -191,6 +191,10 @@ Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_li
 % spin motor slowly when armed for safety reasons and anti lock-up
 Aircraft.Control.motor_spin_min = 0.15; 
 
+% Motor ramp time [s]
+% Time so slowly ramp motor from 0 to motor_spin_min. Prevent initial
+% voltage spike
+Aircraft.Control.motor_ramp_time_s = 3;
 
 %% Yaw rate controller parameters
 % Max yaw rate [radps]
