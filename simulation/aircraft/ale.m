@@ -118,3 +118,6 @@ Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_li
 Aircraft.Control.motor_spin_min = 0.0;
 Aircraft.Control.off_state = [0, 0, -1, -1, 0, 0, 0, 0];
 
+%
+Aircraft.Control.max_speed_mps = 1;
+Aircraft.Control.max_turn_radps = 0.3;

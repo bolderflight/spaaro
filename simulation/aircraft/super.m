@@ -132,10 +132,10 @@ Aircraft.Battery.volt_per_cell = 4.2;
 Aircraft.Battery.voltage = Aircraft.Battery.nCell * Aircraft.Battery.volt_per_cell;
 % Power module voltage gain. Gain between battery voltage and voltage
 % output by power modele
-Aircraft.Battery.voltage_gain = 18.95684;
+Aircraft.Battery.voltage_gain = 18.95;
 % Power module current to voltage gain. Gain between current draw and
 % voltage output by power module
-Aircraft.Battery.current_to_voltage_gain_vpma = 1/125.6524 * 1000; %volt per mA
+Aircraft.Battery.current_to_voltage_gain_vpma = 125.65 * 1000; %mA per volt
 
 %% Sensors (copied from BFS existing model due to same FMS)
 % MPU-9250 IMU
@@ -189,7 +189,7 @@ Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_li
 %% Controller parameters
 % Motor minimum throttle 
 % spin motor slowly when armed for safety reasons and anti lock-up
-Aircraft.Control.motor_spin_min = 0.15; 
+Aircraft.Control.motor_spin_min = 0.1; 
 
 % Motor ramp time [s]
 % Time so slowly ramp motor from 0 to motor_spin_min. Prevent initial
@@ -198,7 +198,7 @@ Aircraft.Control.motor_ramp_time_s = 3;
 
 %% Yaw rate controller parameters
 % Max yaw rate [radps]
-Aircraft.Control.yaw_rate_max = 0.524; %~30deg/s
+Aircraft.Control.yaw_rate_max = 1.74533; %~100deg/s
 % It's good to limit the maximum yaw rate because excessive yaw rate may
 % cause some motors to slow down too much that hover cannot be maintained
 
