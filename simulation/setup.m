@@ -109,8 +109,8 @@ end
 Telem.FlightPlan = load_waypoint(Telem.FlightPlan,'test_mission_upload.waypoints');
 
 %% Select sim
-% multirotor_sim
-ground_sim
+multirotor_sim
+%ground_sim
 
 %% Cleanup
 %clear vehicle fh_vehicle op_point op_report op_spec opt i;

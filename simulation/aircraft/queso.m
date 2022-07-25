@@ -47,10 +47,7 @@ Aircraft.Inceptor.pitch = 3;
 Aircraft.Inceptor.roll = 2;
 Aircraft.Inceptor.yaw = 4;
 Aircraft.Inceptor.mode0 = 5;
-Aircraft.Inceptor.throttle_en = 7;
-Aircraft.Inceptor.coef_1 = [0.00061013, -0.10494204]; %Coeff for sbus to 0:1
-Aircraft.Inceptor.coef_2 = [0.00122026, -1.20988408]; %Coeff for sbus to -1:1
-Aircraft.Inceptor.coef_3 = [0.00122026, -0.20988408]; %Coeff for sbus to 0:2
+Aircraft.Inceptor.throttle_e_stop = 7;
 
 %% Effectors
 % Number of PWM channels
@@ -182,7 +179,7 @@ Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_li
 %% Controller parameters
 % Motor minimum throttle 
 % spin motor slowly when armed for safety reasons and anti lock-up
-Aircraft.Control.motor_spin_min = 0.32; 
+Aircraft.Control.motor_spin_min = 0.2; 
 
 %% Yaw rate controller parameters
 % Max yaw rate [radps]
@@ -197,7 +194,7 @@ Aircraft.Control.D_yaw_rate = 0.05;
 
 %% Pitch controller parameters
 % Max pitch angle [rad]
-Aircraft.Control.pitch_angle_lim = 0.52;  %~30deg
+Aircraft.Control.pitch_angle_lim = 0.175;  %~10deg
 
 % Pitch cmd controller gains
 Aircraft.Control.P_pitch_angle = 0.4;
@@ -209,7 +206,7 @@ Aircraft.Control.pitch_rate_max = 0.524; %~30deg/s
 
 %% Roll controller parameters
 % Max roll angle [rad]
-Aircraft.Control.roll_angle_lim = 0.52; %~30deg
+Aircraft.Control.roll_angle_lim = 0.175;  %~10deg
 
 % Roll cmd controller gains
 Aircraft.Control.P_roll_angle = 0.4;

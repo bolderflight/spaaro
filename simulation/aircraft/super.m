@@ -189,7 +189,7 @@ Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_li
 %% Controller parameters
 % Motor minimum throttle 
 % spin motor slowly when armed for safety reasons and anti lock-up
-Aircraft.Control.motor_spin_min = 0.1; 
+Aircraft.Control.motor_spin_min = 0.15; 
 
 % Motor ramp time [s]
 % Time so slowly ramp motor from 0 to motor_spin_min. Prevent initial
@@ -209,7 +209,7 @@ Aircraft.Control.D_yaw_rate = 0.02;
 
 %% Pitch controller parameters
 % Max pitch angle [rad]
-Aircraft.Control.pitch_angle_lim = 0.523;  %~30deg
+Aircraft.Control.pitch_angle_lim = 0.175;  %~10deg
 
 % Pitch cmd controller gains
 Aircraft.Control.P_pitch_angle = 0.04;
@@ -221,7 +221,7 @@ Aircraft.Control.pitch_rate_max = 1; %~60deg/s
 
 %% Roll controller parameters
 % Max roll angle [rad]
-Aircraft.Control.roll_angle_lim = 0.52; %~30deg
+Aircraft.Control.roll_angle_lim = 0.175;  %~10deg
 
 % Roll cmd controller gains
 Aircraft.Control.P_roll_angle = 0.04;
