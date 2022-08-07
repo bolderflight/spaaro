@@ -5,11 +5,11 @@
 
 
 %% Platform's name
-Aircraft.name = 'super';
+Aircraft.name = 'malt';
 
 %% Mass properties (Obtained using Solidworks) CG is at body origin
 % Mass [kg]
-Aircraft.Mass.mass_kg = 20.4117;
+Aircraft.Mass.mass_kg = 0.3;
 % c.g. location [m]
 Aircraft.Mass.cg_m = [0 0 0];
 % Moments of inertia [kg*m^2] obtained from Solidworks model
@@ -47,10 +47,7 @@ Aircraft.Inceptor.roll = 2;
 Aircraft.Inceptor.pitch = 3;
 Aircraft.Inceptor.yaw = 4;
 Aircraft.Inceptor.mode0 = 5;
-Aircraft.Inceptor.relay = 6;
 Aircraft.Inceptor.throttle_e_stop = 7;
-Aircraft.Inceptor.engine_cmd = 8;
-Aircraft.Inceptor.rtl = 9;
 
 %% Effectors
 % Number of PWM channels
@@ -62,10 +59,10 @@ Aircraft.Eff.nCh = Aircraft.Eff.nPwm + Aircraft.Eff.nSbus;
 
 %% Propulsion properties
 % Number of motors
-Aircraft.Motor.nMotor = 6;
+Aircraft.Motor.nMotor = 4;
 
 % Assign a pwm channel to motor
-Aircraft.Motor.map = [ 1 ; 2 ; 3 ; 4 ; 5 ; 6 ];
+Aircraft.Motor.map = [ 1 ; 2 ; 3 ; 4 ];
 
 % Motor positions relative to c.g in [m] [x,y,z](obtained from Solidworks)
 % Motor numbers and order using Arducopter convention
@@ -78,43 +75,29 @@ Aircraft.Motor.pos_m = [0.0   0.78    0;...
 
 % Alignment with body frame x, y, z axis 
 Aircraft.Motor.align = zeros ( Aircraft.Motor.nMotor , 3);
-%All motor align with body -z axis for hexacopter case
+%All motor align with body -z axis for quadcopter case
 Aircraft.Motor.align (:,3) = -1; 
 
-% Motor speed constant Kv
-Aircraft.Motor.kv = 90; %Kv of T-Motor MN1005
-
-% Motor zero load current [Amp]
-Aircraft.Motor.io = 0.9; 
-
-% Motor internal resistance [Ohm]
-Aircraft.Motor.r = 0.168;
-
 % Motor rotation direction (right hand rule with z_body)
-Aircraft.Motor.dir = [1;-1;1;-1;-1;1];
-
-% Coef of torque of MN1005 motor based on T-Motor's website
-Aircraft.Motor.kq = 0.1495;     %N-m/A
-
+Aircraft.Motor.dir = [1; 1; -1; -1];
 
 % Motor mixing laws [thrust, roll, pitch, yaw]
 % The cmd vector [thrust,roll,pitch, yaw] will by multiplied with the motor
 % mixing matrix to result in the individual motor outputs which is then
 % scaled to the PMW range that the ESC can decode
-Aircraft.Motor.motor_yaw_factor = 0.1;
-Aircraft.Motor.mix = [0.7,  -0.2,     0, -Aircraft.Motor.motor_yaw_factor;...
-                      0.7,   0.2,     0,  Aircraft.Motor.motor_yaw_factor;...
-                      0.7,   0.1,  0.1, -Aircraft.Motor.motor_yaw_factor;...
-                      0.7,  -0.1, -0.1,  Aircraft.Motor.motor_yaw_factor;...
-                      0.7,  -0.1,  0.1, Aircraft.Motor.motor_yaw_factor;...
-                      0.7,   0.1, -0.1, -Aircraft.Motor.motor_yaw_factor;
-                      0, 0, 0, 0; 
+Aircraft.Motor.mix = [0.8, -0.1,  0.1, -0.2;...
+                      0.8,  0.1, -0.1, -0.2;...
+                      0.8,  0.1,  0.1,  0.2;...
+                      0.8, -0.1, -0.1,  0.2;...
+                      0, 0, 0, 0;...
+                      0, 0, 0, 0;...
+                      0, 0, 0, 0;... 
                       0, 0, 0, 0];
 
     
 %% Propeller 
 %Diameter [inches]
-Aircraft.Prop.dia_in = 32;
+Aircraft.Prop.dia_in = 3;
 
 % Coefficient of thrust constant obtained from T-motor's website data
 Aircraft.Prop.kt = 0.0388;   %N-m/N
@@ -125,17 +108,17 @@ Aircraft.Prop.poly_torque = [4.2625 -0.7112];
 
 %% Battery
 % Number of battery cells
-Aircraft.Battery.nCell = 12;
+Aircraft.Battery.nCell = 2;
 % Maximum voltage per cell [V]
 Aircraft.Battery.volt_per_cell = 4.2;
 % Voltage available
 Aircraft.Battery.voltage = Aircraft.Battery.nCell * Aircraft.Battery.volt_per_cell;
 % Power module voltage gain. Gain between battery voltage and voltage
 % output by power modele
-Aircraft.Battery.voltage_gain = 18.95;
+Aircraft.Battery.voltage_gain = 1;
 % Power module current to voltage gain. Gain between current draw and
 % voltage output by power module
-Aircraft.Battery.current_to_voltage_gain_vpma = 125.65 * 1000; %mA per volt
+Aircraft.Battery.current_to_voltage_gain_vpma = 200; %mA per volt
 
 %% Sensors (copied from BFS existing model due to same FMS)
 % MPU-9250 IMU
@@ -191,6 +174,10 @@ Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_li
 % spin motor slowly when armed for safety reasons and anti lock-up
 Aircraft.Control.motor_spin_min = 0.15; 
 
+% Motor maximum throttle
+% Prevent motor from spining at max to reduce current draw on the top end
+Aircraft.Control.motor_spin_max = 0.9;
+
 % Motor ramp time [s]
 % Time so slowly ramp motor from 0 to motor_spin_min. Prevent initial
 % voltage spike
@@ -202,36 +189,49 @@ Aircraft.Control.yaw_rate_max = 1.74533; %~100deg/s
 % It's good to limit the maximum yaw rate because excessive yaw rate may
 % cause some motors to slow down too much that hover cannot be maintained
 
-% Yaw accel PI gains
+% Yaw rate controller PID gains
 Aircraft.Control.P_yaw_rate = 0.5;
 Aircraft.Control.I_yaw_rate = 0.05;
 Aircraft.Control.D_yaw_rate = 0.02;
 
-%% Pitch controller parameters
+%% Pitch rate controller parameters
+% Max pitch rate [radps]
+Aircraft.Control.pitch_rate_max = 1; %~60deg/s
+
+% Pitch rate controller PID gains
+Aircraft.Control.P_pitch_rate = 0.5;
+Aircraft.Control.I_pitch_rate = 0.05;
+Aircraft.Control.D_pitch_rate = 0.02;
+
+%% Roll rate controller parameters
+% Max roll rate [radps]
+Aircraft.Control.roll_rate_max = 1; %~60deg/s
+
+% Roll rate controller PID gains
+Aircraft.Control.P_yaw_rate = 0.5;
+Aircraft.Control.I_yaw_rate = 0.05;
+Aircraft.Control.D_yaw_rate = 0.02;
+
+%% Pitch angle controller parameters
 % Max pitch angle [rad]
-Aircraft.Control.pitch_angle_lim = 0.175;  %~10deg
+Aircraft.Control.pitch_angle_lim = 0.261799;  %~15deg
 
 % Pitch cmd controller gains
 Aircraft.Control.P_pitch_angle = 0.04;
 Aircraft.Control.I_pitch_angle = 0.04;
 Aircraft.Control.D_pitch_angle = 0.02;
 
-% Max pitch rate [radps]
-Aircraft.Control.pitch_rate_max = 1; %~60deg/s
-
 %% Roll controller parameters
 % Max roll angle [rad]
-Aircraft.Control.roll_angle_lim = 0.175;  %~10deg
+Aircraft.Control.roll_angle_lim = 0.261799;  %~15deg
 
 % Roll cmd controller gains
 Aircraft.Control.P_roll_angle = 0.04;
 Aircraft.Control.I_roll_angle = 0.04;
 Aircraft.Control.D_roll_angle = 0.02;
 
-% Max roll rate [radps]
-Aircraft.Control.roll_rate_max = 1; %~60deg/s
-
 %% Vertical speed controller parameters
+
 Aircraft.Control.est_hover_thr = 0.6724;
 % Vertical speed limit [m/s]
 Aircraft.Control.v_z_up_max = 2;
@@ -265,9 +265,3 @@ Aircraft.Control.wp_nav_speed = 3;
 Aircraft.Control.P_heading = 1;
 Aircraft.Control.I_heading = 0.01;
 Aircraft.Control.D_heading = 0.01;
-
-%% Return to land parameters
-Aircraft.Control.rtl_altitude = 35;
-Aircraft.Control.land_speed_fast = 1;
-Aircraft.Control.land_speed_slow = 0.3;
-Aircraft.Control.land_slow_alt = 10; % Altitude [m] where precision landing is engaged
