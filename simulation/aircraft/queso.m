@@ -194,7 +194,7 @@ Aircraft.Control.D_yaw_rate = 0.05;
 
 %% Pitch controller parameters
 % Max pitch angle [rad]
-Aircraft.Control.pitch_angle_lim = 0.175;  %~10deg
+Aircraft.Control.pitch_angle_lim = 0.436;  %~25deg
 
 % Pitch cmd controller gains
 Aircraft.Control.P_pitch_angle = 0.4;
@@ -206,7 +206,7 @@ Aircraft.Control.pitch_rate_max = 0.524; %~30deg/s
 
 %% Roll controller parameters
 % Max roll angle [rad]
-Aircraft.Control.roll_angle_lim = 0.175;  %~10deg
+Aircraft.Control.roll_angle_lim = 0.436;  %~25deg
 
 % Roll cmd controller gains
 Aircraft.Control.P_roll_angle = 0.4;

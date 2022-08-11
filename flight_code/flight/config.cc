@@ -28,11 +28,11 @@
 #include "flight/global_defs.h"
 
 /* Debug */
-bool DEBUG = true;
+bool DEBUG = false;
 /* Aircraft config */
 AircraftConfig config = {
   .sensor = {
-    .pitot_static_installed = true,
+    .pitot_static_installed = false,
     .imu = {
       .dev = IMU_CS,
       .frame_rate = FRAME_RATE_HZ,
@@ -41,7 +41,7 @@ AircraftConfig config = {
       .mag_bias_ut = {0, 0, 0},
       .accel_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
       .mag_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-      .rotation = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}
+      .rotation = {{0, -1, 0}, {1, 0, 0}, {0, 0, 1}}
     },
     .gnss = {
       .sampling_period_ms = 100,  // 10 Hz
@@ -69,7 +69,7 @@ AircraftConfig config = {
     .diff_pres_cutoff_hz = 10
   },
   .telem = {
-    .aircraft_type = bfs::FIXED_WING,
+    .aircraft_type = bfs::MULTIROTOR,
     .bus = &Serial4,
     .baud = 57600
   }
