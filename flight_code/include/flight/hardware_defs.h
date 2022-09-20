@@ -29,13 +29,16 @@
 #include <array>
 #include <cstdint>
 #include <cmath>
+#ifndef SIL
 #include "core/core.h"
+#endif
 #include "imu/imu.h"
-
 /* FMU-R V2 */
 #if defined(__FMU_R_V2__)
 /* Messages */
+#ifndef SIL
 inline constexpr usb_serial_class &MSG_BUS = Serial;
+#endif
 /* Frame rate */
 inline constexpr bfs::FrameRate FRAME_RATE_HZ = bfs::FRAME_RATE_100HZ;
 inline constexpr int16_t FRAME_PERIOD_MS = 1000 /
@@ -43,20 +46,26 @@ inline constexpr int16_t FRAME_PERIOD_MS = 1000 /
 /* Inceptor / Effector */
 inline constexpr int8_t NUM_SBUS_CH = 16;
 inline constexpr int8_t NUM_PWM_PINS = 8;
+#ifndef SIL
 inline constexpr HardwareSerial &SBUS_UART = Serial2;
+#endif
 inline constexpr std::array<int8_t, NUM_PWM_PINS> PWM_PINS = {37, 9, 10, 6,
                                                               5, 4, 3, 2};
 /* 90% of the frame period */
 inline constexpr float EFFECTOR_DELAY_US = FRAME_PERIOD_MS * 0.9f * 1e3;
 /* IMU */
+#ifndef SIL
 inline constexpr SPIClass &IMU_SPI_BUS = SPI;
+#endif
 inline constexpr int8_t IMU_CS = 36;
 inline constexpr int8_t IMU_DRDY = 35;
 inline constexpr int8_t VN_CS = 34;
 inline constexpr int8_t VN_DRDY = 33;
 /* Pressure transducers */
+#ifndef SIL
 inline constexpr TwoWire &PRES_I2C_BUS = Wire;
 inline constexpr SPIClass &PRES_SPI_BUS = SPI;
+#endif
 inline constexpr int8_t PRES_CS = 32;
 /* Analog */
 inline constexpr int8_t NUM_AIN_PINS = 8;

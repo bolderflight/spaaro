@@ -31,14 +31,17 @@
 #include "gnss/gnss.h"
 #include "pres/pres.h"
 #include "global_defs/global_defs.h"
+#ifndef SIL
 #include "mpu9250/mpu9250.h"
 #include "ublox/ublox.h"
 #include "ams5915/ams5915.h"
 #include "bme280/bme280.h"
+#endif
 #include "sbus/sbus.h"
+#ifndef SIL
 #include "pwm/pwm.h"
 #include "units/units.h"
-
+#endif
 /* Control sizes */
 inline constexpr std::size_t NUM_AUX_VAR = 24;
 /* Telem sizes */
@@ -72,7 +75,9 @@ struct NavConfig {
 /* Telem config */
 struct TelemConfig {
   bfs::AircraftType aircraft_type;
+    #ifndef SIL
   HardwareSerial *bus;
+    #endif
   int32_t baud;
 };
 /* Aircraft config */

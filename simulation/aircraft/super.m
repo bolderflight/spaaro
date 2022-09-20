@@ -187,6 +187,9 @@ Aircraft.Sensors.DiffPres.lower_limit_pa = 0;
 Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_limit_pa - Aircraft.Sensors.DiffPres.lower_limit_pa);
 
 %% Controller parameters
+% allow values to come from telem bus or be hardcoded from this file
+Aircraft.Control.hardcode_values = true;
+
 % Motor minimum throttle 
 % spin motor slowly when armed for safety reasons and anti lock-up
 Aircraft.Control.motor_spin_min = 0.15; 
@@ -253,7 +256,7 @@ Aircraft.Control.D_v_hor = 0.1;
 
 %% Altitude controller parameters
 Aircraft.Control.P_alt = 1;
-Aircraft.Control.I_alt = 0.1;
+Aircraft.Control.I_alt = 0.2;
 
 %% Distance controller parameters
 Aircraft.Control.P_xy = 3;
