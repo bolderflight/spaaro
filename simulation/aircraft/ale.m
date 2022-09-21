@@ -112,6 +112,8 @@ Aircraft.Sensors.DiffPres.lower_limit_pa = 0;
 % 2% of the full-scale range
 Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_limit_pa - Aircraft.Sensors.DiffPres.lower_limit_pa);
 
+Aircraft.Sensors.phototransistor.cal_count = 1000;
+
 %% Controller parameters
 % Motor minimum throttle 
 % spin motor slowly when armed for safety reasons and anti lock-up
@@ -121,3 +123,5 @@ Aircraft.Control.off_state = [0, 0, -1, -1, 0, 0, 0, 0];
 %
 Aircraft.Control.max_speed_mps = 1;
 Aircraft.Control.max_turn_radps = 0.3;
+
+Aircraft.Control.death_buffer = 0.1;

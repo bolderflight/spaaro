@@ -28,18 +28,23 @@ InitCond.body_vel_mps = [0 0 0];
 InitCond.euler_rad = [0 0 0];
 InitCond.body_rot_rate_radps = [0 0 0];
 
-%% Flight software frame rate
-frameRate_hz = 50;
-framePeriod_s = 1/frameRate_hz;
-
 %% Definitions
 % Vehicle
- vehicle = 'super';
+%  vehicle = 'super';
 % vehicle = 'queso';
-% vehicle = 'ale';
+vehicle = 'ale';
 % vehicle = 'malt';
 
 % FMU-R version
-% fmu_version = "v1";
+fmu_version = "v1";
 % fmu_version = "v2-beta";
- fmu_version = "v2";
+%  fmu_version = "v2";
+
+%% Flight software frame rate
+if contains(fmu_version, '1')
+    frameRate_hz = 50;
+elseif contains(fmu_version, '2')
+        frameRate_hz = 100;
+end
+
+framePeriod_s = 1/frameRate_hz;

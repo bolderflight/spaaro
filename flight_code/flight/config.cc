@@ -1,12 +1,3 @@
-/*
-* Brian R Taylor
-* brian.taylor@bolderflight.com
-* 
-* Copyright (c) 2021 Bolder Flight Systems Inc
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the “Software”), to
-* deal in the Software without restriction, including without limitation the
 * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
 * sell copies of the Software, and to permit persons to whom the Software is
 * furnished to do so, subject to the following conditions:
@@ -41,25 +32,18 @@ AircraftConfig config = {
       .mag_bias_ut = {0, 0, 0},
       .accel_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
       .mag_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-      .rotation = {{0, -1, 0}, {1, 0, 0}, {0, 0, 1}}
+      .rotation = {{0, 1, 0}, {-1, 0, 0}, {0, 0, 1}}
     },
     .gnss = {
-      .sampling_period_ms = 100,  // 10 Hz
-      .baud = 921600,
-      .bus = &Serial3
+      .sampling_period_ms = 250,  // 4 Hz
+      .baud = 115200,
+      .bus = &Serial4
     },
     .static_pres = {
-      .dev = 0x10,
-      .transducer = bfs::AMS5915_1200_B,
-      .sampling_period_ms = FRAME_PERIOD_MS,
-      .bus = &PRES_I2C_BUS
+  	.dev = PRES_CS,
+  	.sampling_period_ms = FRAME_PERIOD_MS,
+  	.bus = &PRES_SPI_BUS
     },
-    .diff_pres = {
-      .dev = 0x11,
-      .transducer = bfs::AMS5915_0010_D,
-      .sampling_period_ms = FRAME_PERIOD_MS,
-      .bus = &PRES_I2C_BUS
-    }
   },
   .nav = {
     .accel_cutoff_hz = 20,
@@ -70,7 +54,7 @@ AircraftConfig config = {
   },
   .telem = {
     .aircraft_type = bfs::MULTIROTOR,
-    .bus = &Serial4,
+    .bus = &Serial3,
     .baud = 57600
   }
 };
