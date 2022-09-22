@@ -202,6 +202,19 @@ FetchContent_Declare(
 	GIT_TAG v3.0.2
 )
 FetchContent_MakeAvailable(polytools)
+
+# determine config.cc based on vehicle type
+if (DEFINED VEHICLE)
+	string(TOUPPER ${VEHICLE} VEHICLE)
+endif()
+if (VEHICLE STREQUAL "ALE")
+	message("Using ALE config.cc")
+	set(CONFIG_CC config_ale.cc)
+else()
+	message("Using default config.cc")
+	set(CONFIG_CC config.cc)
+endif()
+
 # Add the executable
 add_executable(flight
 	include/flight/global_defs.h
@@ -216,7 +229,7 @@ add_executable(flight
 	include/flight/telem.h
 	include/flight/analog.h
 	flight/flight.cc
-	flight/config.cc
+	flight/${CONFIG_CC}
 	flight/msg.cc
 	flight/sys.cc
 	flight/sensors.cc
