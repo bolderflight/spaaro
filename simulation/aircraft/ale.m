@@ -113,6 +113,7 @@ Aircraft.Sensors.DiffPres.lower_limit_pa = 0;
 Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_limit_pa - Aircraft.Sensors.DiffPres.lower_limit_pa);
 
 Aircraft.Sensors.phototransistor.cal_count = 1000;
+Aircraft.Sensors.phototransistor.cal_delay = 5; % s
 
 %% Controller parameters
 % Motor minimum throttle 
@@ -124,4 +125,4 @@ Aircraft.Control.off_state = [0, 0, -1, -1, 0, 0, 0, 0];
 Aircraft.Control.max_speed_mps = 1;
 Aircraft.Control.max_turn_radps = 0.3;
 
-Aircraft.Control.death_buffer = 0.1;
+Aircraft.Control.death_buffer = 0.2;
