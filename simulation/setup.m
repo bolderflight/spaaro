@@ -24,10 +24,11 @@ addpath(genpath('vms'));
 
 %% Specify root folders for autocode and cache
 % clear all cached code
-cacheFolder = '../flight_code/build/slprj';
+cacheBase = '../flight_code/build';
+cacheFolder = [cacheBase '/slprj'];
 codeGenFolder = '../flight_code/autocode';
-if exist(cacheFolder, 'dir')
-    rmdir(cacheFolder, 's');
+if exist(cacheBase, 'dir')
+    rmdir(cacheBase, 's');
 end
 if exist(codeGenFolder, 'dir')
     rmdir(codeGenFolder, 's');
