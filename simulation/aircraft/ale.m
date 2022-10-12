@@ -45,8 +45,8 @@ Aircraft.Motor.map = [ 1 ; 2 ];
 % The cmd vector [thrust,roll,pitch, yaw] will by multiplied with the motor
 % mixing matrix to result in the individual motor outputs which is then
 % scaled to the PMW range that the ESC can decode
-Aircraft.Motor.mix = [0.95,  0.2, 0, 0; ...
-                      0.95, -0.2, 0, 0; ...
+Aircraft.Motor.mix = [0.95,  0.5, 0, 0; ...
+                      0.95, -0.5, 0, 0; ...
                       0,     0,   1, 0; ...
                       0,     0,   0, 1; ...
                       zeros(4, 4)];
@@ -122,7 +122,7 @@ Aircraft.Control.motor_spin_min = 0.0;
 Aircraft.Control.off_state = [0, 0, -1, -1, 0, 0, 0, 0];
 
 %
-Aircraft.Control.max_speed_mps = 1;
-Aircraft.Control.max_turn_radps = 0.3;
+Aircraft.Control.max_speed_mps = 0.2;
+Aircraft.Control.max_turn_radps = 1;
 
 Aircraft.Control.death_buffer = 0.2;
