@@ -36,7 +36,7 @@ namespace {
 NavConfig config_;
 bool nav_initialized_ = false;
 /* Minimum number of satellites */
-static constexpr int MIN_SAT_ = 12;
+static constexpr int MIN_SAT_ = 7;
 /* Frame period */
 static constexpr float FRAME_PERIOD_S = static_cast<float>(FRAME_PERIOD_MS) /
                                         1000.0f;
@@ -165,6 +165,11 @@ void NavRun(const SensorData &ref, NavData * const ptr) {
                              imu_mag_ut_, gnss_ned_vel_mps_,
                              home_pos_lla_);
       nav_initialized_ = true;
+      #ifdef CAGE_FRAME
+      home_pos_lla_(0) = 0.5797194362704485;
+      home_pos_lla_(1) = -1.5279251062464592;
+      home_pos_lla_(2) = 0.0;
+      #endif
     }
   } else {
     /* EKF time update */

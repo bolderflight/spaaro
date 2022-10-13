@@ -106,11 +106,21 @@ FetchContent_Declare(
 	GIT_TAG v1.2.0
 )
 FetchContent_MakeAvailable(pres)
-FetchContent_Declare(
-	navigation
-	GIT_REPOSITORY https://github.com/bolderflight/navigation.git
-	GIT_TAG v2.0.1
-)
+
+if (DEFINED CAGE)
+	message("Using fork for navigation for cage initialization")
+	FetchContent_Declare(
+		navigation
+		GIT_REPOSITORY git@github.com:TL-4319/ua_navigation.git
+		GIT_TAG v4.0.1
+	)
+else()
+	FetchContent_Declare(
+		navigation
+		GIT_REPOSITORY https://github.com/bolderflight/navigation.git
+		GIT_TAG v2.0.1
+	)
+endif()
 FetchContent_MakeAvailable(navigation)
 FetchContent_Declare(
 	airdata
@@ -213,6 +223,14 @@ if (VEHICLE STREQUAL "ALE")
 else()
 	message("Using default config.cc")
 	set(CONFIG_CC config.cc)
+endif()
+
+if (DEFINED CAGE)
+	message("Using cage frame for home waypoint")
+	string(TOUPPER ${CAGE} CAGE)
+	add_definitions(
+		-DCAGE_FRAME
+	)
 endif()
 
 # Add the executable
