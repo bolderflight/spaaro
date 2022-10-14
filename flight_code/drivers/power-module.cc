@@ -23,11 +23,26 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_ANALOG_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_ANALOG_H_
+#if defined(__FMU_R_MINI_V1__) || defined(__FMU_R_V2__)
 
-#include "flight/global_defs.h"
+#include "drivers/power-module.h"
+#include "global_defs.h"
+#include "flight/config.h"
+#include "flight/msg.h"
 
-void AnalogRead(AdcData * const data);
+namespace {
+PowerModuleConfig cfg_;
+}  // namespace
 
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_ANALOG_H_
+void PowerModuleInit(const PowerModuleConfig &cfg) {
+  cfg_ = cfg;
+}
+
+void PowerModuleRead(PowerModuleData * const data) {
+  data->voltage_v = static_cast<float>(analogRead(PWR_MOD_VOLTAGE_PIN)) *
+                    AIN_VOLTAGE_SCALE * cfg_.volts_per_volt;
+  data->current_ma = static_cast<float>(analogRead(PWR_MOD_CURRENT_PIN)) *
+                     AIN_VOLTAGE_SCALE * cfg_.amps_per_volt * 1000.0f;
+}
+
+#endif

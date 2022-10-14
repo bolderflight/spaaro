@@ -23,13 +23,29 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+#ifndef FLIGHT_CODE_INCLUDE_DRIVERS_AMS5915_H_
+#define FLIGHT_CODE_INCLUDE_DRIVERS_AMS5915_H_
 
 #include "global_defs.h"
+#include "hardware_defs.h"
+#include "ams5915.h"
+#include "statistics.h"
 
-void SensorsInit(const SensorConfig &cfg);
-void SensorsCal();
-void SensorsRead(SensorData * const data);
+class SpaaroAms5915 {
+ public:
+  explicit SpaaroAms5915(TwoWire *i2c) : i2c_(i2c) {}
+  void Init(const PresConfig &cfg);
+  void Cal();
+  void Read(PresData * const data);
 
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+ private:
+  bool installed_ = false;
+  bool is_static_pres_ = false;
+  elapsedMillis t_healthy_ms_;
+  PresTransducer transducer_;
+  TwoWire  *i2c_;
+  bfs::Ams5915 pres_;
+  bfs::RunningStats<float> bias_;
+};
+
+#endif  // FLIGHT_CODE_INCLUDE_DRIVERS_AMS5915_H_

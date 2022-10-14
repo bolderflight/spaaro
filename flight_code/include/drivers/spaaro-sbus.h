@@ -23,13 +23,22 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+#ifndef FLIGHT_CODE_INCLUDE_DRIVERS_SBUS_H_
+#define FLIGHT_CODE_INCLUDE_DRIVERS_SBUS_H_
 
 #include "global_defs.h"
+#include "hardware_defs.h"
+#include "sbus.h"
 
-void SensorsInit(const SensorConfig &cfg);
-void SensorsCal();
-void SensorsRead(SensorData * const data);
+class SpaaroSbus {
+ public:
+  SpaaroSbus(HardwareSerial *bus) : sbus_rx_(bus) {}
+  void Init();
+  void Read(InceptorData * const data);
 
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+ private:
+  bfs::SbusRx sbus_rx_;
+  bfs::SbusData data_;
+};
+
+#endif  // FLIGHT_CODE_INCLUDE_DRIVERS_SBUS_H_

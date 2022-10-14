@@ -23,13 +23,13 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+#ifndef FLIGHT_CODE_INCLUDE_DRIVERS_FMU_H_
+#define FLIGHT_CODE_INCLUDE_DRIVERS_FMU_H_
 
 #include "global_defs.h"
 
-void SensorsInit(const SensorConfig &cfg);
-void SensorsCal();
-void SensorsRead(SensorData * const data);
+void FmuInit(const FmuConfig &cfg);
+void FmuCal();
+void FmuRead(ImuData * const imu, MagData * const mag, PresData * const pres);
 
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+#endif  // FLIGHT_CODE_INCLUDE_DRIVERS_FMU_H_

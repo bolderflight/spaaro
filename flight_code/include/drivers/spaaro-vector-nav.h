@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -23,15 +23,15 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_BATTERY_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_BATTERY_H_
+#ifndef FLIGHT_CODE_INCLUDE_DRIVERS_SPAARO_VECTOR_NAV_H_
+#define FLIGHT_CODE_INCLUDE_DRIVERS_SPAARO_VECTOR_NAV_H_
 
-#if defined(__FMU_R_V2__)
-
-#include "flight/global_defs.h"
-
-void BatteryRead(PowerModuleData * const data);
-
+#if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || \
+    defined(__FMU_R_V2_BETA__)
+void VectorNavInit(const VectorNavConfig & cfg);
+void VectorNavRead(ImuData * const imu, MagData * const mag,
+                   PresData * const pres, GnssData * const gnss,
+                   InsData * const ins);
 #endif
 
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_BATTERY_H_
+#endif  // FLIGHT_CODE_INCLUDE_DRIVERS_SPAARO_VECTOR_NAV_H_

@@ -23,12 +23,14 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_NAV_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_NAV_H_
+#include "drivers/analog.h"
+#include "global_defs.h"
+#include "flight/config.h"
+#include "flight/msg.h"
 
-#include "flight/global_defs.h"
-
-void NavInit(const NavConfig &ref);
-void NavRun(const SensorData &ref, NavData * const ptr);
-
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_NAV_H_
+void AnalogRead(AnalogData * const data) {
+  for (int8_t i = 0; i < NUM_AIN_PINS; i++) {
+    data->voltage_v[i] = static_cast<float>(analogRead(AIN_PINS[i])) *
+                         AIN_VOLTAGE_SCALE;
+  }
+}

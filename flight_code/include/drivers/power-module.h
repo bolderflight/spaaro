@@ -23,18 +23,16 @@
 * IN THE SOFTWARE.
 */
 
-#if defined(__FMU_R_V2__)
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_POWER_MODULE_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_POWER_MODULE_H_
 
-#include "flight/battery.h"
-#include "flight/global_defs.h"
-#include "flight/config.h"
-#include "flight/msg.h"
+#if defined(__FMU_R_MINI_V1__) || defined(__FMU_R_V2__)
 
-void BatteryRead(PowerModuleData * const data) {
-  data->voltage_v = static_cast<float>(analogRead(BATTERY_VOLTAGE_PIN)) *
-                    AIN_VOLTAGE_SCALE;
-  data->current_v = static_cast<float>(analogRead(BATTERY_CURRENT_PIN)) *
-                     AIN_VOLTAGE_SCALE;
-}
+#include "global_defs.h"
+
+void PowerModuleInit(const PowerModuleConfig &cfg);
+void PowerModuleRead(PowerModuleData * const data);
 
 #endif
+
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_POWER_MODULE_H_

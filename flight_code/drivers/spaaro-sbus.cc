@@ -23,13 +23,20 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+#include "drivers/spaaro-sbus.h"
 
-#include "global_defs.h"
+void SpaaroSbus::Init() {
+  sbus_rx_.Begin();
+}
 
-void SensorsInit(const SensorConfig &cfg);
-void SensorsCal();
-void SensorsRead(SensorData * const data);
-
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+void SpaaroSbus::Read(InceptorData * const data) {
+  data->new_data = sbus_rx_.Read();
+  if (data->new_data) {
+    data_ = sbus_rx_.data();
+    data->lost_frame = data_.lost_frame;
+    data->failsafe = data_.failsafe;
+    for (int8_t i = 0; i < data_.NUM_CH; i++) {
+      data->ch[i] = data_.ch[i];
+    }
+  }
+}

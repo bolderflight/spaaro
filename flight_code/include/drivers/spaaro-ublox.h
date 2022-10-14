@@ -23,13 +23,24 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+#ifndef FLIGHT_CODE_INCLUDE_DRIVERS_UBLOX_H_
+#define FLIGHT_CODE_INCLUDE_DRIVERS_UBLOX_H_
 
 #include "global_defs.h"
+#include "hardware_defs.h"
+#include "ubx.h"
 
-void SensorsInit(const SensorConfig &cfg);
-void SensorsCal();
-void SensorsRead(SensorData * const data);
+class SpaaroUbx {
+ public:
+  SpaaroUbx(HardwareSerial* bus) : gnss_(bus) {}
+  void Init(const GnssConfig &cfg);
+  void Read(GnssData * const data);
 
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+ private:
+  bool installed_ = false;
+  static constexpr int16_t HEALTHY_PERIOD_MS_ = 1000;
+  elapsedMillis t_healthy_ms_;
+  bfs::Ubx gnss_;
+};
+
+#endif  // FLIGHT_CODE_INCLUDE_DRIVERS_UBLOX_H_

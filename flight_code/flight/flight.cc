@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -23,17 +23,22 @@
 * IN THE SOFTWARE.
 */
 
-#include "flight/hardware_defs.h"
-#include "flight/global_defs.h"
+#include "hardware_defs.h"
+#include "global_defs.h"
 #include "flight/config.h"
 #include "flight/msg.h"
 #include "flight/sys.h"
 #include "flight/sensors.h"
+#if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || \
+    defined(__FMU_R_V2_BETA__)
+#include "drivers/spaaro-vector-nav.h"
+#endif
+#include "flight/adc.h"
+#include "flight/bfs-ins.h"
 #include "flight/effectors.h"
-#include "flight/nav.h"
-#include "flight/vms.h"
 #include "flight/datalog.h"
 #include "flight/telem.h"
+#include "flight/vms.h"
 
 /* Aircraft data */
 AircraftData data;
@@ -44,11 +49,6 @@ IntervalTimer effector_timer;
 void send_effectors() {
   /* Stop the effector timer */
   effector_timer.end();
-  #if defined(__FMU_R_V1__)
-  /* Pulse the BFS bus */
-  digitalWriteFast(BFS_INT1, LOW);
-  digitalWriteFast(BFS_INT2, HIGH);
-  #endif
   /* Send effector commands */
   EffectorsWrite();
 }
@@ -57,23 +57,34 @@ void send_effectors() {
 void run() {
   /* Start the effector timer */
   effector_timer.begin(send_effectors, EFFECTOR_DELAY_US);
-  #if defined(__FMU_R_V1__)
-  /* Pulse the BFS bus */
-  digitalWriteFast(BFS_INT1, HIGH);
-  digitalWriteFast(BFS_INT2, LOW);
-  #endif
   /* System data */
   SysRead(&data.sys);
   /* Sensor data */
   SensorsRead(&data.sensor);
-  /* Nav filter */
-  NavRun(data.sensor, &data.nav);
+  /* VectorNav */
+  #if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || \
+      defined(__FMU_R_V2_BETA__)
+  VectorNavRead(&data.sensor.vector_nav_imu, &data.sensor.vector_nav_mag,
+                &data.sensor.vector_nav_static_pres,
+                &data.sensor.vector_nav_gnss, &data.vector_nav_ins);
+  #endif
+  /* Air data */
+  AdcRun(data.sensor, &data.adc);
+  /* INS */
+  BfsInsRun(data.sensor, &data.bfs_ins);
   /* VMS */
-  VmsRun(data.sys, data.sensor, data.nav, data.telem, &data.vms);
+  #if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || \
+      defined(__FMU_R_V2_BETA__)
+  VmsRun(data.sys, data.sensor, data.bfs_ins, data.vector_nav_ins, data.adc,
+         data.telem, &data.vms);
+  #else
+  VmsRun(data.sys, data.sensor, data.bfs_ins, data.adc,
+         data.telem, &data.vms);
+  #endif
   /* Command effectors */
   EffectorsCmd(data.vms);
   /* Datalog */
-  DatalogAdd(data);
+  // DatalogAdd(data);
   /* Telemetry */
   TelemUpdate(data, &data.telem);
   /* Frame duration */
@@ -87,20 +98,29 @@ int main() {
   SysInit();
   /* Init sensors */
   SensorsInit(config.sensor);
-  /* Init nav */
-  NavInit(config.nav);
+  /* Calibrate sensors */
+  SensorsCal();
+  /* Init VectorNav */
+  #if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || \
+      defined(__FMU_R_V2_BETA__)
+  VectorNavInit(config.vector_nav);
+  #endif
+  /* Init ADC */
+  AdcInit(config.adc);
+  /* Init INS */
+  BfsInsInit(config.bfs_ins);
   /* Init effectors */
   EffectorsInit();
   /* Init VMS */
   VmsInit();
   /* Init telemetry */
-  TelemInit(config, &data.telem);
+  TelemInit(config.telem, &data.telem);
   /* Init datalog */
-  DatalogInit();
+  // DatalogInit();
   /* Attach data ready interrupt */
-  attachInterrupt(IMU_DRDY, run, RISING);
+  attachInterrupt(IMU_DRDY, run, RISING);\
   while (1) {
     /* Flush datalog */
-    DatalogFlush();
+    // DatalogFlush();
   }
 }

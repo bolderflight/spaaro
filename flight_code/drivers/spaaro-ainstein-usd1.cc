@@ -23,13 +23,34 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
 
 #include "global_defs.h"
+#include "hardware_defs.h"
+#include "ainstein_usd1.h"
+#include "flight/msg.h"
+#include "drivers/spaaro-ainstein-usd1.h"
 
-void SensorsInit(const SensorConfig &cfg);
-void SensorsCal();
-void SensorsRead(SensorData * const data);
+void SpaaroAinsteinUsd1::Init(const RadAltConfig &cfg) {
+  if (cfg.device != RAD_ALT_NONE) {
+    if (!alt_.Begin()) {
+      MsgError("Unable to establish communication with RADAR altimeter");
+    } else {
+      installed_ = true;
+    }
+  } else {
+    installed_ = false;
+  }
+}
 
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+void SpaaroAinsteinUsd1::Read(RadAltData * const data) {
+  data->installed = installed_;
+  if (data->installed) {
+    data->new_data = alt_.Read();
+    if (data->new_data) {
+      t_healthy_ms_ = 0;
+      data->alt_m = alt_.alt_m();
+      data->snr = alt_.snr();
+    }
+    data->healthy = (t_healthy_ms_ < 10 * UPDATE_PERIOD_MS_);
+  }
+}

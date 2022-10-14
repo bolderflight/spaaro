@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -24,8 +24,9 @@
 */
 
 #include "flight/sys.h"
-#include "flight/hardware_defs.h"
-#include "flight/global_defs.h"
+#include "hardware_defs.h"
+#include "global_defs.h"
+#include "flight/msg.h"
 
 namespace {
 /* Frame time */
@@ -34,15 +35,27 @@ int32_t frame_time_us_ = 0;
 }  // namespace
 
 void SysInit() {
+  MsgInfo("Initializing system...");
   /* Pullup CS pins */
+  #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__) || \
+      defined(__FMU_R_V1__)
   pinMode(IMU_CS, OUTPUT);
   pinMode(VN_CS, OUTPUT);
   pinMode(PRES_CS, OUTPUT);
   digitalWriteFast(IMU_CS, HIGH);
   digitalWriteFast(VN_CS, HIGH);
   digitalWriteFast(PRES_CS, HIGH);
+  #elif defined(__FMU_R_MINI_V1__)
+  pinMode(IMU_CS, OUTPUT);
+  pinMode(MAG_CS, OUTPUT);
+  pinMode(PRES_CS, OUTPUT);
+  digitalWriteFast(IMU_CS, HIGH);
+  digitalWriteFast(MAG_CS, HIGH);
+  digitalWriteFast(PRES_CS, HIGH);
+  #endif
   /* Initialize buses */
-  #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
+  #if defined(__FMU_R_MINI_V1__) || defined(__FMU_R_V2__) || \
+      defined(__FMU_R_V2_BETA__)
   /* I2C */
   Wire.begin();
   Wire.setClock(400000);
@@ -51,14 +64,13 @@ void SysInit() {
   /* I2C */
   Wire1.begin();
   Wire1.setClock(400000);
-  /* BFS */
-  pinMode(BFS_INT1, OUTPUT);
-  pinMode(BFS_INT2, OUTPUT);
   #endif
   SPI.begin();
   /* Setup analog for voltage monitoring */
   analogReadResolution(ANALOG_RESOLUTION_BITS);
+  MsgInfo("done.\n");
 }
+
 void SysRead(SysData * const ptr) {
   if (!ptr) {return;}
   frame_start_us_ = micros64();
@@ -75,6 +87,7 @@ void SysRead(SysData * const ptr) {
                   PWM_VOLTAGE_SCALE;
   #endif
 }
+
 void SysFrameEnd() {
   frame_time_us_ = static_cast<int32_t>(micros64() - frame_start_us_);
 }

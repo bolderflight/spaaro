@@ -23,13 +23,27 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+#ifndef FLIGHT_CODE_INCLUDE_DRIVERS_SPAARO_LIS3MDL_H_
+#define FLIGHT_CODE_INCLUDE_DRIVERS_SPAARO_LIS3MDL_H_
 
 #include "global_defs.h"
+#include "lis3mdl.h"
+#include "eigen.h"
 
-void SensorsInit(const SensorConfig &cfg);
-void SensorsCal();
-void SensorsRead(SensorData * const data);
+class SpaaroLis3mdl : public bfs::Lis3mdl {
+ public:
+  SpaaroLis3mdl() {}
+  void Init(const MagConfig &cfg);
+  void Read(MagData * const data);
 
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+ private:
+  bool installed_ = false;
+  elapsedMillis t_healthy_ms_;
+  bfs::Lis3mdl mag_;
+  Eigen::Vector3f mag_ut_;
+  Eigen::Vector3f mag_bias_ut_;
+  Eigen::Matrix3f mag_scale_;
+  Eigen::Matrix3f rotation_;
+};
+
+#endif  // FLIGHT_CODE_INCLUDE_DRIVERS_SPAARO_LIS3MDL_H_

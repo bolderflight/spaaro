@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -23,15 +23,12 @@
 * IN THE SOFTWARE.
 */
 
-#include "flight/analog.h"
-#include "flight/global_defs.h"
-#include "flight/config.h"
-#include "flight/msg.h"
-#include "polytools/polytools.h"
+#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_INS_H_
+#define FLIGHT_CODE_INCLUDE_FLIGHT_INS_H_
 
-void AnalogRead(AdcData * const data) {
-  for (std::size_t i = 0; i < NUM_AIN_PINS; i++) {
-    data->volt[i] = static_cast<float>(analogRead(AIN_PINS[i])) *
-                             AIN_VOLTAGE_SCALE;
-  }
-}
+#include "global_defs.h"
+
+void BfsInsInit(const InsConfig &ref);
+void BfsInsRun(SensorData &ref, InsData * const ptr);
+
+#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_INS_H_

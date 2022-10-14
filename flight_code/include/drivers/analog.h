@@ -23,13 +23,11 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+#ifndef FLIGHT_CODE_INCLUDE_DRIVERS_ANALOG_H_
+#define FLIGHT_CODE_INCLUDE_DRIVERS_ANALOG_H_
 
 #include "global_defs.h"
 
-void SensorsInit(const SensorConfig &cfg);
-void SensorsCal();
-void SensorsRead(SensorData * const data);
+void AnalogRead(AnalogData * const data);
 
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+#endif  // FLIGHT_CODE_INCLUDE_DRIVERS_ANALOG_H_

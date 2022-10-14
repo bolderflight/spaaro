@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -27,8 +27,11 @@
 #ifdef __AUTOCODE__
   #include "./autocode.h"
 #else
-  #include "control/control.h"
-  #include "excitation/excitation.h"
+  #include "filter.h"
+  #include "control.h"
+  #include "excitation.h"
+  #include "navigation.h"
+  #include "airdata.h"
 #endif
 
 namespace {
@@ -43,11 +46,24 @@ void VmsInit() {
   autocode.initialize();
 #endif
 }
+#if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
 void VmsRun(const SysData &sys, const SensorData &sensor,
-            const NavData &nav, const TelemData &telem,
+            const InsData &bfs_ins, const InsData &vector_nav_ins,
+            const AdcData &adc, const TelemData &telem,
             VmsData *vms) {
+#else
+void VmsRun(const SysData &sys, const SensorData &sensor,
+            const InsData &bfs_ins,
+            const AdcData &adc, const TelemData &telem,
+            VmsData *vms) {
+#endif
   if (!vms) {return;}
 #ifdef __AUTOCODE__
-  autocode.Run(sys, sensor, nav, telem, vms);
+  #if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || \
+      defined(__FMU_R_V2_BETA__)
+  autocode.Run(sys, sensor, bfs_ins, vector_nav_ins, adc, telem, vms);
+  #else
+  autocode.Run(sys, sensor, bfs_ins, adc, telem, vms);
+  #endif
 #endif
 }

@@ -23,13 +23,24 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+#ifndef FLIGHT_CODE_INCLUDE_DRIVERS_AINSTEIN_USD1_H_
+#define FLIGHT_CODE_INCLUDE_DRIVERS_AINSTEIN_USD1_H_
 
 #include "global_defs.h"
+#include "hardware_defs.h"
+#include "ainstein_usd1.h"
 
-void SensorsInit(const SensorConfig &cfg);
-void SensorsCal();
-void SensorsRead(SensorData * const data);
+class SpaaroAinsteinUsd1 {
+ public:
+  SpaaroAinsteinUsd1(HardwareSerial *bus) : alt_(bus) {}
+  void Init(const RadAltConfig &cfg);
+  void Read(RadAltData * const data);
 
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+ private:
+  bool installed_ = false;
+  static constexpr int8_t UPDATE_PERIOD_MS_ = 13;
+  elapsedMillis t_healthy_ms_;
+  bfs::AinsteinUsD1 alt_;
+};
+
+#endif  // FLIGHT_CODE_INCLUDE_DRIVERS_AINSTEIN_USD1_H_

@@ -23,13 +23,20 @@
 * IN THE SOFTWARE.
 */
 
-#ifndef FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
-#define FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+/*
+* This protobuf file describes the data log format, which is transpiled
+* to a C header and source file for use in the flight code. There should
+* only be a single message defined, DatalogMessage, which defines all
+* of the data to be logged. The message structure should be flat
+* (i.e. no nested messages), consisting of native types.
+*/
 
-#include "global_defs.h"
+syntax = "proto3";
 
-void SensorsInit(const SensorConfig &cfg);
-void SensorsCal();
-void SensorsRead(SensorData * const data);
-
-#endif  // FLIGHT_CODE_INCLUDE_FLIGHT_SENSORS_H_
+/* Data log message */
+message DatalogMessage {
+  /* System data */
+  int32 sys_frame_time_us = 1;
+  double sys_time_s = 6;
+  /* FMU data */
+}
