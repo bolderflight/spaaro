@@ -38,9 +38,9 @@ inline constexpr usb_serial_class &MSG_BUS = Serial;
 /* Inceptor / Effector */
 inline constexpr int8_t NUM_SBUS_CH = 16;
 inline constexpr int8_t NUM_PWM_PINS = 8;
-inline constexpr HardwareSerial &INCEPT_UART = Serial1;
-inline constexpr int8_t PWM_PINS[NUM_PWM_PINS] = {6, 9, 44, 3,
-                                                  33, 5, 2, 4};
+inline constexpr HardwareSerial &SBUS_UART = Serial1;
+inline constexpr std::array<int8_t, NUM_PWM_PINS> PWM_PINS = {6, 9, 44, 3,
+                                                             33, 5, 2, 4};
 /* UART */
 inline constexpr HardwareSerial &GNSS1_UART = Serial3;
 inline constexpr HardwareSerial &GNSS2_UART = Serial2;
@@ -84,9 +84,9 @@ inline constexpr usb_serial_class &MSG_BUS = Serial;
 /* Inceptor / Effector */
 inline constexpr int8_t NUM_SBUS_CH = 16;
 inline constexpr int8_t NUM_PWM_PINS = 8;
-inline constexpr HardwareSerial &INCEPT_UART = Serial2;
-inline constexpr int8_t PWM_PINS[NUM_PWM_PINS] = {37, 9, 10, 6,
-                                                  5, 4, 3, 2};
+inline constexpr HardwareSerial &SBUS_UART = Serial2;
+inline constexpr std::array<int8_t, NUM_PWM_PINS> PWM_PINS = {37, 9, 10, 6,
+                                                              5, 4, 3, 2};
 /* UART */
 inline constexpr HardwareSerial &GNSS1_UART = Serial3;
 inline constexpr HardwareSerial &GNSS2_UART = Serial4;
@@ -131,9 +131,9 @@ inline constexpr usb_serial_class &MSG_BUS = Serial;
 /* Inceptor / Effector */
 inline constexpr int8_t NUM_SBUS_CH = 16;
 inline constexpr int8_t NUM_PWM_PINS = 8;
-inline constexpr HardwareSerial &INCEPT_UART = Serial2;
-inline constexpr int8_t PWM_PINS[NUM_PWM_PINS] = {37, 22, 23, 6,
-                                                  5, 4, 3, 2};
+inline constexpr HardwareSerial &SBUS_UART = Serial2;
+inline constexpr std::array<int8_t, NUM_PWM_PINS> PWM_PINS = {37, 22, 23, 6,
+                                                              5, 4, 3, 2};
 /* UART */
 inline constexpr HardwareSerial &GNSS1_UART = Serial3;
 inline constexpr HardwareSerial &GNSS2_UART = Serial4;
@@ -175,9 +175,9 @@ inline constexpr usb_serial_class &MSG_BUS = Serial;
 /* Inceptor / Effector */
 inline constexpr int8_t NUM_SBUS_CH = 16;
 inline constexpr int8_t NUM_PWM_PINS = 8;
-inline constexpr HardwareSerial &INCEPT_UART = Serial2;
-inline constexpr int8_t PWM_PINS[NUM_PWM_PINS] = {21, 22, 23, 2,
-                                                  3, 4, 5, 6};
+inline constexpr HardwareSerial &SBUS_UART = Serial2;
+inline constexpr std::array<int8_t, NUM_PWM_PINS> PWM_PINS = {21, 22, 23, 2,
+                                                              3, 4, 5, 6};
 /* UART */
 inline constexpr HardwareSerial &GNSS_UART = Serial3;
 inline constexpr HardwareSerial &TELEM_UART = Serial4;

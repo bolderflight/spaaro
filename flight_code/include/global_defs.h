@@ -471,8 +471,8 @@ struct VmsData {
   bool advance_waypoint;
   bool motors_enabled;
   int8_t mode;
-  int16_t sbus[NUM_SBUS_CH];
-  int16_t pwm[NUM_PWM_PINS];
+  std::array<int16_t, NUM_SBUS_CH> sbus;
+  std::array<int16_t, NUM_PWM_PINS> pwm;
   float throttle_cmd_prcnt;
   float flight_time_remaining_s;
   float power_remaining_prcnt;

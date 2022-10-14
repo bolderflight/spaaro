@@ -60,7 +60,7 @@ SpaaroAinsteinUsd1 rad_alt(&AUX_UART);
 #elif defined(__FMU_R_MINI_V1__)
 SpaaroAinsteinUsd1 rad_alt(&AUX_UART);
 #endif
-SpaaroSbus incept(&INCEPT_UART);
+SpaaroSbus incept(&SBUS_UART);
 /* Sensor calibration */
 elapsedMillis t_ms;
 inline constexpr int32_t CAL_TIME_MS = 5000;

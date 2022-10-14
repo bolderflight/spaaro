@@ -152,12 +152,12 @@ FetchContent_Declare(
   GIT_TAG v4.0.4
 )
 FetchContent_MakeAvailable(vector_nav)
-# FetchContent_Declare(
-#   pwm
-#   GIT_REPOSITORY https://github.com/bolderflight/pwm.git
-#   GIT_TAG v5.0.0
-# )
-# FetchContent_MakeAvailable(pwm)
+FetchContent_Declare(
+  pwm
+  GIT_REPOSITORY https://github.com/bolderflight/pwm.git
+  GIT_TAG v6.0.1
+)
+FetchContent_MakeAvailable(pwm)
 FetchContent_Declare(
   mavlink
   GIT_REPOSITORY https://github.com/bolderflight/mavlink.git
@@ -322,6 +322,7 @@ target_link_libraries(flight
     excitation
     polytools
     vector_nav
+    pwm
 )
 target_compile_options(flight PUBLIC -std=c++20)
 # Add hex and upload targets
