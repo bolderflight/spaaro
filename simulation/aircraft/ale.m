@@ -86,7 +86,7 @@ Aircraft.Sensors.Imu.Mag.noise_ut =  0.6 * ones(3, 1);
 Aircraft.Sensors.Imu.Mag.upper_limit_ut =  4800 * ones(3, 1);
 Aircraft.Sensors.Imu.Mag.lower_limit_ut = -1 * Aircraft.Sensors.Imu.Mag.upper_limit_ut;
 % GNSS model
-Aircraft.Sensors.Gnss.sample_rate_hz = 5;
+Aircraft.Sensors.Gnss.sample_rate_hz = 2.5;
 Aircraft.Sensors.Gnss.fix = 3; % 3D fix
 Aircraft.Sensors.Gnss.num_satellites = 16;
 Aircraft.Sensors.Gnss.horz_accuracy_m = 1.5;

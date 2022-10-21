@@ -118,6 +118,10 @@ end
 
 Telem.FlightPlan = load_waypoint(Telem.FlightPlan,'test_mission_upload.waypoints');
 
+%% Setup configuration set
+if(strcmp(vehicle, 'ale'))
+    ale_config = ale_model_confg();
+end
 %% Select sim
 multirotor_sim
 %ground_sim
