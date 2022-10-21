@@ -123,8 +123,8 @@ if(strcmp(vehicle, 'ale'))
     ale_config = ale_model_confg();
 end
 %% Select sim
-multirotor_sim
-%ground_sim
+%multirotor_sim
+ground_sim
 
 %% Cleanup
 %clear vehicle fh_vehicle op_point op_report op_spec opt i;

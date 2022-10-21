@@ -121,8 +121,10 @@ Aircraft.Sensors.phototransistor.cal_delay = 5; % s
 Aircraft.Control.motor_spin_min = 0.0;
 Aircraft.Control.off_state = [0, 0, -1, -1, 0, 0, 0, 0];
 
-%
-Aircraft.Control.max_speed_mps = 0.2;
-Aircraft.Control.max_turn_radps = 1;
+% Speed controller parameters
+Aircraft.Control.max_speed_mps = 0.3;
+Aircraft.Control.max_turn_radps = 3;
+Aircraft.Control.P_turn_rate = 0.6;
+Aircraft.Control.D_turn_rate = 0.02;
 
 Aircraft.Control.death_buffer = 0.2;
