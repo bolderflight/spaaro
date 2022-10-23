@@ -27,20 +27,7 @@
 #include "flight/msg.h"
 #include "logger/logger.h"
 #include "framing.h"
-#include "./pb_encode.h"
-#include "./pb_decode.h"
-#if defined(__FMU_R_MINI_V1__)
-#include "./datalog_fmu_mini_v1.pb.h"
-#endif
-#if defined(__FMU_R_V2__)
-#include "./datalog_fmu_v2.pb.h"
-#endif
-#if defined(__FMU_R_V2_BETA__)
-#include "./datalog_fmu_v2_beta.pb.h"
-#endif
-#if defined(__FMU_R_V1__)
-#include "./datalog_fmu_v1.pb.h"
-#endif
+#include "../../common/datalog_fmu.h"
 
 namespace {
 /* Datalog file name */
@@ -49,13 +36,10 @@ static const char * DATA_LOG_NAME_ = "flight_data";
 SdFat32 sd_;
 /* Logger object */
 bfs::Logger<400> logger_(&sd_);
-/* Framing */
-bfs::FrameEncoder<DatalogMessage_size> encoder;
-/* nanopb buffer for encoding */
-uint8_t data_buffer_[DatalogMessage_size];
-pb_ostream_t stream_;
-/* Datalog message from protobuf */
+/* Datalog message */
 DatalogMessage datalog_msg_;
+/* Framing */
+bfs::FrameEncoder<sizeof(datalog_msg_)> encoder;
 }  // namespace
 
 void DatalogInit() {
@@ -73,16 +57,11 @@ void DatalogInit() {
 void DatalogAdd(const AircraftData &ref) {
   /* Assign to message */
 
-  /* Encode */
-  stream_ = pb_ostream_from_buffer(data_buffer_, sizeof(data_buffer_));
-  if (!pb_encode(&stream_, DatalogMessage_fields, &datalog_msg_)) {
-    MsgWarning("Error encoding datalog.");
-    return;
-  }
-  std::size_t msg_len = stream_.bytes_written;
+
   /* Framing */
-  std::size_t bytes_written = encoder.Write(data_buffer_, msg_len);
-  if (msg_len != bytes_written) {
+  std::size_t bytes_written = encoder.Write(&datalog_msg_,
+                                            sizeof(datalog_msg_));
+  if (bytes_written != sizeof(datalog_msg_)) {
     MsgWarning("Error framing datalog.");
     return;
   }
