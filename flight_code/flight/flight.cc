@@ -35,6 +35,7 @@
 #endif
 #include "flight/adc.h"
 #include "flight/bfs-ins.h"
+#include "flight/aux-ins.h"
 #include "flight/effectors.h"
 #include "flight/datalog.h"
 #include "flight/telem.h"
@@ -72,6 +73,8 @@ void run() {
   AdcRun(data.sensor, &data.adc);
   /* INS */
   BfsInsRun(data.sensor, &data.bfs_ins);
+  /* Aux INS */
+  AuxInsRun(data, &data.aux_ins);
   /* VMS */
   #if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || \
       defined(__FMU_R_V2_BETA__)
@@ -109,6 +112,8 @@ int main() {
   AdcInit(config.adc);
   /* Init INS */
   BfsInsInit(config.bfs_ins);
+  /* Init Aux INS */
+  AuxInsInit(config.aux_ins);
   /* Init effectors */
   EffectorsInit();
   /* Init VMS */

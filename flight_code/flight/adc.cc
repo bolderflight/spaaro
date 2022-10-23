@@ -34,6 +34,7 @@ namespace {
 AdcConfig cfg_;
 bool adc_initialized_ = false;
 bool diff_source_avail_ = false;
+float init_pres_alt_m_;
 PresData *static_pres_, *diff_pres_;
 bfs::Iir<float> static_pres_dlpf_, diff_pres_dlpf_;
 }  // namespace
@@ -168,6 +169,7 @@ void AdcRun(SensorData &sensor, AdcData * const data) {
     if (static_pres_->new_data) {
       static_pres_dlpf_.Init(cfg_.static_pres_cutoff_hz, FRAME_RATE_HZ,
                              static_pres_->pres_pa);
+      init_pres_alt_m_ = bfs::PressureAltitude_m(static_pres_->pres_pa);
       adc_initialized_ = true;
     }
   } else {
@@ -175,6 +177,7 @@ void AdcRun(SensorData &sensor, AdcData * const data) {
       data->static_pres_pa = static_pres_dlpf_.Filter(static_pres_->pres_pa);
     }
     data->pres_alt_m = bfs::PressureAltitude_m(data->static_pres_pa);
+    data->rel_alt_m = data->pres_alt_m - init_pres_alt_m_;
     if (diff_source_avail_) {
       if (diff_pres_->new_data) {
         data->diff_pres_pa = diff_pres_dlpf_.Filter(diff_pres_->pres_pa);

@@ -155,18 +155,19 @@ struct PowerModuleConfig {
 struct SensorConfig {
   FmuConfig fmu;
   MagConfig ext_mag;
-  #if defined(__FMU_R_V1__)
   GnssConfig ext_gnss1;
-  #elif defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__) || \
-        defined(__FMU_R_MINI_V1__)
-  GnssConfig ext_gnss1;
+  #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__) || \
+      defined(__FMU_R_MINI_V1__)
   GnssConfig ext_gnss2;
   #endif
   PresConfig ext_pres1;
   PresConfig ext_pres2;
   PresConfig ext_pres3;
   PresConfig ext_pres4;
+  #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__) || \
+      defined(__FMU_R_MINI_V1__)
   RadAltConfig rad_alt;
+  #endif
   #if defined(__FMU_R_MINI_V1__) || defined(__FMU_R_V2__)
   PowerModuleConfig power_module;
   #endif
@@ -204,6 +205,18 @@ struct InsConfig {
   float accel_cutoff_hz = 20;
   float gyro_cutoff_hz = 20;
   float mag_cutoff_hz = 10;
+};
+
+enum AuxInsSource {
+  #if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || \
+      defined(__FMU_R_V2_BETA__)
+  AUX_INS_VECTOR_NAV,
+  #endif
+  AUX_INS_BFS
+};
+
+struct AuxInsConfig {
+  AuxInsSource ins_source = AUX_INS_BFS;
 };
 
 enum AdcStaticPresSource : int8_t {
@@ -312,6 +325,7 @@ struct AircraftConfig {
   VectorNavConfig vector_nav;
   #endif
   InsConfig bfs_ins;
+  AuxInsConfig aux_ins;
   AdcConfig adc;
   TelemConfig telem;
 };
@@ -414,18 +428,19 @@ struct SensorData {
   GnssData vector_nav_gnss;
   #endif
   MagData ext_mag;
-  #if defined(__FMU_R_V1__)
   GnssData ext_gnss1;
-  #elif defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__) || \
-        defined(__FMU_R_MINI_V1__)
-  GnssData ext_gnss1;
+  #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__) || \
+      defined(__FMU_R_MINI_V1__)
   GnssData ext_gnss2;
   #endif
   PresData ext_pres1;
   PresData ext_pres2;
   PresData ext_pres3;
   PresData ext_pres4;
+  #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__) || \
+      defined(__FMU_R_MINI_V1__)
   RadAltData rad_alt;
+  #endif
   AnalogData analog;
   #if defined(__FMU_R_V2__) || defined(__FMU_R_MINI_V1__)
   PowerModuleData power_module;
@@ -450,7 +465,18 @@ struct AdcData {
   float static_pres_pa;
   float diff_pres_pa;
   float pres_alt_m;
+  float rel_alt_m;
   float ias_mps;
+};
+
+struct AuxInsData {
+  float home_alt_wgs84_m;
+  float gnd_spd_mps;
+  float gnd_track_rad;
+  float flight_path_rad;
+  double home_lat_rad;
+  double home_lon_rad;
+  double ned_pos_m[3];
 };
 
 struct TelemData {
@@ -487,6 +513,7 @@ struct AircraftData {
       defined(__FMU_R_V2_BETA__)
   InsData vector_nav_ins;
   #endif
+  AuxInsData aux_ins;
   AdcData adc;
   TelemData telem;
   VmsData vms;
