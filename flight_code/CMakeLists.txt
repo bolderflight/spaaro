@@ -70,24 +70,6 @@ else()
     -DSERIAL4_TX_BUFFER_SIZE=1024
   )
 endif()
-# nanopb
-set(NANOPB_SRC_ROOT_FOLDER "/usr/local/nanopb")
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${NANOPB_SRC_ROOT_FOLDER}/extra)
-find_package(Nanopb REQUIRED)
-include_directories(${NANOPB_INCLUDE_DIRS})
-if (FMU STREQUAL "MINI-V1")
-  # FMU-R-mini
-  NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ../common/datalog_fmu_mini_v1.proto)
-elseif (FMU STREQUAL "V2")
-  # FMU-R-V2
-  NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ../common/datalog_fmu_v2.proto)
-elseif(FMU STREQUAL "V2-BETA")
-  # FMU-R-V2-BETA
-  NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ../common/datalog_fmu_v2_beta.proto)
-else()
-  # FMU-R-V1
-  NANOPB_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ../common/datalog_fmu_v1.proto)
-endif()
 # Include directories
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 # Fetch dependencies
@@ -273,8 +255,6 @@ add_executable(flight
   drivers/spaaro-sbus.cc
   drivers/analog.cc
   drivers/spaaro-vector-nav.cc
-  ${PROTO_SRCS}
-  ${PROTO_HDRS}
 )
 if (FMU STREQUAL "MINI-V1" OR FMU STREQUAL "V2")
   # FMU-R mini V1 | FMU-R-V2
