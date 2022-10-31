@@ -343,7 +343,6 @@ struct SysData {
 
 struct InceptorData {
   static constexpr int8_t max_ch = 16;
-  bool healthy;
   bool new_data;
   bool lost_frame;
   bool failsafe;
@@ -402,8 +401,8 @@ struct RadAltData {
   bool installed = false;
   bool healthy;
   bool new_data;
+  uint8_t snr;
   float alt_m;
-  float snr;
 };
 
 struct AnalogData {

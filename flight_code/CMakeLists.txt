@@ -212,6 +212,12 @@ FetchContent_Declare(
   GIT_TAG v3.1.0
 )
 FetchContent_MakeAvailable(filter)
+FetchContent_Declare(
+  imap
+  GIT_REPOSITORY https://github.com/bolderflight/imap.git
+  GIT_TAG v2.0.2
+)
+FetchContent_MakeAvailable(imap)
 # Add the executable
 add_executable(flight
   include/global_defs.h
@@ -305,6 +311,7 @@ target_link_libraries(flight
     polytools
     vector_nav
     pwm
+    imap
 )
 target_compile_options(flight PUBLIC -std=c++20)
 # Add hex and upload targets

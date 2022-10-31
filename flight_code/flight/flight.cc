@@ -87,7 +87,7 @@ void run() {
   /* Command effectors */
   EffectorsCmd(data.vms);
   /* Datalog */
-  // DatalogAdd(data);
+  DatalogAdd(data);
   /* Telemetry */
   TelemUpdate(data, &data.telem);
   /* Frame duration */
@@ -121,11 +121,11 @@ int main() {
   /* Init telemetry */
   TelemInit(config.telem, &data.telem);
   /* Init datalog */
-  // DatalogInit();
+  DatalogInit();
   /* Attach data ready interrupt */
   attachInterrupt(IMU_DRDY, run, RISING);\
   while (1) {
     /* Flush datalog */
-    // DatalogFlush();
+    DatalogFlush();
   }
 }
