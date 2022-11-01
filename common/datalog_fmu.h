@@ -305,7 +305,6 @@ struct DatalogMsg {
   uint64_t telem_param21 : 32;
   uint64_t telem_param22 : 32;
   uint64_t telem_param23 : 32;
-
   uint64_t vms_advance_waypoint : 1;
   uint64_t vms_motors_enabled : 1;
   uint64_t vms_mode : 3;

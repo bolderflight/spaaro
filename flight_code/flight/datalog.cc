@@ -72,11 +72,10 @@ void DatalogAdd(const AircraftData &ref) {
   /* SysData */
   datalog_msg_.sys_frame_time_us = ref.sys.frame_time_us;
   #if defined(__FMU_R_V1__)
-
   datalog_msg_.sys_input_volt = Scale(ref.sys.input_volt, 0.0f, 36.0f, 113.75f, 0.0f);
-  datalog_msg_.sys_reg_volt = Scale(ref.sys.input_volt, 2.5f, 6.5f, 127.75f, -319.375f);
-  datalog_msg_.sys_pwm_volt = Scale(ref.sys.input_volt, 0.0f, 10.0f, 102.3f, 0.0f);
-  datalog_msg_.sys_sbus_volt = Scale(ref.sys.input_volt, 0.0f, 10.0f, 102.3f, 0.0f);
+  datalog_msg_.sys_reg_volt = Scale(ref.sys.reg_volt, 2.5f, 6.5f, 127.75f, -319.375f);
+  datalog_msg_.sys_pwm_volt = Scale(ref.sys.pwm_volt, 0.0f, 10.0f, 102.3f, 0.0f);
+  datalog_msg_.sys_sbus_volt = Scale(ref.sys.sbus_volt, 0.0f, 10.0f, 102.3f, 0.0f);
   #endif
   datalog_msg_.sys_time_us = ref.sys.sys_time_us;
 
