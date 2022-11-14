@@ -367,7 +367,7 @@ template<typename T>
 T Scale(uint64_t val, T min, T max, T sf, T bias) {
   static_assert(std::is_floating_point<T>::value,
                 "Only floating point types supported");
-  T ret = static_cast<T>(val) / sf - bias;
+  T ret = static_cast<T>(val) / sf - bias / sf;
   if (ret > max) {ret = max;}
   if (ret < min) {ret = min;}
   return ret;
