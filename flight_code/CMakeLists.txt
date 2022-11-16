@@ -143,7 +143,7 @@ FetchContent_MakeAvailable(pwm)
 FetchContent_Declare(
   mavlink
   GIT_REPOSITORY https://github.com/bolderflight/mavlink.git
-  GIT_TAG v4.8.6
+  GIT_TAG v4.8.7
 )
 FetchContent_MakeAvailable(mavlink)
 FetchContent_Declare(
