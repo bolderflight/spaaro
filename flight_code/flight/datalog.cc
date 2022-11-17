@@ -305,67 +305,67 @@ void DatalogAdd(const AircraftData &ref) {
   #endif
 
   /* BFS INS */
-  datalog_msg_.bfs_ins_initialized = ref.bfs_ins.initialized;
-  datalog_msg_.bfs_ins_pitch_rad = Scale(ref.bfs_ins.pitch_rad, -bfs::BFS_PI<float> / 2.0f, bfs::BFS_PI<float> / 2.0f, 20860.4383910547f, 32767.5f);
-  datalog_msg_.bfs_ins_roll_rad = Scale(ref.bfs_ins.roll_rad, -bfs::BFS_PI<float> / 2.0f, bfs::BFS_PI<float> / 2.0f, 20860.4383910547f, 32767.5f);
-  datalog_msg_.bfs_ins_heading_rad = Scale(ref.bfs_ins.pitch_rad, -bfs::BFS_PI<float>, bfs::BFS_PI<float>, 10430.2191955274f, 32767.5f);
-  datalog_msg_.bfs_ins_alt_wgs84_m = Scale(ref.bfs_ins.alt_wgs84_m, -500.0f, 5000.0f, 190.65f, 95324.9999999999f);
-  datalog_msg_.bfs_ins_accel_x_mps2 = Scale(ref.bfs_ins.accel_mps2[0], -156.9064f, 156.9064f, 208.834693804714f, 32767.5f);
-  datalog_msg_.bfs_ins_accel_y_mps2 = Scale(ref.bfs_ins.accel_mps2[1], -156.9064f, 156.9064f, 208.834693804714f, 32767.5f);
-  datalog_msg_.bfs_ins_accel_z_mps2 = Scale(ref.bfs_ins.accel_mps2[2], -156.9064f, 156.9064f, 208.834693804714f, 32767.5f);
-  datalog_msg_.bfs_ins_gyro_x_radps = Scale(ref.bfs_ins.gyro_radps[0], -34.9065850398866f, 34.9065850398866f, 938.719727597462f, 32767.5f);
-  datalog_msg_.bfs_ins_gyro_y_radps = Scale(ref.bfs_ins.gyro_radps[1], -34.9065850398866f, 34.9065850398866f, 938.719727597462f, 32767.5f);
-  datalog_msg_.bfs_ins_gyro_z_radps = Scale(ref.bfs_ins.gyro_radps[2], -34.9065850398866f, 34.9065850398866f, 938.719727597462f, 32767.5f);
-  datalog_msg_.bfs_ins_mag_x_ut = Scale(ref.bfs_ins.mag_ut[0], -250.0f, 250.0f, 131.07f, 32767.5f);
-  datalog_msg_.bfs_ins_mag_y_ut = Scale(ref.bfs_ins.mag_ut[1], -250.0f, 250.0f, 131.07f, 32767.5f);
-  datalog_msg_.bfs_ins_mag_z_ut = Scale(ref.bfs_ins.mag_ut[2], -250.0f, 250.0f, 131.07f, 32767.5f);
-  datalog_msg_.bfs_ins_north_vel_mps = Scale(ref.bfs_ins.ned_vel_mps[0], -60.0f, 60.0f, 136.525f, 8191.5f);
-  datalog_msg_.bfs_ins_east_vel_mps = Scale(ref.bfs_ins.ned_vel_mps[1], -60.0f, 60.0f, 136.525f, 8191.5f);
-  datalog_msg_.bfs_ins_down_vel_mps = Scale(ref.bfs_ins.ned_vel_mps[2], -60.0f, 60.0f, 136.525f, 8191.5f);
-  datalog_msg_.bfs_ins_lat_rad = Scale(ref.bfs_ins.lat_rad, -bfs::BFS_PI<double>, bfs::BFS_PI<double>, 10937044409.0637, 34359738367.5);
-  datalog_msg_.bfs_ins_lon_rad = Scale(ref.bfs_ins.lon_rad, -bfs::BFS_PI<double>, bfs::BFS_PI<double>, 10937044409.0637, 34359738367.5);
+  datalog_msg_.bfs_ins_initialized = ref.state_est.bfs_ins.initialized;
+  datalog_msg_.bfs_ins_pitch_rad = Scale(ref.state_est.bfs_ins.pitch_rad, -bfs::BFS_PI<float> / 2.0f, bfs::BFS_PI<float> / 2.0f, 20860.4383910547f, 32767.5f);
+  datalog_msg_.bfs_ins_roll_rad = Scale(ref.state_est.bfs_ins.roll_rad, -bfs::BFS_PI<float> / 2.0f, bfs::BFS_PI<float> / 2.0f, 20860.4383910547f, 32767.5f);
+  datalog_msg_.bfs_ins_heading_rad = Scale(ref.state_est.bfs_ins.pitch_rad, -bfs::BFS_PI<float>, bfs::BFS_PI<float>, 10430.2191955274f, 32767.5f);
+  datalog_msg_.bfs_ins_alt_wgs84_m = Scale(ref.state_est.bfs_ins.alt_wgs84_m, -500.0f, 5000.0f, 190.65f, 95324.9999999999f);
+  datalog_msg_.bfs_ins_accel_x_mps2 = Scale(ref.state_est.bfs_ins.accel_mps2[0], -156.9064f, 156.9064f, 208.834693804714f, 32767.5f);
+  datalog_msg_.bfs_ins_accel_y_mps2 = Scale(ref.state_est.bfs_ins.accel_mps2[1], -156.9064f, 156.9064f, 208.834693804714f, 32767.5f);
+  datalog_msg_.bfs_ins_accel_z_mps2 = Scale(ref.state_est.bfs_ins.accel_mps2[2], -156.9064f, 156.9064f, 208.834693804714f, 32767.5f);
+  datalog_msg_.bfs_ins_gyro_x_radps = Scale(ref.state_est.bfs_ins.gyro_radps[0], -34.9065850398866f, 34.9065850398866f, 938.719727597462f, 32767.5f);
+  datalog_msg_.bfs_ins_gyro_y_radps = Scale(ref.state_est.bfs_ins.gyro_radps[1], -34.9065850398866f, 34.9065850398866f, 938.719727597462f, 32767.5f);
+  datalog_msg_.bfs_ins_gyro_z_radps = Scale(ref.state_est.bfs_ins.gyro_radps[2], -34.9065850398866f, 34.9065850398866f, 938.719727597462f, 32767.5f);
+  datalog_msg_.bfs_ins_mag_x_ut = Scale(ref.state_est.bfs_ins.mag_ut[0], -250.0f, 250.0f, 131.07f, 32767.5f);
+  datalog_msg_.bfs_ins_mag_y_ut = Scale(ref.state_est.bfs_ins.mag_ut[1], -250.0f, 250.0f, 131.07f, 32767.5f);
+  datalog_msg_.bfs_ins_mag_z_ut = Scale(ref.state_est.bfs_ins.mag_ut[2], -250.0f, 250.0f, 131.07f, 32767.5f);
+  datalog_msg_.bfs_ins_north_vel_mps = Scale(ref.state_est.bfs_ins.ned_vel_mps[0], -60.0f, 60.0f, 136.525f, 8191.5f);
+  datalog_msg_.bfs_ins_east_vel_mps = Scale(ref.state_est.bfs_ins.ned_vel_mps[1], -60.0f, 60.0f, 136.525f, 8191.5f);
+  datalog_msg_.bfs_ins_down_vel_mps = Scale(ref.state_est.bfs_ins.ned_vel_mps[2], -60.0f, 60.0f, 136.525f, 8191.5f);
+  datalog_msg_.bfs_ins_lat_rad = Scale(ref.state_est.bfs_ins.lat_rad, -bfs::BFS_PI<double>, bfs::BFS_PI<double>, 10937044409.0637, 34359738367.5);
+  datalog_msg_.bfs_ins_lon_rad = Scale(ref.state_est.bfs_ins.lon_rad, -bfs::BFS_PI<double>, bfs::BFS_PI<double>, 10937044409.0637, 34359738367.5);
 
   /* VectorNav INS */
   #if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || \
       defined(__FMU_R_V2_BETA__)
-  datalog_msg_.vector_nav_ins_initialized = ref.vector_nav_ins.initialized;
-  datalog_msg_.vector_nav_ins_pitch_rad = Scale(ref.vector_nav_ins.pitch_rad, -bfs::BFS_PI<float> / 2.0f, bfs::BFS_PI<float> / 2.0f, 20860.4383910547f, 32767.5f);
-  datalog_msg_.vector_nav_ins_roll_rad = Scale(ref.vector_nav_ins.roll_rad, -bfs::BFS_PI<float> / 2.0f, bfs::BFS_PI<float> / 2.0f, 20860.4383910547f, 32767.5f);
-  datalog_msg_.vector_nav_ins_heading_rad = Scale(ref.vector_nav_ins.pitch_rad, -bfs::BFS_PI<float>, bfs::BFS_PI<float>, 10430.2191955274f, 32767.5f);
-  datalog_msg_.vector_nav_ins_alt_wgs84_m = Scale(ref.vector_nav_ins.alt_wgs84_m, -500.0f, 5000.0f, 190.65f, 95324.9999999999f);
-  datalog_msg_.vector_nav_ins_accel_x_mps2 = Scale(ref.vector_nav_ins.accel_mps2[0], -156.9064f, 156.9064f, 208.834693804714f, 32767.5f);
-  datalog_msg_.vector_nav_ins_accel_y_mps2 = Scale(ref.vector_nav_ins.accel_mps2[1], -156.9064f, 156.9064f, 208.834693804714f, 32767.5f);
-  datalog_msg_.vector_nav_ins_accel_z_mps2 = Scale(ref.vector_nav_ins.accel_mps2[2], -156.9064f, 156.9064f, 208.834693804714f, 32767.5f);
-  datalog_msg_.vector_nav_ins_gyro_x_radps = Scale(ref.vector_nav_ins.gyro_radps[0], -34.9065850398866f, 34.9065850398866f, 938.719727597462f, 32767.5f);
-  datalog_msg_.vector_nav_ins_gyro_y_radps = Scale(ref.vector_nav_ins.gyro_radps[1], -34.9065850398866f, 34.9065850398866f, 938.719727597462f, 32767.5f);
-  datalog_msg_.vector_nav_ins_gyro_z_radps = Scale(ref.vector_nav_ins.gyro_radps[2], -34.9065850398866f, 34.9065850398866f, 938.719727597462f, 32767.5f);
-  datalog_msg_.vector_nav_ins_mag_x_ut = Scale(ref.vector_nav_ins.mag_ut[0], -250.0f, 250.0f, 131.07f, 32767.5f);
-  datalog_msg_.vector_nav_ins_mag_y_ut = Scale(ref.vector_nav_ins.mag_ut[1], -250.0f, 250.0f, 131.07f, 32767.5f);
-  datalog_msg_.vector_nav_ins_mag_z_ut = Scale(ref.vector_nav_ins.mag_ut[2], -250.0f, 250.0f, 131.07f, 32767.5f);
-  datalog_msg_.vector_nav_ins_north_vel_mps = Scale(ref.vector_nav_ins.ned_vel_mps[0], -60.0f, 60.0f, 136.525f, 8191.5f);
-  datalog_msg_.vector_nav_ins_east_vel_mps = Scale(ref.vector_nav_ins.ned_vel_mps[1], -60.0f, 60.0f, 136.525f, 8191.5f);
-  datalog_msg_.vector_nav_ins_down_vel_mps = Scale(ref.vector_nav_ins.ned_vel_mps[2], -60.0f, 60.0f, 136.525f, 8191.5f);
-  datalog_msg_.vector_nav_ins_lat_rad = Scale(ref.vector_nav_ins.lat_rad, -bfs::BFS_PI<double>, bfs::BFS_PI<double>, 10937044409.0637, 34359738367.5);
-  datalog_msg_.vector_nav_ins_lon_rad = Scale(ref.vector_nav_ins.lon_rad, -bfs::BFS_PI<double>, bfs::BFS_PI<double>, 10937044409.0637, 34359738367.5);
+  datalog_msg_.vector_nav_ins_initialized = ref.state_est.vector_nav_ins.initialized;
+  datalog_msg_.vector_nav_ins_pitch_rad = Scale(ref.state_est.vector_nav_ins.pitch_rad, -bfs::BFS_PI<float> / 2.0f, bfs::BFS_PI<float> / 2.0f, 20860.4383910547f, 32767.5f);
+  datalog_msg_.vector_nav_ins_roll_rad = Scale(ref.state_est.vector_nav_ins.roll_rad, -bfs::BFS_PI<float> / 2.0f, bfs::BFS_PI<float> / 2.0f, 20860.4383910547f, 32767.5f);
+  datalog_msg_.vector_nav_ins_heading_rad = Scale(ref.state_est.vector_nav_ins.pitch_rad, -bfs::BFS_PI<float>, bfs::BFS_PI<float>, 10430.2191955274f, 32767.5f);
+  datalog_msg_.vector_nav_ins_alt_wgs84_m = Scale(ref.state_est.vector_nav_ins.alt_wgs84_m, -500.0f, 5000.0f, 190.65f, 95324.9999999999f);
+  datalog_msg_.vector_nav_ins_accel_x_mps2 = Scale(ref.state_est.vector_nav_ins.accel_mps2[0], -156.9064f, 156.9064f, 208.834693804714f, 32767.5f);
+  datalog_msg_.vector_nav_ins_accel_y_mps2 = Scale(ref.state_est.vector_nav_ins.accel_mps2[1], -156.9064f, 156.9064f, 208.834693804714f, 32767.5f);
+  datalog_msg_.vector_nav_ins_accel_z_mps2 = Scale(ref.state_est.vector_nav_ins.accel_mps2[2], -156.9064f, 156.9064f, 208.834693804714f, 32767.5f);
+  datalog_msg_.vector_nav_ins_gyro_x_radps = Scale(ref.state_est.vector_nav_ins.gyro_radps[0], -34.9065850398866f, 34.9065850398866f, 938.719727597462f, 32767.5f);
+  datalog_msg_.vector_nav_ins_gyro_y_radps = Scale(ref.state_est.vector_nav_ins.gyro_radps[1], -34.9065850398866f, 34.9065850398866f, 938.719727597462f, 32767.5f);
+  datalog_msg_.vector_nav_ins_gyro_z_radps = Scale(ref.state_est.vector_nav_ins.gyro_radps[2], -34.9065850398866f, 34.9065850398866f, 938.719727597462f, 32767.5f);
+  datalog_msg_.vector_nav_ins_mag_x_ut = Scale(ref.state_est.vector_nav_ins.mag_ut[0], -250.0f, 250.0f, 131.07f, 32767.5f);
+  datalog_msg_.vector_nav_ins_mag_y_ut = Scale(ref.state_est.vector_nav_ins.mag_ut[1], -250.0f, 250.0f, 131.07f, 32767.5f);
+  datalog_msg_.vector_nav_ins_mag_z_ut = Scale(ref.state_est.vector_nav_ins.mag_ut[2], -250.0f, 250.0f, 131.07f, 32767.5f);
+  datalog_msg_.vector_nav_ins_north_vel_mps = Scale(ref.state_est.vector_nav_ins.ned_vel_mps[0], -60.0f, 60.0f, 136.525f, 8191.5f);
+  datalog_msg_.vector_nav_ins_east_vel_mps = Scale(ref.state_est.vector_nav_ins.ned_vel_mps[1], -60.0f, 60.0f, 136.525f, 8191.5f);
+  datalog_msg_.vector_nav_ins_down_vel_mps = Scale(ref.state_est.vector_nav_ins.ned_vel_mps[2], -60.0f, 60.0f, 136.525f, 8191.5f);
+  datalog_msg_.vector_nav_ins_lat_rad = Scale(ref.state_est.vector_nav_ins.lat_rad, -bfs::BFS_PI<double>, bfs::BFS_PI<double>, 10937044409.0637, 34359738367.5);
+  datalog_msg_.vector_nav_ins_lon_rad = Scale(ref.state_est.vector_nav_ins.lon_rad, -bfs::BFS_PI<double>, bfs::BFS_PI<double>, 10937044409.0637, 34359738367.5);
   #endif
 
   /* AUX INS data */
-  datalog_msg_.aux_ins_home_alt_wgs84_m = Scale(ref.aux_ins.home_alt_wgs84_m, -500.0f, 5000.0f, 190.65f, 95324.9999999999f);
-  datalog_msg_.aux_ins_gnd_spd_mps = Scale(ref.aux_ins.gnd_spd_mps, 0.0f, 60.0f, 136.516666666667f, 0.0f);
-  datalog_msg_.aux_ins_gnd_track_rad = Scale(ref.aux_ins.gnd_track_rad, -bfs::BFS_PI<float>, bfs::BFS_PI<float>, 10430.2191955274f, 32767.5f);
-  datalog_msg_.aux_ins_flight_path_rad = Scale(ref.aux_ins.flight_path_rad, -bfs::BFS_PI<float> / 2.0f, bfs::BFS_PI<float> / 2.0f, 10430.0600405843f, 16383.5f);
-  datalog_msg_.aux_ins_home_lat_rad = Scale(ref.aux_ins.home_lat_rad, -bfs::BFS_PI<double>, bfs::BFS_PI<double>, 10937044409.0637, 34359738367.5);
-  datalog_msg_.aux_ins_home_lon_rad = Scale(ref.aux_ins.home_lon_rad, -bfs::BFS_PI<double>, bfs::BFS_PI<double>, 10937044409.0637, 34359738367.5);
-  datalog_msg_.aux_ins_ned_pos_north_m = Scale(ref.aux_ins.ned_pos_m[0], -50000.0, 50000.0, 1342.17727, 67108863.5);
-  datalog_msg_.aux_ins_ned_pos_east_m = Scale(ref.aux_ins.ned_pos_m[1], -50000.0, 50000.0, 1342.17727, 67108863.5);
-  datalog_msg_.aux_ins_ned_pos_down_m = Scale(ref.aux_ins.ned_pos_m[2], -5000.0, 500.0, 1525.20127272727, 7626006.36363636);
+  datalog_msg_.aux_ins_home_alt_wgs84_m = Scale(ref.state_est.aux_ins.home_alt_wgs84_m, -500.0f, 5000.0f, 190.65f, 95324.9999999999f);
+  datalog_msg_.aux_ins_gnd_spd_mps = Scale(ref.state_est.aux_ins.gnd_spd_mps, 0.0f, 60.0f, 136.516666666667f, 0.0f);
+  datalog_msg_.aux_ins_gnd_track_rad = Scale(ref.state_est.aux_ins.gnd_track_rad, -bfs::BFS_PI<float>, bfs::BFS_PI<float>, 10430.2191955274f, 32767.5f);
+  datalog_msg_.aux_ins_flight_path_rad = Scale(ref.state_est.aux_ins.flight_path_rad, -bfs::BFS_PI<float> / 2.0f, bfs::BFS_PI<float> / 2.0f, 10430.0600405843f, 16383.5f);
+  datalog_msg_.aux_ins_home_lat_rad = Scale(ref.state_est.aux_ins.home_lat_rad, -bfs::BFS_PI<double>, bfs::BFS_PI<double>, 10937044409.0637, 34359738367.5);
+  datalog_msg_.aux_ins_home_lon_rad = Scale(ref.state_est.aux_ins.home_lon_rad, -bfs::BFS_PI<double>, bfs::BFS_PI<double>, 10937044409.0637, 34359738367.5);
+  datalog_msg_.aux_ins_ned_pos_north_m = Scale(ref.state_est.aux_ins.ned_pos_m[0], -50000.0, 50000.0, 1342.17727, 67108863.5);
+  datalog_msg_.aux_ins_ned_pos_east_m = Scale(ref.state_est.aux_ins.ned_pos_m[1], -50000.0, 50000.0, 1342.17727, 67108863.5);
+  datalog_msg_.aux_ins_ned_pos_down_m = Scale(ref.state_est.aux_ins.ned_pos_m[2], -5000.0, 500.0, 1525.20127272727, 7626006.36363636);
 
   /* ADC */
-  datalog_msg_.adc_static_pres_pa = Scale(ref.adc.static_pres_pa, 60000.0f, 120000.0f, 1.09225f, -65535.0f);
-  datalog_msg_.adc_diff_pres_pa = Scale(ref.adc.diff_pres_pa, 0.0f, 2000.0f, 32.7675f, 0.0f);
-  datalog_msg_.adc_pres_alt_m = Scale(ref.adc.pres_alt_m, -500.0f, 5000.0f, 11.9154545454545f, 5957.72727272727f);
-  datalog_msg_.adc_rel_alt_m = Scale(ref.adc.rel_alt_m, -500.0f, 5000.0f, 11.9154545454545f, 5957.72727272727f);
-  datalog_msg_.adc_ias_mps = Scale(ref.adc.ias_mps, 0.0f, 60.0f, 17.05f, 0.0f);
+  datalog_msg_.adc_static_pres_pa = Scale(ref.state_est.adc.static_pres_pa, 60000.0f, 120000.0f, 1.09225f, -65535.0f);
+  datalog_msg_.adc_diff_pres_pa = Scale(ref.state_est.adc.diff_pres_pa, 0.0f, 2000.0f, 32.7675f, 0.0f);
+  datalog_msg_.adc_pres_alt_m = Scale(ref.state_est.adc.pres_alt_m, -500.0f, 5000.0f, 11.9154545454545f, 5957.72727272727f);
+  datalog_msg_.adc_rel_alt_m = Scale(ref.state_est.adc.rel_alt_m, -500.0f, 5000.0f, 11.9154545454545f, 5957.72727272727f);
+  datalog_msg_.adc_ias_mps = Scale(ref.state_est.adc.ias_mps, 0.0f, 60.0f, 17.05f, 0.0f);
 
   /* TELEM */
   datalog_msg_.telem_waypoint_frame = ref.telem.flight_plan[ref.telem.current_waypoint].frame;

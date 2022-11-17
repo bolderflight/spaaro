@@ -67,23 +67,16 @@ void run() {
       defined(__FMU_R_V2_BETA__)
   VectorNavRead(&data.sensor.vector_nav_imu, &data.sensor.vector_nav_mag,
                 &data.sensor.vector_nav_static_pres,
-                &data.sensor.vector_nav_gnss, &data.vector_nav_ins);
+                &data.sensor.vector_nav_gnss, &data.state_est.vector_nav_ins);
   #endif
   /* Air data */
-  AdcRun(data.sensor, &data.adc);
+  AdcRun(data.sensor, &data.state_est.adc);
   /* INS */
-  BfsInsRun(data.sensor, &data.bfs_ins);
+  BfsInsRun(data.sensor, &data.state_est.bfs_ins);
   /* Aux INS */
-  AuxInsRun(data, &data.aux_ins);
+  AuxInsRun(data, &data.state_est.aux_ins);
   /* VMS */
-  #if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || \
-      defined(__FMU_R_V2_BETA__)
-  VmsRun(data.sys, data.sensor, data.bfs_ins, data.vector_nav_ins, data.adc,
-         data.telem, &data.vms);
-  #else
-  VmsRun(data.sys, data.sensor, data.bfs_ins, data.adc,
-         data.telem, &data.vms);
-  #endif
+  VmsRun(data.sys, data.sensor, data.state_est, data.telem, &data.vms);
   /* Command effectors */
   EffectorsCmd(data.vms);
   /* Datalog */

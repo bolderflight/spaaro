@@ -29,16 +29,8 @@
 #include "global_defs.h"
 
 void VmsInit();
-#if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
 void VmsRun(const SysData &sys, const SensorData &sensor,
-            const InsData &bfs_ins, const InsData &vector_nav_ins,
-            const AdcData &adc, const TelemData &telem,
+            const StateEstData &state_est, const TelemData &telem,
             VmsData *vms);
-#else
-void VmsRun(const SysData &sys, const SensorData &sensor,
-            const InsData &bfs_ins,
-            const AdcData &adc, const TelemData &telem,
-            VmsData *vms);
-#endif
 
 #endif  // FLIGHT_CODE_INCLUDE_FLIGHT_CONTROL_H_

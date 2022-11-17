@@ -45,14 +45,14 @@ void AuxInsRun(AircraftData & ref, AuxInsData * const data) {
   if (!initialized_) {
     switch (cfg_.ins_source) {
       case AUX_INS_BFS: {
-        ins_ = &ref.bfs_ins;
+        ins_ = &ref.state_est.bfs_ins;
         break;
       }
       #if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || \
           defined(__FMU_R_V2_BETA__)
       case AUX_INS_VECTOR_NAV: {
         if (ref.sensor.vector_nav_gnss.installed) {
-          ins_ = &ref.vector_nav_ins;
+          ins_ = &ref.state_est.vector_nav_ins;
         } else {
           MsgError("Aux INS source set to VectorNav, which is not installed");
         }

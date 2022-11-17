@@ -504,9 +504,7 @@ struct VmsData {
   float aux[NUM_AUX_VAR];
 };
 
-struct AircraftData {
-  SysData sys;
-  SensorData sensor;
+struct StateEstData {
   InsData bfs_ins;
   #if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || \
       defined(__FMU_R_V2_BETA__)
@@ -514,6 +512,12 @@ struct AircraftData {
   #endif
   AuxInsData aux_ins;
   AdcData adc;
+};
+
+struct AircraftData {
+  SysData sys;
+  SensorData sensor;
+  StateEstData state_est;
   TelemData telem;
   VmsData vms;
 };
