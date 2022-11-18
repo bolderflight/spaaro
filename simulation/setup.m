@@ -3,7 +3,7 @@
 % Brian R Taylor
 % brian.taylor@bolderflight.com
 % 
-% Copyright (c) 2021 Bolder Flight Systems
+% Copyright (c) 2022 Bolder Flight Systems
 %
 
 %% Cleanup
@@ -16,10 +16,7 @@ clc;
 run('./config');
 
 %% Add paths
-addpath(genpath('aircraft'));
 addpath(genpath('data'));
-addpath(genpath('matlab'));
-addpath(genpath('models'));
 addpath(genpath('vms'));
 
 %% Specify root folders for autocode and cache
@@ -30,12 +27,17 @@ Simulink.fileGenControl('set', ...
     Simulink.filegen.CodeGenFolderStructure.ModelSpecific, ...
     'createDir', true);
 
-%% Setup aircraft
-run(strcat('./aircraft/', vehicle));
-
 %% Setup FMU
 %% Setup the flight management unit
-if strcmpi(fmu_version, "V2")
+if strcmpi(fmu_version, "MINI-V1")
+    Fmu.version = 4;
+    Fmu.NUM_AIN = 6;
+    frameRate_hz = 100;
+    Telem.NUM_FLIGHT_PLAN_POINTS = 500;
+    Telem.NUM_FENCE_POINTS = 100;
+    Telem.NUM_RALLY_POINTS = 10;
+    load('./data/fmu_mini_v1_bus_defs.mat');
+elseif strcmpi(fmu_version, "V2")
     Fmu.version = 3;
     Fmu.NUM_AIN = 8;
     frameRate_hz = 100;
@@ -61,9 +63,6 @@ else
     load('./data/fmu_v1_bus_defs.mat');
 end
 framePeriod_s = 1/frameRate_hz;
-
-%% Trim
-trim();
 
 %% Create flight plan, fence, and rally point structs
 % Flight plan
