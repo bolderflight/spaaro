@@ -173,7 +173,7 @@ FetchContent_MakeAvailable(framing)
 FetchContent_Declare(
   navigation
   GIT_REPOSITORY https://github.com/bolderflight/navigation.git
-  GIT_TAG v4.0.1
+  GIT_TAG v4.0.2
 )
 FetchContent_MakeAvailable(navigation)
 FetchContent_Declare(
