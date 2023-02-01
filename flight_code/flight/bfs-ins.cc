@@ -41,6 +41,7 @@ MagData *mag_;
 GnssData *gnss_;
 bfs::Iir<float> ax_, ay_, az_, gx_, gy_, gz_, hx_, hy_, hz_;
 Eigen::Vector3f accel_mps2_, gyro_radps_, mag_ut_, ned_vel_, nav_ned_pos_m_;
+Eigen::Vector3f rel_pos_ned_;
 Eigen::Vector3d llh_;
 bfs::Ekf15State ekf_;
 }
@@ -176,7 +177,13 @@ void BfsInsRun(SensorData &ref, InsData * const ptr) {
       llh_[0] = gnss_->lat_rad;
       llh_[1] = gnss_->lon_rad;
       llh_[2] = gnss_->alt_wgs84_m;
-      ekf_.MeasurementUpdate(ned_vel_, llh_);
+      ekf_.MeasurementUpdate_gnss(ned_vel_, llh_);
+      if (gnss_->rel_pos_avail) {
+        rel_pos_ned_[0] = gnss_->rel_pos_ned_m[0];
+        rel_pos_ned_[1] = gnss_->rel_pos_ned_m[1];
+        rel_pos_ned_[2] = gnss_->rel_pos_ned_m[2];
+        ekf_.MeasurementUpdate_moving_base(rel_pos_ned_);
+      }
     }
     ptr->pitch_rad = ekf_.pitch_rad();
     ptr->roll_rad = ekf_.roll_rad();

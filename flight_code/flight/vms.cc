@@ -30,7 +30,7 @@
   #include "filter.h"
   #include "control.h"
   #include "excitation.h"
-  #include "navigation.h"
+  // #include "navigation.h"
   #include "airdata.h"
 #endif
 

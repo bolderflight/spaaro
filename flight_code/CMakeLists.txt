@@ -113,7 +113,7 @@ FetchContent_MakeAvailable(ams5915)
 FetchContent_Declare(
   ubx
   GIT_REPOSITORY https://github.com/bolderflight/ublox.git
-  GIT_TAG v6.0.5
+  GIT_TAG v6.0.6
 )
 FetchContent_MakeAvailable(ubx)
 FetchContent_Declare(
@@ -143,7 +143,7 @@ FetchContent_MakeAvailable(pwm)
 FetchContent_Declare(
   mavlink
   GIT_REPOSITORY https://github.com/bolderflight/mavlink.git
-  GIT_TAG v4.8.7
+  GIT_TAG v4.8.8
 )
 FetchContent_MakeAvailable(mavlink)
 FetchContent_Declare(
@@ -172,8 +172,8 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(framing)
 FetchContent_Declare(
   navigation
-  GIT_REPOSITORY https://github.com/bolderflight/navigation.git
-  GIT_TAG v4.0.2
+  GIT_REPOSITORY https://github.com/flybrianfly/navigation.git
+  GIT_TAG gnss_nav
 )
 FetchContent_MakeAvailable(navigation)
 FetchContent_Declare(
