@@ -30,32 +30,24 @@ Simulink.fileGenControl('set', ...
 %% Setup FMU
 %% Setup the flight management unit
 if strcmpi(fmu_version, "MINI-V1")
-    Fmu.version = 4;
-    Fmu.NUM_AIN = 6;
     frameRate_hz = 100;
     Telem.NUM_FLIGHT_PLAN_POINTS = 500;
     Telem.NUM_FENCE_POINTS = 100;
     Telem.NUM_RALLY_POINTS = 10;
     load('./data/fmu_mini_v1_bus_defs.mat');
 elseif strcmpi(fmu_version, "V2")
-    Fmu.version = 3;
-    Fmu.NUM_AIN = 8;
     frameRate_hz = 100;
     Telem.NUM_FLIGHT_PLAN_POINTS = 500;
     Telem.NUM_FENCE_POINTS = 100;
     Telem.NUM_RALLY_POINTS = 10;
     load('./data/fmu_v2_bus_defs.mat');
 elseif strcmpi(fmu_version, "V2-BETA")
-    Fmu.version = 2;
-    Fmu.NUM_AIN = 8;
     frameRate_hz = 100;
     Telem.NUM_FLIGHT_PLAN_POINTS = 500;
     Telem.NUM_FENCE_POINTS = 100;
     Telem.NUM_RALLY_POINTS = 10;
     load('./data/fmu_v2_beta_bus_defs.mat');
 else
-    Fmu.version = 1;
-    Fmu.NUM_AIN = 2;
     frameRate_hz = 50;
     Telem.NUM_FLIGHT_PLAN_POINTS = 100;
     Telem.NUM_FENCE_POINTS = 50;
@@ -106,4 +98,4 @@ for i = 1:Telem.NUM_RALLY_POINTS
 end
 
 %% Cleanup
-clear vehicle fh_vehicle op_point op_report op_spec opt i;
+clear i;

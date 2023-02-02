@@ -57,7 +57,7 @@ void EffectorsCmd(const VmsData &vms) {
     sbus_data.ch[i] = vms.sbus[i];
   }
   sbus.data(sbus_data);
-  pwm.ch(vms.pwm);
+  // pwm.ch(vms.pwm);
 }
 void EffectorsWrite() {
   /* Write the effector commands */
