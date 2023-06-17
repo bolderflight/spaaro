@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -24,30 +24,40 @@
 */
 
 #include "flight/effectors.h"
-#include "flight/global_defs.h"
+#include "global_defs.h"
+#include "hardware_defs.h"
 #include "flight/config.h"
 #include "flight/msg.h"
+#include "sbus.h"
+#include "pwm.h"
 
 namespace {
 /* Effectors */
-bfs::SbusTx sbus;
-bfs::PwmTx<NUM_PWM_PINS> pwm;
+bfs::SbusTx sbus(&SBUS_UART);
+bfs::SbusData sbus_data = {
+  .lost_frame = false,
+  .failsafe = false,
+  .ch17 = false,
+  .ch18 = false
+};
+bfs::PwmTx<NUM_PWM_PINS> pwm(PWM_PINS);
 }  // namespace
 
 void EffectorsInit() {
   MsgInfo("Intializing effectors...");
   /* Init SBUS */
-  sbus.Init(&SBUS_UART);
+  sbus.Begin();
   /* Init PWM */
-  pwm.Init(PWM_PINS);
+  pwm.Begin();
   MsgInfo("done.\n");
 }
 void EffectorsCmd(const VmsData &vms) {
   /* Set effector commands */
-  sbus.ch(vms.sbus.cnt);
-  sbus.ch17(vms.sbus.ch17);
-  sbus.ch18(vms.sbus.ch18);
-  pwm.ch(vms.pwm.cnt);
+  for (int8_t i = 0; i < bfs::SbusData::NUM_CH; i++) {
+    sbus_data.ch[i] = vms.sbus[i];
+  }
+  sbus.data(sbus_data);
+  pwm.ch(vms.pwm);
 }
 void EffectorsWrite() {
   /* Write the effector commands */

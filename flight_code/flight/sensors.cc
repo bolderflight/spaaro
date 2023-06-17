@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -23,93 +23,104 @@
 * IN THE SOFTWARE.
 */
 
+#include "global_defs.h"
 #include "flight/sensors.h"
-#include "flight/global_defs.h"
-#include "flight/config.h"
 #include "flight/msg.h"
-#include "flight/analog.h"
-#if defined(__FMU_R_V2__)
-#include "flight/battery.h"
+#include "drivers/fmu.h"
+#include "drivers/analog.h"
+#if defined(__FMU_R_V2__) || defined(__FMU_R_MINI_V1__)
+#include "drivers/power-module.h"
 #endif
+#include "drivers/spaaro-lis3mdl.h"
+#include "drivers/spaaro-ams5915.h"
+#include "drivers/spaaro-ublox.h"
+#include "drivers/spaaro-ainstein-usd1.h"
+#include "drivers/spaaro-sbus.h"
 
 namespace {
-/* Whether pitot static is installed */
-bool pitot_static_installed_;
-/* Sensors */
-bfs::SbusRx inceptor;
-bfs::Mpu9250 imu;
-bfs::Ublox gnss;
-bfs::Bme280 fmu_static_pres;
-bfs::Ams5915 pitot_static_pres;
-bfs::Ams5915 pitot_diff_pres;
+/* External mag */
+SpaaroLis3mdl ext_mag;
+/* External pressure transducer */
+SpaaroAms5915 ext_pres1(&I2C_BUS);
+SpaaroAms5915 ext_pres2(&I2C_BUS);
+SpaaroAms5915 ext_pres3(&I2C_BUS);
+SpaaroAms5915 ext_pres4(&I2C_BUS);
+/* External GNSS receivers */
+#if defined(__FMU_R_V1__)
+SpaaroUbx ext_gnss1(&GNSS_UART);
+#elif defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
+SpaaroUbx ext_gnss1(&GNSS1_UART);
+SpaaroUbx ext_gnss2(&GNSS2_UART);
+#elif defined(__FMU_R_MINI_V1__)
+SpaaroUbx ext_gnss1(&GNSS1_UART);
+SpaaroUbx ext_gnss2(&GNSS2_UART);
+#endif
+#if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
+SpaaroAinsteinUsd1 rad_alt(&AUX_UART);
+#elif defined(__FMU_R_MINI_V1__)
+SpaaroAinsteinUsd1 rad_alt(&AUX_UART);
+#endif
+SpaaroSbus incept(&SBUS_UART);
+/* Sensor calibration */
+elapsedMillis t_ms;
+inline constexpr int32_t CAL_TIME_MS = 5000;
 }  // namespace
 
 void SensorsInit(const SensorConfig &cfg) {
-  pitot_static_installed_ = cfg.pitot_static_installed;
-  MsgInfo("Intializing sensors...");
-  /* Initialize IMU */
-  if (!imu.Init(cfg.imu)) {
-    MsgError("Unable to initialize IMU.");
-  }
-  /* Initialize GNSS */
-  if (!gnss.Init(cfg.gnss)) {
-    MsgError("Unable to initialize GNSS.");
-  }
-  /* Initialize pressure transducers */
-  if (pitot_static_installed_) {
-    if (!pitot_static_pres.Init(cfg.static_pres)) {
-      MsgError("Unable to initialize static pressure sensor.");
-    }
-    if (!pitot_diff_pres.Init(cfg.diff_pres)) {
-      MsgError("Unable to initialize differential pressure sensor.");
-    }
-  } else {
-    if (!fmu_static_pres.Init(cfg.static_pres)) {
-      MsgError("Unable to initialize static pressure sensor.");
-    }
-  }
-  MsgInfo("done.\n");
-  /* Initialize inceptors */
-  MsgInfo("Initializing inceptors...");
-  while (!inceptor.Init(&SBUS_UART)) {}
+  MsgInfo("Initializing sensors...");
+  incept.Init();
+  FmuInit(cfg.fmu);
+  ext_mag.Init(cfg.ext_mag);
+  ext_pres1.Init(cfg.ext_pres1);
+  ext_pres2.Init(cfg.ext_pres2);
+  ext_pres3.Init(cfg.ext_pres3);
+  ext_pres4.Init(cfg.ext_pres4);
+  #if defined(__FMU_R_V1__)
+  ext_gnss1.Init(cfg.ext_gnss1);
+  #elif defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__) || \
+        defined(__FMU_R_MINI_V1__)
+  ext_gnss1.Init(cfg.ext_gnss1);
+  ext_gnss2.Init(cfg.ext_gnss2);
+  rad_alt.Init(cfg.rad_alt);
+  #endif
+  #if defined(__FMU_R_V2__) || defined(__FMU_R_MINI_V1__)
+  PowerModuleInit(cfg.power_module);
+  #endif
   MsgInfo("done.\n");
 }
+
+void SensorsCal() {
+  MsgInfo("Calibrating sensors...");
+  t_ms = 0;
+  while (t_ms < CAL_TIME_MS) {
+    FmuCal();
+    ext_pres1.Cal();
+    ext_pres2.Cal();
+    ext_pres3.Cal();
+    ext_pres4.Cal();
+  }
+  MsgInfo("done.\n");
+}
+
 void SensorsRead(SensorData * const data) {
   if (!data) {return;}
-  /* Read inceptors */
-  data->inceptor.new_data = inceptor.Read();
-  if (data->inceptor.new_data) {
-    data->inceptor.ch = inceptor.ch();
-    data->inceptor.ch17 = inceptor.ch17();
-    data->inceptor.ch18 = inceptor.ch18();
-    data->inceptor.lost_frame = inceptor.lost_frame();
-    data->inceptor.failsafe = inceptor.failsafe();
-  }
-  /* Read IMU */
-  if (!imu.Read(&data->imu)) {
-    MsgWarning("Unable to read IMU data.\n");
-  }
-  /* Read GNSS */
-  gnss.Read(&data->gnss);
-  /* Set whether pitot static is installed */
-  data->pitot_static_installed = pitot_static_installed_;
-  /* Read pressure transducers */
-  if (pitot_static_installed_) {
-    if (!pitot_static_pres.Read(&data->static_pres)) {
-      MsgError("Unable to read pitot static pressure data.\n");
-    }
-    if (!pitot_diff_pres.Read(&data->diff_pres)) {
-      MsgError("Unable to read pitot diff pressure data.\n");
-    }
-  } else {
-    if (!fmu_static_pres.Read(&data->static_pres)) {
-      MsgError("Unable to read FMU static pressure data.\n");
-    }
-  }
-  /* Read analog channels */
-  AnalogRead(&data->adc);
-  /* Read battery voltage / current */
-  #if defined(__FMU_R_V2__)
-  BatteryRead(&data->power_module);
+  incept.Read(&data->inceptor);
+  FmuRead(&data->fmu_imu, &data->fmu_mag, &data->fmu_static_pres);
+  AnalogRead(&data->analog);
+  ext_mag.Read(&data->ext_mag);
+  ext_pres1.Read(&data->ext_pres1);
+  ext_pres2.Read(&data->ext_pres2);
+  ext_pres3.Read(&data->ext_pres3);
+  ext_pres4.Read(&data->ext_pres4);
+  #if defined(__FMU_R_V1__)
+  ext_gnss1.Read(&data->ext_gnss1);
+  #elif defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__) || \
+        defined(__FMU_R_MINI_V1__)
+  ext_gnss1.Read(&data->ext_gnss1);
+  ext_gnss2.Read(&data->ext_gnss2);
+  rad_alt.Read(&data->rad_alt);
+  #endif
+  #if defined(__FMU_R_V2__) || defined(__FMU_R_MINI_V1__)
+  PowerModuleRead(&data->power_module);
   #endif
 }

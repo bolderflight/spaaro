@@ -1,0 +1,3 @@
+repository='https://github.com/bolderflight/eigen.git'
+module=''
+tag='origin'

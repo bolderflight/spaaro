@@ -1,0 +1,6 @@
+branches info:
+	opflow_dev
+		merge into main_dev eventually (all c++ stuff)
+	upgrade
+		backup for working super (kill once super_debug meged into main_dev)
+

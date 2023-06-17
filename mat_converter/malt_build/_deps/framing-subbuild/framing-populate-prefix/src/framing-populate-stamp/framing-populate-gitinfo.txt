@@ -1,0 +1,3 @@
+repository='https://github.com/bolderflight/framing.git'
+module=''
+tag='origin'

@@ -52,6 +52,9 @@ Aircraft.Inceptor.throttle_e_stop = 7;
 Aircraft.Inceptor.engine_cmd = 8;
 Aircraft.Inceptor.rtl = 9;
 
+% Inceptor deadband
+Aircraft.Inceptor.deadband = 0.1;
+
 %% Effectors
 % Number of PWM channels
 Aircraft.Eff.nPwm = 8;
@@ -104,10 +107,10 @@ Aircraft.Motor.kq = 0.1495;     %N-m/A
 Aircraft.Motor.motor_yaw_factor = 0.1;
 Aircraft.Motor.mix = [0.7,  -0.2,     0, -Aircraft.Motor.motor_yaw_factor;...
                       0.7,   0.2,     0,  Aircraft.Motor.motor_yaw_factor;...
-                      0.7,   0.1,  0.1, -Aircraft.Motor.motor_yaw_factor;...
-                      0.7,  -0.1, -0.1,  Aircraft.Motor.motor_yaw_factor;...
-                      0.7,  -0.1,  0.1, Aircraft.Motor.motor_yaw_factor;...
-                      0.7,   0.1, -0.1, -Aircraft.Motor.motor_yaw_factor;
+                      0.7,   0.1,  0.2, -Aircraft.Motor.motor_yaw_factor;...
+                      0.7,  -0.1, -0.2,  Aircraft.Motor.motor_yaw_factor;...
+                      0.7,  -0.1,  0.2, Aircraft.Motor.motor_yaw_factor;...
+                      0.7,   0.1, -0.2, -Aircraft.Motor.motor_yaw_factor;
                       0, 0, 0, 0; 
                       0, 0, 0, 0];
 
@@ -188,11 +191,16 @@ Aircraft.Sensors.DiffPres.noise_pa =  0.02 * (Aircraft.Sensors.DiffPres.upper_li
 
 %% Controller parameters
 % allow values to come from telem bus or be hardcoded from this file
-Aircraft.Control.hardcode_values = true;
+Aircraft.Control.hardcode_values = false;
 
 % Motor minimum throttle 
 % spin motor slowly when armed for safety reasons and anti lock-up
 Aircraft.Control.motor_spin_min = 0.15; 
+
+% Thorttle stick minimum
+% Mimimum valid value of the throttle stick so that arming and gain reset
+% occurs
+Aircraft.Control.throttle_min = 0.05;
 
 % Motor ramp time [s]
 % Time so slowly ramp motor from 0 to motor_spin_min. Prevent initial
@@ -212,7 +220,7 @@ Aircraft.Control.D_yaw_rate = 0.02;
 
 %% Pitch controller parameters
 % Max pitch angle [rad]
-Aircraft.Control.pitch_angle_lim = 0.175;  %~10deg
+Aircraft.Control.pitch_angle_lim = 0.35;  %~20deg
 
 % Pitch cmd controller gains
 Aircraft.Control.P_pitch_angle = 0.04;
@@ -224,7 +232,7 @@ Aircraft.Control.pitch_rate_max = 1; %~60deg/s
 
 %% Roll controller parameters
 % Max roll angle [rad]
-Aircraft.Control.roll_angle_lim = 0.175;  %~10deg
+Aircraft.Control.roll_angle_lim = 0.35;  %~20deg
 
 % Roll cmd controller gains
 Aircraft.Control.P_roll_angle = 0.04;

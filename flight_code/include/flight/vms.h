@@ -26,11 +26,11 @@
 #ifndef FLIGHT_CODE_INCLUDE_FLIGHT_CONTROL_H_
 #define FLIGHT_CODE_INCLUDE_FLIGHT_CONTROL_H_
 
-#include "flight/global_defs.h"
+#include "global_defs.h"
 
 void VmsInit();
 void VmsRun(const SysData &sys, const SensorData &sensor,
-            const NavData &nav, const TelemData &telem,
+            const StateEstData &state_est, const TelemData &telem,
             VmsData *vms);
 
 #endif  // FLIGHT_CODE_INCLUDE_FLIGHT_CONTROL_H_

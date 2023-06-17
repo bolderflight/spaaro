@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2021 Bolder Flight Systems Inc
+* Copyright (c) 2022 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -27,8 +27,10 @@
 #ifdef __AUTOCODE__
   #include "./autocode.h"
 #else
-  #include "control/control.h"
-  #include "excitation/excitation.h"
+  #include "filter.h"
+  #include "control.h"
+  #include "excitation.h"
+  #include "airdata.h"
 #endif
 
 namespace {
@@ -44,10 +46,10 @@ void VmsInit() {
 #endif
 }
 void VmsRun(const SysData &sys, const SensorData &sensor,
-            const NavData &nav, const TelemData &telem,
+            const StateEstData &state_est, const TelemData &telem,
             VmsData *vms) {
   if (!vms) {return;}
 #ifdef __AUTOCODE__
-  autocode.Run(sys, sensor, nav, telem, vms);
+  autocode.Run(sys, sensor, state_est, telem, vms);
 #endif
 }
