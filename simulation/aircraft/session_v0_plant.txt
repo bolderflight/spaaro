@@ -1,0 +1,8 @@
+#########
+Summary of Forces and Moments modelled in session_vo for quadplane sim.
+#########
+
+Aerodynamics
+============
+1. Calculating the coefficients using intercepts and derivatives obtained from OpenVSP for fixed wing. Coefficients are assumed linear with alpha. Using the base values at alpha = 0 deg, and using the derivatives at alpha = 4 deg (because derivatives are more consistent after ~2 deg and they are assumed linear). 
+
