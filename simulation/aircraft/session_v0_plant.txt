@@ -1,8 +1,73 @@
-#########
+************
 Summary of Forces and Moments modelled in session_vo for quadplane sim.
-#########
+************
 
 Aerodynamics
-============
-1. Calculating the coefficients using intercepts and derivatives obtained from OpenVSP for fixed wing. Coefficients are assumed linear with alpha. Using the base values at alpha = 0 deg, and using the derivatives at alpha = 4 deg (because derivatives are more consistent after ~2 deg and they are assumed linear). 
+************
+1. Calculating the coefficients using intercepts and derivatives obtained from OpenVSP for fixed wing. Coefficients are assumed linear with alpha. Using the base values at alpha = 0 deg, and using the derivatives at alpha = 4 deg (because derivatives are more consistent after ~2 deg and they are assumed linear).
+	CL (alpha, q, elevator_def)
+	CD (alpha, q, elevator_def)
+	CY (beta, p, q, r, aileron_def, rudder_def)
+	Cl (beta, p, q, r, aileron_def, rudder_def)
+	Cm (alpha, q, elevator_def)
+	Cn (beta, p, q, r, aileron_def, rudder_def)
+Note : Run the simulation/utils/aero_coef.py script to get these coefficients and derivatives. The python script takes .flt file as input. For control derivatives, manually pick the derivatives from .stab file. 
+-----------
+2. For hover, the best approximation I found was a linear Drag = k * V_b model. But, I didn't find a quick and easy way to estimate k. In the future, we might want to get this parameter with SystemID after flight test. 
+-----------
+3. Blade flapping and other prop/rotor/body interactions are ignored. 
 
+
+************
+Propulsion
+************
+1. For Hover, polynomial fits are created for thrust and torque output using Tmotor static performance data. These poly fits directly map throttle percent [0,1] to thrust_N and torque_Nm. Moment due to thrust offset from C.G is included in the total moment. Total body thrust and moments are calculated based on motor alignment, position, and spin direction.
+	T-motor MN605-s with 21x6 prop. 
+-----------
+2. For forward flight, equivalent circuit model of a motor is used (See simulation/references). throttle_percent [0,1] * total_voltage acts as input to the motor, which directly affects propeller RPM. 
+At equilibrium RPM, motor shaft torque output is equal to the aerodynamic torque on the propeller. In this case, motor/prop's torque contributes to the external body moment. When the throttle is increased, motor shaft torque output increases until aero torque on the propeller matches the torque at a new equilibrium RPM. At this transient phase, the net torque also contributes to the body moment. 
+	T-motor AT5220-B with APC 19x10 prop. 
+-----------
+3. Dynamic performance data from APC's database is used to create thrust and power coefficients based on advance ratio. Note that these normalized curves shift up/down for different RPMs. The curve for 4000 RPM (expected trim RPM) is selected and rest is ignored (they are slightly off due to extra effects such as change in Reynolds number). 
+Note: Convert the APC's .data file to .csv and use simulation/utils/get_prop_coefs.m to visualize the normalized thrust and power curves and get polynomial fits. 
+-----------
+4. Propeller thrust is obtained using the thrust coefficient poly fit based on advance ratio.
+-----------
+5. The following moment terms are included
+	a. Moment due to thrust offset from C.G
+	b. Gyroscopic Moment : body_rotation_rate x J_prop_motor * prop_rotation_rate (Stevens)
+	c. Shaft torque output from the motor (-Qm)
+	d. At transient RPM, additional net torque from prop/motor system -(Qm-Q)
+-----------
+6. All forces and moments are adjusted for motor position, alignment, and spin direction and converted to body frame. 
+
+
+************
+Gravity
+************
+1. Simply adjusted to body frame. 
+
+************
+Mass and Geometry
+************
+1. Obtained geometric and mass properties from OpenVSP.
+------------
+2. Calculated center of pressure using the coefficient of moment and lift at two different alpha.
+
+************
+Controller ouputs
+************
+1. Used 8 PWM channels:
+	[1, 5] : motor_cmds
+	(6, 8] : surface_positions_rad
+------------
+2. Motor map. 
+	1 : front-right 
+	2 : rear-left 
+	3 : front-left
+	4 : rear-right
+------------
+3. Surface Map.
+	1 : Aileron deflection
+	2 : Elevator deflection
+	3 : Rudder deflection
