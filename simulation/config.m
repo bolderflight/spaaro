@@ -9,8 +9,8 @@
 %% Definitions
 % Vehicle
 % vehicle = 'sig_kadet';
-% vehicle = 'malt';
-vehicle = 'session_v0';
+ vehicle = 'malt';
+%vehicle = 'session_v0';
 % vehicle = 'super';
 
 % FMU-R version
@@ -25,6 +25,7 @@ else
     throw(ME);
 end
 
+vms_only = true;
 
 %% Target trim conditions
 

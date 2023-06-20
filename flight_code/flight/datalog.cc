@@ -33,7 +33,7 @@
 
 namespace {
 /* Datalog file name */
-static const char * DATA_LOG_NAME_ = "ale";
+static const char * DATA_LOG_NAME_ = "malt1_";
 /* SD card */
 SdFat32 sd_;
 /* Logger object */
@@ -55,7 +55,9 @@ void DatalogInit() {
   if (file_num < 0) {
     MsgError("Unable to initialize datalog.");
   }
-  MsgInfo("done.\n");
+  MsgInfo("done. Log file prefix is ");
+  MsgInfo(DATA_LOG_NAME_);
+  MsgInfo("xx.bfs\n");
 }
 
 template<typename T>

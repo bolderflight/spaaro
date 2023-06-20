@@ -295,6 +295,7 @@ if (FMU STREQUAL "MINI-V1" OR FMU STREQUAL "V2")
       drivers/power-module.cc
   )
 endif()
+
 # Setup autocode
 if (DEFINED AUTOCODE)
 	include_directories(autocode/${AUTOCODE}_ert_rtw)
@@ -302,12 +303,12 @@ if (DEFINED AUTOCODE)
 		PUBLIC
 			autocode/${AUTOCODE}_ert_rtw/autocode.cpp
 			autocode/${AUTOCODE}_ert_rtw/autocode.h
-			autocode/${AUTOCODE}_ert_rtw/ale_speed_controller.cpp
-			autocode/${AUTOCODE}_ert_rtw/ale_speed_controller.h
-			autocode/${AUTOCODE}_ert_rtw/rt_roundf.cpp
-			autocode/${AUTOCODE}_ert_rtw/rt_roundf.h
-			autocode/${AUTOCODE}_ert_rtw/rtwtypes.h
-			autocode/${AUTOCODE}_ert_rtw/const_params.cpp
+			#autocode/${AUTOCODE}_ert_rtw/ale_speed_controller.cpp
+			#autocode/${AUTOCODE}_ert_rtw/ale_speed_controller.h
+			#autocode/${AUTOCODE}_ert_rtw/rt_roundf.cpp
+			#autocode/${AUTOCODE}_ert_rtw/rt_roundf.h
+			#autocode/${AUTOCODE}_ert_rtw/rtwtypes.h
+			#autocode/${AUTOCODE}_ert_rtw/const_params.cpp
 	)
 	add_definitions(-D__AUTOCODE__)
 endif()
