@@ -1,6 +1,6 @@
 /*
-* Brian R Taylor
-* brian.taylor@bolderflight.com
+* Tuan Luong    
+* tdluong@crimson.ua.edu
 * 
 * Copyright (c) 2022 Bolder Flight Systems Inc
 *
@@ -23,47 +23,24 @@
 * IN THE SOFTWARE.
 */
 
-#include "flight/config.h"
-#include "hardware_defs.h"
-#include "global_defs.h"
+#ifndef FLIGHT_CODE_INCLUDE_DRIVERS_MATEK3901_H_
+#define FLIGHT_CODE_INCLUDE_DRIVERS_MATEK3901_H_
 
-/* Debug */
-bool DEBUG = true;
-/* Aircraft config */
-AircraftConfig config = {
-  .sensor = {
-    .fmu = {
-      .dlpf_hz = DLPF_BANDWIDTH_41HZ,
-      .accel_bias_mps = {0, 0, 0},
-      .mag_bias_ut = {0, 0, 0},
-      .accel_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-      .mag_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-      .rotation = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}
-    },
-    .ext_gnss1 = {
-      .baud = 115200
-    },
-    .ext_gnss2 = {
-      .baud = -1
-    },
-    .opflow = {
-      .device = OPFLOW_MATEK3901
-    },
-    .power_module = {
-      .volts_per_volt = 2.723f,
-      .amps_per_volt = 50.0f
-    }
-  },
-  .bfs_ins = {
-    .imu_source = INS_IMU_FMU,
-    .mag_source = INS_MAG_FMU,
-    .gnss_source = INS_GNSS_EXT_GNSS1,
-    .accel_cutoff_hz = 40.0f,
-    .gyro_cutoff_hz = 40.0f,
-    .hardcoded_heading = 4.71239f
-  },
-  .telem = {
-    .baud = 57600,
-    .aircraft_type = bfs::MULTIROTOR
-  }
+#include "global_defs.h"
+#include "hardware_defs.h"
+#include "matek3901.h"
+
+class SpaaroMatek3901 {
+ public:
+  SpaaroMatek3901(HardwareSerial *bus) : opflow_(bus) {}
+  void Init(const OpFlowConfig &cfg);
+  void Read(OpFlowData * const data);
+
+ private:
+  bool installed_ = false;
+  static constexpr int8_t UPDATE_PERIOD_MS_ = 20;
+  elapsedMillis t_healthy_ms_;
+  bfs::Matek3901 opflow_;
 };
+
+#endif  // FLIGHT_CODE_INCLUDE_DRIVERS_MATEK3901_H_

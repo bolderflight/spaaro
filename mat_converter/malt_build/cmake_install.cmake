@@ -1,4 +1,4 @@
-# Install script for directory: /home/tuan/Projects/super/ua_spaaro/mat_converter
+# Install script for directory: /home/tuan/Projects/ua_spaaro/mat_converter
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,17 +44,17 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/framing-build/cmake_install.cmake")
+  include("/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/framing-build/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/mat_v4-build/cmake_install.cmake")
+  include("/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/mat_v4-build/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/units-build/cmake_install.cmake")
+  include("/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/units-build/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -65,5 +65,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

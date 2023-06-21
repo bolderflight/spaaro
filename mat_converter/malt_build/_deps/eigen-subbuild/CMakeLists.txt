@@ -21,8 +21,8 @@ set_property(GLOBAL PROPERTY _CMAKE_FindGit_GIT_EXECUTABLE_VERSION
 include(ExternalProject)
 ExternalProject_Add(eigen-populate
                      "UPDATE_DISCONNECTED" "False" "GIT_REPOSITORY" "https://github.com/bolderflight/eigen.git" "GIT_TAG" "v2.0.0"
-                    SOURCE_DIR          "/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/eigen-src"
-                    BINARY_DIR          "/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/eigen-build"
+                    SOURCE_DIR          "/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/eigen-src"
+                    BINARY_DIR          "/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/eigen-build"
                     CONFIGURE_COMMAND   ""
                     BUILD_COMMAND       ""
                     INSTALL_COMMAND     ""

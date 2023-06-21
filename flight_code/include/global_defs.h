@@ -146,6 +146,15 @@ struct RadAltConfig {
   RadAlt device = RAD_ALT_NONE;
 };
 
+enum OpFlow {
+  OPFLOW_NONE,
+  OPFLOW_MATEK3901
+};
+
+struct OpFlowConfig{
+  OpFlow device = OPFLOW_NONE;
+};
+
 #if defined(__FMU_R_MINI_V1__) || defined(__FMU_R_V2__)
 struct PowerModuleConfig {
   float volts_per_volt = 15.3f;
@@ -167,6 +176,7 @@ struct SensorConfig {
   PresConfig ext_pres4;
   #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__) || \
       defined(__FMU_R_MINI_V1__)
+  OpFlowConfig opflow;
   RadAltConfig rad_alt;
   #endif
   #if defined(__FMU_R_MINI_V1__) || defined(__FMU_R_V2__)
@@ -369,6 +379,17 @@ struct MagData {
   float mag_ut[3];
 };
 
+struct OpFlowData {
+  bool installed = false;
+  bool healthy;
+  bool new_data;
+  int32_t mot_x;
+  int32_t mot_y;
+  uint8_t sur_qual;
+  int32_t range_mm;
+  uint8_t range_qual;
+};
+
 struct GnssData {
   bool installed = false;
   bool healthy;
@@ -441,6 +462,7 @@ struct SensorData {
   PresData ext_pres4;
   #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__) || \
       defined(__FMU_R_MINI_V1__)
+  OpFlowData opflow;
   RadAltData rad_alt;
   #endif
   AnalogData analog;

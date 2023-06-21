@@ -199,6 +199,15 @@ struct DatalogMsg {
   uint64_t rad_alt_new_data : 1;
   uint64_t rad_alt_snr : 8;
   uint64_t rad_alt_alt_m : 11;
+
+  uint64_t opflow_installed : 1;
+  uint64_t opflow_healthy : 1;
+  uint64_t opflow_new_data : 1;
+  uint64_t opflow_sur_qual : 8;
+  uint64_t opflow_range_qual : 8;
+  uint64_t opflow_mot_x : 15;
+  uint64_t opflow_mot_y : 15;
+  uint64_t opflow_range_mm : 15;
   #endif
   uint64_t ain0_v : 12;
   uint64_t ain1_v : 12;

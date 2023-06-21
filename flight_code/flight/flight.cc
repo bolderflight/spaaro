@@ -62,6 +62,8 @@ void run() {
   SysRead(&data.sys);
   /* Sensor data */
   SensorsRead(&data.sensor);
+  std::string dbg = std::to_string(data.sensor.opflow.mot_x) +"\t"+ std::to_string(data.sensor.opflow.mot_y) + "\t" + std::to_string(data.sensor.opflow.range_mm)+"\n";
+  MsgInfo(dbg.c_str());
   /* VectorNav */
   #if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || \
       defined(__FMU_R_V2_BETA__)
