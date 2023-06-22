@@ -36,6 +36,7 @@
 #include "drivers/spaaro-ublox.h"
 #include "drivers/spaaro-ainstein-usd1.h"
 #include "drivers/spaaro-sbus.h"
+#include "drivers/spaaro-matek3901.h"
 
 namespace {
 /* External mag */
@@ -58,7 +59,8 @@ SpaaroUbx ext_gnss2(&GNSS2_UART);
 #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
 SpaaroAinsteinUsd1 rad_alt(&AUX_UART);
 #elif defined(__FMU_R_MINI_V1__)
-SpaaroAinsteinUsd1 rad_alt(&AUX_UART);
+SpaaroMatek3901 opflow(&AUX_UART);
+SpaaroAinsteinUsd1 rad_alt(&GNSS2_UART);
 #endif
 SpaaroSbus incept(&SBUS_UART);
 /* Sensor calibration */
@@ -81,6 +83,7 @@ void SensorsInit(const SensorConfig &cfg) {
         defined(__FMU_R_MINI_V1__)
   ext_gnss1.Init(cfg.ext_gnss1);
   ext_gnss2.Init(cfg.ext_gnss2);
+  opflow.Init(cfg.opflow);
   rad_alt.Init(cfg.rad_alt);
   #endif
   #if defined(__FMU_R_V2__) || defined(__FMU_R_MINI_V1__)
@@ -118,7 +121,7 @@ void SensorsRead(SensorData * const data) {
         defined(__FMU_R_MINI_V1__)
   ext_gnss1.Read(&data->ext_gnss1);
   ext_gnss2.Read(&data->ext_gnss2);
-  rad_alt.Read(&data->rad_alt);
+  opflow.Read(&data->opflow);
   #endif
   #if defined(__FMU_R_V2__) || defined(__FMU_R_MINI_V1__)
   PowerModuleRead(&data->power_module);

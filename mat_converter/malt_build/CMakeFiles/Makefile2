@@ -54,10 +54,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/tuan/Projects/super/ua_spaaro/mat_converter
+CMAKE_SOURCE_DIR = /home/tuan/Projects/ua_spaaro/mat_converter
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build
+CMAKE_BINARY_DIR = /home/tuan/Projects/ua_spaaro/mat_converter/malt_build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -164,14 +164,14 @@ _deps/units-build/clean:
 CMakeFiles/mat_converter.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mat_converter.dir/build.make CMakeFiles/mat_converter.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mat_converter.dir/build.make CMakeFiles/mat_converter.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/CMakeFiles --progress-num=1,2 "Built target mat_converter"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/CMakeFiles --progress-num=1,2 "Built target mat_converter"
 .PHONY : CMakeFiles/mat_converter.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/mat_converter.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/tuan/Projects/ua_spaaro/mat_converter/malt_build/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/mat_converter.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/tuan/Projects/ua_spaaro/mat_converter/malt_build/CMakeFiles 0
 .PHONY : CMakeFiles/mat_converter.dir/rule
 
 # Convenience name for target.

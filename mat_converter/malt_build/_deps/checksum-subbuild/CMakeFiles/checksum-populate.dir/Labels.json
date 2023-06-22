@@ -2,37 +2,37 @@
 	"sources" : 
 	[
 		{
-			"file" : "/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/CMakeFiles/checksum-populate"
+			"file" : "/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/CMakeFiles/checksum-populate"
 		},
 		{
-			"file" : "/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/CMakeFiles/checksum-populate.rule"
+			"file" : "/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/CMakeFiles/checksum-populate.rule"
 		},
 		{
-			"file" : "/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/CMakeFiles/checksum-populate-complete.rule"
+			"file" : "/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/CMakeFiles/checksum-populate-complete.rule"
 		},
 		{
-			"file" : "/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/checksum-populate-prefix/src/checksum-populate-stamp/checksum-populate-build.rule"
+			"file" : "/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/checksum-populate-prefix/src/checksum-populate-stamp/checksum-populate-build.rule"
 		},
 		{
-			"file" : "/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/checksum-populate-prefix/src/checksum-populate-stamp/checksum-populate-configure.rule"
+			"file" : "/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/checksum-populate-prefix/src/checksum-populate-stamp/checksum-populate-configure.rule"
 		},
 		{
-			"file" : "/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/checksum-populate-prefix/src/checksum-populate-stamp/checksum-populate-download.rule"
+			"file" : "/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/checksum-populate-prefix/src/checksum-populate-stamp/checksum-populate-download.rule"
 		},
 		{
-			"file" : "/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/checksum-populate-prefix/src/checksum-populate-stamp/checksum-populate-install.rule"
+			"file" : "/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/checksum-populate-prefix/src/checksum-populate-stamp/checksum-populate-install.rule"
 		},
 		{
-			"file" : "/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/checksum-populate-prefix/src/checksum-populate-stamp/checksum-populate-mkdir.rule"
+			"file" : "/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/checksum-populate-prefix/src/checksum-populate-stamp/checksum-populate-mkdir.rule"
 		},
 		{
-			"file" : "/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/checksum-populate-prefix/src/checksum-populate-stamp/checksum-populate-patch.rule"
+			"file" : "/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/checksum-populate-prefix/src/checksum-populate-stamp/checksum-populate-patch.rule"
 		},
 		{
-			"file" : "/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/checksum-populate-prefix/src/checksum-populate-stamp/checksum-populate-test.rule"
+			"file" : "/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/checksum-populate-prefix/src/checksum-populate-stamp/checksum-populate-test.rule"
 		},
 		{
-			"file" : "/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/checksum-populate-prefix/src/checksum-populate-stamp/checksum-populate-update.rule"
+			"file" : "/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/checksum-subbuild/checksum-populate-prefix/src/checksum-populate-stamp/checksum-populate-update.rule"
 		}
 	],
 	"target" : 

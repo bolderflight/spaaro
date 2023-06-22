@@ -243,6 +243,12 @@ FetchContent_Declare(
   GIT_TAG v2.0.2
 )
 FetchContent_MakeAvailable(imap)
+FetchContent_Declare(
+  matek3901
+  GIT_REPOSITORY https://github.com/TL-4319/matek3901
+  GIT_TAG v1.1.0
+)
+FetchContent_MakeAvailable(matek3901)
 # Add the executable
 add_executable(flight
   include/global_defs.h
@@ -266,6 +272,7 @@ add_executable(flight
   include/drivers/spaaro-sbus.h
   include/drivers/analog.h
   include/drivers/spaaro-vector-nav.h
+  include/drivers/spaaro-matek3901.h
   flight/flight.cc
   flight/msg.cc
   flight/${CONFIG_CC}
@@ -286,6 +293,7 @@ add_executable(flight
   drivers/spaaro-sbus.cc
   drivers/analog.cc
   drivers/spaaro-vector-nav.cc
+  drivers/spaaro-matek3901.cc
 )
 if (FMU STREQUAL "MINI-V1" OR FMU STREQUAL "V2")
   # FMU-R mini V1 | FMU-R-V2
@@ -295,6 +303,7 @@ if (FMU STREQUAL "MINI-V1" OR FMU STREQUAL "V2")
       drivers/power-module.cc
   )
 endif()
+
 # Setup autocode
 if (DEFINED AUTOCODE)
 	include_directories(autocode/${AUTOCODE}_ert_rtw)
@@ -302,12 +311,12 @@ if (DEFINED AUTOCODE)
 		PUBLIC
 			autocode/${AUTOCODE}_ert_rtw/autocode.cpp
 			autocode/${AUTOCODE}_ert_rtw/autocode.h
-			autocode/${AUTOCODE}_ert_rtw/ale_speed_controller.cpp
-			autocode/${AUTOCODE}_ert_rtw/ale_speed_controller.h
-			autocode/${AUTOCODE}_ert_rtw/rt_roundf.cpp
-			autocode/${AUTOCODE}_ert_rtw/rt_roundf.h
-			autocode/${AUTOCODE}_ert_rtw/rtwtypes.h
-			autocode/${AUTOCODE}_ert_rtw/const_params.cpp
+			#autocode/${AUTOCODE}_ert_rtw/ale_speed_controller.cpp
+			#autocode/${AUTOCODE}_ert_rtw/ale_speed_controller.h
+			#autocode/${AUTOCODE}_ert_rtw/rt_roundf.cpp
+			#autocode/${AUTOCODE}_ert_rtw/rt_roundf.h
+			#autocode/${AUTOCODE}_ert_rtw/rtwtypes.h
+			#autocode/${AUTOCODE}_ert_rtw/const_params.cpp
 	)
 	add_definitions(-D__AUTOCODE__)
 endif()
@@ -343,6 +352,7 @@ target_link_libraries(flight
     vector_nav
     pwm
     imap
+    matek3901
 )
 target_compile_options(flight PUBLIC -std=c++20 -O3)
 # Add hex and upload targets

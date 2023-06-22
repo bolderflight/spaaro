@@ -1,6 +1,6 @@
 /*
-* Brian R Taylor
-* brian.taylor@bolderflight.com
+* Tuan Luong    
+* tdluong@crimson.ua.edu
 * 
 * Copyright (c) 2022 Bolder Flight Systems Inc
 *
@@ -23,47 +23,37 @@
 * IN THE SOFTWARE.
 */
 
-#include "flight/config.h"
-#include "hardware_defs.h"
-#include "global_defs.h"
 
-/* Debug */
-bool DEBUG = true;
-/* Aircraft config */
-AircraftConfig config = {
-  .sensor = {
-    .fmu = {
-      .dlpf_hz = DLPF_BANDWIDTH_41HZ,
-      .accel_bias_mps = {0, 0, 0},
-      .mag_bias_ut = {0, 0, 0},
-      .accel_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-      .mag_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
-      .rotation = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}
-    },
-    .ext_gnss1 = {
-      .baud = 115200
-    },
-    .ext_gnss2 = {
-      .baud = -1
-    },
-    .opflow = {
-      .device = OPFLOW_MATEK3901
-    },
-    .power_module = {
-      .volts_per_volt = 2.723f,
-      .amps_per_volt = 50.0f
+#include "global_defs.h"
+#include "hardware_defs.h"
+#include "matek3901.h"
+#include "flight/msg.h"
+#include "drivers/spaaro-matek3901.h"
+
+void SpaaroMatek3901::Init(const OpFlowConfig &cfg) {
+  if (cfg.device != OPFLOW_NONE) {
+    if (!opflow_.Begin()) {
+      MsgError("Unable to establish communication with optical flow");
+    } else {
+      installed_ = true;
     }
-  },
-  .bfs_ins = {
-    .imu_source = INS_IMU_FMU,
-    .mag_source = INS_MAG_FMU,
-    .gnss_source = INS_GNSS_EXT_GNSS1,
-    .accel_cutoff_hz = 40.0f,
-    .gyro_cutoff_hz = 40.0f,
-    .hardcoded_heading = 4.71239f
-  },
-  .telem = {
-    .baud = 57600,
-    .aircraft_type = bfs::MULTIROTOR
+  } else {
+    installed_ = false;
   }
-};
+}
+
+void SpaaroMatek3901::Read(OpFlowData * const data) {
+  data->installed = installed_;
+  if (data->installed) {
+    data->new_data = opflow_.Read();
+    if (data->new_data) {
+      t_healthy_ms_ = 0;
+      data->sur_qual = opflow_.sur_qual();
+      data->range_qual = opflow_.range_qual();
+      data->mot_x = opflow_.mot_x();
+      data->mot_y = opflow_.mot_y();
+      data->range_mm = opflow_.range_mm();
+    }
+    data->healthy = (t_healthy_ms_ < 10 * UPDATE_PERIOD_MS_);
+  }
+}

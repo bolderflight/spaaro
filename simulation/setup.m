@@ -147,5 +147,6 @@ else
 end
 % double_integrator_sim();
 
+
 %% Cleanup
 clear vehicle fh_vehicle op_point op_report op_spec opt i;

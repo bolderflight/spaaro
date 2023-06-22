@@ -1,4 +1,4 @@
-# Install script for directory: /home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/mat_v4-src
+# Install script for directory: /home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/mat_v4-src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,7 +44,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/eigen-build/cmake_install.cmake")
+  include("/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/eigen-build/cmake_install.cmake")
 
 endif()
 

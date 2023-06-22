@@ -1,4 +1,4 @@
-# Install script for directory: /home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/checksum-src
+# Install script for directory: /home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/checksum-src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

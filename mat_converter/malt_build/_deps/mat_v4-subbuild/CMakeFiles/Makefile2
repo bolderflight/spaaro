@@ -54,10 +54,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/mat_v4-subbuild
+CMAKE_SOURCE_DIR = /home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/mat_v4-subbuild
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/mat_v4-subbuild
+CMAKE_BINARY_DIR = /home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/mat_v4-subbuild
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -81,14 +81,14 @@ clean: CMakeFiles/mat_v4-populate.dir/clean
 CMakeFiles/mat_v4-populate.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mat_v4-populate.dir/build.make CMakeFiles/mat_v4-populate.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mat_v4-populate.dir/build.make CMakeFiles/mat_v4-populate.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/mat_v4-subbuild/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9 "Built target mat_v4-populate"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/mat_v4-subbuild/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9 "Built target mat_v4-populate"
 .PHONY : CMakeFiles/mat_v4-populate.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/mat_v4-populate.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/mat_v4-subbuild/CMakeFiles 9
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/mat_v4-subbuild/CMakeFiles 9
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/mat_v4-populate.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/tuan/Projects/super/ua_spaaro/mat_converter/malt_build/_deps/mat_v4-subbuild/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/tuan/Projects/ua_spaaro/mat_converter/malt_build/_deps/mat_v4-subbuild/CMakeFiles 0
 .PHONY : CMakeFiles/mat_v4-populate.dir/rule
 
 # Convenience name for target.
