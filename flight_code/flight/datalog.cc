@@ -325,7 +325,7 @@ void DatalogAdd(const AircraftData &ref) {
   datalog_msg_.bfs_ins_initialized = ref.state_est.bfs_ins.initialized;
   datalog_msg_.bfs_ins_pitch_rad = Scale(ref.state_est.bfs_ins.pitch_rad, -bfs::BFS_PI<float> / 2.0f, bfs::BFS_PI<float> / 2.0f, 20860.4383910547f, 32767.5f);
   datalog_msg_.bfs_ins_roll_rad = Scale(ref.state_est.bfs_ins.roll_rad, -bfs::BFS_PI<float> / 2.0f, bfs::BFS_PI<float> / 2.0f, 20860.4383910547f, 32767.5f);
-  datalog_msg_.bfs_ins_heading_rad = Scale(ref.state_est.bfs_ins.pitch_rad, -bfs::BFS_PI<float>, bfs::BFS_PI<float>, 10430.2191955274f, 32767.5f);
+  datalog_msg_.bfs_ins_heading_rad = Scale(ref.state_est.bfs_ins.heading_rad, -bfs::BFS_PI<float>, bfs::BFS_PI<float>, 10430.2191955274f, 32767.5f);
   datalog_msg_.bfs_ins_alt_wgs84_m = Scale(ref.state_est.bfs_ins.alt_wgs84_m, -500.0f, 5000.0f, 190.65f, 95324.9999999999f);
   datalog_msg_.bfs_ins_accel_x_mps2 = Scale(ref.state_est.bfs_ins.accel_mps2[0], -156.9064f, 156.9064f, 208.834693804714f, 32767.5f);
   datalog_msg_.bfs_ins_accel_y_mps2 = Scale(ref.state_est.bfs_ins.accel_mps2[1], -156.9064f, 156.9064f, 208.834693804714f, 32767.5f);
