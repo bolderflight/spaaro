@@ -86,7 +86,7 @@ Aircraft.Aero.cutoff_airspeed_mps = 5;
 
 % Wind axis is selected because OpenVSP gives output in this frame and is
 % easier to deal with 
-Aircraft.Aero.axis = 1;
+Aircraft.Aero.axis = 3;
 
 % Using StabilityCoefAndDerivatives class in utils/, base coefficients and 
 % derivatives are used here to model aerodynamic forces and moments. 
@@ -108,10 +108,10 @@ Aircraft.Aero.CL_coefs = [0.9181, 6.8855, 0, 0, 18.7786, 0, 0, 0.8388, 0];
 Aircraft.Aero.CD_coefs = [0.06519, 0.5768, 0, 0, -0.7326, 0, 0, 0.1012, 0];
 
 % Side Force
-Aircraft.Aero.CY_coefs = [0.0006, 0, -0.4412, -0.0205, 0.003166, 0.1137, 0.1638, 0, -0.2071];
+Aircraft.Aero.CY_coefs = [0.0000, 0, -0.4412, -0.0205, -0.003166, -0.1137, 0.1638, 0, -0.2071];
 
 % X-axis moment
-Aircraft.Aero.Cl_coefs = [-0.0004, 0, -0.0719, -0.6494, -0.0457, 0.1962, 0.3357, 0, 0.010322];
+Aircraft.Aero.Cl_coefs = [-0.0004, 0, -0.0719, -0.6494, -0.0457, -0.1962, 0.3357, 0, 0.010322];
 
 % Y-axis moment
 % ignored Cm_q = -101.6445 (not sure why its that low)
@@ -327,6 +327,6 @@ InitCond.motor_cmd = [0 0 0 0 0];
 InitCond.surface_rad = [0 0 0];
 
 % Forward prop rotation rate (rad/s)
-InitCond.engine_speed_radps = 1 * (2*pi/60);
+InitCond.engine_speed_radps = 3000 * (2*pi/60);
 
 

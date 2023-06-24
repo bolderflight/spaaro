@@ -9,8 +9,8 @@
 %% Definitions
 % Vehicle
 % vehicle = 'sig_kadet';
- vehicle = 'malt';
-%vehicle = 'session_v0';
+% vehicle = 'malt';
+vehicle = 'session_v0';
 % vehicle = 'super';
 
 % FMU-R version
@@ -57,7 +57,7 @@ InitCond.alt_m = 67.117600;
 InitCond.ned_pos_m = [0 0 -200];
 
 % [u, v, w]
-InitCond.body_vel_mps = [0 0 0];
+InitCond.body_vel_mps = [25 0 0];
 
 % [roll, pitch, yaw]
 InitCond.euler_rad = [0 0 0];
