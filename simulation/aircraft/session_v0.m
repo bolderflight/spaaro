@@ -63,6 +63,8 @@ Aircraft.Surf.Limit.rate_dps = 150 * ones(Aircraft.Surf.nSurf, 1);
 % Position limits
 Aircraft.Surf.Limit.pos_deg = 30 * ones(Aircraft.Surf.nSurf, 1);
 Aircraft.Surf.Limit.neg_deg = -30 * ones(Aircraft.Surf.nSurf, 1);
+% Servo Actuator bandwidth radps (copied from Ekeren INDI paper)
+Aircraft.Surf.bandwidth = 14.56;
 
 %% Hover Aerodynamics
 % Not implemented for now. 
