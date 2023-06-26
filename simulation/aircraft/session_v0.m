@@ -327,6 +327,26 @@ Aircraft.Control.wp_radius = 0;
 % FixedWing Angular Rate INDI controller
 Aircraft.Control.Forward.indi_pqr_gain = 8;
 
+% aileron-rudder interconnect
+Aircraft.Control.Forward.K_ari = -(Aircraft.Aero.Cn_coefs(7) / ...
+    Aircraft.Aero.Cn_coefs(9));
+
+% yaw damper
+Aircraft.Control.Forward.yaw_damper_gain = 1.5;
+
+%% Aircraft Parameters used in Controller
+% For nominal case, this will be equal to the expected/known parameters.
+% But, these values can be changed to represent aircraft model's parameters
+% uncertainties
+
+% Moment Coefficients
+Aircraft.Control.Forward.Cl_coefs = Aircraft.Aero.Cl_coefs;
+Aircraft.Control.Forward.Cm_coefs = Aircraft.Aero.Cm_coefs;
+Aircraft.Control.Forward.Cn_coefs = Aircraft.Aero.Cn_coefs;
+
+% Moment of inertia
+Aircraft.Control.inertia_inv = inv(Aircraft.Mass.inertia_kgm2);
+
 
 %% Aircraft Specific Initial Conditions
 
