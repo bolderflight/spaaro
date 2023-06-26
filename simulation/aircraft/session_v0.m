@@ -24,6 +24,7 @@ Aircraft.Mass.ixz_kgm2 = 0.00;
 Aircraft.Mass.inertia_kgm2 = [Aircraft.Mass.ixx_kgm2    0   -Aircraft.Mass.ixz_kgm2;...
                               0          Aircraft.Mass.iyy_kgm2          0;...
                               -Aircraft.Mass.ixz_kgm2   0       Aircraft.Mass.izz_kgm2];
+Aircraft.Mass.inertia_inv = inv(Aircraft.Mass.inertia_kgm2);
 
 %% Geometric parameters
 
@@ -288,7 +289,7 @@ Aircraft.Sensors.Gnss.hdop = 0.7;
 Aircraft.Sensors.Gnss.vdop = 0.7;
 % Air data model
 % Static pressure
-Aircraft.Sensors.PitotStaticInstalled = 0;
+Aircraft.Sensors.PitotStaticInstalled = 1;
 Aircraft.Sensors.StaticPres.scale_factor = 1;
 Aircraft.Sensors.StaticPres.bias_pa = 0;
 Aircraft.Sensors.StaticPres.upper_limit_pa = 120000;
@@ -322,6 +323,10 @@ Aircraft.Control.throttle_min = 0.05;
 Aircraft.Control.motor_ramp_time_s = 3;
 
 Aircraft.Control.wp_radius = 0;
+
+% FixedWing Angular Rate INDI controller
+Aircraft.Control.Forward.indi_pqr_gain = 8;
+
 
 %% Aircraft Specific Initial Conditions
 
