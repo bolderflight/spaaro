@@ -327,12 +327,20 @@ Aircraft.Control.wp_radius = 0;
 % FixedWing Angular Rate INDI controller
 Aircraft.Control.Forward.indi_pqr_gain = 8;
 
-% aileron-rudder interconnect
-Aircraft.Control.Forward.K_ari = -(Aircraft.Aero.Cn_coefs(7) / ...
-    Aircraft.Aero.Cn_coefs(9));
-
 % yaw damper
 Aircraft.Control.Forward.yaw_damper_gain = 1.5;
+
+% cutoff frequency for LP filter used for sideslip controller (Hz).
+Aircraft.Control.sideslip_ctrl.accel_LP_filter_CTOFF = 2.5;
+
+% FixedWing Attitude Linear Controller Gains (Roll-pitch)
+Aircraft.Control.Forward.Att_err_gain = [3, 1.75];
+
+% FixedWing Attitude Linear Controller D gains (Roll-pitch)
+Aircraft.Control.Forward.Att_D_gain = [0.5, 0.15];
+
+% Fixed Wing Attitude Controller yaw_ref_rate Gain
+Aircraft.Control.Forward.yaw_ref_rate_gain = 1.2;
 
 %% Aircraft Parameters used in Controller
 % For nominal case, this will be equal to the expected/known parameters.

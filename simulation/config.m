@@ -63,6 +63,6 @@ InitCond.body_vel_mps = [25 0 0];
 InitCond.euler_rad = [0 0 0];
 
 % [p, q, r]
-InitCond.body_rot_rate_radps = [0,0,0];
+InitCond.body_rot_rate_radps = [0 0 0];
 
 
