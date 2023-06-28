@@ -339,8 +339,9 @@ Aircraft.Control.Forward.Att_err_gain = [3, 1.75];
 % FixedWing Attitude Linear Controller D gains (Roll-pitch)
 Aircraft.Control.Forward.Att_D_gain = [0.5, 0.15];
 
-% Fixed Wing Attitude Controller yaw_ref_rate Gain
-Aircraft.Control.Forward.yaw_ref_rate_gain = 1.2;
+% FixedWing Attitude Sideslip Controller Gains (PIDs)
+Aircraft.Control.Forward.Sideslip_gains = [7 2.5 4];
+
 
 %% Aircraft Parameters used in Controller
 % For nominal case, this will be equal to the expected/known parameters.
