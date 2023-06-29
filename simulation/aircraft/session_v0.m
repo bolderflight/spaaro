@@ -345,6 +345,9 @@ Aircraft.Control.Forward.Sideslip_gains = [7 2.5 4];
 % FixedWing Heading Controller Max Roll Angle 
 Aircraft.Control.Forward.max_roll_rad = deg2rad(40);
 
+% FixedWing Outer Loop Controller Max pitch Angle
+Aircraft.Control.Forward.max_pitch_rad = deg2rad(45);
+
 % FixedWing Heading Controller P-gain
 Aircraft.Control.Forward.heading_P = 0.75;
 
