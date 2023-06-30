@@ -315,7 +315,9 @@ if (DEFINED AUTOCODE)
 			#autocode/${AUTOCODE}_ert_rtw/ale_speed_controller.h
 			#autocode/${AUTOCODE}_ert_rtw/rt_roundf.cpp
 			#autocode/${AUTOCODE}_ert_rtw/rt_roundf.h
-			#autocode/${AUTOCODE}_ert_rtw/rtwtypes.h
+			autocode/${AUTOCODE}_ert_rtw/rtwtypes.h
+      #autocode/${AUTOCODE}_ert_rtw/zero_crossing_types.h
+      autocode/${AUTOCODE}_ert_rtw/rtmodel.h
 			#autocode/${AUTOCODE}_ert_rtw/const_params.cpp
 	)
 	add_definitions(-D__AUTOCODE__)

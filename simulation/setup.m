@@ -132,7 +132,7 @@ end
 %% Select sim
 if (vms_only)
     if strcmp(vehicle,'malt')
-        malt();
+        malt_auto_wp();
     elseif strcmp(vehicle,'super')
         super()
     end

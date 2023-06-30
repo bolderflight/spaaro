@@ -88,10 +88,10 @@ Aircraft.Motor.dir = [1; 1; -1; -1];
 % The cmd vector [thrust,roll,pitch, yaw] will by multiplied with the motor
 % mixing matrix to result in the individual motor outputs which is then
 % scaled to the PMW range that the ESC can decode
-Aircraft.Motor.mix = [0.75, -0.1,  0.1, -0.2;...
-                      0.75,  0.1, -0.1, -0.2;...
-                      0.75,  0.1,  0.1,  0.2;...
-                      0.75, -0.1, -0.1,  0.2;...
+Aircraft.Motor.mix = [0.9, -0.1,  0.1, -0.2;...
+                      0.9,  0.1, -0.1, -0.2;...
+                      0.9,  0.1,  0.1,  0.2;...
+                      0.9, -0.1, -0.1,  0.2;...
                       0, 0, 0, 0;...
                       0, 0, 0, 0;...
                       0, 0, 0, 0;... 
@@ -196,43 +196,27 @@ Aircraft.Control.D_yaw_rate = 0.01;
 % Yaw rate D Controller LPFT cutoff frequency [Hz]
 Aircraft.Control.D_yaw_FLTR_CTOFF = 10;
 
-%% Pitch rate controller parameters
-% Max pitch rate [radps]
-Aircraft.Control.pitch_rate_max = 3.83972; %~220deg/s
+%% Rate controller parameters
+% Max att rate [radps]
+Aircraft.Control.att_rate_max = 3.83972; %~220deg/s
 
-% Pitch rate controller PID gains
-Aircraft.Control.P_pitch_rate = 0.25;
-Aircraft.Control.I_pitch_rate = 0.2;
-Aircraft.Control.D_pitch_rate = 0.01;
+% Att rate controller PID gains
+Aircraft.Control.P_att_rate = 0.25;
+Aircraft.Control.I_att_rate = 0.2;
+Aircraft.Control.D_att_rate = 0.01;
 
-% Pitch rate D Controller LPFT cutoff frequency [Hz]
-Aircraft.Control.D_pitch_FLTR_CTOFF = 10;
+% Att rate D Controller LPFT cutoff frequency [Hz]
+Aircraft.Control.D_att_FLTR_CTOFF = 10;
 
-%% Roll rate controller parameters
-% Max roll rate [radps]
-Aircraft.Control.roll_rate_max = 3.83972; %~220deg/s
-
-% Roll rate controller PID gains
-Aircraft.Control.P_roll_rate = 0.25;
-Aircraft.Control.I_roll_rate = 0.3;
-Aircraft.Control.D_roll_rate = 0.01;
-
-% Roll rate D Controller LPFT cutoff frequency [Hz]
-Aircraft.Control.D_roll_FLTR_CTOFF = 10;
+% Att feed forward gain
+Aircraft.Control.FF_att_rate = 0.01;
 
 %% Pitch angle controller parameters
-% Max pitch angle [rad]
-Aircraft.Control.pitch_angle_lim = 0.261799;  %~15deg
+% Max att angle [rad]
+Aircraft.Control.att_angle_lim = 0.261799;  %~15deg
 
-% Pitch cmd controller gains
-Aircraft.Control.P_pitch_angle = 7;
-
-%% Roll controller parameters
-% Max roll angle [rad]
-Aircraft.Control.roll_angle_lim = 0.261799;  %~15deg
-
-% Roll cmd controller gains
-Aircraft.Control.P_roll_angle = 7;
+% Att cmd controller gains
+Aircraft.Control.P_att_angle = 6;
 
 %% Outer to inner loop conversion
 % Max G by the drone 
@@ -242,46 +226,43 @@ Aircraft.Control.max_g_thr = 1.8;
 Aircraft.Control.min_g_thr = 0.1;
 
 % Max tilt angle
-Aircraft.Control.max_tilt_rad = deg2rad(25);
+Aircraft.Control.max_tilt_rad = deg2rad(15);
 
 %% Vertical speed controller parameters
-Aircraft.Control.est_hover_thr = 0.75;
+Aircraft.Control.est_hover_thr = 0.86;
 % Vertical speed limit [m/s]
 Aircraft.Control.v_z_max = 0.4;
 % Vertical speed controller gain
-Aircraft.Control.P_v_z = 0.6;
-Aircraft.Control.I_v_z = 0.2;
-Aircraft.Control.D_v_z = 0.07;
+Aircraft.Control.P_v_z = 1;
+Aircraft.Control.I_v_z = 0.1;
+Aircraft.Control.D_v_z = 0.01;
 
 % Ver speed D Controller LPFT cutoff frequency [Hz]
-Aircraft.Control.D_ver_vel_FLTR_CTOFF = 1;
-
-% Throttle cc LPFT cutoff frequency [Hz]
-Aircraft.Control.throttle_cc_FLTR_CTOFF = 1;
+Aircraft.Control.D_ver_vel_FLTR_CTOFF = 10;
 
 %% Translational speed controller parameters
 % Horizontal spped limit [m/s]
 Aircraft.Control.v_hor_max = 0.5;
 
 % Horizontal speed controller gain
-Aircraft.Control.P_v_hor = 0.5;
-Aircraft.Control.I_v_hor = 0.01;
+Aircraft.Control.P_v_hor = 4;
+Aircraft.Control.I_v_hor = 2;
 Aircraft.Control.D_v_hor = 0.01;
 
 % Hor speed D Controller LPFT cutoff frequency [Hz]
-Aircraft.Control.D_hor_vel_FLTR_CTOFF = 10;
+Aircraft.Control.D_hor_vel_FLTR_CTOFF = 30;
 
 %% Altitude controller parameters
-Aircraft.Control.P_alt = 0.7;
+Aircraft.Control.P_alt = 0.5;
 
 %% Distance controller parameters
-Aircraft.Control.P_xy = 0.8;
-Aircraft.Control.wp_radius = 0.1;
+Aircraft.Control.P_xy = 0.15;
+Aircraft.Control.wp_radius = 0.2;
 
 %% WP controller parameters
-Aircraft.Control.P_wp_dist = 0.4;
-Aircraft.Control.P_dev_dist = 0.5;
-Aircraft.Control.nav_speed = 0.3;
+Aircraft.Control.P_wp_dist = 0.2;
+Aircraft.Control.P_dev_dist = 0;
+Aircraft.Control.nav_speed = 0.2;
 
 %% Heading controller parameters
 Aircraft.Control.P_heading = 6;

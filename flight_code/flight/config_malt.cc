@@ -28,7 +28,7 @@
 #include "global_defs.h"
 
 /* Debug */
-bool DEBUG = true;
+bool DEBUG = false;
 /* Aircraft config */
 AircraftConfig config = {
   .sensor = {
@@ -41,7 +41,7 @@ AircraftConfig config = {
       .rotation = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}
     },
     .ext_gnss1 = {
-      .baud = 115200
+      .baud = 500000
     },
     .ext_gnss2 = {
       .baud = -1
