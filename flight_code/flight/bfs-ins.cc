@@ -50,8 +50,8 @@ uint8_t init_counter_ = 0;
 
 void BfsInsInit(const InsConfig &ref) {
   cfg_ = ref;
-  ekf_.gnss_pos_ne_std_m(0.1f);
-  ekf_.gnss_pos_d_std_m(0.2f);
+  ekf_.gnss_pos_ne_std_m(0.05f);
+  ekf_.gnss_pos_d_std_m(0.1f);
   BASELINE_LEN_M = cfg_.antenna_baseline_m.norm();
 }
 
