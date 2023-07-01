@@ -349,7 +349,7 @@ Aircraft.Control.Forward.max_roll_rad = deg2rad(40);
 Aircraft.Control.Forward.max_pitch_rad = deg2rad(45);
 
 % FixedWing Heading Controller P-gain
-Aircraft.Control.Forward.heading_P = 0.75;
+Aircraft.Control.Forward.heading_P = 0.9;
 
 %% Aircraft Parameters used in Controller
 % For nominal case, this will be equal to the expected/known parameters.
