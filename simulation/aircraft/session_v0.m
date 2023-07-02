@@ -24,6 +24,7 @@ Aircraft.Mass.ixz_kgm2 = 0.00;
 Aircraft.Mass.inertia_kgm2 = [Aircraft.Mass.ixx_kgm2    0   -Aircraft.Mass.ixz_kgm2;...
                               0          Aircraft.Mass.iyy_kgm2          0;...
                               -Aircraft.Mass.ixz_kgm2   0       Aircraft.Mass.izz_kgm2];
+Aircraft.Mass.inertia_inv = inv(Aircraft.Mass.inertia_kgm2);
 
 %% Geometric parameters
 
@@ -63,6 +64,8 @@ Aircraft.Surf.Limit.rate_dps = 150 * ones(Aircraft.Surf.nSurf, 1);
 % Position limits
 Aircraft.Surf.Limit.pos_deg = 30 * ones(Aircraft.Surf.nSurf, 1);
 Aircraft.Surf.Limit.neg_deg = -30 * ones(Aircraft.Surf.nSurf, 1);
+% Servo Actuator bandwidth radps (copied from Ekeren INDI paper)
+Aircraft.Surf.bandwidth = 14.56;
 
 %% Hover Aerodynamics
 % Not implemented for now. 
@@ -286,7 +289,7 @@ Aircraft.Sensors.Gnss.hdop = 0.7;
 Aircraft.Sensors.Gnss.vdop = 0.7;
 % Air data model
 % Static pressure
-Aircraft.Sensors.PitotStaticInstalled = 0;
+Aircraft.Sensors.PitotStaticInstalled = 1;
 Aircraft.Sensors.StaticPres.scale_factor = 1;
 Aircraft.Sensors.StaticPres.bias_pa = 0;
 Aircraft.Sensors.StaticPres.upper_limit_pa = 120000;
@@ -320,6 +323,54 @@ Aircraft.Control.throttle_min = 0.05;
 Aircraft.Control.motor_ramp_time_s = 3;
 
 Aircraft.Control.wp_radius = 0;
+
+% FixedWing Angular Rate INDI controller
+Aircraft.Control.Forward.indi_pqr_gain = 8;
+
+% yaw damper
+Aircraft.Control.Forward.yaw_damper_gain = 1.5;
+
+% cutoff frequency for LP filter used for sideslip controller (Hz).
+Aircraft.Control.sideslip_ctrl.accel_LP_filter_CTOFF = 2.5;
+
+% FixedWing Attitude Linear Controller Gains (Roll-pitch)
+Aircraft.Control.Forward.Att_err_gain = [3, 1.75];
+
+% FixedWing Attitude Linear Controller D gains (Roll-pitch)
+Aircraft.Control.Forward.Att_D_gain = [0.5, 0.15];
+
+% FixedWing Attitude Sideslip Controller Gains (PIDs)
+Aircraft.Control.Forward.Sideslip_gains = [7 2.5 4];
+
+% FixedWing Heading Controller Max Roll Angle 
+Aircraft.Control.Forward.max_roll_rad = deg2rad(45);
+
+% FixedWing Outer Loop Controller Max pitch Angle
+Aircraft.Control.Forward.max_pitch_rad = deg2rad(45);
+
+% FixedWing Heading Controller P-gain
+Aircraft.Control.Forward.heading_P = 2.25;
+
+% FixedWing Altitude Controller P-gain
+Aircraft.Control.Forward.altitude_P = 1;
+
+% FixedWing Outer Loop indi gain (airspeed and flight path control)
+Aircraft.Control.Forward.outer_indi_gains = 0.75;
+
+
+%% Aircraft Parameters used in Controller
+% For nominal case, this will be equal to the expected/known parameters.
+% But, these values can be changed to represent aircraft model's parameters
+% uncertainties
+
+% Moment Coefficients
+Aircraft.Control.Forward.Cl_coefs = Aircraft.Aero.Cl_coefs;
+Aircraft.Control.Forward.Cm_coefs = Aircraft.Aero.Cm_coefs;
+Aircraft.Control.Forward.Cn_coefs = Aircraft.Aero.Cn_coefs;
+
+% Moment of inertia
+Aircraft.Control.inertia_inv = inv(Aircraft.Mass.inertia_kgm2);
+
 
 %% Aircraft Specific Initial Conditions
 

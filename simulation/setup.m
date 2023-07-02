@@ -48,7 +48,7 @@ run(strcat('./aircraft/', vehicle));
 if strcmpi(fmu_version, "V2")
     Fmu.version = 3;
     Fmu.NUM_AIN = 8;
-    frameRate_hz = 200;
+    frameRate_hz = 100;
     Telem.NUM_FLIGHT_PLAN_POINTS = 500;
     Telem.NUM_FENCE_POINTS = 100;
     Telem.NUM_RALLY_POINTS = 10;
