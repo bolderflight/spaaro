@@ -343,13 +343,20 @@ Aircraft.Control.Forward.Att_D_gain = [0.5, 0.15];
 Aircraft.Control.Forward.Sideslip_gains = [7 2.5 4];
 
 % FixedWing Heading Controller Max Roll Angle 
-Aircraft.Control.Forward.max_roll_rad = deg2rad(40);
+Aircraft.Control.Forward.max_roll_rad = deg2rad(45);
 
 % FixedWing Outer Loop Controller Max pitch Angle
 Aircraft.Control.Forward.max_pitch_rad = deg2rad(45);
 
 % FixedWing Heading Controller P-gain
-Aircraft.Control.Forward.heading_P = 0.9;
+Aircraft.Control.Forward.heading_P = 2.25;
+
+% FixedWing Altitude Controller P-gain
+Aircraft.Control.Forward.altitude_P = 1;
+
+% FixedWing Outer Loop indi gain (airspeed and flight path control)
+Aircraft.Control.Forward.outer_indi_gains = 0.75;
+
 
 %% Aircraft Parameters used in Controller
 % For nominal case, this will be equal to the expected/known parameters.
