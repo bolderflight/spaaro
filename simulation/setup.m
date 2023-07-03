@@ -20,7 +20,7 @@ addpath(genpath('aircraft'));
 addpath(genpath('data'));
 addpath(genpath('matlab'));
 addpath(genpath('models'));
-addpath(genpath('vms'));
+addpath(genpath('vms')); 
 
 %% Specify root folders for autocode and cache
 % clear all cached code
