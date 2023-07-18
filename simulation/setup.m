@@ -133,6 +133,7 @@ end
 if (vms_only)
     if strcmp(vehicle,'malt')
         malt_auto_wp();
+        % malt()
     elseif strcmp(vehicle,'super')
         super()
     end

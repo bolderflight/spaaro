@@ -108,7 +108,7 @@ wp = [1 1 .5;
       4 1 .5;
       4 2 .5;
       1 2 .5];
-start_ind = 1;
+start_ind = 1000;
 lla = [rad2deg(bfs_ins_lat_rad(start_ind:end)), rad2deg(bfs_ins_lon_rad(start_ind:end)), bfs_ins_alt_wgs84_m(start_ind:end)];
 cage_pos = lla2ned(lla, cage_origin,'flat');
 gps_lla = [rad2deg(ext_gnss1_lat_rad(start_ind:end)), rad2deg(ext_gnss1_lon_rad(start_ind:end)), ext_gnss1_alt_wgs84_m(start_ind:end)];

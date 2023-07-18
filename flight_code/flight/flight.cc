@@ -62,6 +62,11 @@ void run() {
   SysRead(&data.sys);
   /* Sensor data */
   SensorsRead(&data.sensor);
+  for (uint8_t i = 0; i < 16; i++){
+    std::string dbg = std::to_string(data.sensor.inceptor.ch[i]) + " ";
+    MsgInfo(dbg.c_str());
+  }
+  MsgInfo("\n");
   /* VectorNav */
   #if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || \
       defined(__FMU_R_V2_BETA__)
@@ -80,7 +85,7 @@ void run() {
   /* Command effectors */
   EffectorsCmd(data.vms);
   /* Datalog */
-  DatalogAdd(data);
+  //DatalogAdd(data);
   /* Telemetry */
   TelemUpdate(data, &data.telem);
   /* Frame duration */
