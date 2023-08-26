@@ -184,13 +184,13 @@ Aircraft.Control.motor_spin_max = 0.95;
 
 %% Yaw rate controller parameters
 % Max yaw rate [radps]
-Aircraft.Control.yaw_rate_max = 3.14159; %~180deg/s
+Aircraft.Control.yaw_rate_max = deg2rad(180);
 % It's good to limit the maximum yaw rate because excessive yaw rate may
 % cause some motors to slow down too much that hover cannot be maintained
 
 % Yaw rate controller PID gains
 Aircraft.Control.P_yaw_rate = 0.3;
-Aircraft.Control.I_yaw_rate = 0.1;
+Aircraft.Control.I_yaw_rate = 0.3;
 Aircraft.Control.D_yaw_rate = 0.01;
 
 % Yaw rate D Controller LPFT cutoff frequency [Hz]
@@ -198,71 +198,80 @@ Aircraft.Control.D_yaw_FLTR_CTOFF = 10;
 
 %% Rate controller parameters
 % Max att rate [radps]
-Aircraft.Control.att_rate_max = 3.83972; %~220deg/s
+Aircraft.Control.att_rate_max = deg2rad(220);
 
 % Att rate controller PID gains
-Aircraft.Control.P_att_rate = 0.25;
-Aircraft.Control.I_att_rate = 0.2;
-Aircraft.Control.D_att_rate = 0.01;
+Aircraft.Control.P_att_rate = 0.3;
+Aircraft.Control.I_att_rate = 1.5;
+Aircraft.Control.D_att_rate = 0.025;
 
 % Att rate D Controller LPFT cutoff frequency [Hz]
-Aircraft.Control.D_att_FLTR_CTOFF = 10;
+Aircraft.Control.D_att_FLTR_CTOFF = 40;
 
 % Att feed forward gain
-Aircraft.Control.FF_att_rate = 0.01;
+Aircraft.Control.FF_att_rate = 0.1;
 
-%% Pitch angle controller parameters
+%% Heading controller parameters
+Aircraft.Control.P_heading = 6; 
+
+%% Attitude angle controller parameters
 % Max att angle [rad]
-Aircraft.Control.att_angle_lim = 0.261799;  %~15deg
+Aircraft.Control.att_angle_lim = deg2rad(10);  
 
 % Att cmd controller gains
-Aircraft.Control.P_att_angle = 6;
+Aircraft.Control.P_att_angle = 9;
+Aircraft.Control.I_att_angle = 3;
+Aircraft.Control.D_att_angle = 0.5;
 
 %% Outer to inner loop conversion
 % Max G by the drone 
-Aircraft.Control.max_g_thr = 1.8;
+Aircraft.Control.max_g_thr = 2;
 
 % Min G by the drone
 Aircraft.Control.min_g_thr = 0.1;
 
 % Max tilt angle
-Aircraft.Control.max_tilt_rad = deg2rad(15);
+Aircraft.Control.max_tilt_rad = deg2rad(10);
 
 %% Vertical speed controller parameters
 Aircraft.Control.est_hover_thr = 0.86;
 % Vertical speed limit [m/s]
-Aircraft.Control.v_z_max = 0.4;
+Aircraft.Control.v_z_max = 0.25;
 % Vertical speed controller gain
-Aircraft.Control.P_v_z = 1;
-Aircraft.Control.I_v_z = 0.1;
-Aircraft.Control.D_v_z = 0.01;
+Aircraft.Control.P_v_z = 3;
+Aircraft.Control.I_v_z = 0.3;
+Aircraft.Control.D_v_z = 0.02;
+Aircraft.Control.FF_v_z = 0.7;
 
 % Ver speed D Controller LPFT cutoff frequency [Hz]
-Aircraft.Control.D_ver_vel_FLTR_CTOFF = 10;
+Aircraft.Control.D_ver_vel_FLTR_CTOFF = 5;
 
 %% Translational speed controller parameters
 % Horizontal spped limit [m/s]
-Aircraft.Control.v_hor_max = 0.5;
+Aircraft.Control.v_hor_max = 0.3;
 
 % Horizontal speed controller gain
 Aircraft.Control.P_v_hor = 4;
-Aircraft.Control.I_v_hor = 2;
-Aircraft.Control.D_v_hor = 0.01;
+Aircraft.Control.I_v_hor = 0;
+Aircraft.Control.D_v_hor = 0.07;
+Aircraft.Control.FF_v_hor = 0.1;
 
 % Hor speed D Controller LPFT cutoff frequency [Hz]
-Aircraft.Control.D_hor_vel_FLTR_CTOFF = 30;
+Aircraft.Control.D_hor_vel_FLTR_CTOFF = 5;
 
 %% Altitude controller parameters
-Aircraft.Control.P_alt = 0.5;
+Aircraft.Control.P_alt = 1;
+Aircraft.Control.D_alt = 0.2;
 
 %% Distance controller parameters
-Aircraft.Control.P_xy = 0.15;
-Aircraft.Control.wp_radius = 0.2;
+Aircraft.Control.P_xy = 1;
+Aircraft.Control.D_xy = 0.7;
+Aircraft.Control.wp_radius = 0.3;
 
 %% WP controller parameters
-Aircraft.Control.P_wp_dist = 0.2;
-Aircraft.Control.P_dev_dist = 0;
-Aircraft.Control.nav_speed = 0.2;
+Aircraft.Control.P_wp_dist = 1;
+Aircraft.Control.D_wp_dist = 0.7;
+Aircraft.Control.P_dev_dist = 1;
+Aircraft.Control.nav_speed = 0.3;
 
-%% Heading controller parameters
-Aircraft.Control.P_heading = 6;
+

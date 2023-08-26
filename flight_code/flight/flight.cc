@@ -67,6 +67,8 @@ void run() {
     MsgInfo(dbg.c_str());
   }
   MsgInfo("\n");
+  //std::string dbg = std::to_string((int)data.sensor.power_module.voltage_v * 100) + "\n";
+  //MsgInfo(dbg.c_str());
   /* VectorNav */
   #if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || \
       defined(__FMU_R_V2_BETA__)
@@ -85,7 +87,7 @@ void run() {
   /* Command effectors */
   EffectorsCmd(data.vms);
   /* Datalog */
-  //DatalogAdd(data);
+  DatalogAdd(data);
   /* Telemetry */
   TelemUpdate(data, &data.telem);
   /* Frame duration */
@@ -97,6 +99,11 @@ int main() {
   MsgBegin();
   /* Init system */
   SysInit();
+  // Hack to pause the main program until beacon finish booting up
+  elapsedMillis t_ms;
+  t_ms = 0;
+  while (t_ms < 10000.0f) {
+  }
   /* Init sensors */
   SensorsInit(config.sensor);
   /* Calibrate sensors */

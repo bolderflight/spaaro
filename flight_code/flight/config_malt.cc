@@ -50,7 +50,7 @@ AircraftConfig config = {
       .device = OPFLOW_MATEK3901
     },
     .power_module = {
-      .volts_per_volt = 2.723f,
+      .volts_per_volt = 2.87f,
       .amps_per_volt = 50.0f
     }
   },
