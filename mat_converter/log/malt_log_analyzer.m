@@ -2,7 +2,7 @@ close all
 clear
 clc
 
-load malt1_109.mat;
+load malt2_4.mat;
 
 pos_hold_log = 1;
 wp_log = 1;
