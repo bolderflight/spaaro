@@ -24,7 +24,7 @@ Aircraft.Mass.ixz_kgm2 = 0.00;
 Aircraft.Mass.inertia_kgm2 = [Aircraft.Mass.ixx_kgm2    0   -Aircraft.Mass.ixz_kgm2;...
                               0          Aircraft.Mass.iyy_kgm2          0;...
                               -Aircraft.Mass.ixz_kgm2   0       Aircraft.Mass.izz_kgm2];
-Aircraft.Mass.inertia_inv = inv(Aircraft.Mass.inertia_kgm2);
+
 
 %% Geometric parameters
 
@@ -64,8 +64,11 @@ Aircraft.Surf.Limit.rate_dps = 150 * ones(Aircraft.Surf.nSurf, 1);
 % Position limits
 Aircraft.Surf.Limit.pos_deg = 30 * ones(Aircraft.Surf.nSurf, 1);
 Aircraft.Surf.Limit.neg_deg = -30 * ones(Aircraft.Surf.nSurf, 1);
+
 % Servo Actuator bandwidth radps (copied from Ekeren INDI paper)
 Aircraft.Surf.bandwidth = 14.56;
+
+
 
 %% Hover Aerodynamics
 % Not implemented for now. 
@@ -78,6 +81,14 @@ Aircraft.Aero.linear_drag_coef = 0;
 % below this speed, only include Quadcopter aero forces and moments
 % above this speed, include full forward flight's aero forces and moments 
 Aircraft.Aero.cutoff_airspeed_mps = 5;
+
+%% Weighted Sum between forward and hover aerodynamics
+
+% Using a Sigmoidal MF to calculate weight of aerodynamics contribution
+% x = u_mps
+% a = shape parameter, c = inflection point (on u_mps)
+Aircraft.Aero.sigmoidal_shape = 1.2;
+Aircraft.Aero.sigmoidal_inflection = 4.5;   
 
 %% Forward Flight Aerodynamics
 
@@ -118,7 +129,7 @@ Aircraft.Aero.Cl_coefs = [-0.0004, 0, -0.0719, -0.6494, -0.0457, -0.1962, 0.3357
 
 % Y-axis moment
 % ignored Cm_q = -101.6445 (not sure why its that low)
-Aircraft.Aero.Cm_coefs = [-0.0447, -1.9881, 0, 0, -101.64, 0, 0, 4.1454, 0];
+Aircraft.Aero.Cm_coefs = [-0.0447, -1.9881, 0, 0, -101.6445, 0, 0, 4.1454, 0];
 
 % Z-axis_moment
 Aircraft.Aero.Cn_coefs = [0.0000, 0, 0.0015, -0.1405, -0.0020, -0.03442, -0.0165, 0, 0.0371];
@@ -131,6 +142,9 @@ Aircraft.Motor.nMotor = 5;
 % Assign a pwm channel to motor
 % 1, 2, 3, 4 are hover motors, and 5 is forward motor. 
 Aircraft.Motor.map = [ 1 ; 2 ; 3 ; 4; 5];
+
+% Motor bandwidth radps 
+Aircraft.Motor.bandwidth = 25;
 
 % Motor positions relative to c.g in [m] [x,y,z](obtained from OpenVSP)
 % First 4 Motor numbers and order using Arducopter convention (QUAD-H)
@@ -206,10 +220,10 @@ Aircraft.HoverRotor.kt = 0.0388;   %N-m/N
 
 % Thrust and torque models obtained from Tmotor's data
 % for throttle 0-1
-% 2nd order polyfit on thrust(N)
-Aircraft.HoverRotor.poly_thrust = [40.5584, 28.3258, -4.1581];
+% 2nd order polyfit on thrust(N), 0 throttle = 0 thrust
+Aircraft.HoverRotor.poly_thrust = [48.8680 16.6778 -0.3264];
 % 2nd order polyfit on torque
-Aircraft.HoverRotor.poly_torque = [0.5954, 1.0777, -0.2594];
+Aircraft.HoverRotor.poly_torque = [1.1138 0.3510 -0.0204];
 
 
 %% Forward Flight Propulsion system
@@ -357,6 +371,46 @@ Aircraft.Control.Forward.altitude_P = 1;
 % FixedWing Outer Loop indi gain (airspeed and flight path control)
 Aircraft.Control.Forward.outer_indi_gains = 0.75;
 
+% Hover Inner Loop low-pass filters 
+% cutoff throttle output
+Aircraft.Control.Hover.throttle_output_LP_filter_CTOFF = 1;
+% cutoff w and pqr references
+Aircraft.Control.Hover.inner_ref_LP_filter_CTOFF = 0.1;
+
+% Hover Inner Loop Body Rates (pqrw) Gain
+Aircraft.Control.Hover.body_rates_gain = [1.5, 1.5, 0.25, 3];
+
+% Hover Attitude Control pqr output limits
+Aircraft.Control.Hover.pqr_limit = 2;
+
+% Hover Inner Loop Attitude Control Gain (roll, pitch)
+Aircraft.Control.Hover.att_gain = 2.25;
+
+% Hover Altitude Control
+Aircraft.Control.Hover.alt_gain = 0.75;
+
+% Hover Inertial and Body vertical speed limits 
+Aircraft.Control.Hover.nav_vert_limits = [2, -4];
+Aircraft.Control.Hover.body_vert_limits = [4, -6];
+
+% U_cmd will be calculated if airspeed > threshold. else, u_cmd = 0.
+Aircraft.Control.Hover.uv_ref_airspeed_threshold = 1;
+
+% Hover Speed control LP filter cutoff
+Aircraft.Control.Hover.u_ref_LP_filter_CTOFF = 0.05; 
+Aircraft.Control.Hover.roll_pitch_ref_LP_filter_CTOFF = 0.01;
+
+% Hover Speed Control Gains
+Aircraft.Control.Hover.uv_gain = 0.25; 
+Aircraft.Control.Hover.uv_d = 1.25;
+
+% Roll pitch reference limits
+Aircraft.Control.Hover.roll_pitch_ref_limits = [0.35, 0.35];
+
+% Hover heading control 
+Aircraft.Control.Hover.heading_gain = 2.5;
+Aircraft.Control.Hover.yaw_rate_ref_limit = 1;
+
 
 %% Aircraft Parameters used in Controller
 % For nominal case, this will be equal to the expected/known parameters.
@@ -370,14 +424,14 @@ Aircraft.Control.Forward.Cn_coefs = Aircraft.Aero.Cn_coefs;
 
 % Moment of inertia
 Aircraft.Control.inertia_inv = inv(Aircraft.Mass.inertia_kgm2);
-
+Aircraft.Control.inertia_inv_4by4 = inv([[Aircraft.Mass.inertia_kgm2, [0;0;0]]; [0,0,0,1]]);
 
 %% Aircraft Specific Initial Conditions
 
-InitCond.motor_cmd = [0 0 0 0 0];
+InitCond.motor_cmd = [0.55, 0.55, 0.55, 0.55, 0.0];
 InitCond.surface_rad = [0 0 0];
 
 % Forward prop rotation rate (rad/s)
-InitCond.engine_speed_radps = 3000 * (2*pi/60);
+InitCond.engine_speed_radps = 0.1 * (2*pi/60);
 
 
