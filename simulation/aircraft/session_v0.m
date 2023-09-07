@@ -341,14 +341,17 @@ Aircraft.Control.wp_radius = 0;
 % FixedWing Angular Rate INDI controller
 Aircraft.Control.Forward.indi_pqr_gain = 8;
 
+% cutoff frequency for LP filter on inner loop surface deflection outputs
+Aircraft.Control.Forward.surf_def_out_LP_filter_CTOFF = 5;
+
 % yaw damper
-Aircraft.Control.Forward.yaw_damper_gain = 1.5;
+Aircraft.Control.Forward.yaw_damper_gain = 2.0;
 
 % cutoff frequency for LP filter used for sideslip controller (Hz).
-Aircraft.Control.sideslip_ctrl.accel_LP_filter_CTOFF = 2.5;
+Aircraft.Control.sideslip_ctrl.accel_LP_filter_CTOFF = 0.5;
 
 % FixedWing Attitude Linear Controller Gains (Roll-pitch)
-Aircraft.Control.Forward.Att_err_gain = [3, 1.75];
+Aircraft.Control.Forward.Att_err_gain = [3, 2.5];
 
 % FixedWing Attitude Linear Controller D gains (Roll-pitch)
 Aircraft.Control.Forward.Att_D_gain = [0.5, 0.15];
@@ -369,7 +372,10 @@ Aircraft.Control.Forward.heading_P = 2.25;
 Aircraft.Control.Forward.altitude_P = 1;
 
 % FixedWing Outer Loop indi gain (airspeed and flight path control)
-Aircraft.Control.Forward.outer_indi_gains = 0.75;
+Aircraft.Control.Forward.outer_indi_gains = [1, 1.5];
+
+% LP filter on throttle_cmd_out and pitch_ref
+Aircraft.Control.Forward.outer_indi_outputs_LP_filter_CTOFF = [0.1, 1];
 
 % Hover Inner Loop low-pass filters 
 % cutoff throttle output
@@ -428,10 +434,10 @@ Aircraft.Control.inertia_inv_4by4 = inv([[Aircraft.Mass.inertia_kgm2, [0;0;0]]; 
 
 %% Aircraft Specific Initial Conditions
 
-InitCond.motor_cmd = [0.55, 0.55, 0.55, 0.55, 0.0];
+InitCond.motor_cmd = [0.0, 0.0, 0.0, 0.0, 0.3];
 InitCond.surface_rad = [0 0 0];
 
 % Forward prop rotation rate (rad/s)
-InitCond.engine_speed_radps = 0.1 * (2*pi/60);
+InitCond.engine_speed_radps = 2000 * (2*pi/60);
 
 
