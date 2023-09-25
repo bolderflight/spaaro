@@ -569,11 +569,11 @@ make flight_upload
 ```
 
 
-```
-Cite
-====
-Please cite the framework as follows
 
+## Cite
+
+Please cite the framework as follows
+```
     @Misc{lager_spaaro,
         author       = {Brian Taylor and Jordan D. Larson and Tuan D. Luong and Aabhash Bhandari and Ryan W. Thomas},
         howpublished = {Web page},
