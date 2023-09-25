@@ -568,6 +568,21 @@ Software can be uploaded with:
 make flight_upload
 ```
 
+
+```
+Cite
+====
+Please cite the framework as follows
+
+    @Misc{lager_spaaro,
+        author       = {Brian Taylor and Jordan D. Larson and Tuan D. Luong and Aabhash Bhandari and Ryan W. Thomas},
+        howpublished = {Web page},
+        title        = {{lager_spaaro}: {S}imulink/C++ {P}latform for {A}eronautics and {A}utonomy {R}esearch and {O}perations},
+        year         = {2023},
+        url          = {https://github.com/drjdlarson/lager_spaaro},
+    }
+```
+
 <!-- # Simulation
 
 # Analyzing Data -->
