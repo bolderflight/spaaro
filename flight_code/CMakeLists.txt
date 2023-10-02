@@ -211,9 +211,9 @@ FetchContent_Declare(
   navigation
   #GIT_REPOSITORY https://github.com/bolderflight/navigation.git
   #GIT_TAG v4.0.1
-  #GIT_REPOSITORY git@github.com:TL-4319/navigation.git
-  #GIT_TAG 4c3d0f03c969c05c788325735805ad118a1778f3
-  SOURCE_DIR /home/tuan/Projects/navigation
+  GIT_REPOSITORY git@github.com:TL-4319/navigation.git
+  GIT_TAG f870deb4303e73fa4c32b54126e7402174ea668d
+  #SOURCE_DIR /home/tuan/Projects/navigation
 )
 FetchContent_MakeAvailable(navigation)
 FetchContent_Declare(
