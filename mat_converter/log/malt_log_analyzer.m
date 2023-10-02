@@ -2,7 +2,9 @@ close all
 clear
 clc
 
-load malt2_4.mat;
+%name = "/home/tuan/Projects/ua_spaaro/mat_converter/log/flight_day1/flight2/malt1_1.mat";
+name = 'malt1_23.mat';
+load(name);
 
 pos_hold_log = 1;
 wp_log = 1;
@@ -130,20 +132,18 @@ end
 
 if (wp_log == 1)
 cage_origin = [33.2154770, -87.5436600, 0];
-wp = [1 1 .5;
-      4 1 .5;
-      4 2 .5;
-      1 2 .5];
+wp = [4.0505 2.7443 .5;
+      0.6489 1.7163 .5];
 start_ind = 1000;
 lla = [rad2deg(bfs_ins_lat_rad(start_ind:end)), rad2deg(bfs_ins_lon_rad(start_ind:end)), bfs_ins_alt_wgs84_m(start_ind:end)];
 cage_pos = lla2ned(lla, cage_origin,'flat');
 gps_lla = [rad2deg(ext_gnss1_lat_rad(start_ind:end)), rad2deg(ext_gnss1_lon_rad(start_ind:end)), ext_gnss1_alt_wgs84_m(start_ind:end)];
 gps_pos = lla2ned (gps_lla, cage_origin,'flat');
 figure(5)
-%plot3(cage_pos(:,1),-cage_pos(:,2), -cage_pos(:,3))
-%hold on
-plot3(gps_pos(:,1),-gps_pos(:,2), -gps_pos(:,3),'.')
+plot3(cage_pos(:,1),-cage_pos(:,2), -cage_pos(:,3))
 hold on
+plot3(gps_pos(:,1),-gps_pos(:,2), -gps_pos(:,3),'.')
+plot3(wp(:,1),wp(:,2), wp(:,3))
 plot3 ([0;8],[0;4],[0;5],'*')
 grid on
 grid minor

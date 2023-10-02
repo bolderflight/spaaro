@@ -33,7 +33,7 @@
 
 namespace {
 /* Datalog file name */
-static const char * DATA_LOG_NAME_ = "malt2_";
+static const char * DATA_LOG_NAME_ = "malt1_";
 /* SD card */
 SdFat32 sd_;
 /* Logger object */

@@ -46,6 +46,9 @@ AircraftConfig config = {
     .ext_gnss2 = {
       .baud = -1
     },
+    .opflow = {
+      .device = OPFLOW_MATEK3901
+    },
     .power_module = {
       .volts_per_volt = 2.87f,
       .amps_per_volt = 50.0f
