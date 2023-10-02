@@ -28,12 +28,12 @@
 #include "global_defs.h"
 
 /* Debug */
-bool DEBUG = true;
+bool DEBUG = false;
 /* Aircraft config */
 AircraftConfig config = {
   .sensor = {
     .fmu = {
-      .dlpf_hz = DLPF_BANDWIDTH_41HZ,
+      .dlpf_hz = DLPF_BANDWIDTH_10HZ,
       .accel_bias_mps = {0, 0, 0},
       .mag_bias_ut = {0, 0, 0},
       .accel_scale = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}},
@@ -41,7 +41,7 @@ AircraftConfig config = {
       .rotation = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}
     },
     .ext_gnss1 = {
-      .baud = 115200
+      .baud = 500000
     },
     .ext_gnss2 = {
       .baud = -1
@@ -50,7 +50,7 @@ AircraftConfig config = {
       .device = OPFLOW_MATEK3901
     },
     .power_module = {
-      .volts_per_volt = 2.723f,
+      .volts_per_volt = 2.87f,
       .amps_per_volt = 50.0f
     }
   },

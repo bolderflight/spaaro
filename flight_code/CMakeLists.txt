@@ -46,6 +46,11 @@ else()
   )
 endif()
 
+# determin SBUS radio module
+if (DEFINED SBUS_SRC)
+  string(TOUPPER ${SBUS_SRC} SBUS_SRC)
+endif()
+
 # determine config.cc based on vehicle type
 if (DEFINED VEHICLE)
 	string(TOUPPER ${VEHICLE} VEHICLE)
@@ -141,11 +146,21 @@ FetchContent_Declare(
   GIT_TAG v1.1.3
 )
 FetchContent_MakeAvailable(ainstein_usd1)
-FetchContent_Declare(
-  sbus
-  GIT_REPOSITORY https://github.com/bolderflight/sbus.git
-  GIT_TAG v8.1.3
-)
+if (SBUS_SRC STREQUAL "XBEE")
+  message("Fetching XBEE sbus module")
+  FetchContent_Declare(
+    sbus
+    #GIT_REPOSITORY https://github.com/bolderflight/sbus.git
+    #GIT_TAG v8.1.3
+    SOURCE_DIR /home/tuan/Projects/sbus
+    )
+else()
+  FetchContent_Declare(
+    sbus
+    GIT_REPOSITORY https://github.com/bolderflight/sbus.git
+    GIT_TAG v8.1.3
+  )
+endif()
 FetchContent_MakeAvailable(sbus)
 FetchContent_Declare(
   vector_nav
@@ -315,7 +330,9 @@ if (DEFINED AUTOCODE)
 			#autocode/${AUTOCODE}_ert_rtw/ale_speed_controller.h
 			#autocode/${AUTOCODE}_ert_rtw/rt_roundf.cpp
 			#autocode/${AUTOCODE}_ert_rtw/rt_roundf.h
-			#autocode/${AUTOCODE}_ert_rtw/rtwtypes.h
+			autocode/${AUTOCODE}_ert_rtw/rtwtypes.h
+      #autocode/${AUTOCODE}_ert_rtw/zero_crossing_types.h
+      autocode/${AUTOCODE}_ert_rtw/rtmodel.h
 			#autocode/${AUTOCODE}_ert_rtw/const_params.cpp
 	)
 	add_definitions(-D__AUTOCODE__)

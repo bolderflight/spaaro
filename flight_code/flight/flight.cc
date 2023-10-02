@@ -62,8 +62,13 @@ void run() {
   SysRead(&data.sys);
   /* Sensor data */
   SensorsRead(&data.sensor);
-  std::string dbg = std::to_string(data.sensor.opflow.mot_x) +"\t"+ std::to_string(data.sensor.opflow.mot_y) + "\t" + std::to_string(data.sensor.opflow.range_mm)+"\n";
-  MsgInfo(dbg.c_str());
+  for (uint8_t i = 0; i < 16; i++){
+    std::string dbg = std::to_string(data.sensor.inceptor.ch[i]) + " ";
+    MsgInfo(dbg.c_str());
+  }
+  MsgInfo("\n");
+  //std::string dbg = std::to_string((int)data.sensor.power_module.voltage_v * 100) + "\n";
+  //MsgInfo(dbg.c_str());
   /* VectorNav */
   #if defined(__FMU_R_V1__) || defined(__FMU_R_V2__) || \
       defined(__FMU_R_V2_BETA__)
@@ -94,6 +99,11 @@ int main() {
   MsgBegin();
   /* Init system */
   SysInit();
+  // Hack to pause the main program until beacon finish booting up
+  elapsedMillis t_ms;
+  t_ms = 0;
+  while (t_ms < 10000.0f) {
+  }
   /* Init sensors */
   SensorsInit(config.sensor);
   /* Calibrate sensors */

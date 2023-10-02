@@ -11,7 +11,7 @@ max_body_accel = -1.8;
 %% Generate truth data
 inertial_z = [0; 0; 1];
 thrust_vector_body = [0; 0; -1.7];
-truth_ypr = [deg2rad(0) deg2rad(-10) deg2rad(0)];
+truth_ypr = [deg2rad(0) deg2rad(-20) deg2rad(0)];
 truth_ypr_deg = truth_ypr * 180/pi;
 rotMatZYX = eul2rotm(truth_ypr);
 thrust_vector_inertial = rotMatZYX * thrust_vector_body;
@@ -23,7 +23,7 @@ quaternion_truth = quaternion(truth_ypr,"euler","ZYX","frame");
 thrust_vector_inertial_thrust_limited = limit_thrust(thrust_vector_inertial, 1.8);
 limited_thrust = norm(thrust_vector_inertial_thrust_limited);
 
-thrust_vector_inertial_tilt_limited = limit_tilt(thrust_vector_inertial_thrust_limited,25);
+thrust_vector_inertial_tilt_limited = limit_tilt(thrust_vector_inertial_thrust_limited,10);
 tilt_limited_thrust = norm(thrust_vector_inertial_tilt_limited);
 tilt_angle = acos(dot(thrust_vector_inertial_tilt_limited/norm(thrust_vector_inertial_tilt_limited),[0 0 -1]));
 tilt_angle = rad2deg(tilt_angle);
@@ -43,7 +43,7 @@ hold on
 plot3 ([0,thrust_vector_inertial_thrust_limited(1)],[0,thrust_vector_inertial_thrust_limited(2)],...
     [0,thrust_vector_inertial_thrust_limited(3)],'g*','LineWidth',3)
 plot3 ([0,thrust_vector_inertial_tilt_limited(1)],[0,thrust_vector_inertial_tilt_limited(2)],...
-    [0,thrust_vector_inertial_tilt_limited(3)],'c','LineWidth',2)
+    [0,thrust_vector_inertial_tilt_limited(3)],'r','LineWidth',2)
 %plot3 ([0,thrust_vector_inertial_test(1)],[0,thrust_vector_inertial_test(2)],...
 %    [0,thrust_vector_inertial_test(3)],'r')
 plot3 ([0,thrust_vector_inertial(1)],[0,thrust_vector_inertial(2)],...
