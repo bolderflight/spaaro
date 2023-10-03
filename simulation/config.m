@@ -9,12 +9,13 @@
 %% Definitions
 % Vehicle
 % vehicle = 'sig_kadet';
- vehicle = 'malt';
+% vehicle = 'malt';
 % vehicle = 'session_v0';
 % vehicle = 'super';
+vehicle = 'lambu';
 
 % FMU-R version
-if strcmpi(vehicle, 'malt')
+if strcmpi(vehicle, 'malt') || strcmpi(vehicle, 'lambu')
     fmu_version = "mini";
 elseif strcmpi(vehicle, 'ale')
     fmu_version = "v1";

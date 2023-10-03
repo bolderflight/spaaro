@@ -134,11 +134,14 @@ if (vms_only)
     if strcmp(vehicle,'malt')
         malt_mot_test();
         % malt()
+    elseif strcmp(vehicle,'lambu')
+        lambu_mot_test();
+        % lambu()
     elseif strcmp(vehicle,'super')
         super()
     end
 else
-    if any(strcmp(vehicle, {'super', 'malt'}))
+    if any(strcmp(vehicle, {'super', 'malt', 'lambu'}))
         multirotor_sim();
     elseif any(strcmpi(vehicle, {'ale'}))
         ground_sim();
