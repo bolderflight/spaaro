@@ -144,7 +144,7 @@ Aircraft.Motor.nMotor = 5;
 Aircraft.Motor.map = [ 1 ; 2 ; 3 ; 4; 5];
 
 % Motor bandwidth radps 
-Aircraft.Motor.bandwidth = 25;
+Aircraft.Motor.bandwidth = 100;
 
 % Motor positions relative to c.g in [m] [x,y,z](obtained from OpenVSP)
 % First 4 Motor numbers and order using Arducopter convention (QUAD-H)
@@ -339,7 +339,7 @@ Aircraft.Control.motor_ramp_time_s = 3;
 Aircraft.Control.wp_radius = 0;
 
 % FixedWing Angular Rate INDI controller
-Aircraft.Control.Forward.indi_pqr_gain = 8;
+Aircraft.Control.Forward.indi_pqr_gain = [8,8,15];
 
 % cutoff frequency for LP filter on inner loop surface deflection outputs
 Aircraft.Control.Forward.surf_def_out_LP_filter_CTOFF = 5;
@@ -348,7 +348,7 @@ Aircraft.Control.Forward.surf_def_out_LP_filter_CTOFF = 5;
 Aircraft.Control.Forward.yaw_damper_gain = 2.0;
 
 % cutoff frequency for LP filter used for sideslip controller (Hz).
-Aircraft.Control.sideslip_ctrl.accel_LP_filter_CTOFF = 0.5;
+Aircraft.Control.Forward.sideslip_accel_LP_filter_CTOFF = 0.5;
 
 % FixedWing Attitude Linear Controller Gains (Roll-pitch)
 Aircraft.Control.Forward.Att_err_gain = [3, 2.5];
@@ -356,14 +356,28 @@ Aircraft.Control.Forward.Att_err_gain = [3, 2.5];
 % FixedWing Attitude Linear Controller D gains (Roll-pitch)
 Aircraft.Control.Forward.Att_D_gain = [0.5, 0.15];
 
+% FixedWing Attitude Controller pqr max rates
+Aircraft.Control.Forward.max_pqr_ref = 1.2;
+
 % FixedWing Attitude Sideslip Controller Gains (PIDs)
 Aircraft.Control.Forward.Sideslip_gains = [7 2.5 4];
 
+% FixedWing Total Heading Control System 
+Aircraft.Control.Forward.thcs.error_gain = 0.4;
+Aircraft.Control.Forward.thcs.cmd_gain = 0.75;
+Aircraft.Control.Forward.thcs.beta_dot_ref_limit = 0.05;
+
+% Sorta turning rate (rad/s)
+Aircraft.Control.Forward.thcs.psi_dot_ref = 0.4;
+
 % FixedWing Heading Controller Max Roll Angle 
-Aircraft.Control.Forward.max_roll_rad = deg2rad(45);
+Aircraft.Control.Forward.max_roll_rad = deg2rad(35);
 
 % FixedWing Outer Loop Controller Max pitch Angle
-Aircraft.Control.Forward.max_pitch_rad = deg2rad(45);
+Aircraft.Control.Forward.max_pitch_rad = deg2rad(30);
+
+% FixedWing Outer Loop Controller Max yaw ref rate
+Aircraft.Control.Forward.max_yaw_rate = deg2rad(40);
 
 % FixedWing Heading Controller P-gain
 Aircraft.Control.Forward.heading_P = 2.25;
@@ -372,10 +386,10 @@ Aircraft.Control.Forward.heading_P = 2.25;
 Aircraft.Control.Forward.altitude_P = 1;
 
 % FixedWing Outer Loop indi gain (airspeed and flight path control)
-Aircraft.Control.Forward.outer_indi_gains = [1, 1.5];
+Aircraft.Control.Forward.outer_indi_gains = [1.0, 1.5];
 
 % LP filter on throttle_cmd_out and pitch_ref
-Aircraft.Control.Forward.outer_indi_outputs_LP_filter_CTOFF = [0.1, 1];
+Aircraft.Control.Forward.outer_indi_outputs_LP_filter_CTOFF = [0.15, 0.75];
 
 % Hover Inner Loop low-pass filters 
 % cutoff throttle output
@@ -407,21 +421,25 @@ Aircraft.Control.Hover.u_ref_LP_filter_CTOFF = 0.05;
 Aircraft.Control.Hover.roll_pitch_ref_LP_filter_CTOFF = 0.01;
 
 % Hover Speed Control Gains
-Aircraft.Control.Hover.uv_gain = 0.25; 
-Aircraft.Control.Hover.uv_d = 1.25;
+Aircraft.Control.Hover.uv_gain = [1.1, 0.2]; 
+Aircraft.Control.Hover.uv_d = [2.0, 1.25];
 
 % Roll pitch reference limits
 Aircraft.Control.Hover.roll_pitch_ref_limits = [0.35, 0.35];
 
 % Hover heading control 
-Aircraft.Control.Hover.heading_gain = 2.5;
+Aircraft.Control.Hover.heading_gain = 7;
 Aircraft.Control.Hover.yaw_rate_ref_limit = 1;
 
 % Mode Switching and Transition related parameters
 Aircraft.Control.modes.mode_shutoff_airspeeds = [7,18];
 
-Aircraft.Control.modes.hover2forward_airspeed_ramp = 5;
+Aircraft.Control.modes.hover2forward_airspeed_ramp = 3;
 Aircraft.Control.modes.forward2hover_airspeed_ramp = -1.5;
+
+% Parameters of the controller input blending sigmoidal function
+Aircraft.Control.modes.transition_sigmoidal_a = 0.4;
+Aircraft.Control.modes.transition_sigmoidal_c = 14;
 
 
 
@@ -441,10 +459,10 @@ Aircraft.Control.inertia_inv_4by4 = inv([[Aircraft.Mass.inertia_kgm2, [0;0;0]]; 
 
 %% Aircraft Specific Initial Conditions
 
-InitCond.motor_cmd = [0.0, 0.0, 0.0, 0.0, 0.0];
+InitCond.motor_cmd = [0.5, 0.5, 0.5, 0.5, 0.1];
 InitCond.surface_rad = [0 0 0];
 
 % Forward prop rotation rate (rad/s)
-InitCond.engine_speed_radps = 30 * (2*pi/60);
+InitCond.engine_speed_radps = 4 * (2*pi/60);
 
 
