@@ -181,7 +181,7 @@ FetchContent_Declare(
   mavlink
   #GIT_REPOSITORY https://github.com/bolderflight/mavlink.git
   #GIT_TAG v4.8.10
-  GIT_REPOSITORY git@github.com:TL-4319/mavlink.git
+  GIT_REPOSITORY https://github.com/TL-4319/mavlink.git
   GIT_TAG v1.0.2
   #SOURCE_DIR /home/tuan/Projects/mavlink
 )
@@ -214,7 +214,7 @@ FetchContent_Declare(
   navigation
   #GIT_REPOSITORY https://github.com/bolderflight/navigation.git
   #GIT_TAG v4.0.1
-  GIT_REPOSITORY git@github.com:TL-4319/navigation.git
+  GIT_REPOSITORY https://github.com/TL-4319/navigation.git
   GIT_TAG f870deb4303e73fa4c32b54126e7402174ea668d
   #SOURCE_DIR /home/tuan/Projects/navigation
 )
