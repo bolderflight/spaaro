@@ -57,7 +57,8 @@ SpaaroUbx ext_gnss1(&GNSS1_UART);
 SpaaroUbx ext_gnss2(&GNSS2_UART);
 #endif
 #if defined(__FMU_R_V2__) || defined(__FMU_R_V2_BETA__)
-SpaaroAinsteinUsd1 rad_alt(&AUX_UART);
+SpaaroMatek3901 opflow(&AUX_UART);
+SpaaroAinsteinUsd1 rad_alt(&GNSS2_UART); // Changed port for compatibility. Need to redo
 #elif defined(__FMU_R_MINI_V1__)
 SpaaroMatek3901 opflow(&AUX_UART);
 SpaaroAinsteinUsd1 rad_alt(&GNSS2_UART);
