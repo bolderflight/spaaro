@@ -1,7 +1,8 @@
 %Initialize a vehicle for use in the simulation
 %
 %
-% Tuan Luong
+% Tuan Luong (dynamic sim imported from SUPER)
+% Aabhash Bhandari 10/31/2023 (updated for actual MALT vehicle)
 
 
 %% Platform's name
@@ -10,34 +11,28 @@ Aircraft.name = 'malt';
 %% Mass properties (Obtained using Solidworks) CG is at body origin
 % Mass [kg]
 Aircraft.Mass.mass_kg = 0.3;
+
+% Weight breakdown
+% 2 Li-Ion battery and case = 103g
+% top_housing and ultrasonic = 35g
+% top_plate and electronics = 60g
+% bottom plate = 36g
+% motors = 5g each 
+% other electroncis = 30g
+% total = 284g
+
 % c.g. location [m]
 Aircraft.Mass.cg_m = [0 0 0];
 % Moments of inertia [kg*m^2] obtained from Solidworks model
-Aircraft.Mass.ixx_kgm2 = 0.07151;
-Aircraft.Mass.iyy_kgm2 = 0.08636;
-Aircraft.Mass.izz_kgm2 = 0.15364;
-Aircraft.Mass.ixz_kgm2 = 0.014;
+Aircraft.Mass.ixx_kgm2 = 4.68213e-4;
+Aircraft.Mass.iyy_kgm2 = 4.94712e-4;
+Aircraft.Mass.izz_kgm2 = 7.05253e-4;
+Aircraft.Mass.ixz_kgm2 = 0;
 Aircraft.Mass.inertia_kgm2 = [Aircraft.Mass.ixx_kgm2    0   -Aircraft.Mass.ixz_kgm2;...
                               0          Aircraft.Mass.iyy_kgm2          0;...
                               -Aircraft.Mass.ixz_kgm2   0       Aircraft.Mass.izz_kgm2];
 
-%% Geometric properties of the body
-% Axial area (m^2) in body frame
-% Frontal area at different angles
-Aircraft.Geo.front_area_m2 = [0.32, 0.36, 0.4, 0.43, 0.45, 0.5, 0.47,...
-    0.44, 0.47,0.34,0.47,0.44,0.47,0.5,0.45,0.43,0.4,0.36,0.32,0.36,...
-    0.4,0.43,0.45,0.5,0.47,0.44,0.47,0.34,0.47, 0.44, 0.47, 0.5, 0.45, ...
-    0.43,0.4,0.36,0.32];
     
-%% Aerodymanics coef
-% Axis system for aerodynamic coefficients
-% https://www.mathworks.com/help/aeroblks/aerodynamicforcesandmoments.html
-% 1 = Wind axis
-% 2 = Stability axis
-% 3 = Body axis
-Aircraft.Aero.axis = 1;
-%Drag coefficient
-Aircraft.Aero.Cd = 0.8; %Based on CD of slanted cube [Jan Willem Vervoorst]
 
 %% Inceptor configuration
 % Configure function of main control
@@ -64,24 +59,26 @@ Aircraft.Eff.nCh = Aircraft.Eff.nPwm + Aircraft.Eff.nSbus;
 % Number of motors
 Aircraft.Motor.nMotor = 4;
 
+% Motor bandwidth radps 
+Aircraft.Motor.bandwidth = 100;
+
 % Assign a pwm channel to motor
 Aircraft.Motor.map = [ 1 ; 2 ; 3 ; 4 ];
 
 % Motor positions relative to c.g in [m] [x,y,z](obtained from Solidworks)
 % Motor numbers and order using Arducopter convention
-Aircraft.Motor.pos_m = [0.0   0.78    0;...
-                        0.0   -0.78   0;...
-                        0.75    -0.43   0;...
-                        -0.75   0.43    0;...
-                        0.75    0.43    0;...
-                        -0.75   -0.43   0]; 
+Aircraft.Motor.pos_m = [0.055   0.055   0;...
+                        -0.055  -0.055  0;...
+                        0.055   -0.055  0;...
+                        -0.055  0.055   0]; 
 
-% Alignment with body frame x, y, z axis 
-Aircraft.Motor.align = zeros ( Aircraft.Motor.nMotor , 3);
-%All motor align with body -z axis for quadcopter case
-Aircraft.Motor.align (:,3) = -1; 
+Aircraft.Motor.align = [0, 0, -1;...
+                            0, 0, -1;...
+                            0, 0, -1;...
+                            0, 0, -1];
 
 % Motor rotation direction (right hand rule with z_body)
+% Motor 1 and 2 are cw and motor 3 and 4 are ccw
 Aircraft.Motor.dir = [1; 1; -1; -1];
 
 % Motor mixing laws [thrust, roll, pitch, yaw]
@@ -97,17 +94,32 @@ Aircraft.Motor.mix = [0.9, -0.1,  0.1, -0.2;...
                       0, 0, 0, 0;... 
                       0, 0, 0, 0];
 
+
+
+%% Hover Propulsion System
+% GTS V2 1202.5-6000kV
+
+% Motor speed constant Kv
+Aircraft.HoverMotor.kv = 6000; 
+
+% Motor zero load current [Amp]
+Aircraft.HoverMotor.io = 0.55; 
+
+% Motor internal resistance [Ohm]
+Aircraft.HoverMotor.r = 0.3 ;
+
+% Diameter [inches]
+Aircraft.HoverRotor.dia_in = 3;
+
+% Thrust and torque models obtained from Tmotor's data
+% for throttle 0-1
+% 2nd order polyfit on thrust(N), 0 throttle = 0 thrust
+Aircraft.HoverRotor.poly_thrust = [0.2356, 1.118, 0];
+% 2nd order polyfit on torque
+Aircraft.HoverRotor.poly_torque = [0.0075, -0.0017, 0];
     
-%% Propeller 
-%Diameter [inches]
-Aircraft.Prop.dia_in = 3;
 
-% Coefficient of thrust constant obtained from T-motor's website data
-Aircraft.Prop.kt = 0.0388;   %N-m/N
 
-%Polynomial coefficient for simple thrust model
-Aircraft.Prop.poly_thrust = [109.86 -18.329];
-Aircraft.Prop.poly_torque = [4.2625 -0.7112];
 
 %% Battery
 % Number of battery cells

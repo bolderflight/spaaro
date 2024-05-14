@@ -117,8 +117,7 @@ class StabilityCoefAndDerivatives:
 
         plt.xlabel('Alpha (deg)')
         plt.ylabel('Base coefficients')
-        
-        plt.title('Base Coefficients vs. Alpha')
+
         plt.legend()
         plt.figure(fig1.number)
         plt.show()
@@ -128,7 +127,7 @@ class StabilityCoefAndDerivatives:
         """plotting the base coefficients"""
 
         fig2 = plt.figure(2)
-        for derivative_key in DERIVATIVE_KEYS:
+        for derivative_key in DERIVATIVE_KEYS[:7]:
             plt.scatter(self.alpha, self.derivatives[derivative_key], label=derivative_key)
             plt.plot(self.alpha, self.derivatives[derivative_key], linestyle=':')
 
@@ -136,7 +135,6 @@ class StabilityCoefAndDerivatives:
         plt.ylabel('Coefficient derivatives')
 
         plt.legend()
-        plt.title('Coefficients derivatives vs. Alpha')
         plt.figure(fig2.number)
         plt.show()
 

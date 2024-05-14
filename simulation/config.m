@@ -10,9 +10,9 @@
 % Vehicle
 % vehicle = 'sig_kadet';
 % vehicle = 'malt';
-% vehicle = 'session_v0';
+vehicle = 'session_v0';
 % vehicle = 'super';
-vehicle = 'lambu';
+% vehicle = 'lambu';
 
 % FMU-R version
 if strcmpi(vehicle, 'malt') || strcmpi(vehicle, 'lambu')
@@ -26,7 +26,7 @@ else
     throw(ME);
 end
 
-vms_only = true;
+vms_only = false;
 
 
 %% Target trim conditions
@@ -60,12 +60,56 @@ InitCond.alt_m = 67.117600;
 InitCond.ned_pos_m = [0 0 -100];
 
 % [u, v, w]
-InitCond.body_vel_mps = [2.0 ,0.1,0.1];
+InitCond.body_vel_mps = [0.5, 0.1, 0.1];
 
 % [roll, pitch, yaw]
 InitCond.euler_rad = [0 0 0];
 
 % [p, q, r]
 InitCond.body_rot_rate_radps = [0 0 0];
+
+%% Additional Effects
+% Bool of whether to include additional effects. With some parameters
+
+% Effects of wind
+AddEffects.wind.steady_bool = 0; 
+AddEffects.wind.gust_bool = 1;
+AddEffects.wind.direction_rad = 0.6;
+AddEffects.wind.speed_mps = 4; 
+
+% Noise and bias on the angular rate measurements
+AddEffects.pqr.noise_bool = 0;
+AddEffects.pqr.bias_bool = 0;
+
+% Effects to aerodynamic moment coefficients
+AddEffects.aero_moments.loss_control_eff_bias_bool = 0;
+AddEffects.aero_moments.sys_dynamics_bias_bool = 0; 
+AddEffects.aero_moments.percent_diff = 10;
+
+% Effects to body moment of inertia
+AddEffects.inertia.bias_bool = 0;
+AddEffects.inertia.percent_diff = 10;
+
+% Effects to hover propulsive performance
+AddEffects.hover_prop.bias_bool = 0;
+AddEffects.hover_prop.percent_diff = 5;
+
+% Noise on the Airspeed sensor
+AddEffects.airspeed.noise_bool = 0;
+
+% Actuator faults and loss of control effectiveness
+AddEffects.actuator_fault_bool = 0; 
+AddEffects.elevator_stuck_bool = 0;
+AddEffects.surf_fault_scale = 0.75;
+AddEffects.motor_fault_scale_1 = 0.95;
+AddEffects.motor_fault_scale_2 = 0.85;
+
+% Actuator dynamics uncertainty
+AddEffects.motor_bias_bool = 0;
+AddEffects.surf_bias_bool = 0;
+
+
+
+
 
 
