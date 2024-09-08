@@ -153,9 +153,8 @@ if (SBUS_SRC STREQUAL "XBEE")
   message("Fetching XBEE sbus module")
   FetchContent_Declare(
     sbus
-    #GIT_REPOSITORY https://github.com/bolderflight/sbus.git
-    #GIT_TAG v8.1.3
-    SOURCE_DIR /home/tuan/Projects/sbus
+    GIT_REPOSITORY https://github.com/TL-4319/sbus
+    GIT_TAG v1.0.0
     )
 else()
   FetchContent_Declare(
