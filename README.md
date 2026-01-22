@@ -1,4 +1,27 @@
-<img src="https://github.com/bolderflight/spaaro/blob/main/docs/img/logo.png" alt="Logo" width="250">
+# Setup
+* Install WSL 1 and Ubuntu or install Ubuntu natively
+* In WSL or Ubuntu:
+   * Update and upgrate (sudo apt-get update, sudo apt-get upgrade)
+   * Install git (sudo apt-get install git)
+   * Install build essential (sudo apt-get install build-essential)
+   * Install g++ for bare metal (sudo apt-get install gcc-arm-none-eabi)
+   * Install CMake (sudo apt-get install cmake)
+
+
+# Building
+* Clone SPAARO
+   * IMPORTANT: in WSL, clone to Windows folders (i.e. /mnt/c/Users/)
+* Navigate to SPAARO (cd spaaro)
+* Checkout the lager branch (git pull, git checkout lager)
+* Make a build folder (mkdir build)
+* Setup the compilation environment (cd build, cmake ../flight_code -D FMU=mini-v1 -D AUTOCODE=baseline)
+   * Note the first define gives the FMU version the software is being built for and the second define is the name of the MATLAB Simulink autocode model. If AUTOCODE is not defined, it is assumed the compilation is for C++ instead of MATLAB Simulink autocode.
+* Build the Simulink model
+* Compile or compile and flash code to the FMU-R (make / make flight_upload)
+
+
+
+<!-- <img src="https://github.com/bolderflight/spaaro/blob/main/docs/img/logo.png" alt="Logo" width="250">
 
 # Simulink/C++ Platform for Aeronautics and Autonomy Research and Operations (SPAARO)
 SPAARO, when coupled with Bolder Flight control systems, enables engineers to quickly research, develop, and deploy control laws, autonomy algorithms, and flight software.
@@ -581,7 +604,7 @@ Please cite the framework as follows
         year         = {2023},
         url          = {https://github.com/drjdlarson/lager_spaaro},
     }
-```
+``` -->
 
 <!-- # Simulation
 
