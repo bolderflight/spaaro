@@ -162,8 +162,7 @@ void BfsInsRun(SensorData &ref, InsData * const ptr) {
       rel_pos_ned_ [0] = float(gnss_->rel_pos_ned_m[0]);
       rel_pos_ned_ [1] = float(gnss_->rel_pos_ned_m[1]);
       rel_pos_ned_ [2] = float(gnss_->rel_pos_ned_m[2]);
-      ekf_.Initialize(accel_mps2_, gyro_radps_, mag_ut_,
-                      ned_vel_, llh_, rel_pos_ned_, cfg_.hardcoded_heading);
+      ekf_.Initialize(accel_mps2_, gyro_radps_, mag_ut_, ned_vel_, llh_);
       /* Init DLPF */
       gx_.Init(cfg_.gyro_cutoff_hz, FRAME_RATE_HZ, ekf_.gyro_radps()[0]);
       gy_.Init(cfg_.gyro_cutoff_hz, FRAME_RATE_HZ, ekf_.gyro_radps()[1]);
@@ -197,10 +196,7 @@ void BfsInsRun(SensorData &ref, InsData * const ptr) {
       rel_pos_ned_ [1] = float(gnss_->rel_pos_ned_m[1]);
       rel_pos_ned_ [2] = float(gnss_->rel_pos_ned_m[2]);
       cur_baseline_len_m_ = rel_pos_ned_.norm();
-      ekf_.MeasurementUpdate_gnss(ned_vel_, llh_);
-      //if ((gnss_->fix >= 5) && (abs(cur_baseline_len_m_ - BASELINE_LEN_M) < 0.1f )){
-      //  ekf_.MeasurementUpdate_moving_base(rel_pos_ned_);
-      //}
+      ekf_.MeasurementUpdate(ned_vel_, llh_);
     }
     ptr->pitch_rad = ekf_.pitch_rad();
     ptr->roll_rad = ekf_.roll_rad();

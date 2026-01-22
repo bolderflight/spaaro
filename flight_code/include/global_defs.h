@@ -2,7 +2,7 @@
 * Brian R Taylor
 * brian.taylor@bolderflight.com
 * 
-* Copyright (c) 2022 Bolder Flight Systems Inc
+* Copyright (c) 2026 Bolder Flight Systems Inc
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the “Software”), to
@@ -61,7 +61,7 @@ enum DlpfBandwidth : int8_t {
 };
 
 struct FmuConfig {
-  DlpfBandwidth dlpf_hz = DLPF_BANDWIDTH_41HZ;
+  DlpfBandwidth dlpf_hz = DLPF_BANDWIDTH_5HZ;
   float accel_bias_mps[3] = {0, 0, 0};
   float mag_bias_ut[3] = {0, 0, 0};
   float accel_scale[3][3] = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};

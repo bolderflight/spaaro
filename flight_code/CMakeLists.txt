@@ -10,7 +10,7 @@ FetchContent_MakeAvailable(mcu_support)
 set(CMAKE_TOOLCHAIN_FILE "${mcu_support_SOURCE_DIR}/cmake/cortex.cmake")
 # Project information
 project(Flight
-  VERSION 4.0.0
+  VERSION 5.0.0
   DESCRIPTION "Flight software skeleton"
   LANGUAGES C CXX
 )
@@ -44,32 +44,6 @@ else()
   add_definitions(
     -D__FMU_R_V1__
   )
-endif()
-
-# determin SBUS radio module
-if (DEFINED SBUS_SRC)
-  string(TOUPPER ${SBUS_SRC} SBUS_SRC)
-endif()
-
-# determine config.cc based on vehicle type
-if (DEFINED VEHICLE)
-	string(TOUPPER ${VEHICLE} VEHICLE)
-endif()
-if (VEHICLE STREQUAL "ALE")
-	message("Using ALE config.cc")
-	set(CONFIG_CC config_ale.cc)
-elseif (VEHICLE STREQUAL "MALT")
-	message("Using MALT config.cc")
-	set(CONFIG_CC config_malt.cc)
-elseif (VEHICLE STREQUAL "SUPER")
-	message("Using SUPER config.cc")
-	set(CONFIG_CC config_super.cc)
-elseif (VEHICLE STREQUAL "LAMBU")
-  message("Using LAMBU config.cc")
-	set(CONFIG_CC config_lambu.cc)
-else()
-	message("Using default config.cc")
-	set(CONFIG_CC config.cc)
 endif()
 
 # Grab the processor and set up definitions and compile options
@@ -149,20 +123,11 @@ FetchContent_Declare(
   GIT_TAG v1.1.3
 )
 FetchContent_MakeAvailable(ainstein_usd1)
-if (SBUS_SRC STREQUAL "XBEE")
-  message("Fetching XBEE sbus module")
-  FetchContent_Declare(
-    sbus
-    GIT_REPOSITORY https://github.com/TL-4319/sbus
-    GIT_TAG v1.0.0
-    )
-else()
-  FetchContent_Declare(
-    sbus
-    GIT_REPOSITORY https://github.com/bolderflight/sbus.git
-    GIT_TAG v8.1.3
-  )
-endif()
+FetchContent_Declare(
+  sbus
+  GIT_REPOSITORY https://github.com/bolderflight/sbus.git
+  GIT_TAG v8.1.3
+)
 FetchContent_MakeAvailable(sbus)
 FetchContent_Declare(
   vector_nav
@@ -178,11 +143,8 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(pwm)
 FetchContent_Declare(
   mavlink
-  #GIT_REPOSITORY https://github.com/bolderflight/mavlink.git
-  #GIT_TAG v4.8.10
-  GIT_REPOSITORY https://github.com/TL-4319/mavlink.git
-  GIT_TAG v1.0.2
-  #SOURCE_DIR /home/tuan/Projects/mavlink
+  GIT_REPOSITORY https://github.com/bolderflight/mavlink.git
+  GIT_TAG v4.8.10
 )
 FetchContent_MakeAvailable(mavlink)
 FetchContent_Declare(
@@ -211,11 +173,8 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(framing)
 FetchContent_Declare(
   navigation
-  #GIT_REPOSITORY https://github.com/bolderflight/navigation.git
-  #GIT_TAG v4.0.1
-  GIT_REPOSITORY https://github.com/TL-4319/navigation.git
-  GIT_TAG f870deb4303e73fa4c32b54126e7402174ea668d
-  #SOURCE_DIR /home/tuan/Projects/navigation
+  GIT_REPOSITORY https://github.com/bolderflight/navigation.git
+  GIT_TAG v4.0.1
 )
 FetchContent_MakeAvailable(navigation)
 FetchContent_Declare(
@@ -260,12 +219,6 @@ FetchContent_Declare(
   GIT_TAG v2.0.2
 )
 FetchContent_MakeAvailable(imap)
-FetchContent_Declare(
-  matek3901
-  GIT_REPOSITORY https://github.com/TL-4319/matek3901
-  GIT_TAG v1.1.0
-)
-FetchContent_MakeAvailable(matek3901)
 # Add the executable
 add_executable(flight
   include/global_defs.h
@@ -289,10 +242,9 @@ add_executable(flight
   include/drivers/spaaro-sbus.h
   include/drivers/analog.h
   include/drivers/spaaro-vector-nav.h
-  include/drivers/spaaro-matek3901.h
   flight/flight.cc
   flight/msg.cc
-  flight/${CONFIG_CC}
+  flight/config.cc
   flight/sys.cc
   flight/sensors.cc
   flight/adc.cc
@@ -310,7 +262,6 @@ add_executable(flight
   drivers/spaaro-sbus.cc
   drivers/analog.cc
   drivers/spaaro-vector-nav.cc
-  drivers/spaaro-matek3901.cc
 )
 if (FMU STREQUAL "MINI-V1" OR FMU STREQUAL "V2")
   # FMU-R mini V1 | FMU-R-V2
@@ -328,14 +279,8 @@ if (DEFINED AUTOCODE)
 		PUBLIC
 			autocode/${AUTOCODE}_ert_rtw/autocode.cpp
 			autocode/${AUTOCODE}_ert_rtw/autocode.h
-			#autocode/${AUTOCODE}_ert_rtw/ale_speed_controller.cpp
-			#autocode/${AUTOCODE}_ert_rtw/ale_speed_controller.h
-			#autocode/${AUTOCODE}_ert_rtw/rt_roundf.cpp
-			#autocode/${AUTOCODE}_ert_rtw/rt_roundf.h
 			autocode/${AUTOCODE}_ert_rtw/rtwtypes.h
-      #autocode/${AUTOCODE}_ert_rtw/zero_crossing_types.h
       autocode/${AUTOCODE}_ert_rtw/rtmodel.h
-			#autocode/${AUTOCODE}_ert_rtw/const_params.cpp
 	)
 	add_definitions(-D__AUTOCODE__)
 endif()
@@ -371,9 +316,8 @@ target_link_libraries(flight
     vector_nav
     pwm
     imap
-    matek3901
 )
-target_compile_options(flight PUBLIC -std=c++20 -O3)
+target_compile_options(flight PUBLIC -std=c++20)
 # Add hex and upload targets
 include(${mcu_support_SOURCE_DIR}/cmake/flash_mcu.cmake)
 FlashMcu(flight ${MCU} ${mcu_support_SOURCE_DIR})
