@@ -19,6 +19,14 @@
 * Build the Simulink model
 * Compile or compile and flash code to the FMU-R (make / make flight_upload)
 
+# TODO - Near Term
+* The FMU-R models in /simulink/models need to be updated to reflect the current bus definitions and data log names
+* The uas_sim (/simulink/uas_sim.slx) needs it's FMU-R variant updated to include the FMU-R mini v1
+
+# TODO - Longer Term
+* The config should be simplified (i.e. we can use a telemetry output to dump the data we want telemetered instead of choosing IMU, GPS, etc to telemeter in the config)
+* The config can be moved to a struct that is accessible from the VMS / Autocode sandbox, enabling all of the configuration to be available from that instead of needing to have a two-step process of updating config.cc.
+
 
 
 <!-- <img src="https://github.com/bolderflight/spaaro/blob/main/docs/img/logo.png" alt="Logo" width="250">

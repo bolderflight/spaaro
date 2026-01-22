@@ -3,7 +3,7 @@
 % Brian R Taylor
 % brian.taylor@bolderflight.com
 % 
-% Copyright (c) 2021 Bolder Flight Systems
+% Copyright (c) 2026 Bolder Flight Systems
 %
 
 %% Cleanup
@@ -23,19 +23,9 @@ addpath(genpath('models'));
 addpath(genpath('vms')); 
 
 %% Specify root folders for autocode and cache
-% clear all cached code
-cacheBase = sprintf('../flight_code/build_%s', lower(vehicle));
-cacheFolder = [cacheBase '/slprj'];
-codeGenFolder = '../flight_code/autocode';
-if exist(cacheBase, 'dir')
-    rmdir(cacheBase, 's');
-end
-if exist(codeGenFolder, 'dir')
-    rmdir(codeGenFolder, 's');
-end
 Simulink.fileGenControl('set', ...
-    'CacheFolder', cacheFolder, ...
-    'CodeGenFolder', codeGenFolder, ...
+    'CacheFolder', '../flight_code/build/slprj', ...
+    'CodeGenFolder', '../flight_code/autocode', ...
     'CodeGenFolderStructure', ...
     Simulink.filegen.CodeGenFolderStructure.ModelSpecific, ...
     'createDir', true);
@@ -61,14 +51,14 @@ elseif strcmpi(fmu_version, "V2-BETA")
     Telem.NUM_FENCE_POINTS = 100;
     Telem.NUM_RALLY_POINTS = 10;
     load('./data/fmu_v2_beta_bus_defs.mat');
-elseif strcmpi(fmu_version, "MINI")
+elseif strcmpi(fmu_version, "MINI-V1")
     Fmu.version = 4;
-    Fmu.NUM_AIN = 8;
-    frameRate_hz = 200;
+    Fmu.NUM_AIN = 6;
+    frameRate_hz = 100;
     Telem.NUM_FLIGHT_PLAN_POINTS = 500;
     Telem.NUM_FENCE_POINTS = 100;
     Telem.NUM_RALLY_POINTS = 10;
-    load('./data/fmu_mini_bus_defs.mat');
+    load('./data/fmu_mini_v1_bus_defs.mat');
 else
     Fmu.version = 1;
     Fmu.NUM_AIN = 2;
@@ -81,7 +71,7 @@ end
 framePeriod_s = 1/frameRate_hz;
 
 %% Trim
-% trim();
+trim();
 
 %% Create flight plan, fence, and rally point structs
 % Flight plan
@@ -123,34 +113,6 @@ for i = 1:Telem.NUM_RALLY_POINTS
     Telem.Rally(i).y = int32(0);
     Telem.Rally(i).z = single(0);
 end
-
-
-%% Setup configuration set
-if(strcmp(vehicle, 'ale'))
-    ale_config = ale_model_confg();
-end
-%% Select sim
-if (vms_only)
-    if strcmp(vehicle,'malt')
-        malt_mot_test();
-        % malt()
-    elseif strcmp(vehicle,'lambu')
-        lambu_test_angle();
-        % lambu()
-    elseif strcmp(vehicle,'super')
-        super()
-    end
-else
-    if any(strcmp(vehicle, {'super', 'malt', 'lambu'}))
-        multirotor_sim();
-    elseif any(strcmpi(vehicle, {'ale'}))
-        ground_sim();
-    elseif any(strcmpi(vehicle, {'session_v0'}))
-        quadplane_sim();
-    end
-end
-% double_integrator_sim();
-
 
 %% Cleanup
 clear vehicle fh_vehicle op_point op_report op_spec opt i;

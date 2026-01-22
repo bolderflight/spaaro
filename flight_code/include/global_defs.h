@@ -526,7 +526,7 @@ struct VmsData {
   float throttle_cmd_prcnt;
   float flight_time_remaining_s;
   float power_remaining_prcnt;
-  float aux[NUM_AUX_VAR];
+  std::array<float, NUM_AUX_VAR> aux;
 };
 
 struct StateEstData {
