@@ -16,10 +16,7 @@ clc;
 run('./config');
 
 %% Add paths
-addpath(genpath('aircraft'));
 addpath(genpath('data'));
-addpath(genpath('matlab'));
-addpath(genpath('models'));
 addpath(genpath('vms'));
 
 %% Specify root folders for autocode and cache
@@ -29,9 +26,6 @@ Simulink.fileGenControl('set', ...
     'CodeGenFolderStructure', ...
     Simulink.filegen.CodeGenFolderStructure.ModelSpecific, ...
     'createDir', true);
-
-%% Setup aircraft
-run(strcat('./aircraft/', vehicle));
 
 %% Setup FMU
 %% Setup the flight management unit
@@ -61,9 +55,6 @@ else
     load('./data/fmu_v1_bus_defs.mat');
 end
 framePeriod_s = 1/frameRate_hz;
-
-%% Trim
-trim();
 
 %% Create flight plan, fence, and rally point structs
 % Flight plan
@@ -107,4 +98,4 @@ for i = 1:Telem.NUM_RALLY_POINTS
 end
 
 %% Cleanup
-clear vehicle fh_vehicle op_point op_report op_spec opt i;
+clear i;
